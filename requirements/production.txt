@@ -1,0 +1,35 @@
+# Install everything that needs to be compiled
+-r compiled.txt
+
+# Django stuff
+Django>=1.6
+
+django-hstore
+
+# Templates
+django_compressor
+
+Fabric
+
+# Security
+bleach
+#cef
+
+# Logging
+#raven
+
+# Celery: Message queue
+celery
+django-celery
+
+# L10n/i18n
+Babel
+
+# Caching
+python-memcached
+
+# Migrations
+South
+
+# Feature testing
+django-waffle
