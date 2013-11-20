@@ -34,19 +34,45 @@ module.exports = function (grunt) {
       //   files: ['<%= yeoman.app %>/css/{,*/}*.css'],
       //   tasks: ['copy:styles']
       // },
+      css: {
+        files: '<%= yeoman.app %>/css/*.css',
+        tasks: [],
+        options: {
+          livereload: LIVERELOAD_PORT
+        }
+      },
+      less: {
+        files: '<%= yeoman.app %>/less/*.less',
+        tasks: ['less'],
+        options: {
+          livereload: LIVERELOAD_PORT,
+          dumpLineNumbers: "comments",
+          env: "development",
+          relativeUrls: false
+        }
+      },
       livereload: {
         options: {
           livereload: LIVERELOAD_PORT
         },
         files: [
-          '<%= yeoman.app %>/*.html',
+          '<%= yeoman.app %>/templates/*.html',
           '<%= yeoman.app %>/js/{,*/}*.js',
-          '<%= yeoman.app %>/css/app.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
-
+    less: {
+      development: {
+        options: {
+          paths: ['<%= yeoman.app %>/less'],
+          yuicompress: true
+        },
+        files: {
+          '<%= yeoman.app %>/css/flat-ui-custom.css': '<%= yeoman.app %>/less/flat-ui.less'
+        }
+      }
+    },
     connect: {
       options: {
         port: 9000,
@@ -66,7 +92,7 @@ module.exports = function (grunt) {
     },
     open: {
       server: {
-        url: 'http://localhost:<%= connect.options.port %>/profiles.html'
+        url: 'http://localhost:<%= connect.options.port %>'
       }
     },
     concurrent: {
@@ -78,7 +104,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     // 'concurrent:server',
-    'open:server',
+    // 'open:server',
     'connect:livereload',
     'watch'
   ]);

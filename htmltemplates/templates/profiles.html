@@ -6,15 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Loading Flat UI -->
-    <link href="css/flat-ui.css" rel="stylesheet">
+    <!-- <link href="css/flat-ui.css" rel="stylesheet"> -->
+    <link href="../css/flat-ui-custom.css" rel="stylesheet">
 
     <!-- Custom styles -->
-    <link href="css/app.css" rel="stylesheet">
+    <link href="../css/app.css" rel="stylesheet">
 
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="../images/favicon.ico">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
@@ -36,9 +37,9 @@
           </div>
           <div class="navbar-collapse collapse navbar-collapse-01">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#fakelink">Dashboard</a></li>
+              <li><a href="#fakelink">Dashboard</a></li>
               <li><a href="#fakelink">Promotions</a></li>
-              <li><a href="#fakelink">Customers</a></li>
+              <li class="active"><a href="#fakelink">Customers</a></li>
               <li><a href="#fakelink">Business Profile</a></li>
             </ul> <!-- /nav -->
 
@@ -50,10 +51,10 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <span class="fui-gear"></span>
                 </a>
-                <span class="dropdown-arrow dropdown-arrow-inverse"></span>
+                <span class="dropdown-arrow dropdown-arrow-inverse mrm"></span>
                 <ul class="dropdown-menu pull-right">
                   <li><a href="#fakelink">My settings</a></li>
-                  <li><a href="#fakelink" class='highlighted'>Logout <i class="fui-power pull-right"></i></a></li>
+                  <li><a href="#fakelink" class='highlighted'>Log Out <i class="fui-power pull-right"></i></a></li>
                 </ul>
               </li>
             </ul>
@@ -118,20 +119,20 @@
           </div>
         </div>
 
-        <div class="navbar navbar-inverse mtl">
-          <div class="navbar-collapse navbar-collapse-03 in" style="height: auto;">
+        <div class="navbar navbar-inverse mtl mbn profile-toolbar">
+          <div class="navbar-collapse navbar-collapse-03 in">
             <ul class="nav navbar-nav">
               <li>
                 <a href="#fakelink">
                   Import from
                   <b class="caret"></b>
                 </a>
-                <ul>
-                  <li><a href="#fakelink">item</a></li>
-                  <li><a href="#fakelink">item</a></li>
+                <ul class='pull-right'>
+                  <li><a href="#fakelink">Mailing list</a></li>
+                  <li><a href="#fakelink">.CSV file</a></li>
                 </ul>
               </li>
-              <li class="active">
+              <li>
                 <a href="#fakelink">
                   Export list to
                   <b class="caret"></b>
@@ -141,7 +142,6 @@
                   <li><a href="#fakelink">.CSV download</a></li>
                 </ul> <!-- /Sub menu -->
               </li>
-              <li class="divider"></li>
             </ul> <!-- /nav -->
 
             <ul class="nav navbar-nav navbar-right">
@@ -159,17 +159,48 @@
                 </form>
               </li>
               <li>
-                <button class="btn btn-embossed btn-primary mts mrl">New Customer <i class="fui-user mll"></i></button>
+                <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+                  <span class='mrl'>New Customer</span>
+                  <i class="fui-user mll"></i></button>
               </li>
               <li>
-                <button class="btn btn-embossed btn-primary mts mrl">Create Campain <i class="fui-mail mll"></i></button>
+                <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+                  <span class='mrl'>Create Campain</span>
+                  <i class="fui-mail mll"></i></button>
+              </li>
+            </ul> <!-- /nav -->
+          </div><!--/.navbar-collapse -->
+        </div>
+
+        <div style='display: none' class="navbar navbar-inverse profile-toolbar toolbar-secondary js-item-selected">
+          <div class="navbar-collapse">
+            <p class='white pull-left mtm mls mbn'>Item Actions:</p>
+            <ul class="nav navbar-nav navbar-right">
+              <li class='mrl'>
+                <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
+              </li>
+              <li>
+                <button class="btn btn-sm btn-embossed btn-primary mts mrl" disabled>
+                  <span>Enrich</span>
+                </button>
+              </li>
+              <li>
+                <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+                  <span>Copy to...</span>
+                </button>
+              </li>
+              <li>
+                <button class="btn btn-sm btn-embossed btn-danger mts mrl">
+                  <span class='mrl'>Delete</span>
+                  <i class="fui-cross mll"></i>
+                </button>
               </li>
             </ul> <!-- /nav -->
           </div><!--/.navbar-collapse -->
         </div>
 
         <div class="table-responsive">
-          <table class="table table-bordered">
+          <table id='customers-table' class="table table-bordered">
             <thead>
               <tr>
                 <th><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
@@ -273,16 +304,18 @@
 
 
     <!-- Load JS here for greater good =============================-->
-    <script src="js/jquery-1.8.3.min.js"></script>
-    <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="js/jquery.ui.touch-punch.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/bootstrap-switch.js"></script>
-    <script src="js/flatui-checkbox.js"></script>
-    <script src="js/flatui-radio.js"></script>
-    <script src="js/jquery.tagsinput.js"></script>
-    <script src="js/jquery.placeholder.js"></script>
-    <script src="js/application.js"></script>
+    <script src="../js/vendor/jquery/jquery-1.8.3.min.js"></script>
+    <script src="../js/vendor/jquery/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../js/vendor/jquery/jquery.ui.touch-punch.min.js"></script>
+    <script src="../js/vendor/jquery/jquery.tagsinput.js"></script>
+    <script src="../js/vendor/jquery/jquery.placeholder.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap-select.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap-switch.js"></script>
+    <script src="../js/vendor/flatui-checkbox.js"></script>
+    <script src="../js/vendor/flatui-radio.js"></script>
+    <script src="../js/application.js"></script>
+
+    <script src="../js/profiles.js"></script>
   </body>
 </html>
