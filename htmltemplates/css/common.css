@@ -1,0 +1,13 @@
+.white {
+  color: #fff;
+}
+.icon.orange {
+  color: #f29913;
+}
+.icon.orange.active {
+  color: #e67d22;
+}
+
+.mn {
+  margin: 0;
+}
