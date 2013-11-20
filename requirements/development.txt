@@ -1,0 +1,7 @@
+-r production.txt
+
+django-debug-toolbar
+django-nose
+
+pep8
+pyflakes
