@@ -11,7 +11,7 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'', include('keen.web.urls')),
+    url(r'', include('keen.web.urls')),
 )
 
 ## In DEBUG mode, serve media files through Django.

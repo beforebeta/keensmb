@@ -103,6 +103,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'shared_static'),
 )
 
 # If you set this to False, Django will make some optimizations so as not
@@ -198,11 +199,11 @@ MANAGERS = ADMINS = (
 # SECURITY WARNING: don't run with debug turned on in production!
 # Debugging displays nice error messages, but leaks memory. Set this to False
 # on all server instances and True only for development.
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 
 # Is this a development instance? Set this to True on development/master
 # instances and False on stage/prod.
-DEV = False
+DEV = True
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -239,18 +240,20 @@ SYSTEM_EMAIL_PREFIX = "[keen]"
 
 ## Log settings
 
-LOG_LEVEL = logging.INFO
-HAS_SYSLOG = True
-SYSLOG_TAG = "http_app_keen"  # Make this unique to your project.
 # Remove this configuration variable to use your custom logging configuration
-LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
     'loggers': {
-        'keen': {
-            'level': "DEBUG"
-        }
-    }
+        '': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
 }
 
 # Common Event Format logging parameters

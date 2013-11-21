@@ -47,7 +47,7 @@ class Address(Timestamps):
 class Location(Timestamps):
 
     name = models.CharField(max_length=255)
-    client = models.ForeignKey('Client')
+    client = models.ForeignKey('Client', related_name='locations')
     address = models.ForeignKey('Address')
     is_main = models.BooleanField(default=False)
 

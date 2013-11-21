@@ -1,0 +1,17 @@
+.white {
+  color: #fff;
+}
+.icon.orange {
+  color: #f29913;
+}
+.icon.orange:hover {
+  color: #e67d22;
+}
+
+.mn {
+  margin: 0;
+}
+
+.page-title {
+  font-size: 24px;
+}
