@@ -5,7 +5,7 @@ var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
 
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+// var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              proxySnippet,
+              // proxySnippet,
               lrSnippet,
               mountFolder(connect, yeomanConfig.app)
             ];

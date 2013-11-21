@@ -28,7 +28,7 @@ html, body {
 .navbar-inverse .nav .caret {
   border-top-color: #169e83; border-bottom-color: #169e83;
 }
-.navbar-inverse .nav > li > a:hover .caret {
+.navbar-inverse .nav > li:hover > a .caret {
   border-top-color: #fff; border-bottom-color: #fff;
 }
 .navbar-inverse .nav li a:hover  {
@@ -238,10 +238,10 @@ section {
   padding-bottom: 8px;
   z-index: 1;
 }
-.toolbar-secondary .btn-primary {
+.btn-primary.btn-secondary {
   background: #1aba9a;
 }
-.toolbar-secondary .btn-primary:hover {
+.btn-primary.btn-secondary:hover {
   background: #48c7ad;
 }
 .toolbar-secondary .btn-embossed {
