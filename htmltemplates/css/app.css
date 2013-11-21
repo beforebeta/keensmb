@@ -222,6 +222,11 @@ section {
   background: #169e83;
   color: #1aba9a !important;
 }
+
+.profile-toolbar .nav > li > a {font-weight: normal;}
+.profile-toolbar .nav > li {overflow: hidden;}
+.profile-toolbar .nav > li:hover {overflow: visible;}
+
 .profile-toolbar.navbar-inverse .navbar-form .form-control::-webkit-input-placeholder {color: #1aba9a;}
 .profile-toolbar.navbar-inverse .navbar-form .form-control:-moz-placeholder {color: #1aba9a;}
 .profile-toolbar.navbar-inverse .navbar-form .form-control::-moz-placeholder {color: #1aba9a;}
@@ -242,4 +247,57 @@ section {
 .toolbar-secondary .btn-embossed {
   -webkit-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.global-alert {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  padding: 0;
+  border: none;
+  z-index: 99;
+}
+
+.table.table-bordered {
+  border: none;
+}
+.table.table-bordered tr > td,
+.table.table-bordered tr > th {
+  border: 1px solid #ebeff0 !important;
+}
+.customers-table tr > td:last-child,
+.customers-table tr > th:last-child {
+  border: 1px dashed #ebeff0 !important;
+}
+.table.table-bordered thead tr {
+  background: #f2f2f2;
+}
+.table.table-bordered thead .first-icon,
+.table.table-bordered thead .second-icon {
+  background: none;
+}
+.customers-table .new-field-cell {
+  background: #fff;
+}
+.customers-table .new-field-cell:hover {
+  background: #f2f2f2;
+  border:1px dashed #ccc !important;
+  color: #000;
+  cursor: pointer;
+  -webkit-transition: background .2s;
+  -moz-transition: background .2s;
+  -ms-transition: background .2s;
+  -o-transition: background .2s;
+  transition: background .2s;
+  box-shadow: inset 1px 0 0 0 #ddd;
+}
+.customers-table .new-field-cell:hover > i,
+.customers-table .new-field-cell:hover > span {
+  color: #526476;
+  -webkit-transition: color .2s;
+  -moz-transition: color .2s;
+  -ms-transition: color .2s;
+  -o-transition: color .2s;
+  transition: color .2s;
 }
