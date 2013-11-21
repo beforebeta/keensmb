@@ -63,6 +63,15 @@
         </div>
       </header>
 
+      <div class="global-alert customer-deleted-alert dialog dialog-warning text-left fade" data-alert="alert">
+        <div class="container">
+          <a class="close mts" href="#" aria-hidden="true"><i class="fui-cross"></i></a>
+          <p class='mn text-left'>
+            <span class='small mll'>Customer <span class="text-danger js-customer-deleted-name"></span> was deleted</span>
+          </p>
+        </div>
+      </div>
+
       <!-- Breadcrumbs -->
       <ul class="breadcrumb kn-breadcrumb">
         <li><a href="#fakelink">Customers</a></li>
@@ -71,7 +80,7 @@
 
       <!-- Content -->
       <section class='clearfix'>
-        <h5>Customer Profiles</h5>
+        <h1 class='page-title mbn'>Customer Profiles</h1>
 
         <div class="row">
           <div class="col-md-6">
@@ -150,7 +159,7 @@
                 <form class="navbar-form navbar-left" action="#">
                   <div class="form-group">
                     <div class="input-group input-group-sm">
-                      <input class="form-control" id="navbarInput-02" type="search" placeholder="Search">
+                      <input class="form-control" id="navbarInput-02" type="search" placeholder="Search in list...">
                       <span class="input-group-btn">
                         <button type="submit" class="btn"><span class="fui-search"></span></button>
                       </span>
@@ -165,16 +174,16 @@
               </li>
               <li>
                 <button class="btn btn-sm btn-embossed btn-primary mts mrl">
-                  <span class='mrl'>Create Campain</span>
+                  <span class='mrl'>Create Campaign</span>
                   <i class="fui-mail mll"></i></button>
               </li>
             </ul> <!-- /nav -->
           </div><!--/.navbar-collapse -->
         </div>
 
-        <div style='display: none' class="navbar navbar-inverse profile-toolbar toolbar-secondary js-item-selected">
+        <div style='display: none' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
           <div class="navbar-collapse">
-            <p class='white pull-left mtm mls mbn'>Item Actions:</p>
+            <p class='white pull-left mtm mll mbn'>Item Actions:</p>
             <ul class="nav navbar-nav navbar-right">
               <li class='mrl'>
                 <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
@@ -190,7 +199,7 @@
                 </button>
               </li>
               <li>
-                <button class="btn btn-sm btn-embossed btn-danger mts mrl">
+                <button class="btn btn-sm btn-embossed btn-danger js-delete-customer mts mrl">
                   <span class='mrl'>Delete</span>
                   <i class="fui-cross mll"></i>
                 </button>
@@ -199,17 +208,37 @@
           </div><!--/.navbar-collapse -->
         </div>
 
+        <div id="deleteItemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
+              </div>
+              <div class="modal-body">
+                <h4>Text in a modal</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
         <div class="table-responsive">
-          <table id='customers-table' class="table table-bordered">
+          <table id='customers-table' class="table table-bordered customers-table">
             <thead>
               <tr>
-                <th><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
+                <th width='60' class='text-center'><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
                 <th>Name</th>
                 <th>Enriched</th>
                 <th>Email Address</th>
                 <th>Age</th>
                 <th>Gender</th>
-                <th>New field</th>
+                <th class='new-field-cell'><i class='text-muted'>New field</i></th>
               </tr>
             </thead>
             <tbody>
