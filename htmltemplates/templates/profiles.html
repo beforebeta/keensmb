@@ -54,7 +54,11 @@
                 <span class="dropdown-arrow dropdown-arrow-inverse mrm"></span>
                 <ul class="dropdown-menu pull-right">
                   <li><a href="#fakelink">My settings</a></li>
-                  <li><a href="#fakelink" class='highlighted'>Log Out <i class="fui-power pull-right"></i></a></li>
+                  <li>
+                    <a href="#fakelink" class='highlighted' data-toggle="modal" data-target="#loginModal">
+                      Log Out <i class="fui-power pull-right"></i>
+                    </a>
+                  </li>
                 </ul>
               </li>
             </ul>
@@ -189,12 +193,12 @@
                 <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
               </li>
               <li>
-                <button class="btn btn-sm btn-embossed btn-primary mts mrl" disabled>
+                <button class="btn btn-sm btn-embossed btn-primary btn-secondary mts mrl" disabled>
                   <span>Enrich</span>
                 </button>
               </li>
               <li>
-                <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+                <button class="btn btn-sm btn-embossed btn-primary btn-secondary mts mrl">
                   <span>Copy to...</span>
                 </button>
               </li>
@@ -208,37 +212,19 @@
           </div><!--/.navbar-collapse -->
         </div>
 
-        <div id="deleteItemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
-              </div>
-              <div class="modal-body">
-                <h4>Text in a modal</h4>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-              </div>
-
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
         <div class="table-responsive">
           <table id='customers-table' class="table table-bordered customers-table">
             <thead>
               <tr>
-                <th width='60' class='text-center'><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
+                <th width='56' class='text-center'><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
                 <th>Name</th>
                 <th>Enriched</th>
                 <th>Email Address</th>
                 <th>Age</th>
                 <th>Gender</th>
-                <th class='new-field-cell'><i class='text-muted'>New field</i></th>
+                <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
+                  <i class='text-muted'>New field</i>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -330,6 +316,106 @@
         </div>
       </div>
     </footer>
+
+    <div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fui-cross"></i>
+            </button>
+            <h4 class="modal-title">Select Fields to Add</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row mbl">
+              <div class="col-md-3"><span>Field Name 1</span></div>
+              <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
+              <div class="col-md-3">
+                <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+                  <span class='mrl'>Add Field</span>
+                  <i class="fui-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row mbl">
+              <div class="col-md-3"><span>Field Name 2</span></div>
+              <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
+              <div class="col-md-3">
+                <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+                  <span class='mrl'>Add Field</span>
+                  <i class="fui-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row mbl">
+              <div class="col-md-3"><span>Field Name 3</span></div>
+              <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
+              <div class="col-md-3">
+                <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+                  <span class='mrl'>Add Field</span>
+                  <i class="fui-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Add Field(s)</button>
+            <button type="button" class="btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Login modal -->
+    <div id="loginModal" class="modal fade modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fui-cross"></i>
+            </button>
+            <h4 class="modal-title">Sign In to Your Keen Account</h4>
+          </div>
+          <div class="modal-body">
+            <form action='#' id='signInForm'>
+              <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                  <div class="form-group">
+                    <input type="email" placeholder='Email Address' class='form-control'>
+                  </div>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                  <div class="form-group mbs">
+                    <input type="email" placeholder='Password' class='form-control'>
+                  </div>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                  <label class="checkbox no-label mtm" for="remember-me">
+                    <input type="checkbox" name='remember-me' id="remember-me" data-toggle="checkbox">
+                    <span>Remember me</span>
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <a class='small' href="#">Forgot your password?</a>
+                </div>
+              </div>
+              <div class="row mts mbl">
+                <div class="col-md-5 col-md-offset-1">
+                  <button class="btn btn-default btn-embossed">Create an account</button>
+                </div>
+                <div class="col-md-5">
+                  <button class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right">Sign In</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
     <!-- Load JS here for greater good =============================-->
