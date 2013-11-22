@@ -23,6 +23,8 @@ def customers(request):
     offset = (page - 1) * page_size
 
     try:
+        if Client.objects.filter(slug="mdo").count() <= 0:  # TODO REMOVE ME LATER
+            Client(slug="mdo", name="mdo").save()           # TODO REMOVE ME LATER
         client = Client.objects.get(slug='mdo')
     except Client.DoesNotExist:
         logger.error('Client not found')
