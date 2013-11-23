@@ -11,16 +11,6 @@ class Timestamps(models.Model):
         abstract = True
 
 
-class HStoreFieldCatalog(Timestamps):
-
-    name = models.CharField(max_length=50, unique=True)
-    type = models.CharField(max_length=50)
-    # allows you to group fields together
-    grouping = models.CharField(max_length=50)
-    group_ranking = models.PositiveSmallIntegerField()
-    length = models.IntegerField()
-
-
 class Image(Timestamps):
 
     IMAGE_TYPES = (
@@ -49,36 +39,56 @@ class Location(Timestamps):
     name = models.CharField(max_length=255)
     client = models.ForeignKey('Client', related_name='locations')
     address = models.ForeignKey('Address')
-    is_main = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         unique_together = ('name', 'client')
+
+
+class CustomerField(Timestamps):
+
+    FIELD_TYPES = (
+        ('S', 'String'),
+        ('I', 'Integer'),
+        ('D', 'Date'),
+        ('U', 'URL'),
+        ('E', 'E-mail address'),
+        ('F', 'Float'),
+    )
+
+    name = models.CharField(max_length=64, unique=True)
+    group = models.CharField(max_length=32)
+    type = models.CharField(max_length=1, choices=FIELD_TYPES)
 
 
 class Client(Timestamps):
 
     slug = models.CharField(max_length=255, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
-    customer_fields = models.ManyToManyField(HStoreFieldCatalog)
-    groups = models.ManyToManyField(Group)
+    main_location = models.ForeignKey('Location', null=True, related_name='+')
+    customer_fields = models.ManyToManyField(CustomerField)
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return self.slug
+        return self.name
 
 
 class CustomerSource(Timestamps):
 
     client = models.ForeignKey(Client)
     slug = models.CharField(max_length=50)
-    name = models.CharField(max_length=255)
     url = models.TextField(blank=True, null=True)
     # this may be a reference to a specific web.models.SignupForm model or a
     # mailchimp list or anything else
     ref_id = models.IntegerField()
     ref_source = models.CharField(max_length=50)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
-        unique_together = ('client', 'name')
+        unique_together = ('client', 'slug')
 
 
 class Customer(Timestamps):
@@ -91,9 +101,9 @@ class Customer(Timestamps):
 
     client = models.ForeignKey('Client')
     source = models.ForeignKey(CustomerSource)
-    data = hstore.DictionaryField(db_index=True)
-    locations = models.ManyToManyField(Location)
-    enrichment_status = models.CharField(max_length=3,
-                                         choices=ENRICHMENT_STATUS)
+    data = hstore.DictionaryField()
+    locations = models.ManyToManyField(Location, related_name='customers')
+    enrichment_status = models.CharField(
+        max_length=3, choices=ENRICHMENT_STATUS)
 
     objects = hstore.HStoreManager()
