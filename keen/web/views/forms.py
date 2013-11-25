@@ -35,4 +35,4 @@ class CustomerForm(forms.Form):
             if group.name not in self.fieldsets:
                 self.fieldsets[group.name] = FieldSet(group.title)
             self.fieldsets[group.name].fields.append(
-                BoundField(self, form_field, field.name))
+                BoundField(self, form_field, 'data_{0}'.format(field.name)))

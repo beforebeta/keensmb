@@ -6,8 +6,6 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-import deform
-
 from keen.core.models import Client, Customer
 from keen.web.views.api.schema import NewCustomerSchema, CustomerSchema
 
@@ -18,7 +16,7 @@ def response(content, content_type='application/json', **kw):
     return Response(serialize('json', content), content_type=content_type, **kw)
 
 
-class CusomerList(APIView):
+class CustomerList(APIView):
     """Customer list API
     """
     def get(self, request):
@@ -44,19 +42,15 @@ class CusomerList(APIView):
 
     def post(self, request):
         client = Client.objects.get(slug=client_slug)
-        form = deform.Form(NewCustomerSchema().bind(client=client))
+        form = CustomerForm(client, request.POST))
 
-        try:
-            customer = form.validate(request.POST.items())
-        except deform.ValidationFailure, e:
-            return Response(e.render(), status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            customer = Customer(**customer)
-            customer.save()
-        except DatabaseError:
-            logger.exception('Failed to save new customer')
-            return Result(status=status.HTTTP_500_SERVER_ERROR)
+        if form.is_valid():
+            try:
+                customer = Customer(**customer)
+                customer.save()
+            except DatabaseError:
+                logger.exception('Failed to save new customer')
+                return Result(status=status.HTTTP_500_SERVER_ERROR)
 
         return response({'id': customer.id}, status=status.HTTP_201_CREATED)
 
@@ -64,29 +58,30 @@ class CusomerList(APIView):
 class CustomerProfile(APIView):
     """Customer API
     """
-    def get(self, id):
-        customer = Customer.objects.get(id=id)
+    def get(self, customer_id):
+        client = get_object_or_404(Client, slug='mdo')
+        customer = get_object_or_404(Customer, client=client, id=customer_id)
         return Response(customer)
 
-    @transaction.commit_on_success
-    def post(self, id):
-        customer = Customer.objects.get(id=id)
+    def post(self, customer_id):
+        client = get_object_or_404(Client, slug='mdo')
+        customer = get_object_or_404(Customer, client=client, id=customer_id)
 
-        try:
-            # Always clone() if sub-nodes are going to be modified
-            schema = CustomerSchema().clone()
-            schema.bind(client=client)
-            form = deformForm(schema)
-            data = form.validate(request.POST.items())
-        except deform.ValidationError, e:
-            return response(e.render())
+        form = CustomerForm(client, request.POST)
 
-        try:
-            customer.data.update(form)
-            customer.save()
-        except DatabaseError:
-            logger.exception('Failed to update customer')
-            return response({'error': 'Failed to save customer profile',
-                             status=status.HTTP_400_BAD_REQUEST)
+        if form.is_valid():
+            for field in form:
+                if field.name.startswith('data_'):
+                    name = field.name[5:]
+                    # FIXME: should check if this field is actually in
+                    # customer_fields of that client
+                    customer[name] = field.value
+
+            try:
+                customer.save()
+            except DatabaseError:
+                logger.exception('Failed to update customer')
+                return response('Failed to save customer profile',
+                                status=status.HTTP_400_BAD_REQUEST)
 
         return response(customer)
