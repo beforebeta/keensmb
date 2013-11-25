@@ -101,6 +101,7 @@ def _setup_sample_data():
 
     #setup default client
     client,created = Client.objects.get_or_create(slug="default_client", name="default_client")
+    customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
 
     #setup default field list
     if client.customer_fields.all().count() == 0:
@@ -117,12 +118,10 @@ def _setup_sample_data():
             customer_text = customer_text.replace("\n","")
             customer_values = customer_text.split(",")
             if len(customer_values) == len(clients_customer_fields):
-                data = {}
+                c = Customer(client=client, source=customer_source)
                 for i in range(0, len(customer_values)):
-                    data[clients_customer_fields[i].name] = customer_values[i]
-                print data
-                customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
-                c = Customer(client=client, source=customer_source, data=data)
+                    c.data[clients_customer_fields[i].name] = str(customer_values[i])
+                print c.data
                 c.save()
 
 
