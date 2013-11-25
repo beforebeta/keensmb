@@ -38,3 +38,4 @@ South
 
 # Feature testing
 django-waffle
+django-model-utils==1.5.0
