@@ -1,10 +1,15 @@
 # Install everything that needs to be compiled
 -r compiled.txt
 
+uwsgi
+
 # Django stuff
 Django>=1.6
 
 django-hstore
+djangorestframework
+deform
+colander
 
 # Templates
 django_compressor
