@@ -3,12 +3,12 @@ from django.conf.urls import patterns, url, include
 from .views import client
 #from .views.api.client import CustomerList, CustomerProfile
 
-#
-#api_urls = patterns(
-#    'keen.web.views.api',
-#    url(r'^customers/', CustomerList.as_view()),
-#    url(r'^customers/{?P<customer_id>\d+)$', CustomerProfile.as_view()),
-#)
+
+api_urls = patterns(
+    'keen.web.views.api',
+    url(r'^customers/', CustomerList.as_view()),
+    url(r'^customers/(?P<customer_id>\d+)$', CustomerProfile.as_view()),
+)
 
 
 urlpatterns = patterns(
