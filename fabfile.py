@@ -46,7 +46,7 @@ def install_os_packages():
 
 def prepare_db():
     sudo('service postgresql start')
-    with settings(sudo_user='postgres'):
+    with settings(sudo_user='postgres', warn_only=True):
         sudo('createuser -S -D -R keen')
         sudo('createdb -O keen -T template0 -E utf8 keen')
         sudo('psql -c "create extension hstore;" keen')
@@ -71,20 +71,23 @@ def ensure_virtualenv():
     run("virtualenv --no-site-packages %s" % env.virtualenv)
 
 
-def pull_code():
-    if not exists(env.code_dir):
-        run('git clone %s "%s"' % (env.code_repo, env.code_dir))
-    else:
-        with cd(env.code_dir):
-            run('git pull')
-
+def clone(repo=None):
+    if repo is None:
+        repo = 'git@github.com:beforebeta/keensmb.git'
+    run('git clone %s %s' % (repo, env.code_dir))
     local_py = 'keen/settings/local.py'
-    if not exists(path(env.code_dir, local_py)):
-        put(local_py, path(env.code_dir, 'keen/settings/'))
+    put(local_py, path('keen/keen/settings/'))
 
+
+def pull():
+    with cd(env.code_dir):
+        run('git pull')
+
+
+def configure_nginx():
     nginx_sites_enabled = '/etc/nginx/sites-enabled/'
     if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
-        sudo('ln -s %s %s' % (path('conf/nginx/keensmb.com'), nginx_sites_enabled))
+        sudo('ln -s %s %s' % (path('keen/conf/nginx/keensmb.com'), nginx_sites_enabled))
 
 
 @task
@@ -101,7 +104,6 @@ def staging(hosts):
     """
     env.django_settings_module = 'keen.settings.development'
     env.hosts = hosts.split(',')
-    env.code_repo = 'git@github.com:beforebeta/keensmb.git'
 
 
 @task
@@ -205,8 +207,9 @@ def sshagent_run(cmd):
 
 
 @task
-def install():
+def install(repo=None):
     install_os_packages()
+    ensure_virtualenv()
     prepare_db()
-    pull_code()
+    clone(repo)
     install_dependencies()
