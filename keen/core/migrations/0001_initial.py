@@ -76,7 +76,7 @@ class Migration(SchemaMigration):
             ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('slug', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
-            ('main_location', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', null=True, to=orm['core.Location'])),
+            ('main_location', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='+', null=True, to=orm['core.Location'])),
         ))
         db.send_create_signal(u'core', ['Client'])
 
@@ -97,8 +97,8 @@ class Migration(SchemaMigration):
             ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Client'])),
             ('slug', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('url', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('ref_id', self.gf('django.db.models.fields.IntegerField')()),
-            ('ref_source', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('ref_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('ref_source', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
         ))
         db.send_create_signal(u'core', ['CustomerSource'])
 
@@ -113,7 +113,7 @@ class Migration(SchemaMigration):
             ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Client'])),
             ('source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.CustomerSource'])),
             ('data', self.gf('django_hstore.fields.DictionaryField')(db_index=True)),
-            ('enrichment_status', self.gf('django.db.models.fields.CharField')(max_length=3)),
+            ('enrichment_status', self.gf('django.db.models.fields.CharField')(default='NE', max_length=3)),
         ))
         db.send_create_signal(u'core', ['Customer'])
 
@@ -182,7 +182,7 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'customer_fields': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['core.CustomerField']", 'symmetrical': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'main_location': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'null': 'True', 'to': u"orm['core.Location']"}),
+            'main_location': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'to': u"orm['core.Location']"}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'})
@@ -192,7 +192,7 @@ class Migration(SchemaMigration):
             'client': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Client']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'data': ('django_hstore.fields.DictionaryField', [], {'db_index': 'True'}),
-            'enrichment_status': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
+            'enrichment_status': ('django.db.models.fields.CharField', [], {'default': "'NE'", 'max_length': '3'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'locations': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'customers'", 'symmetrical': 'False', 'to': u"orm['core.Location']"}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
@@ -223,8 +223,8 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'ref_id': ('django.db.models.fields.IntegerField', [], {}),
-            'ref_source': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'ref_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'ref_source': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
