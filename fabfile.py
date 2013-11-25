@@ -78,9 +78,9 @@ def pull_code():
         with cd(env.code_dir):
             run('git pull')
 
-    #local_py = 'keen/settings/local.py'
-    #if not exists(path(local_py)):
-    #    put(local_py, path('keen/settings/'))
+    local_py = 'keen/settings/local.py'
+    if not exists(path(env.code_dir, local_py)):
+        put(local_py, path(env.code_dir, 'keen/settings/'))
 
     nginx_sites_enabled = '/etc/nginx/sites-enabled/'
     if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
