@@ -131,6 +131,7 @@
 // Transitions
 .transition(@transition) {
   -webkit-transition: @transition;
+     -moz-transition: @transition;
           transition: @transition;
 }
 .transition-property(@transition-property) {
@@ -681,10 +682,10 @@
 .label-variant(@color, @hover-color, @text-color: @inverse) {
   background-color: @color;
   color: @text-color;
-  
+
   &[href] {
     color: @text-color;
-    
+
     &:hover,
     &:focus {
       color: @text-color;
@@ -710,7 +711,7 @@
     border-color: @border-color;
     .box-shadow(none);
     .placeholder(@text-color);
-    
+
     &:focus {
       border-color: @border-color;
       .box-shadow(none);
