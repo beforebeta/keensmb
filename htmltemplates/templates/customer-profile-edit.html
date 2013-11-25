@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Flat UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <!-- <link href="css/flat-ui.css" rel="stylesheet"> -->
+    <link href="../css/flat-ui-custom.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="../css/app.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="../images/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="main-container container">
+
+      <!-- Header -->
+      <header class="navbar navbar-default navbar-fixed-top kn-nav" role="banner">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-collapse-01"></button>
+            <a href="#fakelink" class="navbar-brand">
+              <img src="../images/logo-small.png" alt="Keen">
+            </a>
+          </div>
+          <div class="navbar-collapse collapse navbar-collapse-01">
+            <ul class="nav navbar-nav">
+              <li><a href="#fakelink">Dashboard</a></li>
+              <li><a href="#fakelink">Promotions</a></li>
+              <li class="active"><a href="#fakelink">Customers</a></li>
+              <li><a href="#fakelink">Business Profile</a></li>
+            </ul> <!-- /nav -->
+
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href="#fakelink">Business/User Name</a>
+              </li>
+              <li class='dropdown'>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="fui-gear"></span>
+                </a>
+                <span class="dropdown-arrow dropdown-arrow-inverse mrm"></span>
+                <ul class="dropdown-menu pull-right">
+                  <li><a href="#fakelink">My settings</a></li>
+                  <li>
+                    <a href="#fakelink" class='highlighted' data-toggle="modal" data-target="#loginModal">
+                      Log Out <i class="fui-power pull-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.navbar-collapse -->
+
+        </div>
+      </header>
+
+      <div class="global-alert customer-deleted-alert dialog dialog-warning text-left fade" data-alert="alert" style='display: none;'>
+        <div class="container">
+          <a class="close mts" href="#" aria-hidden="true"><i class="fui-cross"></i></a>
+          <p class='mn text-left'>
+            <span class='small mll'>Customer <span class="text-danger js-customer-deleted-name"></span> was deleted</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Breadcrumbs -->
+      <ul class="breadcrumb kn-breadcrumb">
+        <li><a href="#fakelink">Customers</a></li>
+        <li><a href="#fakelink">Customers Profile</a></li>
+        <li class="active"><a href="#fakelink">Add New Customer</a></li>
+      </ul>
+
+      <!-- Content -->
+      <section class='clearfix'>
+        <h1 class='page-title mbn'>Customer Profile</h1>
+
+        <div class="row mtl">
+          <div class="col-md-4 user-details">
+            <div class="center-block text-center">
+              <div class="logo-block dib">
+                <div class="logo-block-cover">
+                  <button class="btn btn-sm btn-wide btn-embossed btn-primary btn-secondary">Upload photo</button>
+                  <button class="btn btn-sm btn-danger btn-embossed mtm">
+                    <span class='mrs'>Delete</span>
+                    <i class="fui-cross"></i>
+                  </button>
+                </div>
+                <img src="../images/icons/dude.svg" alt="user name" style='width: 170px'>
+              </div>
+            </div>
+            <div class="mtl">
+
+              <div class='row'>
+                <div class='col-sm-6'>
+                  <div class="form-group mbn">
+                    <input type="text" class="form-control input-hg" placeholder='First Name'>
+                  </div>
+                </div>
+                <div class='col-sm-6 pln'>
+                  <div class="form-group mbn">
+                    <input type="text" class="form-control input-hg" placeholder='Last Name'>
+                  </div>
+                </div>
+              </div>
+              <div class='row mtm'>
+                <div class='col-sm-3'><span class="text-muted mtx mrs dib">DOB:</span></div>
+                <div class='col-sm-9'>
+                  <div class="form-group mbn">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button class="btn" type="button"><span class="fui-calendar"></span></button>
+                      </span>
+                      <input type="text" class="form-control" value="14 March, 2013" id="datepicker-01">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class='row mtm'>
+                <div class='col-sm-3'><span class="text-muted mtx mrs dib">Gender:</span></div>
+                <div class='col-sm-4'>
+                  <label class="radio">
+                    <input type="radio" name="optionsRadios" id="field-gender" value="female" data-toggle="radio">
+                    Female
+                  </label>
+                </div>
+                <div class='col-sm-4'>
+                  <label class="radio">
+                    <input type="radio" name="optionsRadios" id="field-gender" value="male" data-toggle="radio">
+                    Male
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mtl">
+                <div class="col-md-3">
+                  <span class="fui-facebook text-blue social-icon mts"></span>
+                </div>
+                <div class="col-md-9">
+                  <div class="form-group mbn">
+                    <input type="url" class="form-control" placeholder='facebook.com/username'>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mtm">
+                <div class="col-md-3">
+                  <span class="fui-twitter text-blue social-icon mts"></span>
+                </div>
+                <div class="col-md-9">
+                  <div class="form-group mbn">
+                    <div class="input-group">
+                      <span class="input-group-addon">@</span>
+                      <input class="form-control" type="text" placeholder="@ your twitter name">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mtm">
+                <div class="col-md-3">
+                  <span class="fui-googleplus text-blue social-icon mts"></span>
+                </div>
+                <div class="col-md-9">
+                  <div class="form-group mbn">
+                    <input type="url" class="form-control" placeholder='plus.google/username'>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-8">
+            <div class='mbs'>
+              <button class="btn btn-sm btn-primary btn-secondary btn-embossed btn-wide-sm pull-right">Save</button>
+              <button class="btn btn-sm btn-default btn-embossed btn-wide-sm pull-right mrm">Cancel</button>
+
+              <img src="../images/icons/retina.svg" alt="" class='dib mid mrl' style='width: 40px;'>
+              <span class='dib mid mtn mbn'>Profile was enriched on date</span>
+            </div>
+
+            <div class="kn-section active">
+              <div class="kn-section-header">
+                <span class='fui-book text-blue  dib mid'></span>
+                <h6 class='mll dib mid mbn mtn'>Basic Information</span>
+              </div>
+              <div class="kn-section-content">
+                <div class="row small">
+                  <div class="col-md-2">
+                    <span>Email:</span>
+                  </div>
+                  <div class="col-md-10">
+                    <div class="form-group mbl">
+                      <input type="email" class="form-control" placeholder='Email Address'>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <span>Address:</span>
+                  </div>
+                  <div class="col-md-10">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Address Line 1'>
+                    </div>
+                  </div>
+                  <div class="col-md-7 col-md-offset-2">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Address Line 2'>
+                    </div>
+                  </div>
+                  <div class="col-md-3 pln">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Apt No.'>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-md-offset-2">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='City'>
+                    </div>
+                  </div>
+                  <div class="col-md-3 pln">
+                    <select name="state" id="state" class='simple full mbs'>
+                      <option value="0" selected disabled>State</option>
+                      <option value="1">Alabama</option>
+                      <option value="2">Alaska</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3 pln">
+                    <div class="form-group mbl">
+                      <input type="text" class="form-control" placeholder='Zip Code'>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2 prn">
+                    <span>Mobile phone:</span>
+                  </div>
+                  <div class="col-md-10">
+                    <div class="form-group mbl">
+                      <input type="text" class="form-control input-fixed dib" placeholder='(555)'>
+                      <span class="dib">&minus;</span>
+                      <input type="text" class="form-control input-fixed dib" placeholder='555'>
+                      <span class="dib">&minus;</span>
+                      <input type="text" class="form-control input-fixed dib" placeholder='5555'>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <span>Occupation:</span>
+                  </div>
+                  <div class="col-md-10">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Occupation'>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="kn-section mtl disabled">
+              <div class="kn-section-header">
+                <i class='pull-right small'>Not Enriched</i>
+                <span class='fui-home text-blue dib mid'></span>
+                <h6 class='mll dib mid mbn mtn'>Household Information</span>
+              </div>
+              <div class="kn-section-content small">
+                <div class="row">
+                  <div class="col-md-4"><span>Marital Status:</span></div>
+                  <div class="col-md-4">
+                    <select name="marital" id="marital" class='simple full'>
+                      <option selected disabled>State</option>
+                      <option value="1">Alabama</option>
+                      <option value="2">Alaska</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4"><span>Presence of Children:</span></div>
+                  <div class="col-md-4">
+                    <select name="children" id="children" class='simple full'>
+                      <option selected disabled>State</option>
+                      <option value="1">Alabama</option>
+                      <option value="2">Alaska</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4"><span>Home Owner Status:</span></div>
+                  <div class="col-md-4 mbl">
+                    <select name="homeowner" id="homeowner" class='simple full'>
+                      <option selected disabled>State</option>
+                      <option value="1">Alabama</option>
+                      <option value="2">Alaska</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4"><span>Income:</span></div>
+                  <div class="col-md-8">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Income'>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4"><span>Home Market Value:</span></div>
+                  <div class="col-md-8">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Home Market Value'>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4"><span>High Net Worth:</span></div>
+                  <div class="col-md-8">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='High Net Worth'>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4"><span>Length of Residence:</span></div>
+                  <div class="col-md-8">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder='Length of Residence'>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="kn-section mtl mbl disabled">
+              <div class="kn-section-header">
+                <i class='pull-right small'>Not Enriched</i>
+                <span class='fui-gear text-blue dib mid'></span>
+                <h6 class='mll dib mid mbn mtn'>Custom Fields</h6>
+              </div>
+              <div class="kn-section-content">
+                <div class="row small">
+                  <div class="col-md-4"><span>Add a field:</span></div>
+                  <div class="col-md-8">
+                    <div class="form-group mbs">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" id="new-field-query">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn"><span class="fui-search"></span></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row small">
+                  <div class="col-md-4"><span>Website</span></div>
+                  <div class="col-md-8">
+                    <div class="form-group mbs">
+                      <input type="text" class="form-control" placeholder="Website">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /.container -->
+
+      <div class="push-footer"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bottom-menu kn-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 navbar-brand">
+            <a href="#fakelink">
+              <img src="../images/logo-small.png" alt="Keen">
+            </a>
+          </div>
+
+          <div class="col-md-6">
+            <ul class="list-justify col-md-offset-2">
+              <li>
+                <a href="#fakelink">Terms of use</a>
+              </li>
+              <li>
+                <a href="#fakelink">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#fakelink">Contact Us</a>
+              </li>
+            </ul>
+            <div class='text-center'>
+              <small>Copyright Digital First Ventures. All Rights Reserved.</small>
+            </div>
+          </div>
+
+          <div class="col-md-2 col-md-offset-1">
+            <span>Try Keen for Free!</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+    <!-- Load JS here for greater good =============================-->
+    <script src="../js/vendor/jquery/jquery-1.8.3.min.js"></script>
+    <script src="../js/vendor/jquery/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../js/vendor/jquery/jquery.ui.touch-punch.min.js"></script>
+    <script src="../js/vendor/jquery/jquery.tagsinput.js"></script>
+    <script src="../js/vendor/jquery/jquery.placeholder.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap-select.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap-typeahead.js"></script>
+    <script src="../js/vendor/bootstrap/bootstrap-switch.js"></script>
+    <script src="../js/vendor/flatui-checkbox.js"></script>
+    <script src="../js/vendor/flatui-radio.js"></script>
+    <script src="../js/application.js"></script>
+
+    <script src="../js/profiles.js"></script>
+  </body>
+</html>
