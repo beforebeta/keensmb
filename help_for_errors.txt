@@ -1,0 +1,13 @@
+
+create a db called keen with the keen user
+run sql "create extension hstore" in the keendb
+
+do ./man
+
+pip install errors
+----------------------------------------------------------------
+
+1. Error: pg_config executable not found.
+
+export PATH=$PATH:/Library/PostgreSQL/9.1/bin/ --> change with your local PG install directory
+
