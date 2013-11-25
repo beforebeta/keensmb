@@ -84,7 +84,7 @@ def pull_code():
 
     nginx_sites_enabled = '/etc/nginx/sites-enabled/'
     if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
-        sudo('ln -s %s %s' % (path('conf/nginx/keensmb.com'), nginx_sites_enables))
+        sudo('ln -s %s %s' % (path('conf/nginx/keensmb.com'), nginx_sites_enabled))
 
 
 @task
