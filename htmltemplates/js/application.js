@@ -22,6 +22,7 @@ String.prototype.repeat = function(num) {
     $("select[name='large']").selectpicker({style: 'btn-lg btn-danger'});
     $("select[name='info']").selectpicker({style: 'btn-info'});
     $("select[name='small']").selectpicker({style: 'btn-sm btn-warning'});
+    $("select.simple").selectpicker({style: 'btn-sm btn-default'});
 
     // Tabs
     $(".nav-tabs a").on('click', function (e) {
@@ -178,6 +179,9 @@ String.prototype.repeat = function(num) {
 
     // Switch
     $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
+
+    // Typehead
+    $('.typeahead').typeahead();
 
     // make code pretty
     window.prettyPrint && prettyPrint();

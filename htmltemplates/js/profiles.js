@@ -25,6 +25,15 @@
         $alertBlock.removeClass('in').hide();
     };
 
+    $('#new-field-query').typeahead({
+        source: function (query, process) {
+            return ['opop', 'apap', 'ipip', 'opasd', 'asdfgh', 'jklpoiu', 'ytrewq', 'zxccvbn'];
+            // return $.get('/profile/custom-fields', { query: query }, function (data) {
+            //     return process(data.options);
+            // });
+        }
+    });
+
 
 
     // Table: Add class row selected

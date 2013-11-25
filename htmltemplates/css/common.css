@@ -8,9 +8,16 @@
   color: #e67d22;
 }
 
-.mn {
-  margin: 0;
-}
+.dib {display: inline-block;}
+.dib.mid {vertical-align: middle;}
+.dib.top {vertical-align: top;}
+.dib.bot {vertical-align: bottom;}
+
+
+.mn {margin: 0;}
+.pn {padding: 0;}
+.pln {padding-left: 0;}
+.prn {padding-right: 0;}
 
 .page-title {
   font-size: 24px;
@@ -33,4 +40,33 @@
 .text-simple {
   font-size: 13px;
   line-height: 1.3;
+}
+.text-blue {
+  color: #446cb3;
+}
+
+.select .btn, .full {
+  width: 100%;
+}
+
+.btn-group.select.simple .btn {
+  background: #fff;
+  border: 2px solid #bdc3c7;
+  height: 42px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #bdc3c7;
+  font-size: 15px;
+}
+.btn-group.select.simple .caret {
+  border-bottom-color: #bdc3c7;
+  border-top-color: #bdc3c7;
+}
+.btn-group.select.simple .dropdown-menu {
+  min-height: 0 !important;
+}
+
+.btn-wide-sm {
+  padding-left: 30px;
+  padding-right: 30px;
 }
