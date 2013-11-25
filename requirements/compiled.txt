@@ -3,3 +3,6 @@ psycopg2
 
 # for bcrypt passwords
 bcrypt
+
+#smart string matching
+fuzzywuzzy==0.2

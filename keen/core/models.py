@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import *
 from django_hstore import hstore
-
+from model_utils import Choices
 
 class Timestamps(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -13,10 +13,25 @@ class Timestamps(models.Model):
 
 class HStoreFieldCatalog(Timestamps):
 
+    FIELD_GROUPS = Choices(
+        ('basic', 'Basic Information'),
+        ('household', 'Household Information'),
+        ('custom', 'Custom Fields'),
+    )
+
+    FIELD_TYPES = Choices(
+        ('int', 'int'),
+        ('string', 'string'),
+        ('float', 'float'),
+        ('bool', 'bool'),
+        ('date', 'datetime.date')
+    )
+
     name = models.CharField(max_length=50, unique=True)
-    type = models.CharField(max_length=50)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=50, choices=FIELD_TYPES)
     # allows you to group fields together
-    grouping = models.CharField(max_length=50)
+    grouping = models.CharField(max_length=50, choices=FIELD_GROUPS)
     group_ranking = models.PositiveSmallIntegerField()
     length = models.IntegerField()
 
