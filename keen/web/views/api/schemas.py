@@ -19,9 +19,10 @@ def customer_data_schema(node, kw):
     """Build customer schema for given client dynamicly.
     """
     client = kw['client']
-    schema = colander.SchemaNode(Schema())
+    groups = {}
 
-    for field in client.customer_fields:
+    for field in client.customer_fields.order_by('group'):
+        if field.group.
         if field.type == 'S':
             schema.add(colander.SchemaNode(colander.Str(), name=field.name,
                                            missing=None))

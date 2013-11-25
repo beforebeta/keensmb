@@ -32,6 +32,10 @@ class Address(Timestamps):
     state_province = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return u','.join((self.street, self.city, self.state_province,
+                          self.country, self.postal_code))
+
 
 class Location(Timestamps):
 
@@ -46,41 +50,42 @@ class Location(Timestamps):
         unique_together = ('name', 'client')
 
 
-class CustomerField(Timestamps):
-
-    FIELD_GROUPS = Choices(
-        ('basic', 'Basic Information'),
-        ('household', 'Household Information'),
-        ('custom', 'Custom Fields'),
-    )
-
-    FIELD_TYPES = Choices(
-        ('int', 'int'),
-        ('string', 'string'),
-        ('float', 'float'),
-        ('bool', 'bool'),
-        ('date', 'datetime.date'),
-        ('url', 'url'),
-        ('email', 'email')
-    )
+class CustomerFieldGroup(Timestamps):
 
     name = models.CharField(max_length=64, unique=True)
-    group = models.CharField(max_length=32)
-    type = models.CharField(max_length=10, choices=Choices(FIELD_TYPES))
-    description = models.CharField(max_length=255, blank=True, null=True)
-    # allows you to group fields together
-    grouping = models.CharField(max_length=50, choices=FIELD_GROUPS)
-    group_ranking = models.PositiveSmallIntegerField()
-    length = models.IntegerField()
+    title = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
+
+
+class CustomerField(Timestamps):
+
+    FIELD_TYPES = (
+        ('S', 'String'),
+        ('I', 'Integer'),
+        ('D', 'Date'),
+        ('U', 'URL'),
+        ('E', 'E-mail Address'),
+        ('F', 'Float'),
+        ('L', 'Location'),
+    )
+
+    name = models.CharField(max_length=64, unique=True)
+    title = models.CharField(max_length=255, unique=True)
+    group = models.ForeignKey(CustomerFieldGroup)
+    type = models.CharField(max_length=1, choices=FIELD_TYPES)
+    required = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
+
 
 class Client(Timestamps):
 
     slug = models.CharField(max_length=255, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
-    main_location = models.ForeignKey('Location', null=True, related_name='+')
+    main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
     customer_fields = models.ManyToManyField(CustomerField)
 
     def __unicode__(self):  # Python 3: def __str__(self):
