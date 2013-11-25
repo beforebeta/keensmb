@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3646c680-0a28-4401-b1f7-8b7e8af1b0f4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/core/migrations/0002_auto__del_field_location_is_main__add_field_client_main_location__del_.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/views/api/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/views/api/client.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/views/api/schemas.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/settings/base.py" afterPath="$PROJECT_DIR$/keen/settings/base.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/views/api/client.py" afterPath="$PROJECT_DIR$/keen/web/views/api/client.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/core/models.py" afterPath="$PROJECT_DIR$/keen/core/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements/production.txt" afterPath="$PROJECT_DIR$/requirements/production.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/models.py" afterPath="$PROJECT_DIR$/keen/web/models.py" />
     </list>
     <ignored path="keensmb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,6 +50,8 @@
         <option value="$PROJECT_DIR$/keen/__init__.py" />
         <option value="$PROJECT_DIR$/requirements/compiled.txt" />
         <option value="$PROJECT_DIR$/keen/core/management/commands/setup.py" />
+        <option value="$PROJECT_DIR$/keen/web/views/api/client.py" />
+        <option value="$PROJECT_DIR$/keen/web/models.py" />
         <option value="$PROJECT_DIR$/keen/core/models.py" />
       </list>
     </option>
@@ -150,7 +148,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -169,10 +167,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="migrations" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -428,59 +422,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/keen/web/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="851">
-          <folding>
-            <element signature="e#0#28#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="9" selection-start="277" selection-end="277" vertical-scroll-proportion="0.546697" vertical-offset="0" max-vertical-offset="878">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../env/keensmb/lib/python2.7/site-packages/django/db/models/fields/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="683" column="8" selection-start="26192" selection-end="26192" vertical-scroll-proportion="11.267123" vertical-offset="0" max-vertical-offset="21075">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keen/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="130" selection-end="130" vertical-scroll-proportion="0.1369863" vertical-offset="0" max-vertical-offset="876">
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../env/keensmb/lib/python2.7/site-packages/django/db/models/fields/related.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="460" column="30" selection-start="21911" selection-end="21911" vertical-scroll-proportion="0.6801854" vertical-offset="6073" max-vertical-offset="22845">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../env/keensmb/lib/python2.7/site-packages/django/utils/translation/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="0" selection-start="2835" selection-end="2835" vertical-scroll-proportion="0.33333334" vertical-offset="953" max-vertical-offset="2970">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/setup/customers_appended.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.1022327" vertical-offset="2640" max-vertical-offset="1455375">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements/production.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="876">
@@ -537,14 +478,69 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/core/migrations/0002_auto__del_field_location_is_main__add_field_client_main_location__del_.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.39379475" vertical-offset="330" max-vertical-offset="2220">
+        <state line="5" column="0" selection-start="165" selection-end="165" vertical-scroll-proportion="0.035842296" vertical-offset="0" max-vertical-offset="2220">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="9" selection-start="667" selection-end="667" vertical-scroll-proportion="0.26439482" vertical-offset="0" max-vertical-offset="1035">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/views/api/schemas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="57" selection-start="753" selection-end="753" vertical-scroll-proportion="0.45828438" vertical-offset="0" max-vertical-offset="1005">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="411" selection-end="411" vertical-scroll-proportion="0.21151586" vertical-offset="0" max-vertical-offset="851">
+          <folding>
+            <element signature="e#0#42#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="0" selection-start="780" selection-end="780" vertical-scroll-proportion="0.493537" vertical-offset="0" max-vertical-offset="851">
+          <folding>
+            <element signature="e#34#66#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/core/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="876">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="395" selection-end="395" vertical-scroll-proportion="0.29964748" vertical-offset="0" max-vertical-offset="851">
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/views/api/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="28" selection-start="714" selection-end="714" vertical-scroll-proportion="0.4054054" vertical-offset="0" max-vertical-offset="1410">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="882" selection-end="882" vertical-scroll-proportion="0.59929496" vertical-offset="0" max-vertical-offset="1875">
+        <state line="72" column="45" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.49657536" vertical-offset="645" max-vertical-offset="1860">
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>

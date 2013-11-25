@@ -1,7 +1,7 @@
 from django.db import models
 from django_hstore import hstore
 
-from keen.core.models import Timestamps, Client, HStoreFieldCatalog
+from keen.core.models import *
 
 
 class PageCustomerField(Timestamps):
@@ -13,7 +13,7 @@ class PageCustomerField(Timestamps):
 
     page = models.CharField(max_length=3, choices=PAGE_NAMES)
     client = models.ForeignKey(Client)
-    fields = models.ManyToManyField(HStoreFieldCatalog)
+    fields = models.ManyToManyField(CustomerField)
 
 
 class SignupForm(Timestamps):

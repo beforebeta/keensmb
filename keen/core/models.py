@@ -103,17 +103,16 @@ class CustomerSource(Timestamps):
 
 class Customer(Timestamps):
 
-    ENRICHMENT_STATUS = (
+    ENRICHMENT_STATUS = Choices((
         ('NE', 'Not Enriched'),
         ('IN', 'In Enrichment'),
         ('EN', 'Enriched'),
-    )
+    ))
 
     client = models.ForeignKey('Client')
     source = models.ForeignKey(CustomerSource)
     data = hstore.DictionaryField()
     locations = models.ManyToManyField(Location, related_name='customers')
-    enrichment_status = models.CharField(
-        max_length=3, choices=ENRICHMENT_STATUS)
+    enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS)
 
     objects = hstore.HStoreManager()
