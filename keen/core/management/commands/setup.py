@@ -1,6 +1,7 @@
 from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
 
@@ -27,24 +28,24 @@ def section(message):
 ################################################################################################################
 def _setup_field(group, group_ranking, name, description, field_type, length=-1):
     print "Setup field %s-%s" % (group, name)
-    HStoreFieldCatalog.objects.get_or_create(grouping=group,
+    obj,created = CustomerField.objects.get_or_create(grouping=group,
                                              group_ranking=group_ranking,
                                              name=name,
                                              description=description,
                                              type=field_type,
                                              length=length)
-
+    print created
 
 def _setup_core():
     section("Creating Customer Field Catalog")
 
-    _basic = HStoreFieldCatalog.FIELD_GROUPS.basic
-    _household = HStoreFieldCatalog.FIELD_GROUPS.household
-    _custom = HStoreFieldCatalog.FIELD_GROUPS.custom
+    _basic = CustomerField.FIELD_GROUPS.basic
+    _household = CustomerField.FIELD_GROUPS.household
+    _custom = CustomerField.FIELD_GROUPS.custom
 
-    _string = HStoreFieldCatalog.FIELD_TYPES.string
-    _bool = HStoreFieldCatalog.FIELD_TYPES.bool
-    _date = HStoreFieldCatalog.FIELD_TYPES.date
+    _string = CustomerField.FIELD_TYPES.string
+    _bool = CustomerField.FIELD_TYPES.bool
+    _date = CustomerField.FIELD_TYPES.date
 
     _setup_field(_basic, 100, "first_name", "First Name", _string)
     _setup_field(_basic, 200, "last_name", "Last Name", _string)
@@ -96,6 +97,36 @@ def _setup_core():
     _setup_field(_custom, 1600, "purchase#technology", "Purchases Technology Products", _bool)
     _setup_field(_custom, 1700, "purchase#travel", "Purchases Travel Related Goods", _bool)
 
+def _setup_sample_data():
+
+    #setup default client
+    client,created = Client.objects.get_or_create(slug="default_client", name="default_client")
+
+    #setup default field list
+    if client.customer_fields.all().count() == 0:
+        #only setup fields is nothing has been manually created
+        customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
+        csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
+        all_customer_fields = dict([(c.description,c) for c in CustomerField.objects.all()])
+        clients_customer_fields = map(lambda x:
+                                      all_customer_fields[process.extractOne(x, all_customer_fields.keys())[0]],
+                                      csv_schema_fields)
+        assert len(csv_schema_fields) == len(clients_customer_fields) #should map all fields
+        for customer_text in customers_appended[1:]:
+            customer_text = customer_text.replace("\r","")
+            customer_text = customer_text.replace("\n","")
+            customer_values = customer_text.split(",")
+            if len(customer_values) == len(clients_customer_fields):
+                data = {}
+                for i in range(0, len(customer_values)):
+                    data[clients_customer_fields[i].name] = customer_values[i]
+                print data
+                customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
+                c = Customer(client=client, source=customer_source, data=data)
+                c.save()
+
+
 def setup_all():
     _setup_core()
+    _setup_sample_data()
 

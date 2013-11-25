@@ -66,12 +66,15 @@ class CustomerField(Timestamps):
 
     name = models.CharField(max_length=64, unique=True)
     group = models.CharField(max_length=32)
-    type = models.CharField(max_length=1, choices=Choices(FIELD_TYPES))
+    type = models.CharField(max_length=10, choices=Choices(FIELD_TYPES))
     description = models.CharField(max_length=255, blank=True, null=True)
     # allows you to group fields together
     grouping = models.CharField(max_length=50, choices=FIELD_GROUPS)
     group_ranking = models.PositiveSmallIntegerField()
     length = models.IntegerField()
+
+    def __unicode__(self):
+        return self.name
 
 class Client(Timestamps):
 
@@ -91,11 +94,11 @@ class CustomerSource(Timestamps):
     url = models.TextField(blank=True, null=True)
     # this may be a reference to a specific web.models.SignupForm model or a
     # mailchimp list or anything else
-    ref_id = models.IntegerField()
-    ref_source = models.CharField(max_length=50)
+    ref_id = models.IntegerField(null=True, blank=True)
+    ref_source = models.CharField(max_length=50,null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return self.slug
 
     class Meta:
         unique_together = ('client', 'slug')
@@ -113,6 +116,6 @@ class Customer(Timestamps):
     source = models.ForeignKey(CustomerSource)
     data = hstore.DictionaryField()
     locations = models.ManyToManyField(Location, related_name='customers')
-    enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS)
+    enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS, default="NE")
 
     objects = hstore.HStoreManager()
