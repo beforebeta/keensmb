@@ -7,7 +7,7 @@ defaults if you are happy with the default layout.
 
 import posixpath
 
-from fabric.api import run, local, env, settings, cd, task, put
+from fabric.api import run, sudo, local, env, settings, cd, task, put
 from fabric.contrib.files import exists
 from fabric.operations import _prefix_commands, _prefix_env_vars
 #from fabric.decorators import runs_once
@@ -18,12 +18,10 @@ path = lambda *args: posixpath.join(ROOT, *args)
 
 # CHANGEME
 env.use_ssh_config = True
-env.hosts = ['root@keen-test']
-env.code_dir = path('keen')
 env.project_dir = ROOT
-env.static_root = path('keen', 'static')
+env.code_dir = path('keen')
+env.static_root = path('keen/static')
 env.virtualenv = ROOT
-env.code_repo = 'git@github.com:momyc/keensmb.git'
 env.django_settings_module = 'keen.settings'
 
 
@@ -39,42 +37,71 @@ def run_venv(command, **kwargs):
     Runs a command in a virtualenv (which has been specified using
     the virtualenv context manager
     """
-    run("source %s/bin/activate" % env.virtualenv + " && " + command, **kwargs)
+    run(". %s/bin/activate" % env.virtualenv + " && " + command, **kwargs)
+
+
+def install_os_packages():
+    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv')
+
+
+def prepare_db():
+    sudo('service postgresql start')
+    with settings(sudo_user='postgres'):
+        sudo('createuser -S -D -R keen')
+        sudo('createdb -O keen -T template0 -E utf8 keen')
+        sudo('psql -c "create extension hstore;" keen')
+
+
+def drop_db():
+    sudo('service postgresql start')
+    with settings(sudo_user='postgres'):
+        sudo('dropdb keen')
+        sudo('dropuser keen')
 
 
 def install_dependencies():
-    run('sudo aptitude install nginx build-essential python-dev postgresql libpq-dev libffi-dev')
-    run('sudo service postgresql start')
-
     ensure_virtualenv()
     with virtualenv(env.virtualenv):
-        with cd(env.code_dir):
-            run_venv("pip install -r requirements/development.txt")
+        run_venv("pip install -r %s" % (path('keen/requirements/development.txt')))
 
 
 def ensure_virtualenv():
-    if exists(env.virtualenv):
+    if exists(posixpath.join(env.virtualenv, 'bin/activate')):
         return
-
-    with cd(env.code_dir):
-        run("virtualenv --no-site-packages --python=%s %s" %
-            (PYTHON_BIN, env.virtualenv))
-        run("echo %s > %s/lib/%s/site-packages/projectsource.pth" %
-            (env.project_dir, env.virtualenv, PYTHON_BIN))
+    run("virtualenv --no-site-packages %s" % env.virtualenv)
 
 
 def pull_code():
     if not exists(env.code_dir):
-        run("mkdir -p %s" % env.code_dir)
-    with cd(env.code_dir):
-        if not exists(posixpath.join(env.code_dir, '.git')):
-            run('git clone %s .' % (env.code_repo))
-        else:
+        run('git clone %s "%s"' % (env.code_repo, env.code_dir))
+    else:
+        with cd(env.code_dir):
             run('git pull')
 
-    local_py = posixpath.join('keen', 'settings', 'local.py')
-    if not exists(posixpath.join(env.code_dir, local_py)):
-        put(local_py, posixpath.join(env.code_dir, 'keen', 'settings'))
+    #local_py = 'keen/settings/local.py'
+    #if not exists(path(local_py)):
+    #    put(local_py, path('keen/settings/'))
+
+    nginx_sites_enabled = '/etc/nginx/sites-enabled/'
+    if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
+        sudo('ln -s %s %s' % (path('conf/nginx/keensmb.com'), nginx_sites_enables))
+
+
+@task
+def production(hosts):
+    """Set hosts and profile variables
+    """
+    env.django_settings_module = 'keen.settings.production'
+    env.hosts = hosts.split(',')
+
+
+@task
+def staging(hosts):
+    """Set hosts and profile variables
+    """
+    env.django_settings_module = 'keen.settings.development'
+    env.hosts = hosts.split(',')
+    env.code_repo = 'git@github.com:beforebeta/keensmb.git'
 
 
 @task
@@ -101,7 +128,7 @@ def nginx_stop():
     """
     Stop the webserver that is running the Django instance
     """
-    run("service nginx stop")
+    sudo("service nginx stop")
 
 
 @task
@@ -109,7 +136,7 @@ def nginx_start():
     """
     Starts the webserver that is running the Django instance
     """
-    run("service nginx start")
+    sudo("service nginx start")
 
 
 @task
@@ -117,7 +144,7 @@ def nginx_restart():
     """
     Restarts the webserver that is running the Django instance
     """
-    run("service nginx restart")
+    sudo("service nginx restart")
 
 
 def restart():
@@ -135,25 +162,16 @@ def build_static():
     run("chmod -R ugo+r %s" % env.static_root)
 
 
-@task
-def first_deployment_mode():
-    """
-    Use before first deployment to switch on fake south migrations.
-    """
-    env.initial_deploy = True
-
-
-@task
 def update_database(app=None):
     """
     Update the database (run the migrations)
     Usage: fab update_database:app_name
     """
+    run('sudo service postgresql start')
+
     with virtualenv(env.virtualenv):
         with cd(env.code_dir):
             if getattr(env, 'initial_deploy', False):
-                run('sudo -u postgres createuser -S -D -R keen')
-                run('sudo -u postgres createdb -O keen -T template0 -E utf8 keen')
                 run_venv("./manage.py syncdb --all")
                 run_venv("./manage.py migrate --fake --noinput")
             else:
@@ -187,11 +205,8 @@ def sshagent_run(cmd):
 
 
 @task
-def deploy():
-    """
-    Deploy the project.
-    """
+def install():
+    install_os_packages()
+    prepare_db()
     pull_code()
     install_dependencies()
-    update_database()
-    build_static()
