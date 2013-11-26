@@ -52,8 +52,14 @@ class Location(Timestamps):
 
 class CustomerFieldGroup(Timestamps):
 
+    FIELD_GROUPS = Choices(
+        ('basic', 'Basic Information'),
+        ('household', 'Household Information'),
+        ('custom', 'Custom Fields'),
+    )
+
     name = models.CharField(max_length=64, unique=True)
-    title = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
 
     def __unicode__(self):
         return self.name
