@@ -25,31 +25,26 @@ env.virtualenv = ROOT
 env.django_settings_module = 'keen.settings'
 
 
-def virtualenv(venv_dir):
-    """
-    Context manager that establishes a virtualenv to use.
-    """
-    return settings(venv=venv_dir)
-
-
 def run_venv(command, **kwargs):
     """
     Runs a command in a virtualenv (which has been specified using
     the virtualenv context manager
     """
-    run(". %s/bin/activate" % env.virtualenv + " && " + command, **kwargs)
+    run(". {0}/bin/activate && ".format(env.virtualenv) + command, **kwargs)
 
 
 def install_os_packages():
     sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv')
 
 
+def postgres_sudo(cmd):
+    return run('sudo -u postgres -i ' + cmd)
+
 def prepare_db():
     sudo('service postgresql start')
-    with settings(sudo_user='postgres', warn_only=True):
-        sudo('createuser -S -D -R keen')
-        sudo('createdb -O keen -T template0 -E utf8 keen')
-        sudo('psql -c "create extension hstore;" keen')
+    postgres_sudo('createuser -S -D -R keen')
+    postgres_sudo('createdb -O keen -T template0 -E utf8 keen')
+    postgres_sudo('psql -c "create extension hstore;" keen')
 
 
 def drop_db():
@@ -61,14 +56,19 @@ def drop_db():
 
 def install_dependencies():
     ensure_virtualenv()
-    with virtualenv(env.virtualenv):
-        run_venv("pip install -r %s" % (path('keen/requirements/development.txt')))
+    run_venv("pip install -r %s" % (path('keen/requirements/development.txt')))
+
+
+def configure_nginx():
+    nginx_sites_enabled = '/etc/nginx/sites-enabled/'
+    if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
+        sudo('ln -s %s %s' % (path('keen/conf/nginx/keensmb.com'), nginx_sites_enabled))
 
 
 def ensure_virtualenv():
     if exists(posixpath.join(env.virtualenv, 'bin/activate')):
         return
-    run("virtualenv --no-site-packages %s" % env.virtualenv)
+    run("virtualenv --no-site-packages {0}".format(env.virtualenv))
 
 
 def clone(repo=None):
@@ -79,22 +79,49 @@ def clone(repo=None):
     put(local_py, path('keen/keen/settings/'))
 
 
-def pull():
+def pull(branch=''):
     with cd(env.code_dir):
-        run('git pull')
+        run('git pull ' + branch)
 
 
-def configure_nginx():
-    nginx_sites_enabled = '/etc/nginx/sites-enabled/'
-    if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
-        sudo('ln -s %s %s' % (path('keen/conf/nginx/keensmb.com'), nginx_sites_enabled))
+@task
+def uwsgi_start():
+    with cd(env.code_dir):
+        run_venv('uwsgi --ini conf/uwsgi/{0}.ini'.format(env.profile))
+
+
+@task
+def uwsgi_stop():
+    with cd(env.code_dir):
+        run_venv('uwsgi --stop {0}.pid'.format(env.profile))
+
+
+@task
+def uwsgi_reload():
+    with cd(env.code_dir):
+        run_venv('uwsgi --reload {0}.pid'.format(env.profile))
+
+
+@task
+def deploy(branch=''):
+    """Deploy current branch or branch specified as argument
+
+    Target host must be specified by using either "staging" or "production" command
+    """
+    pull(branch)
+    with cd(env.code_dir):
+        run_venv('./manage.py migrate')
+        run_venv('./manage.py collectstatic')
+    uwsgi_reload()
+
 
 
 @task
 def production(hosts):
     """Set hosts and profile variables
     """
-    env.django_settings_module = 'keen.settings.production'
+    env.profile = 'production'
+    env.django_settings_module = 'keen.settings{profile}'.format(env)
     env.hosts = hosts.split(',')
 
 
@@ -102,7 +129,8 @@ def production(hosts):
 def staging(hosts):
     """Set hosts and profile variables
     """
-    env.django_settings_module = 'keen.settings.development'
+    env.profile = 'development'
+    env.django_settings_module = 'keen.settings{0}'.format(env.profile)
     env.hosts = hosts.split(',')
 
 
@@ -117,12 +145,6 @@ def version():
     """ Show last commit to the deployed repo. """
     with cd(env.code_dir):
         run('git log -1')
-
-
-@task
-def uname():
-    """ Prints information about the host. """
-    run("uname -a")
 
 
 @task
@@ -147,12 +169,6 @@ def nginx_restart():
     Restarts the webserver that is running the Django instance
     """
     sudo("service nginx restart")
-
-
-def restart():
-    """ Restart the wsgi process """
-    with cd(env.code_dir):
-        run("touch %s/keen/wsgi.py" % env.code_dir)
 
 
 def build_static():
@@ -208,8 +224,28 @@ def sshagent_run(cmd):
 
 @task
 def install(repo=None):
+    """Initial installation
+
+    That includes the following steps
+
+        1. Install Ubuntu packages
+        2. Create virtualenv
+        3. Create database and database user
+        4. Clone git repository (accepts optional git repository URL,
+                    default is git@github.com:beforebeta/keensmb.git)
+        5. Install Python packages listed in requirements file
+        6. Add keensmb.com virtual host to Nginx configuration
+
+    Note:
+        Target host must be specified by using either "staging" or "production"
+        command as following:
+            fab staging:test install:git@github.com:momyc/keensmb.git
+            or
+            fab production:keensmb.com install
+    """
     install_os_packages()
     ensure_virtualenv()
     prepare_db()
     clone(repo)
     install_dependencies()
+    configure_nginx()
