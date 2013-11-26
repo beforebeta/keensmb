@@ -26,22 +26,20 @@ def section(message):
 ################################################################################################################
 # Setup Core
 ################################################################################################################
-def _setup_field(group, group_ranking, name, description, field_type, length=-1):
+def _setup_field(group, group_ranking, name, title, field_type, length=-1):
     print "Setup field %s-%s" % (group, name)
-    obj,created = CustomerField.objects.get_or_create(grouping=group,
+    obj,created = CustomerField.objects.get_or_create(group=group,
                                              group_ranking=group_ranking,
                                              name=name,
-                                             description=description,
-                                             type=field_type,
-                                             length=length)
-    print created
+                                             title=title,
+                                             type=field_type)
 
 def _setup_core():
     section("Creating Customer Field Catalog")
 
-    _basic = CustomerField.FIELD_GROUPS.basic
-    _household = CustomerField.FIELD_GROUPS.household
-    _custom = CustomerField.FIELD_GROUPS.custom
+    _basic,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.basic)
+    _household,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.household)
+    _custom,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.custom)
 
     _string = CustomerField.FIELD_TYPES.string
     _bool = CustomerField.FIELD_TYPES.bool
@@ -98,33 +96,35 @@ def _setup_core():
     _setup_field(_custom, 1700, "purchase#travel", "Purchases Travel Related Goods", _bool)
 
 def _setup_sample_data():
+    section("Creating Customer Database")
 
     #setup default client
     client,created = Client.objects.get_or_create(slug="default_client", name="default_client")
+    customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
+
+    customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
+    csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
+    all_customer_fields = dict([(c.title,c) for c in CustomerField.objects.all()])
+    clients_customer_fields = map(lambda x:
+                                  all_customer_fields[process.extractOne(x, all_customer_fields.keys())[0]],
+                                  csv_schema_fields)
 
     #setup default field list
     if client.customer_fields.all().count() == 0:
-        #only setup fields is nothing has been manually created
-        customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
-        csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
-        all_customer_fields = dict([(c.description,c) for c in CustomerField.objects.all()])
-        clients_customer_fields = map(lambda x:
-                                      all_customer_fields[process.extractOne(x, all_customer_fields.keys())[0]],
-                                      csv_schema_fields)
+        map(lambda x: client.customer_fields.add(x), clients_customer_fields)
         assert len(csv_schema_fields) == len(clients_customer_fields) #should map all fields
-        for customer_text in customers_appended[1:]:
-            customer_text = customer_text.replace("\r","")
-            customer_text = customer_text.replace("\n","")
-            customer_values = customer_text.split(",")
-            if len(customer_values) == len(clients_customer_fields):
-                data = {}
-                for i in range(0, len(customer_values)):
-                    data[clients_customer_fields[i].name] = customer_values[i]
-                print data
-                customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
-                c = Customer(client=client, source=customer_source, data=data)
-                c.save()
 
+    client.customer_set.all().delete()
+
+    for customer_text in customers_appended[1:]:
+        customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
+        customer_text = customer_text.replace("\n","")
+        customer_values = customer_text.split(",")
+        if len(customer_values) == len(clients_customer_fields):
+            c = Customer(client=client, source=customer_source)
+            for i in range(0, len(customer_values)):
+                c.data[clients_customer_fields[i].name] = str(customer_values[i])
+            c.save()
 
 def setup_all():
     _setup_core()

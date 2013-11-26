@@ -1,14 +1,14 @@
 from django.db import models
 from django_hstore import hstore
-
+from model_utils import Choices
 from keen.core.models import *
 
 
 class PageCustomerField(Timestamps):
 
-    PAGE_NAMES = (
-        ('DB', 'Customer Database View'),
-        ('SC', 'Single Customer View'),
+    PAGE_NAMES = Choices(
+        ('db', 'Customer Database View'),
+        ('sc', 'Single Customer View'),
     )
 
     page = models.CharField(max_length=3, choices=PAGE_NAMES)

@@ -84,6 +84,7 @@ class CustomerField(Timestamps):
     group_ranking = models.IntegerField(default=99999999)
     type = models.CharField(max_length=20, choices=FIELD_TYPES)
     required = models.BooleanField(default=False)
+    is_unique = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -119,11 +120,11 @@ class CustomerSource(Timestamps):
 
 class Customer(Timestamps):
 
-    ENRICHMENT_STATUS = Choices((
+    ENRICHMENT_STATUS = Choices(
         ('ne', 'Not Enriched'),
         ('in', 'In Enrichment'),
         ('en', 'Enriched'),
-    ))
+    )
 
     client = models.ForeignKey('Client')
     source = models.ForeignKey(CustomerSource)
