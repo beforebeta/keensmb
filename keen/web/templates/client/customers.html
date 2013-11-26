@@ -1,3 +1,4 @@
+
 {% extends "page.html" %}
 
 {% block content %}
@@ -170,7 +171,9 @@
         <th>Email Address</th>
         <th>Age</th>
         <th>Gender</th>
-        <th class='new-field-cell'><i class='text-muted'>New field</i></th>
+          <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
+            <i class='text-muted'>New field</i>
+          </th>
       </tr>
     </thead>
     <tbody>
@@ -190,8 +193,59 @@
 </div>
 
 </section>
-<!-- /.container -->
 
-<div class="push-footer"></div>
+<!-- new field modal -->
+<div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header header-primary">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="fui-cross"></i>
+        </button>
+        <h4 class="modal-title">Select Fields to Add</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row mbl">
+          <div class="col-md-3"><span>Field Name 1</span></div>
+          <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
+          <div class="col-md-3">
+            <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+              <span class='mrl'>Add Field</span>
+              <i class="fui-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row mbl">
+          <div class="col-md-3"><span>Field Name 2</span></div>
+          <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
+          <div class="col-md-3">
+            <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+              <span class='mrl'>Add Field</span>
+              <i class="fui-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row mbl">
+          <div class="col-md-3"><span>Field Name 3</span></div>
+          <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
+          <div class="col-md-3">
+            <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+              <span class='mrl'>Add Field</span>
+              <i class="fui-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Add Field(s)</button>
+        <button type="button" class="btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- /.container -->
 
 {% endblock %}

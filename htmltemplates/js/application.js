@@ -1,3 +1,4 @@
+
 // Some general UI pack related JS
 // Extend JS String with repeat method
 String.prototype.repeat = function(num) {
@@ -147,6 +148,12 @@ String.prototype.repeat = function(num) {
     $('.table .toggle-all').on('click', function() {
       var ch = $(this).find(':checkbox').prop('checked');
       $(this).closest('.table').find('tbody :checkbox').checkbox(!ch ? 'check' : 'uncheck');
+    });
+
+    // Popovers
+    $('.js-popover-hover').popover({
+        'trigger': 'hover',
+        'container': 'body'
     });
 
     // Table: Add class row selected

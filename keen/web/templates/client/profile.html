@@ -1,9 +1,164 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "page.html" %}
 
-</body>
-</html>
+{% block content %}
+  <section class='clearfix'>
+    <h1 class='page-title mbn'>Customer Profile</h1>
+
+    <div class="row mtl">
+      <div class="col-md-4 user-details">
+        <div class="center-block text-center">
+          <img src="../images/icons/dude.svg" alt="user name" style='width: 170px'>
+        </div>
+        <div class="mtl">
+          <table>
+            <div class='row'>
+              <div class='col-sm-3'><span class="text-muted mtl mrs dib">Name:</span></div>
+              <div class='col-sm-9'><span class='dib mtl'>Full Name</span></div>
+            </div>
+            <div class='row'>
+              <div class='col-sm-3'><span class="text-muted mtl mrs dib">DOB:</span></div>
+              <div class='col-sm-9'><small class='dib mtl'>14 March, 2013</small></div>
+            </div>
+            <div class='row'>
+              <div class='col-sm-3'><span class="text-muted mtl mrs dib">Gender:</span></div>
+              <div class='col-sm-9'><small class='dib mtl'>Female</small></div>
+            </div>
+          </table>
+
+          <div class="row mtl">
+            <div class="col-md-3">
+              <span class="fui-facebook text-blue social-icon"></span>
+            </div>
+            <div class="col-md-9"><span class="text-muted small">facebook.com/username</span></div>
+          </div>
+
+          <div class="row mtm">
+            <div class="col-md-3">
+              <span class="fui-twitter text-blue social-icon"></span>
+            </div>
+            <div class="col-md-9"><span class="text-muted small">@ your twitter name</span></div>
+          </div>
+
+          <div class="row mtm">
+            <div class="col-md-3">
+              <span class="fui-googleplus text-blue social-icon"></span>
+            </div>
+            <div class="col-md-9"><span class="text-muted small">plus.google/username</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class='mbs'>
+          <button class="btn btn-sm btn-primary btn-secondary btn-embossed btn-wide pull-right">
+            <span class='mrl'>Edit Profile</span>
+            <i class="fui-new"></i>
+          </button>
+          <img src="../images/icons/retina.svg" alt="" class='dib mid mrl' style='width: 40px;'>
+          <span class='dib mid mtn mbn'>Prodile was enriched on date</span>
+        </div>
+
+        <div class="kn-section active">
+          <div class="kn-section-header">
+            <span class='fui-book text-blue  dib mid'></span>
+            <h6 class='mll dib mid mbn mtn'>Basic Information</span>
+          </div>
+          <div class="kn-section-content">
+            <div class="row small">
+              <div class="col-md-3">
+                <span class='text-muted'>Email:</span>
+              </div>
+              <div class="col-md-9">
+                <span>johndoe@gmail.com</span>
+              </div>
+
+              <div class="col-md-3">
+                <span class='text-muted'>Address:</span>
+              </div>
+              <div class="col-md-9">
+                <span>Address line 1</span>
+              </div>
+              <div class="col-md-7 col-md-offset-3">
+                <span>Address line 2</span>
+              </div>
+              <div class="col-md-2">
+                <span>Apt No.</span>
+              </div>
+              <div class="col-md-5 col-md-offset-3">
+                <span>City</span>
+              </div>
+              <div class="col-md-2">
+                <span>State</span>
+              </div>
+              <div class="col-md-2">
+                <span>Zip Code</span>
+              </div>
+
+              <div class="col-md-3">
+                <span class='text-muted'>Mobile phone:</span>
+              </div>
+              <div class="col-md-9">
+                <span>(555) - 555 - 5555</span>
+              </div>
+
+              <div class="col-md-3">
+                <span class='text-muted'>Occupation:</span>
+              </div>
+              <div class="col-md-9">
+                <span>Occupation</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="kn-section mtl disabled">
+          <div class="kn-section-header">
+            <i class='pull-right small'>Not Enriched</i>
+            <span class='fui-home text-blue dib mid'></span>
+            <h6 class='mll dib mid mbn mtn'>Household Information</span>
+          </div>
+          <div class="kn-section-content">
+            <div class="row small">
+              <div class="col-md-5"><span class='text-muted'>Marital Status:</span></div>
+              <div class="col-md-7"><span>State</span></div>
+
+              <div class="col-md-5"><span class='text-muted'>Presence of Children:</span></div>
+              <div class="col-md-7"><span>State</span></div>
+
+              <div class="col-md-5"><span class='text-muted'>Home Owner Status:</span></div>
+              <div class="col-md-7"><span>State</span></div>
+
+              <div class="col-md-5"><span class='text-muted'>Income:</span></div>
+              <div class="col-md-7"><span>Income</span></div>
+
+              <div class="col-md-5"><span class='text-muted'>Home Market Value:</span></div>
+              <div class="col-md-7"><span>Home Market Value</span></div>
+
+              <div class="col-md-5"><span class='text-muted'>High Net Worth:</span></div>
+              <div class="col-md-7"><span>High Net Worth</span></div>
+
+              <div class="col-md-5"><span class='text-muted'>Length of Residence:</span></div>
+              <div class="col-md-7"><span>Length of Residence</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kn-section mtl mbl disabled">
+          <div class="kn-section-header">
+            <i class='pull-right small'>Not Enriched</i>
+            <span class='fui-gear text-blue dib mid'></span>
+            <h6 class='mll dib mid mbn mtn'>Custom Fields</h6>
+          </div>
+          <div class="kn-section-content">
+            <div class="row small">
+              <div class="col-md-5"><span class='text-muted'>Name of Custom Field:</span></div>
+              <div class="col-md-7"><span>State</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+{% endblock %}
