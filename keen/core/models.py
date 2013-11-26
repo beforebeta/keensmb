@@ -12,10 +12,10 @@ class Timestamps(models.Model):
 
 class Image(Timestamps):
 
-    IMAGE_TYPES = (
-        ('S', 'Small'),
-        ('M', 'Medium'),
-        ('B', 'Big'),
+    IMAGE_TYPES = Choices(
+        ('s', 'Small'),
+        ('m', 'Medium'),
+        ('b', 'Big'),
     )
 
     url = models.CharField(max_length=255)
@@ -61,21 +61,23 @@ class CustomerFieldGroup(Timestamps):
 
 class CustomerField(Timestamps):
 
-    FIELD_TYPES = (
-        ('S', 'String'),
-        ('I', 'Integer'),
-        ('D', 'Date'),
-        ('U', 'URL'),
-        ('E', 'E-mail Address'),
-        ('F', 'Float'),
-        ('L', 'Location'),
+    FIELD_TYPES = Choices(
+        ('string', 'String'),
+        ('int', 'Integer'),
+        ('date', 'Date'),
+        ('url', 'URL'),
+        ('email', 'E-mail Address'),
+        ('float', 'Float'),
+        ('location', 'Location'),
+        ('bool', 'Bool')
     )
 
     name = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=255, unique=True)
     group = models.ForeignKey(CustomerFieldGroup)
-    type = models.CharField(max_length=1, choices=FIELD_TYPES)
-    required = models.BooleanField()
+    group_ranking = models.IntegerField(default=99999999)
+    type = models.CharField(max_length=20, choices=FIELD_TYPES)
+    required = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -112,15 +114,15 @@ class CustomerSource(Timestamps):
 class Customer(Timestamps):
 
     ENRICHMENT_STATUS = Choices((
-        ('NE', 'Not Enriched'),
-        ('IN', 'In Enrichment'),
-        ('EN', 'Enriched'),
+        ('ne', 'Not Enriched'),
+        ('in', 'In Enrichment'),
+        ('en', 'Enriched'),
     ))
 
     client = models.ForeignKey('Client')
     source = models.ForeignKey(CustomerSource)
     data = hstore.DictionaryField()
     locations = models.ManyToManyField(Location, related_name='customers')
-    enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS, default="NE")
+    enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS, default="ne")
 
     objects = hstore.HStoreManager()

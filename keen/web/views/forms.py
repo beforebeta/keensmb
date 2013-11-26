@@ -1,15 +1,17 @@
 from django import forms
 from django.forms.forms import BoundField
-
+from keen.core.models import *
 
 FIELD_TYPE_MAP = {
-    'S': forms.CharField,
-    'D': forms.DateField,
-    'I': forms.IntegerField,
-    'E': forms.EmailField,
-    'U': forms.URLField,
+    CustomerField.FIELD_TYPES.string: forms.CharField,
+    CustomerField.FIELD_TYPES.date: forms.DateField,
+    CustomerField.FIELD_TYPES.int: forms.IntegerField,
+    CustomerField.FIELD_TYPES.email: forms.EmailField,
+    CustomerField.FIELD_TYPES.url: forms.URLField,
+    CustomerField.FIELD_TYPES.float: forms.FloatField,
+    CustomerField.FIELD_TYPES.location: forms.CharField,
+    CustomerField.FIELD_TYPES.bool: forms.BooleanField,
 }
-
 
 class FieldSet(object):
 

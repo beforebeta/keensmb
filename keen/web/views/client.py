@@ -22,8 +22,8 @@ def customers(request):
     page_size = 37
     offset = (page - 1) * page_size
 
-    client = get_object_or_404(Client, slug='mdo')
-
+    #client = get_object_or_404(Client, slug='mdo')
+    client,created = Client.objects.get_or_create(slug='mdo',name='mdo')
     q = Customer.objects.filter(client=client)
 
     context = {}
