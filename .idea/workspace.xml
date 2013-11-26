@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3646c680-0a28-4401-b1f7-8b7e8af1b0f4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/models.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/keen/core/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/keen/core/migrations/0002_auto__add_field_customerfield_group_ranking__chg_field_customerfield_t.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/keen/core/migrations/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/keen/web/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/keen/web/migrations/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tracking/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tracking/migrations/__init__.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/core/models.py" afterPath="$PROJECT_DIR$/keen/core/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/models.py" afterPath="$PROJECT_DIR$/keen/web/models.py" />
     </list>
     <ignored path="keensmb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,7 +28,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/keen/web/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="40" selection-start="245" selection-end="245" vertical-scroll-proportion="0.17584994" vertical-offset="0" max-vertical-offset="853">
+            <state line="22" column="36" selection-start="551" selection-end="551" vertical-scroll-proportion="0.38686988" vertical-offset="0" max-vertical-offset="853">
               <folding />
             </state>
           </provider>
@@ -523,7 +514,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="40" selection-start="245" selection-end="245" vertical-scroll-proportion="0.17584994" vertical-offset="0" max-vertical-offset="853">
+        <state line="22" column="36" selection-start="551" selection-end="551" vertical-scroll-proportion="0.38686988" vertical-offset="0" max-vertical-offset="853">
           <folding />
         </state>
       </provider>
