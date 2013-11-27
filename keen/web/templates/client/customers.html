@@ -1,6 +1,7 @@
 {% extends "page.html" %}
 
-{% load hstore %}
+{% load static %}
+{% load compress %}
 
 {% block content %}
 {% if messages %}
@@ -164,7 +165,7 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="table-responsive">
+<div class="table-responsive container">
   <table id='customers-table' class="table table-bordered customers-table">
     <thead>
       <tr>
@@ -175,23 +176,34 @@
         <th class='new-field-cell'><i class='text-muted'>New field</i></th>
       </tr>
     </thead>
-    <tbody>
-      {% for customer in customers %}
-      <tr>
-        <td><label class="checkbox no-label" for="checkbox-table-2"><input type="checkbox" value="" id="checkbox-table-2" data-toggle="checkbox"></label></td>
-        {% for field in customer_fields %}
-        <td>{{ customer.data|hstore:field.name }}</td>
-        {% endfor %}
-        <td class="text-center"></td>
-      </tr>
-      {% endfor %}
+    <tbody class="infinite-container">
     </tbody>
   </table>
+  <div>
+    <a href="{% url "api_customer_list" offset=0 %}" class="infinite-more-link">Loading customers...</a>
+  </div>
 </div>
 
 </section>
 <!-- /.container -->
 
 <div class="push-footer"></div>
+
+{% endblock %}
+
+{% block bottom_js %}
+
+    {% compress js %}
+    <script src="{% static "js/waypoints.js" %}"></script>
+    <script src="{% static "js/waypoints-infinite.js" %}"></script>
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.infinite-container').waypoint('infinite', {items: 'tr'});
+      });
+    </script>
+    {% endcompress %}
 
 {% endblock %}

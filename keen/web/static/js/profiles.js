@@ -26,7 +26,6 @@
     };
 
 
-
     // Table: Add class row selected
     $(document).on('toggle', '#customers-table :checkbox', checkItemActions);
     $(document).on('click', '.js-delete-customer', deleteCustomer);
