@@ -2,7 +2,7 @@ import logging
 
 from django.shortcuts import render, get_object_or_404
 
-from keen.core.models import Client, Customer
+from keen.core.models import Client, Customer, Location
 from keen.web.views.forms import CustomerForm
 
 
@@ -19,21 +19,23 @@ def promotions(request):
 
 def customers(request):
     page = 1
-    page_size = 37
-    offset = (page - 1) * page_size
+    page_size = 100
+    page_end = page * page_size
+    page_start = page_end - page_size
 
-    #client = get_object_or_404(Client, slug='mdo')
-    client,created = Client.objects.get_or_create(slug='mdo',name='mdo')
+    client = get_object_or_404(Client.objects.prefetch_related('customer_fields'), slug='default_client')
     q = Customer.objects.filter(client=client)
 
     context = {}
     context['client'] = client
+    context['locations'] = list(client.locations.all())
+    context['customer_fields'] = list(client.customer_fields.all())
     context['summary'] = {
         'total_customers': q.count(),
         'redeemers': 0,
         'new_signups': 0,
     }
-    context['customers'] = q[offset:offset + page_size]
+    context['customers'] = q[page_start:page_end]
 
     return render(request, 'client/customers.html', context)
 

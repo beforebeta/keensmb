@@ -1,6 +1,8 @@
 
 {% extends "page.html" %}
 
+{% load hstore %}
+
 {% block content %}
 {% if messages %}
 {% for message in messages %}
@@ -49,15 +51,17 @@
   </div>
 
   <div class="col-md-6">
+    {% if locations %}
     <h6>Locations</h6>
     <div class="row profile-locations">
-      {% for loc in client.locations.all %}
+      {% for location in locations %}
       <div class="col-md-2 text-center">
-        <span>{{ loc.name }}</span>
+        <span>{{ location.name }}</span>
         <span class="fui-home icon orange"></span>
       </div>
       {% endfor %}
     </div>
+    {% endif %}
   </div>
 </div>
 
@@ -166,25 +170,19 @@
     <thead>
       <tr>
         <th width='60' class='text-center'><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
-        <th>Name</th>
-        <th>Enriched</th>
-        <th>Email Address</th>
-        <th>Age</th>
-        <th>Gender</th>
-          <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
-            <i class='text-muted'>New field</i>
-          </th>
+        {% for field in customer_fields %}
+        <th>{{ field.title }}</th>
+        {% endfor %}
+        <th class='new-field-cell'><i class='text-muted'>New field</i></th>
       </tr>
     </thead>
     <tbody>
       {% for customer in customers %}
       <tr>
         <td><label class="checkbox no-label" for="checkbox-table-2"><input type="checkbox" value="" id="checkbox-table-2" data-toggle="checkbox"></label></td>
-        <td>{{ customer.full_name }}</td>
-        <td>The</td>
-        <td>Crime, Drama</td>
-        <td>923,629</td>
-        <td>1994</td>
+        {% for field in customer_fields %}
+        <td>{{ customer.data|hstore:field.name }}</td>
+        {% endfor %}
         <td class="text-center"></td>
       </tr>
       {% endfor %}

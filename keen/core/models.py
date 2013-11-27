@@ -126,7 +126,7 @@ class Customer(Timestamps):
         ('en', 'Enriched'),
     )
 
-    client = models.ForeignKey('Client')
+    client = models.ForeignKey('Client', related_name='customers')
     source = models.ForeignKey(CustomerSource)
     data = hstore.DictionaryField()
     locations = models.ManyToManyField(Location, related_name='customers')

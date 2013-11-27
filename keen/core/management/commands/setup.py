@@ -99,8 +99,13 @@ def _setup_sample_data():
     section("Creating Customer Database")
 
     #setup default client
-    client,created = Client.objects.get_or_create(slug="default_client", name="default_client")
-    customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
+    client, created = Client.objects.get_or_create(slug="default_client", name="default_client")
+    customer_source, created = CustomerSource.objects.get_or_create(client=client, slug="import")
+    address, created = Address.objects.get_or_create(
+        street='1 Easy Str', city='Simpleville', state_province='IL',
+        country='US', postal_code='12345')
+    location = Location.objects.get_or_create(name='default_location',
+                                              client=client, address=address)
 
     customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
     csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
@@ -114,7 +119,7 @@ def _setup_sample_data():
         map(lambda x: client.customer_fields.add(x), clients_customer_fields)
         assert len(csv_schema_fields) == len(clients_customer_fields) #should map all fields
 
-    client.customer_set.all().delete()
+    client.customers.all().delete()
 
     for customer_text in customers_appended[1:]:
         customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
