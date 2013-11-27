@@ -4,77 +4,92 @@ Starter fabfile for deploying the keen project.
 Change all the things marked CHANGEME. Other things can be left at their
 defaults if you are happy with the default layout.
 """
+from fabric.api import run, local, env, settings, cd, task, put, prefix
 
-import posixpath
 
-from fabric.api import run, local, env, settings, cd, task, put
-from fabric.contrib.files import exists
-from fabric.operations import _prefix_commands, _prefix_env_vars
-#from fabric.decorators import runs_once
-#from fabric.context_managers import cd, lcd, settings, hide
-
-ROOT = '/var/apps/keensmb.com'
-path = lambda *args: posixpath.join(ROOT, *args)
-
-# CHANGEME
 env.use_ssh_config = True
-env.hosts = ['root@keen-test']
-env.code_dir = path('keen')
-env.project_dir = ROOT
-env.static_root = path('keen', 'static')
-env.virtualenv = ROOT
-env.code_repo = 'git@github.com:momyc/keensmb.git'
-env.django_settings_module = 'keen.settings'
+
+env.virtualenv = '/var/apps/keensmb.com'
+env.project_name = 'keen'
+env.project_dir = '%(virtualenv)s/%(project_name)s' % env
+env.pidfile = '%(project_dir)s/%(project_name)s.pid' % env
 
 
-def virtualenv(venv_dir):
-    """
-    Context manager that establishes a virtualenv to use.
-    """
-    return settings(venv=venv_dir)
+def virtualenv():
+    assert 'virtualenv' in env
+    return settings(
+        cd(env.project_dir),
+        prefix('source %(virtualenv)s' % env),
+    )
 
 
-def run_venv(command, **kwargs):
-    """
-    Runs a command in a virtualenv (which has been specified using
-    the virtualenv context manager
-    """
-    run("source %s/bin/activate" % env.virtualenv + " && " + command, **kwargs)
+def install_os_packages():
+    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv')
+
+
+def prepare_db():
+    sudo('service postgresql start')
+
+    with prefix('sudo -u postfix -i'):
+        run('createuser -S -D -R keen')
+        run('createdb -O keen -T template0 -E utf8 keen')
+        run('psql -c "create extension hstore;" keen')
+
+    with virtualenv():
+        run('./manage.py syncdb')
+        run('./manage.py migrate')
+        run('./manage.py setup --all')
 
 
 def install_dependencies():
-    run('sudo aptitude install nginx build-essential python-dev postgresql libpq-dev libffi-dev')
-    run('sudo service postgresql start')
+    assert 'profile' in env
 
-    ensure_virtualenv()
-    with virtualenv(env.virtualenv):
-        with cd(env.code_dir):
-            run_venv("pip install -r requirements/development.txt")
+    with virtualenv():
+        run("pip install -r requirements/%(profile)s.txt" % env)
 
 
-def ensure_virtualenv():
-    if exists(env.virtualenv):
-        return
-
-    with cd(env.code_dir):
-        run("virtualenv --no-site-packages --python=%s %s" %
-            (PYTHON_BIN, env.virtualenv))
-        run("echo %s > %s/lib/%s/site-packages/projectsource.pth" %
-            (env.project_dir, env.virtualenv, PYTHON_BIN))
+def configure_nginx():
+    sudo('ln -s %(project_dir)s/conf/nginx/sites-available/keensmb.com /etc/nginx/sites-enabled/' % env)
 
 
-def pull_code():
-    if not exists(env.code_dir):
-        run("mkdir -p %s" % env.code_dir)
-    with cd(env.code_dir):
-        if not exists(posixpath.join(env.code_dir, '.git')):
-            run('git clone %s .' % (env.code_repo))
-        else:
-            run('git pull')
+def clone(repo=None):
+    assert 'project_dir' in env
 
-    local_py = posixpath.join('keen', 'settings', 'local.py')
-    if not exists(posixpath.join(env.code_dir, local_py)):
-        put(local_py, posixpath.join(env.code_dir, 'keen', 'settings'))
+    if repo is None:
+        repo = 'git@github.com:beforebeta/keensmb.git'
+
+    run('git clone %s %s' % (repo, env.project_dir))
+
+    local_py = 'keen/settings/local.py'
+    put(local_py, '%(project_dir)s/settings/')
+
+
+def pull(branch=''):
+    with cd(env.project_dir):
+        run('git pull ' + branch)
+
+
+def migrate():
+    with virtualenv():
+        run('./manage.py migrate')
+
+
+@task
+def production(hosts):
+    """Set hosts and profile variables
+    """
+    env.profile = 'production'
+    env.django_settings_module = 'keen.settings.%(profile)s' % env
+    env.hosts = hosts.split(',')
+
+
+@task
+def staging(hosts):
+    """Set hosts and profile variables
+    """
+    env.profile = 'development'
+    env.django_settings_module = 'keen.settings.%(profile)s' % env
+    env.hosts = hosts.split(',')
 
 
 @task
@@ -86,14 +101,26 @@ def run_tests():
 @task
 def version():
     """ Show last commit to the deployed repo. """
-    with cd(env.code_dir):
+    with cd(env.project_dir):
         run('git log -1')
 
 
 @task
-def uname():
-    """ Prints information about the host. """
-    run("uname -a")
+def uwsgi_start():
+    with virtualenv():
+        run('uwsgi --ini conf/uwsgi/%(profile)s.ini --daemonize --pidfile %(pidfile)s' % env)
+
+
+@task
+def uwsgi_stop():
+    with virtualenv:
+        run('uwsgi --stop %(pidfile)s' % env)
+
+
+@task
+def uwsgi_reload():
+    with virtualenv():
+        run('uwsgi --reload %(pidfile)s' % env)
 
 
 @task
@@ -120,78 +147,43 @@ def nginx_restart():
     run("service nginx restart")
 
 
-def restart():
-    """ Restart the wsgi process """
-    with cd(env.code_dir):
-        run("touch %s/keen/wsgi.py" % env.code_dir)
+@task
+def deploy(branch=''):
+    """Deploy current branch or branch specified as argument
 
-
-def build_static():
-    assert env.static_root.strip() != '' and env.static_root.strip() != '/'
-    with virtualenv(env.virtualenv):
-        with cd(env.code_dir):
-            run_venv("./manage.py collectstatic -v 0 --clear --noinput")
-
-    run("chmod -R ugo+r %s" % env.static_root)
+    Target host must be specified by using either "staging" or "production" command
+    """
+    pull(branch)
+    migrate()
+    with virtualenv():
+        run('./manage.py collectstatic --noinput')
+    uwsgi_reload()
 
 
 @task
-def first_deployment_mode():
-    """
-    Use before first deployment to switch on fake south migrations.
-    """
-    env.initial_deploy = True
+def install(repo=None):
+    """Initial installation
 
+    That includes the following steps
 
-@task
-def update_database(app=None):
-    """
-    Update the database (run the migrations)
-    Usage: fab update_database:app_name
-    """
-    with virtualenv(env.virtualenv):
-        with cd(env.code_dir):
-            if getattr(env, 'initial_deploy', False):
-                run('sudo -u postgres createuser -S -D -R keen')
-                run('sudo -u postgres createdb -O keen -T template0 -E utf8 keen')
-                run_venv("./manage.py syncdb --all")
-                run_venv("./manage.py migrate --fake --noinput")
-            else:
-                run_venv("./manage.py syncdb --noinput")
-                if app:
-                    run_venv("./manage.py migrate %s --noinput" % app)
-                else:
-                    run_venv("./manage.py migrate --noinput")
+        1. Install Ubuntu packages
+        2. Create virtualenv
+        3. Create database and database user
+        4. Clone git repository (accepts optional git repository URL,
+                    default is git@github.com:beforebeta/keensmb.git)
+        5. Install Python packages listed in requirements file
+        6. Add keensmb.com virtual host to Nginx configuration
 
-
-@task
-def sshagent_run(cmd):
+    Note:
+        Target host must be specified by using either "staging" or "production"
+        command as following:
+            fab staging:test install:git@github.com:momyc/keensmb.git
+            or
+            fab production:keensmb.com install
     """
-    Helper function.
-    Runs a command with SSH agent forwarding enabled.
-
-    Note:: Fabric (and paramiko) can't forward your SSH agent.
-    This helper uses your system's ssh to do so.
-    """
-    # Handle context manager modifications
-    wrapped_cmd = _prefix_commands(_prefix_env_vars(cmd), 'remote')
-    try:
-        host, port = env.host_string.split(':')
-        return local(
-            "ssh -p %s -A %s@%s '%s'" % (port, env.user, host, wrapped_cmd)
-        )
-    except ValueError:
-        return local(
-            "ssh -A %s@%s '%s'" % (env.user, env.host_string, wrapped_cmd)
-        )
-
-
-@task
-def deploy():
-    """
-    Deploy the project.
-    """
-    pull_code()
+    install_os_packages()
+    run("virtualenv --no-site-packages %(virtualenv)s" % env)
+    prepare_db()
+    clone(repo)
     install_dependencies()
-    update_database()
-    build_static()
+    configure_nginx()
