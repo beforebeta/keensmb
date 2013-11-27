@@ -97,12 +97,12 @@ class Client(Timestamps):
     main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
     customer_fields = models.ManyToManyField(CustomerField)
 
-    def customer_page(self, offset=0, order_by=None, filter=None, page_size=100):
+    def customer_page(self, offset=0, filter=None, page_size=100):
         q = self.customers.all()
         if not filter is None:
             q = q.filter(**filter)
-        if not order_by is None:
-            q = q.order_by(order_by)
+        q = q.extra(select={'email': "upper(core_customer.data -> 'email')"})
+        q = q.order_by('email')
         return q[offset:offset + page_size]
 
     def __unicode__(self):  # Python 3: def __str__(self):

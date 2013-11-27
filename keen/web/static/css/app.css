@@ -301,11 +301,3 @@ section {
   -o-transition: color .2s;
   transition: color .2s;
 }
-
-
-.infinite-more-link {
-	display: block;
-	text-align: center;
-	font-size: 150%;
-	padding-bottom: 1em;
-}

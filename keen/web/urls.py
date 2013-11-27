@@ -6,6 +6,7 @@ from .views.api.client import CustomerList, CustomerProfile
 
 api_urls = patterns(
     'keen.web.views.api',
+    url(r'^customers/$', CustomerList.as_view(), name='api_customer_list'),
     url(r'^customers/(?P<offset>\d+)$', CustomerList.as_view(), name='api_customer_list'),
     url(r'^customers/(?P<customer_id>\d+)$', CustomerProfile.as_view()),
 )
