@@ -19,11 +19,11 @@ class CustomerList(APIView):
         client = get_object_or_404(Client, slug='default_client')
 
         # FIXME: this should be configurabe
-        page_size = 1000
+        page_size = 200
 
-        if offset:
+        if 'offset' in request.GET:
             try:
-                offset = int(offset)
+                offset = int(request.GET['offset'])
                 if offset < 0:
                     offset = 0
             except ValueError:
@@ -32,6 +32,7 @@ class CustomerList(APIView):
             offset = 0
 
         ctx = {
+            'client': client,
             'customer_fields': list(client.customer_fields.all()),
             'customers': client.customer_page(offset, page_size=page_size),
             # This might be beyond the end but that's fine

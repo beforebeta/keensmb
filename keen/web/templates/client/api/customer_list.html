@@ -2,16 +2,22 @@
 {% if customers %}
 {% for customer in customers %}
 <tr class="customer">
-  <td><label class="checkbox no-label" for="checkbox-table-2"><input type="checkbox" value="" id="checkbox-table-2" data-toggle="checkbox"></label></td>
+  <td>
+    <label class="checkbox no-label" for="checkbox-table-{{ customer.id }}">
+      <input type="checkbox" value="" id="checkbox-table-{{ customer.id }}" data-toggle="checkbox">
+    </label>
+  </td>
   {% for field in customer_fields %}
   <td>{{ customer.data|hstore:field.name }}</td>
   {% endfor %}
   <td class="text-center"></td>
 </tr>
 {% endfor %}
+{% comment %}
 <tr>
   <td>
     <a href="{% url "api_customer_list" offset=offset %}" class="infinite-more-link">Loading more customers...</a> 
   </td>
 </tr>
+{% endcomment %}
 {% endif %}

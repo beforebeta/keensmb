@@ -165,7 +165,7 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="table-responsive container">
+<div class="table-responsive">
   <table id='customers-table' class="table table-bordered customers-table">
     <thead>
       <tr>
@@ -178,10 +178,13 @@
     </thead>
     <tbody class="infinite-container">
     </tbody>
+
   </table>
-  <div>
-    <a href="{% url "api_customer_list" offset=0 %}" class="infinite-more-link">Loading customers...</a>
-  </div>
+</div>
+
+<div class="alert alert-warn">
+  <strong>Loading more customers</strong> Please wait...
+  <a href="{% url "api_customer_list" %}" id="load-more-customers"></a>
 </div>
 
 </section>
@@ -195,15 +198,7 @@
 
     {% compress js %}
     <script src="{% static "js/waypoints.js" %}"></script>
-    <script src="{% static "js/waypoints-infinite.js" %}"></script>
-    {% endcompress %}
-
-    {% compress js %}
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.infinite-container').waypoint('infinite', {items: 'tr'});
-      });
-    </script>
+    <script src="{% static "js/customer_list.js" %}"></script>
     {% endcompress %}
 
 {% endblock %}
