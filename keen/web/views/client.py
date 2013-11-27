@@ -18,11 +18,6 @@ def promotions(request):
 
 
 def customers(request):
-    page = 1
-    page_size = 100
-    page_end = page * page_size
-    page_start = page_end - page_size
-
     client = get_object_or_404(Client.objects.prefetch_related('customer_fields'), slug='default_client')
     q = Customer.objects.filter(client=client)
 
@@ -35,7 +30,6 @@ def customers(request):
         'redeemers': 0,
         'new_signups': 0,
     }
-    context['customers'] = q[page_start:page_end]
 
     return render(request, 'client/customers.html', context)
 
