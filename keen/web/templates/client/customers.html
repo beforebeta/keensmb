@@ -179,14 +179,22 @@
     </thead>
     <tbody class="infinite-container">
     </tbody>
-
+    <tfoot>
+      <tr>
+        <td>
+          <a href="{% url "api_customer_list" %}" id="load-more-customers"></a>
+        </td>
+      </tr>
+    </tfoot>
   </table>
+
+  <div id="loading">
+    <h6>
+      Loading more customers. Please wait...
+    </h6>
+  </div>
 </div>
 
-<div class="alert alert-warn">
-  <strong>Loading more customers</strong> Please wait...
-  <a href="{% url "api_customer_list" %}" id="load-more-customers"></a>
-</div>
 
 </section>
 
