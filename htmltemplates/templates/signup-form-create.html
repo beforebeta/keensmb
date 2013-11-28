@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Flat UI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" >
 
     <!-- Loading Bootstrap -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -12,6 +13,8 @@
     <!-- Loading Flat UI -->
     <!-- <link href="css/flat-ui.css" rel="stylesheet"> -->
     <link href="../css/flat-ui-custom.css" rel="stylesheet">
+
+    <link href="../css/chromoselector.min.css" rel="stylesheet">
 
     <!-- Custom styles -->
     <link href="../css/app.css" rel="stylesheet">
@@ -111,9 +114,16 @@
           </div>
         </div>
 
-        <div class="su-form-wrapper">
-          <div class="banner-logo">
-            <img src="" alt="" class='banner-preview fade' id='banner-preview'>
+        <div class="su-form-wrapper mbm">
+          <div class="banner-logo js-image-container">
+            <p class="placeholder">Banner Logo</p>
+
+            <img src="" alt="" class='js-banner-preview fade' id='banner-preview'>
+
+            <div class="instructions">
+              <i class="fui-list dib mid"></i>
+              <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
+            </div>
 
             <div class="btn-group photo-actions">
               <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover' data-content='Upload your unique logo for the banner of your sign up form' data-placement="left">
@@ -126,26 +136,102 @@
               <i class="dropdown-arrow dropdown-arrow-inverse"></i>
               <ul class="dropdown-menu dropdown-inverse">
                 <li><a href="#fakelink">Choose from photos</a></li>
-                <li><a class='js-upload-banner-logo' href="#fakelink">Upload Photo</a></li>
+                <li class="js-fileapi-wrapper" id="choose">
+                  <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
+                  <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="files" type="file" />
+                </li>
                 <li class='disabled'><a href="#fakelink">Reposition</a></li>
               </ul>
             </div>
-            <p class="placeholder">Banner Logo</p>
-
-            <input id='upload-banner-logo' type="file" class='hidden' accept="image/*">
-            <canvas width='1100' height='165' id='canvas-banner-logo' style='display: none;position: relative; z-index: 10; background: rgba(255,0,0,0.1)'></canvas>
           </div>
 
-          <div class="background-image">
+          <div class="background-image js-image-container">
             <p class="placeholder">Background Image</p>
+
+            <img src="" alt="" class='js-banner-preview fade' id='background-image'>
 
             <div class="su-form">
               <h5 class='su-form-header'>Header 4 would have max 50 characters</h5>
               <p class="su-form-text text-simple">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, ratione libero fugiat unde!</p>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Full Name'>
+                  </div>
+                  <div class="form-group mbm">
+                    <input type="email" class="form-control" placeholder='Email Address'>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Zip Code'>
+                  </div>
+                </div>
+                <div class="col-md-6 pln">
+                  <div class="form-group mbm">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Birthday" id="datepicker-01">
+                      <span class="input-group-btn">
+                        <button class="btn" type="button"><span class="fui-calendar"></span></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 prn">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Phone'>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mbm">
+                    <select name="gender" id="gender" class='simple full mbs'>
+                      <option value="0" selected disabled>Gender</option>
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
+
+              <p class='su-form-text text-simple mtl'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea debitis corporis molestiae.</p>
             </div>
+
+            <div class='color-picker-wrapper'>
+              <input type="text" class='hidden' id="color-picker-anchor">
+            </div>
+
+            <div class="btn-group photo-actions">
+              <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover'
+                      data-content='Choose a unique image for the background of your sign up form'
+                      data-placement="left">
+                <i class="fui-new"></i>
+                <span class='mll'>Choose Photo</span>
+              </button>
+              <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+              <i class="dropdown-arrow dropdown-arrow-inverse"></i>
+              <ul class="dropdown-menu dropdown-inverse">
+                <li><a href="#fakelink">Choose from photos</a></li>
+                <li class="js-fileapi-wrapper">
+                  <a href="#fakelink" class="js-trigger" data-target='#upload-background-image'>Upload Photo</a>
+                  <input id='upload-background-image' accept="image/*" class='hidden js-upload-banner' name="files" type="file" />
+                </li>
+                <li class='disabled'><a href="#fakelink">Reposition</a></li>
+                <li class='disabled'><a href="#fakelink">Remvoe Photo</a></li>
+                <li class='disabled'><a href="#fakelink">Add Photo Effect</a></li>
+                <li><a href="#fakelink" class='js-trigger' data-target='#color-picker-anchor'>Choose background color</a></li>
+              </ul>
+            </div>
+
           </div>
         </div>
 
+        <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm">Save & Publish</button>
+        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
+        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Live Preview</button>
+        <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>
       </section>
       <!-- /.container -->
 
@@ -199,6 +285,22 @@
     <script src="../js/vendor/bootstrap/bootstrap-switch.js"></script>
     <script src="../js/vendor/flatui-checkbox.js"></script>
     <script src="../js/vendor/flatui-radio.js"></script>
+    <script src="../js/vendor/chromoselector.min.js"></script>
+    <script>
+      window.FileAPI = {
+          debug: false   // debug mode, see Console
+        , cors: false    // if used CORS, set `true`
+        , media: false   // if used WebCam, set `true`
+        , staticPath: '/js/vendor/fileapi/' // path to '*.swf'
+        , postNameConcat: function (name, idx){
+          // Default: object[foo]=1&object[bar][baz]=2
+          // .NET: https://github.com/mailru/FileAPI/issues/121#issuecomment-24590395
+          return  name + (idx != null ? '['+ idx +']' : '');
+        }
+      };
+    </script>
+    <script src="../js/vendor/fileapi/FileAPI.min.js"></script>
+
     <script src="../js/application.js"></script>
 
     <script src="../js/profiles.js"></script>
