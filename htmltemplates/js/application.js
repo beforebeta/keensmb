@@ -156,6 +156,15 @@ String.prototype.repeat = function(num) {
         'container': 'body'
     });
 
+    // Trigger click elements
+    $(document).on('click', '.js-trigger', function(e) {
+        var target = $(this).data('target');
+        $(target).trigger('click');
+    });
+
+    // Chromoselector
+    $('.chromoselector').chromoselector();
+
     // Table: Add class row selected
     $('.table tbody :checkbox').on('check uncheck toggle', function (e) {
       var $this = $(this)

@@ -41,6 +41,9 @@ def customers(request):
 def profile(request):
     return render(request, 'client/profile.html')
 
+def signup_form_create(request):
+    return render(request, 'client/signup-form-create.html')
+
 
 def customer_form(request, customer_id=None):
     client = get_object_or_404(Client, slug='mdo')

@@ -18,5 +18,6 @@ urlpatterns = patterns(
     url(r'^client/customers$', 'client.customers', name='client_customers'),
     url(r'^client/profile$', 'client.profile', name='client_profile'),
     url(r'^client/customer_form$', 'client.customer_form', name='customer_form'),
+    url(r'^client/signup-form/create$', 'client.signup_form_create', name='signup_form_create'),
     #url(r'^client/api/', include(api_urls)),
 )
