@@ -64,7 +64,6 @@ class CustomerFieldGroup(Timestamps):
     def __unicode__(self):
         return self.name
 
-
 class CustomerField(Timestamps):
 
     FIELD_TYPES = Choices(
@@ -118,6 +117,56 @@ class CustomerSource(Timestamps):
         unique_together = ('client', 'slug')
 
 
+CUSTOMER_FIELD_NAMES = Choices(
+    ('profile_image', 'Profile Image'),
+    ('first_name', 'First Name'),
+    ('last_name', 'Last Name'),
+    ('dob', 'Birthday'),
+    ('age', 'Age'),
+    ('email', 'Email'),
+    ('gender', 'Gender'),
+    ('address__line1', 'Address Line 1'),
+    ('address__line2', 'Address Line 2'),
+    ('address__city', 'City'),
+    ('address__zipcode', 'ZipCode'),
+    ('address__state', 'State'),
+    ('address__country', 'Country'),
+    ('phone__mobile', 'Mobile Phone'),
+    ('phone__home', 'Home Phone'),
+    ('occupation', 'Occupation'),
+    ('education', 'Education'),
+    ('marital_status', 'Marital Status'),
+    ('has_children', 'Presence of Children'),
+    ('home_owner_status', 'Home Owner Status'),
+    ('income', 'Household Income'),
+    ('home_market_value', 'Home Market Value'),
+    ('high_net_worth', 'High Net Worth'),
+    ('length_of_residence', 'Length of Residence'),
+    ('interest__arts', 'Interest in Arts and Crafts'),
+    ('interest__blogging', 'Interest in Blogging'),
+    ('interest__books', 'Interest in Books'),
+    ('interest__business', 'Interest in Business'),
+    ('interest__health', 'Interest in Health and Wellness'),
+    ('interest__news', 'Interest in News and Current Events'),
+    ('purchase__automotive', 'Purchases Automotive Goods'),
+    ('purchase__baby', 'Has Bought a Baby Product'),
+    ('purchase__beauty', 'Purchases Beauty Products'),
+    ('purchase__charitable', 'Indicates liklihood of Being a Charitable Donor'),
+    ('purchase__cooking', 'Purchases cooking magazines; interest in cooking'),
+    ('purchase__discount', 'Purchase behavior: Interest in discounts'),
+    ('purchase__high_end_brands', 'Has bought a premium CPG brand in the past 18 months '),
+    ('purchase__home_garden', 'Purchases Home & Garden Products'),
+    ('purchase__home_improvement', 'Purchases Home Improvement Products'),
+    ('purchase__luxury', 'Purchases Luxury Items'),
+    ('purchase__magazine', 'Purchases Magazine Subscriptions'),
+    ('purchase__outdoor', 'Purchases Outdoor and Adventure Products'),
+    ('purchase__pets', 'Purchases Pet Related Products'),
+    ('purchase__power_shopper', 'Purchases Items from Multiple Retail Channels'),
+    ('purchase__sports', 'Purchases Sporting Goods / Sports Related Products'),
+    ('purchase__technology', 'Purchases Technology Products'),
+    ('purchase__travel', 'Purchases Travel Related Goods')
+)
+
 class Customer(Timestamps):
 
     ENRICHMENT_STATUS = Choices(
@@ -131,5 +180,35 @@ class Customer(Timestamps):
     data = hstore.DictionaryField()
     locations = models.ManyToManyField(Location, related_name='customers')
     enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS, default="ne")
+    enrichment_date = models.DateTimeField(null=True, blank=True)
 
     objects = hstore.HStoreManager()
+
+    def set_val(self, field_name, val):
+        self.data[field_name] = val
+
+    def get_profile_image(self):
+        try:
+            return self.data[CUSTOMER_FIELD_NAMES.profile_image]
+        except:
+            return "/static/images/icons/dude.svg"
+
+    def get_name(self):
+        first_name = self._return_field(CUSTOMER_FIELD_NAMES.first_name)
+        last_name = self._return_field(CUSTOMER_FIELD_NAMES.last_name)
+        if first_name or last_name:
+            return "%s %s" % (first_name, last_name)
+        else:
+            return ""
+
+    def get_email(self):
+        return self._return_field(CUSTOMER_FIELD_NAMES.email)
+
+    def _return_field(self, field_name):
+        try:
+            if self.data[field_name]:
+                return self.data[field_name]
+            else:
+                return ""
+        except:
+            return ""

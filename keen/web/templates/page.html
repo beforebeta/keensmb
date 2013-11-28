@@ -3,62 +3,77 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% compress css %}
-    <!-- Loading Bootstrap -->
-    <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+        {% compress css %}
+        <!-- Loading Bootstrap -->
+        <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
 
-    <!-- Loading Flat UI -->
-    <!-- <link href="{% static "css/flat-ui.css" %}" rel="stylesheet"> -->
-    <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
+        <!-- Loading Flat UI -->
+        <!-- <link href="{% static "css/flat-ui.css" %}" rel="stylesheet"> -->
+        <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
 
-    <!-- Custom styles -->
-    <link href="{% static "css/app.css" %}" rel="stylesheet">
-    {% endcompress %}
+        <!-- Custom styles -->
+        <link href="{% static "css/app.css" %}" rel="stylesheet">
+        {% endcompress %}
 
-    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+        <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
 
-    {% compress js %}
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
-    <!--[if lt IE 9]>
-    <script src="{% static "js/html5shiv.js" %}"></script>
-    <![endif]-->
-    {% endcompress %}
-  </head>
+        {% compress js %}
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+        <!--[if lt IE 9]>
+        <script src="{% static "js/html5shiv.js" %}"></script>
+        <![endif]-->
+        {% endcompress %}
+    </head>
 
-  <body>
-    <div class="main-container container">
+    <body>
+        <div class="main-container container">
 
-      {% include "page_header.html" %}
+            {% include "page_header.html" %}
 
-      {% block content %}
-      {% endblock %}
+            {% block breadcrumbs %}
+                {% if breadcrumbs %}
+                    <!-- Breadcrumbs -->
+                    <ul class="breadcrumb kn-breadcrumb">
+                    {% for bc in breadcrumbs %}
+                        {% if forloop.last %}
+                                <li class="active"><a href="{{ bc.link }}">{{ bc.text }}</a></li>
+                        {% else %}
+                                <li><a href="{{ bc.link }}">{{ bc.text }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endblock %}
 
-      <div class="push-footer"></div>
-    </div>
+            {% block content %}
+            {% endblock %}
 
-    {% include "page_footer.html" %}
+            <div class="push-footer"></div>
+        </div>
 
-    {% compress js %}
-    <!-- Load JS here for greater good =============================-->
-    <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
-    <script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
-    <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
-    <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
-    <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
-    <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
-    <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
-    <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
-    <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
-    <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
-    <script src="{% static "js/application.js" %}"></script>
+        {% include "page_footer.html" %}
 
-    <script src="{% static "js/profiles.js" %}"></script>
-    <script src="{% static "js/sign-up.js" %}"></script>
-    {% endcompress %}
-  </body>
+        {% compress js %}
+        <!-- Load JS here for greater good =============================-->
+        <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
+        <script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
+        <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
+        <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
+        <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
+        <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
+        <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
+        <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
+        <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
+        <script src="{% static "js/application.js" %}"></script>
+
+        <script src="{% static "js/profiles.js" %}"></script>
+        <script src="{% static "js/sign-up.js" %}"></script>
+        {% endcompress %}
+    </body>
 </html>

@@ -1,4 +1,5 @@
 from optparse import make_option
+import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from fuzzywuzzy import process
@@ -45,62 +46,62 @@ def _setup_core():
     _bool = CustomerField.FIELD_TYPES.bool
     _date = CustomerField.FIELD_TYPES.date
 
-    _setup_field(_basic, 100, "first_name", "First Name", _string)
-    _setup_field(_basic, 200, "last_name", "Last Name", _string)
-    _setup_field(_basic, 300, "dob", "Birthday", _date)
-    _setup_field(_basic, 301, "age", "Age", _string)
-    _setup_field(_basic, 400, "email", "Email", _string)
-    _setup_field(_basic, 500, "gender", "Gender", _string)
-    _setup_field(_basic, 600, "address#line1", "Address Line 1", _string)
-    _setup_field(_basic, 601, "address#line2", "Address Line 2", _string)
-    _setup_field(_basic, 700, "address#city", "City", _string)
-    _setup_field(_basic, 800, "address#zipcode", "ZipCode", _string)
-    _setup_field(_basic, 900, "address#state", "State", _string)
-    _setup_field(_basic, 1000, "address#country", "Country", _string)
-    _setup_field(_basic, 1100, "phone#mobile", "Mobile Phone", _string)
-    _setup_field(_basic, 1200, "phone#home", "Home Phone", _string)
-    _setup_field(_basic, 1300, "occupation", "Occupation", _string)
-    _setup_field(_basic, 1400, "education", "Education", _string)
+    _setup_field(_basic, 0, CUSTOMER_FIELD_NAMES.profile_image, "Profile Image", _string)
+    _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name, "First Name", _string)
+    _setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name, "Last Name", _string)
+    _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob, "Birthday", _date)
+    _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age, "Age", _string)
+    _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.email, "Email", _string)
+    _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.gender, "Gender", _string)
+    _setup_field(_basic, 600, CUSTOMER_FIELD_NAMES.address__line1, "Address Line 1", _string)
+    _setup_field(_basic, 601, CUSTOMER_FIELD_NAMES.address__line2, "Address Line 2", _string)
+    _setup_field(_basic, 700, CUSTOMER_FIELD_NAMES.address__city, "City", _string)
+    _setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode, "ZipCode", _string)
+    _setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state, "State", _string)
+    _setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country, "Country", _string)
+    _setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone__mobile, "Mobile Phone", _string)
+    _setup_field(_basic, 1200, CUSTOMER_FIELD_NAMES.phone__home, "Home Phone", _string)
+    _setup_field(_basic, 1300, CUSTOMER_FIELD_NAMES.occupation, "Occupation", _string)
+    _setup_field(_basic, 1400, CUSTOMER_FIELD_NAMES.education, "Education", _string)
 
-    _setup_field(_household, 100, "marital_status", "Marital Status", _string)
-    _setup_field(_household, 200, "has_children", "Presence of Children", _bool)
-    _setup_field(_household, 300, "home_owner_status", "Home Owner Status", _string)
-    _setup_field(_household, 400, "income", "Household Income", _string)
-    _setup_field(_household, 500, "home_market_value", "Home Market Value", _string)
-    _setup_field(_household, 600, "high_net_worth", "High Net Worth", _bool)
-    _setup_field(_household, 700, "length_of_residence", "Length of Residence",_bool)
+    _setup_field(_household, 100, CUSTOMER_FIELD_NAMES.marital_status, "Marital Status", _string)
+    _setup_field(_household, 200, CUSTOMER_FIELD_NAMES.has_children, "Presence of Children", _bool)
+    _setup_field(_household, 300, CUSTOMER_FIELD_NAMES.home_owner_status, "Home Owner Status", _string)
+    _setup_field(_household, 400, CUSTOMER_FIELD_NAMES.income, "Household Income", _string)
+    _setup_field(_household, 500, CUSTOMER_FIELD_NAMES.home_market_value, "Home Market Value", _string)
+    _setup_field(_household, 600, CUSTOMER_FIELD_NAMES.high_net_worth, "High Net Worth", _bool)
+    _setup_field(_household, 700, CUSTOMER_FIELD_NAMES.length_of_residence, "Length of Residence",_bool)
 
-    _setup_field(_custom, 100, "interest#arts", "Interest in Arts and Crafts", _bool)
-    _setup_field(_custom, 200, "interest#blogging", "Interest in Blogging", _bool)
-    _setup_field(_custom, 300, "interest#books", "Interest in Books", _bool)
-    _setup_field(_custom, 400, "interest#business", "Interest in Business", _bool)
-    _setup_field(_custom, 500, "interest#health", "Interest in Health and Wellness", _bool)
-    _setup_field(_custom, 600, "interest#news", "Interest in News and Current Events", _bool)
-
-    _setup_field(_custom, 100, "purchase#automotive", "Purchases Automotive Goods", _bool)
-    _setup_field(_custom, 200, "purchase#baby", "Has Bought a Baby Product", _bool)
-    _setup_field(_custom, 300, "purchase#beauty", "Purchases Beauty Products", _bool)
-    _setup_field(_custom, 400, "purchase#charitable","Indicates liklihood of Being a Charitable Donor", _bool)
-    _setup_field(_custom, 500, "purchase#cooking", "Purchases cooking magazines; interest in cooking", _bool)
-    _setup_field(_custom, 600, "purchase#discount", "Purchase behavior: Interest in discounts", _bool)
-    _setup_field(_custom, 700, "purchase#high_end_brands", "Has bought a premium CPG brand in the past 18 months ", _bool)
-    _setup_field(_custom, 800, "purchase#home_garden", "Purchases Home & Garden Products", _bool)
-    _setup_field(_custom, 900, "purchase#home_improvement", "Purchases Home Improvement Products", _bool)
-    _setup_field(_custom, 1000, "purchase#luxury", "Purchases Luxury Items", _bool)
-    _setup_field(_custom, 1100, "purchase#magazine", "Purchases Magazine Subscriptions", _bool)
-    _setup_field(_custom, 1200, "purchase#outdoor", "Purchases Outdoor and Adventure Products", _bool)
-    _setup_field(_custom, 1300, "purchase#pets", "Purchases Pet Related Products", _bool)
-    _setup_field(_custom, 1400, "purchase#power_shopper", "Purchases Items from Multiple Retail Channels", _bool)
-    _setup_field(_custom, 1500, "purchase#sports", "Purchases Sporting Goods / Sports Related Products", _bool)
-    _setup_field(_custom, 1600, "purchase#technology", "Purchases Technology Products", _bool)
-    _setup_field(_custom, 1700, "purchase#travel", "Purchases Travel Related Goods", _bool)
+    _setup_field(_custom, 100, CUSTOMER_FIELD_NAMES.interest__arts, "Interest in Arts and Crafts", _bool)
+    _setup_field(_custom, 200, CUSTOMER_FIELD_NAMES.interest__blogging, "Interest in Blogging", _bool)
+    _setup_field(_custom, 300, CUSTOMER_FIELD_NAMES.interest__books, "Interest in Books", _bool)
+    _setup_field(_custom, 400, CUSTOMER_FIELD_NAMES.interest__business, "Interest in Business", _bool)
+    _setup_field(_custom, 500, CUSTOMER_FIELD_NAMES.interest__health, "Interest in Health and Wellness", _bool)
+    _setup_field(_custom, 600, CUSTOMER_FIELD_NAMES.interest__news, "Interest in News and Current Events", _bool)
+    _setup_field(_custom, 100, CUSTOMER_FIELD_NAMES.purchase__automotive, "Purchases Automotive Goods", _bool)
+    _setup_field(_custom, 200, CUSTOMER_FIELD_NAMES.purchase__baby, "Has Bought a Baby Product", _bool)
+    _setup_field(_custom, 300, CUSTOMER_FIELD_NAMES.purchase__beauty, "Purchases Beauty Products", _bool)
+    _setup_field(_custom, 400, CUSTOMER_FIELD_NAMES.purchase__charitable,"Indicates liklihood of Being a Charitable Donor", _bool)
+    _setup_field(_custom, 500, CUSTOMER_FIELD_NAMES.purchase__cooking, "Purchases cooking magazines; interest in cooking", _bool)
+    _setup_field(_custom, 600, CUSTOMER_FIELD_NAMES.purchase__discount, "Purchase behavior: Interest in discounts", _bool)
+    _setup_field(_custom, 700, CUSTOMER_FIELD_NAMES.purchase__high_end_brands, "Has bought a premium CPG brand in the past 18 months ", _bool)
+    _setup_field(_custom, 800, CUSTOMER_FIELD_NAMES.purchase__home_garden, "Purchases Home & Garden Products", _bool)
+    _setup_field(_custom, 900, CUSTOMER_FIELD_NAMES.purchase__home_improvement, "Purchases Home Improvement Products", _bool)
+    _setup_field(_custom, 1000, CUSTOMER_FIELD_NAMES.purchase__luxury, "Purchases Luxury Items", _bool)
+    _setup_field(_custom, 1100, CUSTOMER_FIELD_NAMES.purchase__magazine, "Purchases Magazine Subscriptions", _bool)
+    _setup_field(_custom, 1200, CUSTOMER_FIELD_NAMES.purchase__outdoor, "Purchases Outdoor and Adventure Products", _bool)
+    _setup_field(_custom, 1300, CUSTOMER_FIELD_NAMES.purchase__pets, "Purchases Pet Related Products", _bool)
+    _setup_field(_custom, 1400, CUSTOMER_FIELD_NAMES.purchase__power_shopper, "Purchases Items from Multiple Retail Channels", _bool)
+    _setup_field(_custom, 1500, CUSTOMER_FIELD_NAMES.purchase__sports, "Purchases Sporting Goods / Sports Related Products", _bool)
+    _setup_field(_custom, 1600, CUSTOMER_FIELD_NAMES.purchase__technology, "Purchases Technology Products", _bool)
+    _setup_field(_custom, 1700, CUSTOMER_FIELD_NAMES.purchase__travel, "Purchases Travel Related Goods", _bool)
 
 def _setup_sample_data():
     section("Creating Customer Database")
 
     #setup default client
-    client,created = Client.objects.get_or_create(slug="default_client", name="default_client")
-    customer_source,created = CustomerSource.objects.get_or_create(client=client, slug="import")
+    client, created = Client.objects.get_or_create(slug="default_client", name="default_client")
+    customer_source, created = CustomerSource.objects.get_or_create(client=client, slug="import")
 
     customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
     csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
@@ -122,8 +123,17 @@ def _setup_sample_data():
         customer_values = customer_text.split(",")
         if len(customer_values) == len(clients_customer_fields):
             c = Customer(client=client, source=customer_source)
+            c.set_val(CUSTOMER_FIELD_NAMES.profile_image, '/static/images/icons/dude.svg')
             for i in range(0, len(customer_values)):
                 c.data[clients_customer_fields[i].name] = str(customer_values[i])
+            if c.data[CUSTOMER_FIELD_NAMES.age] or \
+                c.data[CUSTOMER_FIELD_NAMES.gender] or \
+                c.data[CUSTOMER_FIELD_NAMES.has_children] or \
+                c.data[CUSTOMER_FIELD_NAMES.income] or \
+                c.data[CUSTOMER_FIELD_NAMES.length_of_residence] or \
+                c.data[CUSTOMER_FIELD_NAMES.marital_status]:
+                c.enrichment_status = Customer.ENRICHMENT_STATUS.en
+                c.enrichment_date = datetime.datetime.now()
             c.save()
 
 def setup_all():
