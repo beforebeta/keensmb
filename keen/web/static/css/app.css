@@ -266,6 +266,10 @@ section {
 .table.table-bordered tr > th {
   border: 1px solid #ebeff0 !important;
 }
+.customers-table {
+	display: block;
+	overflow: auto;
+}
 .customers-table tr > td:last-child,
 .customers-table tr > th:last-child {
   border: 1px dashed #ebeff0 !important;
@@ -300,4 +304,9 @@ section {
   -ms-transition: color .2s;
   -o-transition: color .2s;
   transition: color .2s;
+}
+#loading {
+	width: 30em;
+	margin-left: auto;
+	margin-right: auto;
 }

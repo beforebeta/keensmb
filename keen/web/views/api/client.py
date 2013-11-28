@@ -19,7 +19,7 @@ class CustomerList(APIView):
         client = get_object_or_404(Client, slug='default_client')
 
         # FIXME: this should be configurabe
-        page_size = 200
+        page_size = int(getattr(settings, 'CUSTOMER_LIST_PAGE_SIZE', 100))
 
         if 'offset' in request.GET:
             try:

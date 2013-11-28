@@ -3,23 +3,29 @@
 // This is more optimal than using waypoints-infinite.js
 
 $(function() {
-  var $customers_container = $('#customers-table tbody');
+	var $loading = $('#loading'),
+	$customers_container = $('#customers-table tbody');
 
-  $('#load-more-customers').waypoint({
-    handler: function(direction) {
-      var $this = $(this);
+	$('#load-more-customers').waypoint(
+		{
+			handler: function(direction) {
+				var $this = $(this);
 
-      $this.waypoint('disable');
+				$loading.show();
+				$this.waypoint('disable');
 
-      $.get($this.attr('href'), function(data) {
-        if (data) {
-          $customers_container.append($(data)).find(':checkbox').checkbox();
-          $this.waypoint('enable');
-        } else {
-          $this.waypoint('destroy');
-          $this.hide();
-        }
-      });
-    },
-    offset: 'bottom-in-view'});
-  });
+				$.get($this.attr('href'), function(data) {
+					$loading.hide();
+					if (data) {
+						$customers_container.append($(data)).find(':checkbox').checkbox();
+						$this.waypoint('enable');
+					} else {
+						$this.waypoint('destroy');
+						$this.hide();
+					}
+				});
+			},
+			offset: 'bottom-in-view'
+		}
+	);
+});
