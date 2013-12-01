@@ -17,10 +17,8 @@ env.pidfile = '%(project_dir)s/%(project_name)s.pid' % env
 
 def virtualenv():
     assert 'virtualenv' in env
-    return settings(
-        cd(env.project_dir),
-        prefix('source %(virtualenv)s' % env),
-    )
+    return settings(cd(env.project_dir),
+                    prefix('source %(virtualenv)s/bin/activate' % env))
 
 
 def install_os_packages():
@@ -69,6 +67,12 @@ def pull(branch=''):
         run('git pull ' + branch)
 
 
+def checkout(branch):
+    with cd(env.project_dir):
+        run('git fetch')
+        run('git checkout -f ' + branch)
+
+
 def migrate():
     with virtualenv():
         run('./manage.py migrate')
@@ -108,12 +112,12 @@ def version():
 @task
 def uwsgi_start():
     with virtualenv():
-        run('uwsgi --ini conf/uwsgi/%(profile)s.ini --daemonize --pidfile %(pidfile)s' % env)
+        run('uwsgi --ini conf/uwsgi/%(profile)s.ini --pidfile %(pidfile)s' % env)
 
 
 @task
 def uwsgi_stop():
-    with virtualenv:
+    with virtualenv():
         run('uwsgi --stop %(pidfile)s' % env)
 
 
@@ -153,11 +157,13 @@ def deploy(branch=''):
 
     Target host must be specified by using either "staging" or "production" command
     """
-    pull(branch)
+    checkout(branch)
     migrate()
     with virtualenv():
         run('./manage.py collectstatic --noinput')
-    uwsgi_reload()
+    with settings(warn_only=True):
+        uwsgi_stop()
+    uwsgi_start()
 
 
 @task
