@@ -47,12 +47,15 @@ def _setup_core():
     _date = CustomerField.FIELD_TYPES.date
 
     _setup_field(_basic, 0, CUSTOMER_FIELD_NAMES.profile_image, "Profile Image", _string)
+    _setup_field(_basic, 1, CUSTOMER_FIELD_NAMES.social__facebook, "Facebook", _string)
+    _setup_field(_basic, 2, CUSTOMER_FIELD_NAMES.social__twitter, "Twitter", _string)
+    _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus, "Google Plus", _string)
     _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name, "First Name", _string)
     _setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name, "Last Name", _string)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob, "Birthday", _date)
     _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age, "Age", _string)
-    _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.email, "Email", _string)
-    _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.gender, "Gender", _string)
+    _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender, "Gender", _string)
+    _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.email, "Email", _string)
     _setup_field(_basic, 600, CUSTOMER_FIELD_NAMES.address__line1, "Address Line 1", _string)
     _setup_field(_basic, 601, CUSTOMER_FIELD_NAMES.address__line2, "Address Line 2", _string)
     _setup_field(_basic, 700, CUSTOMER_FIELD_NAMES.address__city, "City", _string)

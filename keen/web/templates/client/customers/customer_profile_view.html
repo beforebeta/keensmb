@@ -16,15 +16,15 @@
               <table>
                 <div class='row'>
                   <div class='col-sm-3'><span class="text-muted mtl mrs dib">Name:</span></div>
-                  <div class='col-sm-9'><span class='dib mtl'>{{ customer.get_full_name }}</span></div>
+                  <div class='col-sm-9'><span class='dib mtl'>{{ customer.get_name|nonempty }}</span></div>
                 </div>
                 <div class='row'>
                   <div class='col-sm-3'><span class="text-muted mtl mrs dib">DOB:</span></div>
-                  <div class='col-sm-9'><small class='dib mtl'>14 March, 2013</small></div>
+                  <div class='col-sm-9'><small class='dib mtl'>{{ customer.get_dob|nonempty }}</small></div>
                 </div>
                 <div class='row'>
                   <div class='col-sm-3'><span class="text-muted mtl mrs dib">Gender:</span></div>
-                  <div class='col-sm-9'><small class='dib mtl'>Female</small></div>
+                  <div class='col-sm-9'><small class='dib mtl'>{{ customer.get_formatted_gender|nonempty }}</small></div>
                 </div>
               </table>
 
@@ -32,21 +32,21 @@
                 <div class="col-md-3">
                   <span class="fui-facebook text-blue social-icon"></span>
                 </div>
-                <div class="col-md-9"><span class="text-muted small">facebook.com/username</span></div>
+                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_facebook_username|nonempty }}</span></div>
               </div>
 
               <div class="row mtm">
                 <div class="col-md-3">
                   <span class="fui-twitter text-blue social-icon"></span>
                 </div>
-                <div class="col-md-9"><span class="text-muted small">@ your twitter name</span></div>
+                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_twitter_username|nonempty }}</span></div>
               </div>
 
               <div class="row mtm">
                 <div class="col-md-3">
                   <span class="fui-googleplus text-blue social-icon"></span>
                 </div>
-                <div class="col-md-9"><span class="text-muted small">plus.google/username</span></div>
+                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_googleplus_username|nonempty }}</span></div>
               </div>
             </div>
           </div>
@@ -58,8 +58,13 @@
                 <span class='mrl'>Edit Profile</span>
                 <i class="fui-new"></i>
               </button>
-              <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;'>
-              <span class='dib mid mtn mbn'>Profile was enriched on date</span>
+                {% if customer.is_enriched %}
+                  <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;'>
+                  <span class='dib mid mtn mbn'>Profile was enriched on {{ customer.enrichment_date }}</span>
+                {% else %}
+                  <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;opacity:0.1;'>
+                  <span class='dib mid mtn mbn text-muted'>Profile has not been enriched</span>
+                {% endif %}
             </div>
 
             <div class="kn-section active mtl">
@@ -69,95 +74,60 @@
               </div>
               <div class="kn-section-content">
                 <div class="row small">
-                  <div class="col-md-3">
-                    <span class='text-muted'>Email:</span>
-                  </div>
-                  <div class="col-md-9">
-                    <span>{{ customer.get_email|nonempty }}</span>
-                  </div>
-
-                  <div class="col-md-3">
-                    <span class='text-muted'>Address:</span>
-                  </div>
-                  <div class="col-md-9">
-                    <span>Address line 1</span>
-                  </div>
-                  <div class="col-md-7 col-md-offset-3">
-                    <span>Address line 2</span>
-                  </div>
-                  <div class="col-md-2">
-                    <span>Apt No.</span>
-                  </div>
-                  <div class="col-md-5 col-md-offset-3">
-                    <span>City</span>
-                  </div>
-                  <div class="col-md-2">
-                    <span>State</span>
-                  </div>
-                  <div class="col-md-2">
-                    <span>Zip Code</span>
-                  </div>
-
-                  <div class="col-md-3">
-                    <span class='text-muted'>Mobile phone:</span>
-                  </div>
-                  <div class="col-md-9">
-                    <span>(555) - 555 - 5555</span>
-                  </div>
-
-                  <div class="col-md-3">
-                    <span class='text-muted'>Occupation:</span>
-                  </div>
-                  <div class="col-md-9">
-                    <span>Occupation</span>
-                  </div>
-
+                    {% for field in customer.get_field_list %}
+                        {% if field.group == 'basic' and field.group_ranking >= 500%}
+                          <div class="col-md-3">
+                            <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
+                          </div>
+                          <div class="col-md-9">
+                            <span>{{ field.value|nonempty }}</span>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
               </div>
             </div>
 
-            <div class="kn-section mtl disabled">
+            <div class="kn-section mtl">
               <div class="kn-section-header">
-                <i class='pull-right small'>Not Enriched</i>
+                <i class='pull-right small {% if not customer.is_enriched %}text-muted{% endif %}'>{% if not customer.is_enriched %}Not {% endif %}Enriched</i>
                 <span class='fui-home text-blue dib mid'></span>
-                <h6 class='mll dib mid mbn mtn'>Household Information</span>
+                <h6 class='mll dib mid mbn mtn'>Household Information</h6>
               </div>
               <div class="kn-section-content">
                 <div class="row small">
-                  <div class="col-md-5"><span class='text-muted'>Marital Status:</span></div>
-                  <div class="col-md-7"><span>State</span></div>
-
-                  <div class="col-md-5"><span class='text-muted'>Presence of Children:</span></div>
-                  <div class="col-md-7"><span>State</span></div>
-
-                  <div class="col-md-5"><span class='text-muted'>Home Owner Status:</span></div>
-                  <div class="col-md-7"><span>State</span></div>
-
-                  <div class="col-md-5"><span class='text-muted'>Income:</span></div>
-                  <div class="col-md-7"><span>Income</span></div>
-
-                  <div class="col-md-5"><span class='text-muted'>Home Market Value:</span></div>
-                  <div class="col-md-7"><span>Home Market Value</span></div>
-
-                  <div class="col-md-5"><span class='text-muted'>High Net Worth:</span></div>
-                  <div class="col-md-7"><span>High Net Worth</span></div>
-
-                  <div class="col-md-5"><span class='text-muted'>Length of Residence:</span></div>
-                  <div class="col-md-7"><span>Length of Residence</span></div>
+                    {% for field in customer.get_field_list %}
+                        {% if field.group == 'household' %}
+                          <div class="col-md-5">
+                            <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
+                          </div>
+                          <div class="col-md-7">
+                            <span>{{ field.value|nonempty }}</span>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
               </div>
             </div>
 
-            <div class="kn-section mtl mbl disabled">
+            <div class="kn-section mtl mbl">
               <div class="kn-section-header">
-                <i class='pull-right small'>Not Enriched</i>
+                <i class='pull-right small {% if not customer.is_enriched %}text-muted{% endif %}'>{% if not customer.is_enriched %}Not {% endif %}Enriched</i>
                 <span class='fui-gear text-blue dib mid'></span>
                 <h6 class='mll dib mid mbn mtn'>Custom Fields</h6>
               </div>
               <div class="kn-section-content">
                 <div class="row small">
-                  <div class="col-md-5"><span class='text-muted'>Name of Custom Field:</span></div>
-                  <div class="col-md-7"><span>State</span></div>
+                    {% for field in customer.get_field_list %}
+                        {% if field.group == 'custom' %}
+                          <div class="col-md-7">
+                            <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
+                          </div>
+                          <div class="col-md-5">
+                            <span>{{ field.value|nonempty }}</span>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
               </div>
             </div>
