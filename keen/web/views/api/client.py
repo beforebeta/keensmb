@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -60,13 +61,17 @@ class CustomerList(APIView):
             offset = 0
 
         customers = client.customer_page(offset, page_size=page_size)
+        loaded = len(customers)
 
-        return Response({
-            'customers': CustomerSerializer(
-                customers,
+        data = {
+            'customers': CustomerSerializer(customers,
                 exclude_fields=('created', 'modified', 'client'),
-                many=True).data
-        })
+                many=True).data,
+        }
+        if loaded == page_size:
+            data['next_page'] = reverse(
+                'api_customer_list', kwargs={'client_slug': client_slug}) + '?offset=%d' % (offset + page_size)
+        return Response(data)
 
     def post(self, request, client_slug):
         """Create new customer
