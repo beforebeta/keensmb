@@ -115,7 +115,7 @@ class ClientUser(Timestamps):
 
     client = models.ForeignKey(Client)
     user = models.OneToOneField(User)
-    manager = models.Boolean(default=False)
+    is_manager = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('client', 'user')
