@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import *
+from django.contrib.auth.models import User
 from django_hstore import hstore
 from model_utils import Choices
+
 
 class Timestamps(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -9,6 +10,7 @@ class Timestamps(models.Model):
 
     class Meta:
         abstract = True
+
 
 class Image(Timestamps):
 
@@ -43,11 +45,11 @@ class Location(Timestamps):
     client = models.ForeignKey('Client', related_name='locations')
     address = models.ForeignKey('Address')
 
-    def __unicode__(self):
-        return self.name
-
     class Meta:
         unique_together = ('name', 'client')
+
+    def __unicode__(self):
+        return name
 
 
 class CustomerFieldGroup(Timestamps):
@@ -80,7 +82,7 @@ class CustomerField(Timestamps):
 
     name = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=255, unique=True)
-    group = models.ForeignKey(CustomerFieldGroup)
+    group = models.ForeignKey(CustomerFieldGroup, related_name='fields')
     group_ranking = models.IntegerField(default=99999999)
     type = models.CharField(max_length=20, choices=FIELD_TYPES)
     required = models.BooleanField(default=False)
@@ -107,6 +109,16 @@ class Client(Timestamps):
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
+
+
+class ClientUser(Timestamps):
+
+    client = models.ForeignKey(Client)
+    user = models.OneToOneField(User)
+    manager = models.Boolean(default=False)
+
+    class Meta:
+        unique_together = ('client', 'user')
 
 
 class CustomerSource(Timestamps):

@@ -1,14 +1,18 @@
 from django.conf.urls import patterns, url, include
 
-from .views import client
-from .views.api.client import CustomerList, CustomerProfile
+from .views.api.client import ClientProfile, CustomerList, CustomerProfile
 
 
 api_urls = patterns(
-    'keen.web.views.api',
-    url(r'^customers/$', CustomerList.as_view(), name='api_customer_list'),
-    url(r'^customers/(?P<offset>\d+)$', CustomerList.as_view(), name='api_customer_list'),
-    url(r'^customers/(?P<customer_id>\d+)$', CustomerProfile.as_view()),
+    '',
+    url(r'^client/(?P<client_slug>[\w-]+)$', ClientProfile.as_view(),
+        name='client_profile'),
+    url(r'^client/(?P<client_slug>[\w-]+)/(?P<part>summary)$',
+        ClientProfile.as_view(), name='client_profile'),
+    url(r'^client/(?P<client_slug>[\w-]+)/customers$', CustomerList.as_view(),
+        name='api_customer_list'),
+    url(r'^client/(?P<client_slug>[\w-]+)/customer/(?P<customer_id>\d+)$',
+        CustomerProfile.as_view(), name='api_customer_profile'),
 )
 
 
@@ -18,6 +22,7 @@ urlpatterns = patterns(
     url(r'^client/promotions$', 'client.promotions', name='client_promotions'),
     url(r'^client/customers$', 'client.customers', name='client_customers'),
     url(r'^client/profile$', 'client.profile', name='client_profile'),
-    url(r'^client/customer_form$', 'client.customer_form', name='customer_form'),
-    url(r'^client/api/', include(api_urls)),
+    url(r'^client/customer_form$', 'client.customer_form',
+        name='customer_form'),
+    url(r'^api/', include(api_urls)),
 )
