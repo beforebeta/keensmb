@@ -180,7 +180,7 @@ WSGI_APPLICATION = 'keen.wsgi.application'
 # Define your database connections
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django_hstore.postgresql_psycopg2',
         'NAME': 'keen',
         'USER': 'keen',
         #'PASSWORD': '',
