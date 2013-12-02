@@ -84,3 +84,14 @@
 .popover.left .arrow {
   border-left-color: #ecedef;
 }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.input-group .input-group-btn .btn-calendar {
+  padding-left: 3px;
+}
+.input-group  .hasDatepicker {
+  padding-right: 3px;
+}

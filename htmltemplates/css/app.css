@@ -1,5 +1,5 @@
-
 @import 'common.css';
+@import 'animations.css';
 
 html, body {
   height: 100%;
@@ -379,6 +379,21 @@ section {
   position: absolute;
   z-index: 2;
 }
+.su-form-wrapper .banner-logo:not(:hover) .hover-vis,
+.su-form-wrapper .background-image:not(:hover) .hover-vis {
+  opacity: 0;
+}
+.hover-vis {
+  -webkit-transition: opacity .3s;
+  -moz-transition: opacity .3s;
+  -ms-transition: opacity .3s;
+  -o-transition: opacity .3s;
+  transition: opacity .3s;
+}
+/*.su-form-wrapper .banner-logo:hover .hover-vis,
+.su-form-wrapper .background-image:hover .hover-vis {
+  display: block;
+}*/
 
 .su-form-wrapper .instructions {
   display: none;
@@ -414,11 +429,11 @@ section {
   line-height: 17px;
 }
 
-.su-form-wrapper .ui-draggable:hover {
+.su-form-wrapper .ui-draggable:not(.ui-draggable-disabled):hover {
   cursor: pointer;
 }
 
-.su-form-wrapper .ui-draggable:active {
+.su-form-wrapper .ui-draggable:not(.ui-draggable-disabled):active {
   cursor: move;
 }
 .su-form-wrapper .placeholder {
@@ -437,6 +452,15 @@ section {
   height: 575px;
   background: #f2f2f2;
   overflow: hidden;
+}
+.su-form-wrapper .action-buttons {
+  position: absolute;
+  bottom: 15px;
+  right: 12px;
+  visibility: hidden;
+}
+.su-form-wrapper .editing .action-buttons {
+  visibility: visible;
 }
 
 .su-form {

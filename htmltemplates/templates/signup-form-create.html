@@ -88,44 +88,60 @@
       </ul>
 
       <!-- Content -->
-      <section class='clearfix'>
-        <div class="su-title su-editable row mtl mbn js-editable-section">
+      <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>
+        <div class="su-title su-editable row mtl mbn"
+             ng-class='{editing: title.isEditing}'>
           <div class="col-md-10">
             <div class="form-group mbn">
-              <input type="text" class='form-control page-title js-editable-trigger' value='HandleBar Frozen Yogurt Sign Up'>
+              <input type="text"
+                     class='form-control page-title'
+                     ng-model='title.text'
+                     ng-focus='startEditing(title)'
+                     ng-blur='cancelEditing(title)'>
             </div>
           </div>
           <div class="col-md-2">
-            <button class="btn btn-primary btn-sm pull-right mtx">Save</button>
+            <button class="btn btn-primary btn-sm pull-right mtx"
+                    ng-click='startEditing(title)'>Save</button>
+
             <button class="btn btn-default btn-sm pull-right mrs mtx">Cancel</button>
           </div>
         </div>
 
-        <div class="su-subtitle su-editable form-group row mts mbn js-editable-section">
+        <div class="su-subtitle su-editable form-group row mts mbn"
+             ng-class='{editing: permalink.isEditing}'>
           <div class="col-md-10">
             <span class='mtx dib'><b>Permalink: </b> http://keensmb.com/slug/signup/</span>
             <div class="form-group dib">
-              <input type="text" class='form-control input-sm permalink js-editable-trigger' value='handlebar-fro-yo'>
+              <input type="text"
+                     class='form-control input-sm permalink js-editable-trigger'
+                     ng-model='permalink.text'
+                     ng-focus='startEditing(permalink)'
+                     ng-blur='cancelEditing(permalink)'>
             </div>
           </div>
           <div class="col-md-2">
-            <button class="btn btn-primary btn-sm pull-right">Save</button>
+            <button class="btn btn-primary btn-sm pull-right"
+                    ng-click='startEditing(permalink)'>Save</button>
+
             <button class="btn btn-default btn-sm pull-right mrs">Cancel</button>
           </div>
         </div>
 
         <div class="su-form-wrapper mbm">
-          <div class="banner-logo js-image-container">
+
+        <!-- Banner Logo -->
+          <div class="banner-logo js-image-container" ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'>
             <p class="placeholder">Banner Logo</p>
 
-            <img src="" alt="" class='js-banner-preview fade' id='banner-preview'>
+            <img src='' ng-src="{{bannerLogo.image.src}}" alt="" class='js-banner-preview fade in' id='banner-preview'>
 
-            <div class="instructions">
+            <div class="instructions hover-vis">
               <i class="fui-list dib mid"></i>
               <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
             </div>
 
-            <div class="btn-group photo-actions">
+            <div class="btn-group photo-actions hover-vis">
               <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover' data-content='Upload your unique logo for the banner of your sign up form' data-placement="left">
                 <i class="fui-new"></i>
                 <span class='mll'>Choose Photo</span>
@@ -138,17 +154,30 @@
                 <li><a href="#fakelink">Choose from photos</a></li>
                 <li class="js-fileapi-wrapper" id="choose">
                   <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
-                  <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="files" type="file" />
+                  <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="banner-logo" type="file" />
                 </li>
-                <li class='disabled'><a href="#fakelink">Reposition</a></li>
+                <li class='disabled js-reposition-banner'><a href="#fakelink">Reposition</a></li>
               </ul>
+            </div>
+
+            <div class="action-buttons hover-vis">
+              <button class="btn btn-default btn-wide btn-embossed"
+                      ng-click='cancelEditingBanner()'>Cancel</button>
+              <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
+                      ng-click='saveEditingBanner()'>Save Changes</button>
             </div>
           </div>
 
-          <div class="background-image js-image-container">
+        <!-- Background Image -->
+          <div class="background-image js-image-container" ng-class='{"image-loaded" : bgImage.reposition}'>
             <p class="placeholder">Background Image</p>
 
             <img src="" alt="" class='js-banner-preview fade' id='background-image'>
+
+            <div class="instructions hover-vis">
+              <i class="fui-list dib mid"></i>
+              <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
+            </div>
 
             <div class="su-form">
               <h5 class='su-form-header'>Header 4 would have max 50 characters</h5>
@@ -172,7 +201,7 @@
                     <div class="input-group">
                       <input type="text" class="form-control" placeholder="Birthday" id="datepicker-01">
                       <span class="input-group-btn">
-                        <button class="btn" type="button"><span class="fui-calendar"></span></button>
+                        <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
                       </span>
                     </div>
                   </div>
@@ -197,11 +226,11 @@
               <p class='su-form-text text-simple mtl'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea debitis corporis molestiae.</p>
             </div>
 
-            <div class='color-picker-wrapper'>
+            <div class='color-picker-wrapper hover-vis'>
               <input type="text" class='hidden' id="color-picker-anchor">
             </div>
 
-            <div class="btn-group photo-actions">
+            <div class="btn-group photo-actions hover-vis">
               <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover'
                       data-content='Choose a unique image for the background of your sign up form'
                       data-placement="left">
@@ -216,7 +245,7 @@
                 <li><a href="#fakelink">Choose from photos</a></li>
                 <li class="js-fileapi-wrapper">
                   <a href="#fakelink" class="js-trigger" data-target='#upload-background-image'>Upload Photo</a>
-                  <input id='upload-background-image' accept="image/*" class='hidden js-upload-banner' name="files" type="file" />
+                  <input id='upload-background-image' accept="image/*" class='hidden js-upload-banner' name="background-image" type="file" />
                 </li>
                 <li class='disabled'><a href="#fakelink">Reposition</a></li>
                 <li class='disabled'><a href="#fakelink">Remvoe Photo</a></li>
@@ -279,6 +308,9 @@
     <script src="../js/vendor/jquery/jquery.ui.touch-punch.min.js"></script>
     <script src="../js/vendor/jquery/jquery.tagsinput.js"></script>
     <script src="../js/vendor/jquery/jquery.placeholder.js"></script>
+
+    <script src="../js/vendor/angular/angular-1.2.3.js"></script>
+
     <script src="../js/vendor/bootstrap/bootstrap.min.js"></script>
     <script src="../js/vendor/bootstrap/bootstrap-select.js"></script>
     <script src="../js/vendor/bootstrap/bootstrap-typeahead.js"></script>
@@ -303,6 +335,8 @@
 
     <script src="../js/application.js"></script>
 
+
+    <script src="../js/module.js"></script>
     <script src="../js/profiles.js"></script>
     <script src="../js/sign-up.js"></script>
   </body>
