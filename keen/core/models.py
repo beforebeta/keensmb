@@ -293,5 +293,9 @@ class Customer(Timestamps):
                           })
         return sorted(fields, key=operator.itemgetter("group", "group_ranking"))
 
+    def has_custom_fields(self):
+        return self.client.customer_fields.filter(
+            group=CustomerFieldGroup.objects.get(name=CustomerFieldGroup.FIELD_GROUPS.custom)).count() > 0
+
     def __unicode__(self):
         return self.get_name()

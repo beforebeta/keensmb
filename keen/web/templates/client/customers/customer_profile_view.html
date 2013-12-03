@@ -88,7 +88,7 @@
               </div>
             </div>
 
-            <div class="kn-section mtl">
+            <div class="kn-section mtl {% if not customer.has_custom_fields %}mbl{% endif %}">
               <div class="kn-section-header">
                 <i class='pull-right small {% if not customer.is_enriched %}text-muted{% endif %}'>{% if not customer.is_enriched %}Not {% endif %}Enriched</i>
                 <span class='fui-home text-blue dib mid'></span>
@@ -110,6 +110,8 @@
               </div>
             </div>
 
+
+          {% if customer.has_custom_fields %}
             <div class="kn-section mtl mbl">
               <div class="kn-section-header">
                 <i class='pull-right small {% if not customer.is_enriched %}text-muted{% endif %}'>{% if not customer.is_enriched %}Not {% endif %}Enriched</i>
@@ -131,6 +133,10 @@
                 </div>
               </div>
             </div>
+          {% endif %}
+
+
+
           </div>
         </div>
 
