@@ -197,7 +197,7 @@ String.prototype.repeat = function(num) {
     $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
 
     // Typehead
-    $('.typeahead').typeahead();
+    // $('.typeahead').typeahead();
 
     // make code pretty
     window.prettyPrint && prettyPrint();

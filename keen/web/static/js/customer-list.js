@@ -6,6 +6,16 @@
     angular.module('keen')
         .controller('customersCtrl', ['$scope', '$timeout', 'customerService', 'ngTableParams', function($scope, $timeout, customerService, ngTableParams){
 
+            $scope.$watch('searchCustomers', function(newVal) {
+                lazySearch(newVal);
+            });
+
+            var lazySearch = _.debounce(function(text) {
+                    $scope.customers = [];
+                    customerService.searchCustomers(text);
+                    $scope.loadMoreCustomers();
+            }, 300);
+
             customerService.getClientData().then(function(data) {
                 var customerFields = data.data.customer_fields;
 
@@ -23,22 +33,47 @@
 
                 $scope.availableFields = availableFields;
 
-                // customerService.putCustomersFields(availableFields);
+                availableFields.length = 3;
+
+                customerService.putCustomersFields(availableFields);
             });
+
+            $scope.loadingDisabled = false;
 
             $scope.customers = [];
             // TODO: hardcoded
             var fields = ['first_name','last_name','email', 'age', 'gender'];
-            $scope.loadMoreCustomers = function() {
-                customerService.getClientCustomers(fields).then(function(data) {
+            // $scope.loadMoreCustomers = function() {
+            //     customerService.getClientCustomers(fields, $scope.searchCustomers).then(function(data) {
+            //         console.log('more: ', data.data);
+            //         var customers = data.data.customers;
+
+            //         // TODO hardcoded limit
+            //         if (customers.length < 25) {
+            //             $scope.loadingDisabled = true;
+            //         }
+
+            //         $scope.customers = $scope.customers.concat(customers);
+
+            //         initCheckbox();
+            //     });
+            // };
+
+            $scope.loadMoreCustomers = _.debounce(function() {
+                customerService.getClientCustomers(fields, $scope.searchCustomers).then(function(data) {
                     console.log('more: ', data.data);
                     var customers = data.data.customers;
+
+                    // TODO hardcoded limit
+                    if (customers.length < 25) {
+                        $scope.loadingDisabled = true;
+                    }
 
                     $scope.customers = $scope.customers.concat(customers);
 
                     initCheckbox();
                 });
-            };
+            }, 150);
 
 
             // customerService.getClientCustomers(fields).then(function(data) {
@@ -123,23 +158,33 @@
                     return $http({
                         url: '/api/client/'+clientSlug+'/customer_fields',
                         method: 'PUT',
-                        data: {display_customer_fields: fields},
+                        data: fields.join(','),
                     });
                 },
-                getClientCustomers: function(fields) {
+                getClientCustomers: function(fields, search) {
                     currentOffset += limit;
+
+                    var params = {
+                        fields: fields.join(','),
+                        limit: limit,
+                        offset: currentOffset
+                    };
+
+                    if (search) {
+                        params.search = search;
+                        params.offset = 0;
+                    }
 
                     return $http({
                         url: '/api/client/'+clientSlug+'/customers',
                         method: 'GET',
-                        params: {
-                            fields: fields.join(','),
-                            limit: limit,
-                            offset: currentOffset
-                        },
+                        params: params,
                         cache: true
                     });
 
+                },
+                searchCustomers: function(str) {
+                    currentOffset = -10;
                 }
             };
         }]);

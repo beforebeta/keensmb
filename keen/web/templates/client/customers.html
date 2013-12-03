@@ -97,7 +97,10 @@
       <form class="navbar-form navbar-left" action="#">
         <div class="form-group">
           <div class="input-group input-group-sm">
-            <input class="form-control" id="navbarInput-02" type="search" placeholder="Search in list...">
+            <input class="form-control"
+                   type="search"
+                   placeholder="Search in list..."
+                   ng-model='searchCustomers'>
             <span class="input-group-btn">
               <button type="submit" class="btn"><span class="fui-search"></span></button>
             </span>
@@ -168,7 +171,7 @@
 
 {% verbatim  %}
 
-<div class="table-responsive" ng-app='keen' ng-controller='customersCtrl' ng-cloak>
+<div class="table-responsive" ng-controller='customersCtrl' ng-cloak>
 
 <!--   <table ng-table='tableParams' class='table table-bordered customers-table'>
   <tr ng-repeat="customer in $data">
@@ -182,6 +185,7 @@
 
   <table id='customers-table' ng-cloak
          class="table table-bordered customers-table"
+         infinite-scroll-disabled='{{ loadingDisabled }}'
          infinite-scroll='loadMoreCustomers()',
          infinite-scroll-immediate-check='true'>
     <thead>
@@ -209,12 +213,6 @@
         </tr>
     </tbody>
   </table>
-
-  <div id="loading">
-    <h6>
-      Loading more customers. Please wait...
-    </h6>
-  </div>
 
   <!-- new field modal -->
     <div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
