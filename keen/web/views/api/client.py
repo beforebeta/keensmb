@@ -82,9 +82,18 @@ class CustomerList(APIView):
 
         customers = client.customers.all()
 
+        if 'search' in request.GET:
+            # full-text search
+            customers = customers.extra(
+                where=['cast(avals(data) as text) @@ %s'],
+                params=[request.GET['search']])
+
         if 'order' in request.GET:
             order_by = request.GET['order'].split(',')
             fields = [field.lstrip('-') for field in order_by]
+            # TODO: Use client.customer_fields to match field names AND
+            # to add CAST to database query so it matches index that was
+            # created by setup management command
             customers = customers.extra(
                 select=dict(
                     (field, "core_customer.data -> '%s'" % field)
