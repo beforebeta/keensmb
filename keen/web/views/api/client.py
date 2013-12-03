@@ -1,6 +1,6 @@
 import re
 from django.conf import settings
-from django.http import Http404
+from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 
@@ -60,9 +60,22 @@ class ClientProfile(APIView):
                 'display_customer_fields': [field.name for field in display_fields],
             }
         else:
-            return Http404
+            return Http404()
 
         return Response(data)
+
+    def put(self, request, customer_slug, part=None):
+        client = get_object_or_404(Client, slug=client_slug)
+
+        if part == 'customer_fields':
+            fields = request.POST.get('display_customer_fields', '').split(',')
+            PageCustomerField.objects.filter(page='db', client=client).delete()
+            for field in client.customer_fields.filter(name__in=fields):
+                PageCustomerField(page='db', client=client, field=field).save()
+        else:
+            return HttpResponseNotAllowed()
+
+        return Response('')
 
 
 class CustomerList(APIView):
