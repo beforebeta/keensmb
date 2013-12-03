@@ -14,4 +14,7 @@ def nonempty(value):
 
 @register.filter(name='cf_display_name')
 def cf_display_name(value):
-    return mark_safe(CUSTOMER_FIELD_NAMES_DICT[value])
+    try:
+        return mark_safe(CustomerField.objects.get(name=value).title)
+    except:
+        return value

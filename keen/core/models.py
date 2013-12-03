@@ -87,6 +87,12 @@ class CustomerField(Timestamps):
     required = models.BooleanField(default=False)
     is_unique = models.BooleanField(default=False)
 
+    def group_name(self):
+        try:
+            return self.group.name
+        except:
+            return ""
+
     def __unicode__(self):
         return self.name
 
@@ -213,9 +219,11 @@ class Customer(Timestamps):
             return "%s %s" % (first_name, last_name)
         else:
             return ""
+    get_name.short_description = 'Name'
 
     def get_email(self):
         return self._return_field(CUSTOMER_FIELD_NAMES.email)
+    get_email.short_description = 'Email'
 
     def get_dob(self):
         return self._return_field(CUSTOMER_FIELD_NAMES.dob)
@@ -266,11 +274,18 @@ class Customer(Timestamps):
             return ""
 
     def get_field_list(self):
-        """ orders by group and group_ranking"""
+        """ returns customer field data in the following format:
+            [
+                field 1 - {"name":"", "value":"", "group":"", "group_ranking:""},
+                field 2 - {"name":"", "value":"", "group":"", "group_ranking:""}
+            ]
+            orders by group and group_ranking
+        """
         fields = []
         for field in self.data.keys():
             cf = CustomerField.objects.get(name=field)
             fields.append({"name": field, "value": self.data[field], "group": cf.group.name, "group_ranking": cf.group_ranking})
-        s = sorted(fields, key=operator.itemgetter("group", "group_ranking"))
-        print s
-        return s
+        return sorted(fields, key=operator.itemgetter("group", "group_ranking"))
+
+    def __unicode__(self):
+        return self.get_name()
