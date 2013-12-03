@@ -28,7 +28,7 @@ Retrieve client summary consisting of following named values:
 		Number of new customers
 
 
-PUT /api/client/:client_slug/customer_fields
+GET /api/client/:client_slug/customer_fields
 --------------------------------------------
 
 Retrieve customer fields information for the client as a object/hash with the following fields:
@@ -52,6 +52,20 @@ Each customer field object consists of the following fields:
         ``required``
                 Whether or not this field is mandatory for every customer of this client
 
+
+PUT /api/client/:client_slug/customer_fields
+--------------------------------------------
+
+Update customer fields to display on customer list. Request body should have the following parameters
+encoded using **application/x-www-form-urlencoed** method:
+
+        ``display_customer_fields``
+                Comma separeted list of customer field **names**
+
+Response is JSON-encoded objec/hash and includes the following fields:
+
+        ``display_customers_fields``
+                Comma separated list of customer field **names** as it's been saved on server
 
 
 GET /api/client/:client_slug/customers
