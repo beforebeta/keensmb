@@ -64,7 +64,7 @@ class ClientProfile(APIView):
 
         return Response(data)
 
-    def put(self, request, customer_slug, part=None):
+    def put(self, request, client_slug, part=None):
         client = get_object_or_404(Client, slug=client_slug)
 
         if part == 'customer_fields':
