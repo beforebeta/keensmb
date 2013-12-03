@@ -1,4 +1,5 @@
 @import 'common.css';
+@import 'animations.css';
 
 html, body {
   height: 100%;
@@ -28,7 +29,7 @@ html, body {
 .navbar-inverse .nav .caret {
   border-top-color: #169e83; border-bottom-color: #169e83;
 }
-.navbar-inverse .nav > li > a:hover .caret {
+.navbar-inverse .nav > li:hover > a .caret {
   border-top-color: #fff; border-bottom-color: #fff;
 }
 .navbar-inverse .nav li a:hover  {
@@ -37,12 +38,21 @@ html, body {
 .navbar-inverse .btn-primary {
   /*background: #169e83;*/
 }
-.navbar .nav ul li {
+.navbar .nav ul li,
+.dropdown-menu.dropdown-inverse,
+.dropdown-menu.dropdown-inverse li a {
   background-color: #1aba9a;
 }
-.navbar .nav ul li a:hover {
+.navbar .nav ul li a:hover,
+.dropdown-menu.dropdown-inverse li:not(.disabled):hover a {
   background: #48c7ad;
+  color: #fff;
 }
+.dropdown-menu.dropdown-inverse li.disabled a {
+  opacity: .7;
+  color: #fff;
+}
+.dropdown-menu.dropdown-inverse li:not(.disabled)
 .navbar .nav > li > ul:before {
   border-color: transparent transparent #1aba9a transparent;
 }
@@ -126,7 +136,7 @@ html, body {
 
 section {
   background: #fff;
-  padding: 0 10px;
+  padding: 0 20px;
 }
 
 
@@ -238,10 +248,10 @@ section {
   padding-bottom: 8px;
   z-index: 1;
 }
-.toolbar-secondary .btn-primary {
+.btn-primary.btn-secondary {
   background: #1aba9a;
 }
-.toolbar-secondary .btn-primary:hover {
+.btn-primary.btn-secondary:hover {
   background: #48c7ad;
 }
 .toolbar-secondary .btn-embossed {
@@ -265,10 +275,6 @@ section {
 .table.table-bordered tr > td,
 .table.table-bordered tr > th {
   border: 1px solid #ebeff0 !important;
-}
-.customers-table {
-	display: block;
-	overflow: auto;
 }
 .customers-table tr > td:last-child,
 .customers-table tr > th:last-child {
@@ -305,8 +311,217 @@ section {
   -o-transition: color .2s;
   transition: color .2s;
 }
-#loading {
-	width: 30em;
-	margin-left: auto;
-	margin-right: auto;
+
+
+.kn-section {
+  border: 2px solid #ebeff0;
+  border-radius: 7px;
+}
+.kn-section.disabled{
+  opacity: .7;
+}
+.kn-section.disabled .kn-section-header,
+.kn-section.disabled .kn-section-header .text-blue {
+  color: #bdc3c7;
+}
+.kn-section-header {
+  padding: 15px 25px;
+  background: #f2f2f2;
+}
+.kn-section-header [class^='fui-']{
+  font-size: 24px;
+  line-height: 1;
+}
+.kn-section-content {
+  padding: 15px 25px;
+  margin-bottom: 7px;
+  background: #fff;
+}
+
+.user-details .social-icon {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.input-fixed {
+  width: 75px;
+}
+
+
+.logo-block {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.logo-block .logo-block-cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-top: 55px;
+  background: rgba(0,0,0,0.5);
+}
+
+/* Signup page */
+
+.su-form-wrapper {
+  border: 1px dashed #b3b3b3;
+}
+
+.su-form-wrapper .banner-logo {
+  position: relative;
+  height: 165px;
+  overflow: hidden;
+  background: #bdc3c7;
+}
+.su-form-wrapper .banner-logo .banner-preview {
+  position: absolute;
+  z-index: 2;
+}
+.su-form-wrapper .banner-logo:not(:hover) .hover-vis,
+.su-form-wrapper .background-image:not(:hover) .hover-vis {
+  opacity: 0;
+}
+.hover-vis {
+  -webkit-transition: opacity .3s;
+  -moz-transition: opacity .3s;
+  -ms-transition: opacity .3s;
+  -o-transition: opacity .3s;
+  transition: opacity .3s;
+}
+/*.su-form-wrapper .banner-logo:hover .hover-vis,
+.su-form-wrapper .background-image:hover .hover-vis {
+  display: block;
+}*/
+
+.su-form-wrapper .instructions {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -18px;
+  margin-left: -114px;
+  padding: 4px 10px 4px 10px;
+  background: #546185;
+  background-color: rgba(0,0,0, .4);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, .12);
+  color: #fff;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 26px;
+  text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+.su-form-wrapper .image-loaded .instructions {
+  display: block;
+}
+.su-form-wrapper .instructions > i {
+  color: #37485a;
+  font-size: 17px;
+  line-height: 17px;
+}
+
+.su-form-wrapper .ui-draggable:not(.ui-draggable-disabled):hover {
+  cursor: pointer;
+}
+
+.su-form-wrapper .ui-draggable:not(.ui-draggable-disabled):active {
+  cursor: move;
+}
+.su-form-wrapper .placeholder {
+  font-size: 24px;
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  text-align: center;
+  color: #808b8c;
+  margin-top: -16px;
+}
+.su-form-wrapper .background-image {
+  position: relative;
+  height: 575px;
+  background: #f2f2f2;
+  overflow: hidden;
+}
+.su-form-wrapper .action-buttons {
+  position: absolute;
+  bottom: 15px;
+  right: 12px;
+  visibility: hidden;
+}
+.su-form-wrapper .editing .action-buttons {
+  visibility: visible;
+}
+
+.su-form {
+  position: absolute;
+  background: #fff45c;
+  padding: 20px;
+  top: 5px;
+  bottom: 0;
+  left: 70px;
+  left: 30px;
+  width: 300px;
+}
+
+.su-form-header {
+  font-size: 24px;
+}
+.su-form .su-form-text {
+  font-size: 16px;
+}
+.su-form-wrapper .photo-actions {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 11;
+}
+.su-form-wrapper .color-picker-wrapper {
+  position: absolute;
+  left: 370px;
+  top: 10px;
+}
+.su-form-wrapper .color-picker-wrapper .ui-cs-chromoselector.ui-cs-static {
+  background: #e4ccc1;
+  background: rgba(228,204,193,0.8);
+}
+
+.su-editable .input-group {
+  width: 100%;
+}
+.su-editable:not(.editing) .form-control {
+  border-color: transparent;
+  padding-left: 0;
+}
+.su-editable:not(.editing) .form-control:hover {
+  border: 2px dashed #bdc3c7;
+
+}
+.su-editable:not(.editing) .permalink {
+  text-shadow: 0 0 10px #93c4bc;
+}
+.su-editable:not(.editing) .btn {
+  display: none;
+}
+.su-editable .form-group .form-control {
+  border-radius: 5px;
+  -webkit-transition: padding-left .3s;
+  -moz-transition: padding-left .3s;
+  -ms-transition: padding-left .3s;
+  -o-transition: padding-left .3s;
+  transition: padding-left .3s;
+}
+.su-editable .permalink {
+  font-size: 18px;
+  width: 385px;
 }

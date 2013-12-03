@@ -50,16 +50,32 @@
     <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
     <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
     <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
+
+    <script src="{% static "js/vendor/angular/angular-1.2.3.js" %}"></script>
+    <script src="{% static "js/vendor/angular/angular-table.min.js" %}"></script>
+    <script src="{% static "js/vendor/angular/angular-infinite-scroll.min.js" %}"></script>
+
     <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
     <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
     <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-typeahead.js" %}"></script>
+
     <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
     <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
+
+    <script src="{% static "js/vendor/fileapi/FileAPI.min.js" %}"></script>
+    <script src="{% static "js/vendor/chromoselector.min.js" %}"></script>
+
     <script src="{% static "js/application.js" %}"></script>
 
-    <script src="{% static "js/profiles.js" %}"></script>
+    <script src="{% static "js/module.js" %}"></script>
+
+    <script src="{% static "js/customer-list.js" %}"></script>
     <script src="{% static "js/sign-up.js" %}"></script>
     {% endcompress %}
+
+    {# for development only: #}
+    {# <script src="http://localhost:35729/livereload.js?snipver=1" type="text/javascript"></script> #}
 
     {% block bottom_js %}{% endblock %}
 

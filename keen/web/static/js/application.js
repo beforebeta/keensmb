@@ -1,3 +1,4 @@
+
 // Some general UI pack related JS
 // Extend JS String with repeat method
 String.prototype.repeat = function(num) {
@@ -22,6 +23,7 @@ String.prototype.repeat = function(num) {
     $("select[name='large']").selectpicker({style: 'btn-lg btn-danger'});
     $("select[name='info']").selectpicker({style: 'btn-info'});
     $("select[name='small']").selectpicker({style: 'btn-sm btn-warning'});
+    $("select.simple").selectpicker({style: 'btn-sm btn-default'});
 
     // Tabs
     $(".nav-tabs a").on('click', function (e) {
@@ -148,6 +150,21 @@ String.prototype.repeat = function(num) {
       $(this).closest('.table').find('tbody :checkbox').checkbox(!ch ? 'check' : 'uncheck');
     });
 
+    // Popovers
+    $('.js-popover-hover').popover({
+        'trigger': 'hover',
+        'container': 'body'
+    });
+
+    // Trigger click elements
+    $(document).on('click', '.js-trigger', function(e) {
+        var target = $(this).data('target');
+        $(target).trigger('click');
+    });
+
+    // Chromoselector
+    $('.chromoselector').chromoselector();
+
     // Table: Add class row selected
     $('.table tbody :checkbox').on('check uncheck toggle', function (e) {
       var $this = $(this)
@@ -165,7 +182,7 @@ String.prototype.repeat = function(num) {
     $(datepickerSelector).datepicker({
       showOtherMonths: true,
       selectOtherMonths: true,
-      dateFormat: "d MM, yy",
+      dateFormat: "d M, y",
       yearRange: '-1:+1'
     }).prev('.btn').on('click', function (e) {
       e && e.preventDefault();
@@ -178,6 +195,9 @@ String.prototype.repeat = function(num) {
 
     // Switch
     $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
+
+    // Typehead
+    $('.typeahead').typeahead();
 
     // make code pretty
     window.prettyPrint && prettyPrint();

@@ -19,7 +19,7 @@ module.exports = function (grunt) {
 
   // configurable paths
   var yeomanConfig = {
-    app: '.',
+    app: '../keen/web/static',
     dist: 'dist'
   };
 
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
           livereload: LIVERELOAD_PORT
         },
         files: [
-          '<%= yeoman.app %>/templates/*.html',
+          '<%= yeoman.app %>/../templates/{,*/}*.html',
           '<%= yeoman.app %>/js/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]

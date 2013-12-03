@@ -166,26 +166,48 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="table-responsive">
-  <table id='customers-table' class="table table-bordered customers-table">
+{% verbatim  %}
+
+<div class="table-responsive" ng-app='keen' ng-controller='customersCtrl' ng-cloak>
+
+<!--   <table ng-table='tableParams' class='table table-bordered customers-table'>
+  <tr ng-repeat="customer in $data">
+    <td data-title="'Name'">{{customer.first_name}} {{customer.last_name}}</td>
+    <td data-title="'Email Address'">{{customer.email}}</td>
+    <td data-title="'Age'">{{customer.age}}</td>
+    <td data-title="'Gender'">{{customer.gender}}</td>
+    <td></td>
+  </tr>
+</table> -->
+
+  <table id='customers-table' ng-cloak
+         class="table table-bordered customers-table"
+         infinite-scroll='loadMoreCustomers()',
+         infinite-scroll-immediate-check='true'>
     <thead>
       <tr>
-        <th width='60' class='text-center'><label class="checkbox no-label toggle-all" for="checkbox-table-1"><input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox"></label></th>
-        {% for field in customer_fields %}
-        <th>{{ field.title }}</th>
-        {% endfor %}
-        <th class='new-field-cell'><i class='text-muted'>New field</i></th>
+        <th width='60' class='text-center'>
+            <label class="checkbox no-label toggle-all" for="checkbox-table-1">
+                <input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox">
+            </label>
+        </th>
+        <th ng-repeat='field in customerFields'>{{ field.title }}</th>
+        <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
+          <i class='text-muted'>New field</i>
+        </th>
       </tr>
     </thead>
     <tbody class="infinite-container">
+        <tr ng-repeat='customer in customers' class='fade-onload'>
+            <td><label class="checkbox no-label" for="checkbox-table-{{$index}}"><input type="checkbox" value="" id="checkbox-table-{{$index}}" data-toggle="checkbox"></label></td>
+            <td>{{ customer.data.first_name }}</td>
+            <td>{{ customer.data.last_name }}</td>
+            <td>{{ customer.data.email }}</td>
+            <td>{{ customer.data.age }}</td>
+            <td>{{ customer.data.gender }}</td>
+            <td></td>
+        </tr>
     </tbody>
-    <tfoot>
-      <tr>
-        <td>
-          <a href="{% url "api_customer_list" %}" id="load-more-customers"></a>
-        </td>
-      </tr>
-    </tfoot>
   </table>
 
   <div id="loading">
@@ -193,62 +215,45 @@
       Loading more customers. Please wait...
     </h6>
   </div>
-</div>
 
+  <!-- new field modal -->
+    <div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fui-cross"></i>
+            </button>
+            <h4 class="modal-title">Select Fields to Add</h4>
+          </div>
+          <div class="modal-body" ng-repeat='field in availableFields'>
+            <div class="row mbl">
+              <div class="col-md-3"><span>{{ field.title }}</span></div>
+              <div class="col-md-6 text-simple"><span>Description</span></div>
+
+              <div class="col-md-3">
+                <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+                  <span class='mrl'>Add Field</span>
+                  <i class="fui-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Add Field(s)</button>
+            <button type="button" class="btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+{% endverbatim %}
 
 </section>
 
-<!-- new field modal -->
-<div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
 
-      <div class="modal-header header-primary">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          <i class="fui-cross"></i>
-        </button>
-        <h4 class="modal-title">Select Fields to Add</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row mbl">
-          <div class="col-md-3"><span>Field Name 1</span></div>
-          <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
-          <div class="col-md-3">
-            <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
-              <span class='mrl'>Add Field</span>
-              <i class="fui-plus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="row mbl">
-          <div class="col-md-3"><span>Field Name 2</span></div>
-          <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
-          <div class="col-md-3">
-            <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
-              <span class='mrl'>Add Field</span>
-              <i class="fui-plus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="row mbl">
-          <div class="col-md-3"><span>Field Name 3</span></div>
-          <div class="col-md-6 text-simple"><span>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? </span></div>
-          <div class="col-md-3">
-            <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
-              <span class='mrl'>Add Field</span>
-              <i class="fui-plus"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Add Field(s)</button>
-        <button type="button" class="btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
-      </div>
-
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <!-- /.container -->
 
@@ -257,8 +262,6 @@
 {% block bottom_js %}
 
     {% compress js %}
-    <script src="{% static "js/waypoints.js" %}"></script>
-    <script src="{% static "js/customer_list.js" %}"></script>
     {% endcompress %}
 
 {% endblock %}
