@@ -1,4 +1,5 @@
 import re
+import logging
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
@@ -19,15 +20,18 @@ from keen.core.serializers import (
 from keen.web.forms import CustomerForm
 
 
+logger = logging.getLogger(__name__)
+
 field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
 
 
 def get_put_params(request):
     try:
         content = QueryDict(request.body, request.encoding)
-        return QueryDict(content['_content'], content['_content_type'])
+        return QueryDict(content['_content'])
     except (ValueError, KeyError):
-        return QueryDict()
+        logger.exception('Failed to parse PUT request parameters: %r' % request.body)
+        return {}
 
 
 class IsClientUser(BasePermission):
