@@ -22,6 +22,14 @@ from keen.web.forms import CustomerForm
 field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
 
 
+def get_put_params(request):
+    try:
+        content = QueryDict(request.body, request.encoding)
+        return QueryDict(content['_content'], content['_content_type'])
+    except (ValueError, KeyError):
+        return QueryDict()
+
+
 class IsClientUser(BasePermission):
 
     def has_permission(self, request, view):
@@ -68,13 +76,12 @@ class ClientProfile(APIView):
         client = get_object_or_404(Client, slug=client_slug)
 
         if part == 'customer_fields':
-            params = QueryDict(request.body, request.encoding)
-            params = QueryDict(params['_content'], params['_content_type'])
+            params = get_put_params(request)
             fields = params.get('display_customer_fields', '').split(',')
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
             page.fields = list(client.customer_fields.filter(name__in=fields))
             page.save()
-            data = {'success': 'Saved'}
+            data = {'display_customer_fields': [f.name for f in page.fields.all()]}
         else:
             return HttpResponseNotAllowed()
 
