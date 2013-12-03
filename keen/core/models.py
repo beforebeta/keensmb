@@ -282,9 +282,15 @@ class Customer(Timestamps):
             orders by group and group_ranking
         """
         fields = []
+        field_ids = [cf.id for cf in self.client.customer_fields.all().only("id")]
         for field in self.data.keys():
             cf = CustomerField.objects.get(name=field)
-            fields.append({"name": field, "value": self.data[field], "group": cf.group.name, "group_ranking": cf.group_ranking})
+            fields.append({"name": field,
+                           "value": self.data[field],
+                           "group": cf.group.name,
+                           "group_ranking": cf.group_ranking,
+                           "is_client_relevant": cf.id in field_ids
+                          })
         return sorted(fields, key=operator.itemgetter("group", "group_ranking"))
 
     def __unicode__(self):

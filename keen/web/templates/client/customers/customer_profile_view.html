@@ -119,7 +119,7 @@
               <div class="kn-section-content">
                 <div class="row small">
                     {% for field in customer.get_field_list %}
-                        {% if field.group == 'custom' %}
+                        {% if field.group == 'custom' and field.is_client_relevant %}
                           <div class="col-md-7">
                             <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
                           </div>
