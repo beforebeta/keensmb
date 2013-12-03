@@ -1,9 +1,11 @@
 from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django import db
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -33,6 +35,23 @@ def _setup_field(group, group_ranking, name, title, field_type, length=-1):
                                              name=name,
                                              title=title,
                                              type=field_type)
+
+    cast = {
+        # 'date': '::date',
+        'int': '::integer',
+        'float': '::float',
+        #'bool': '::bool',
+    }.get(field_type, '')
+
+    c = db.connection.cursor()
+    try:
+        index_name = 'core_customer_data_' + name.replace('#', '_')
+        c.execute('''drop index if exists %(index_name)s''' % locals())
+        c.execute('''create index %(index_name)s
+                  on core_customer(((data->'%(name)s')%(cast)s))''' % locals())
+    finally:
+        c.close()
+
 
 def _setup_core():
     section("Creating Customer Field Catalog")

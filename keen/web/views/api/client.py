@@ -1,3 +1,4 @@
+import re
 from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -16,6 +17,9 @@ from keen.core.serializers import (
     CustomerFieldSerializer,
 )
 from keen.web.forms import CustomerForm
+
+
+field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
 
 
 class IsClientUser(BasePermission):
@@ -82,9 +86,26 @@ class CustomerList(APIView):
 
         customers = client.customers.all()
 
+        if 'fields' in request.GET:
+            fields = [field for field in request.GET['fields'].split(',')
+                      if field_name_re.match(field)]
+            customers = customers.extra(
+                select={'data': 'slice(data, array[%s])' % (
+                    ','.join(("'%s'" % field) for field in fields))},
+            )
+
+        if 'search' in request.GET:
+            # full-text search
+            customers = customers.extra(
+                where=['cast(avals(data) as text) @@ %s'],
+                params=[request.GET['search']])
+
         if 'order' in request.GET:
             order_by = request.GET['order'].split(',')
             fields = [field.lstrip('-') for field in order_by]
+            # TODO: Use client.customer_fields to match field names AND
+            # to add CAST to database query so it matches index that was
+            # created by setup management command
             customers = customers.extra(
                 select=dict(
                     (field, "core_customer.data -> '%s'" % field)
@@ -94,14 +115,6 @@ class CustomerList(APIView):
 
         customers = customers[offset:offset + limit]
         customers = CustomerSerializer(customers, many=True).data
-
-        if 'fields' in  request.GET:
-            fields = request.GET['fields'].split(',')
-            to_keep = set(fields)
-            for customer in customers:
-                data = customer['data']
-                to_remove = set(data.keys()) - to_keep
-                map(data.pop, to_remove)
 
         return Response({
             'offset': offset,

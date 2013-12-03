@@ -4,7 +4,18 @@ Starter fabfile for deploying the keen project.
 Change all the things marked CHANGEME. Other things can be left at their
 defaults if you are happy with the default layout.
 """
-from fabric.api import run, local, env, settings, cd, task, put, prefix
+from fabric.api import (
+    run,
+    local,
+    env,
+    settings,
+    cd,
+    task,
+    put,
+    prefix,
+    warn_only,
+)
+from fabric.contrib.files import exists
 
 
 env.use_ssh_config = True
@@ -79,24 +90,6 @@ def migrate():
 
 
 @task
-def production(hosts):
-    """Set hosts and profile variables
-    """
-    env.profile = 'production'
-    env.django_settings_module = 'keen.settings.%(profile)s' % env
-    env.hosts = hosts.split(',')
-
-
-@task
-def staging(hosts):
-    """Set hosts and profile variables
-    """
-    env.profile = 'development'
-    env.django_settings_module = 'keen.settings.%(profile)s' % env
-    env.hosts = hosts.split(',')
-
-
-@task
 def run_tests():
     """ Runs the Django test suite as is.  """
     local("./manage.py test")
@@ -152,22 +145,35 @@ def nginx_restart():
 
 
 @task
-def deploy(branch=''):
+def deploy(profile, branch):
     """Deploy current branch or branch specified as argument
 
     Target host must be specified by using either "staging" or "production" command
     """
+    assert exists(env.project_dir), '''
+    It seems that you did not do install on that host.
+    Please use "install" command first'''
+
+    assert profile in ('development', 'production')
+    env.profile = profile
+
+    assert branch, "Please specify branch to checkout on that host"
     checkout(branch)
+
     migrate()
     with virtualenv():
+        run('./manage.py setup --all')
         run('./manage.py collectstatic --noinput')
-    with settings(warn_only=True):
+    with warn_only():
         uwsgi_stop()
+    # giv it some time to release port
+    local('sleep 3')
     uwsgi_start()
+    nginx_start()
 
 
 @task
-def install(repo=None):
+def install(repo):
     """Initial installation
 
     That includes the following steps
@@ -187,6 +193,11 @@ def install(repo=None):
             or
             fab production:keensmb.com install
     """
+    assert not exists(env.virtualenv), '''
+    It seems that installation has been already done on that host.
+    Please consider "deploy" command instead OR manually remove %(virtualenv)s directory
+    ''' % env
+
     install_os_packages()
     run("virtualenv --no-site-packages %(virtualenv)s" % env)
     prepare_db()
