@@ -7,7 +7,7 @@ api_urls = patterns(
     '',
     url(r'^client/(?P<client_slug>[\w-]+)$', ClientProfile.as_view(),
         name='client_profile'),
-    url(r'^client/(?P<client_slug>[\w-]+)/(?P<part>summary)$',
+    url(r'^client/(?P<client_slug>[\w-]+)/(?P<part>summary|customer_fields)$',
         ClientProfile.as_view(), name='client_profile'),
     url(r'^client/(?P<client_slug>[\w-]+)/customers$', CustomerList.as_view(),
         name='api_customer_list'),

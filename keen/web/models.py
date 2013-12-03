@@ -1,7 +1,7 @@
 from django.db import models
 from django_hstore import hstore
 from model_utils import Choices
-from keen.core.models import *
+from keen.core.models import Timestamps, Client, CustomerField
 
 
 class PageCustomerField(Timestamps):

@@ -18,18 +18,18 @@ from keen.core.models import (
 class DynamicSerializer(ModelSerializer):
 
     def __init__(self, *args, **kw):
-        exclude_fields = kw.pop('exclude_fields', None)
+        fields = kw.pop('fields', None)
         super(DynamicSerializer, self).__init__(*args, **kw)
-        if exclude_fields:
-            for field in exclude_fields:
-                self.fields.pop(field, None)
+        if fields:
+            for field in set(self.fields.keys()) - set(fields):
+                self.fields.pop(field)
 
 
 class AddressSerializer(DynamicSerializer):
 
     class Meta:
         model = Address
-        fields = ('created', 'modified', 'street', 'city', 'postal_code',
+        fields = ('street', 'city', 'postal_code',
                   'state_province', 'country')
 
 
@@ -39,21 +39,24 @@ class LocationSerializer(DynamicSerializer):
 
     class Meta:
         model = Location
-        fields = ('created', 'modified', 'name', 'address')
+        fields = ('name', 'address')
 
 
 class CustomerFieldSerializer(DynamicSerializer):
 
+    group = SlugRelatedField(slug_field='name')
+
     class Meta:
         model = CustomerField
-        fields = ('created', 'modified', 'name', 'title', 'type', 'required')
+        fields = ('name', 'title', 'type', 'required',
+                  'group')
 
 
 class CustomerFieldGroupSerializer(DynamicSerializer):
 
     class Meta:
         model = CustomerFieldGroup
-        fields = ('created', 'modified', 'name', 'title')
+        fields = ('name', 'title')
 
 
 class ClientSerializer(DynamicSerializer):
@@ -64,7 +67,7 @@ class ClientSerializer(DynamicSerializer):
 
     class Meta:
         model = Client
-        fields = ('created', 'modified', 'slug', 'name', 'locations',
+        fields = ('slug', 'name', 'locations',
                   'main_location', 'customer_fields')
 
 
@@ -74,4 +77,4 @@ class CustomerSerializer(DynamicSerializer):
 
     class Meta:
         model = Customer
-        fields = ('id','created', 'modified',  'client', 'data')
+        fields = ('id', 'client', 'data')

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 
@@ -8,10 +9,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
 from keen.core.models import Client, Customer
+from keen.web.models import PageCustomerField
 from keen.core.serializers import (
     ClientSerializer,
     CustomerSerializer,
+    CustomerFieldSerializer,
 )
+from keen.web.forms import CustomerForm
 
 
 class IsClientUser(BasePermission):
@@ -28,12 +32,31 @@ class ClientProfile(APIView):
 
     def get(self, request, client_slug, part=None):
         client = get_object_or_404(Client, slug=client_slug)
-        data = ClientSerializer(client).data
 
-        if part == 'summary':
-            data['total_customers'] = client.customers.count()
-            data['redeemers'] = 0
-            data['new_signups'] = 0
+        if part is None:
+            data = ClientSerializer(client).data
+        elif part == 'summary':
+            data = {
+                'total_customers': client.customers.count(),
+                'redeemers': 0,
+                'new_signups': 0,
+            }
+        elif part == 'customer_fields':
+            available_fields = list(client.customer_fields.all())
+            display_fields = list(
+                client.customer_fields.filter(
+                    id__in=PageCustomerField.objects.filter(
+                        client=client, page='db').values('fields__id')))
+
+            if not display_fields:
+                display_fields = available_fields
+            data = {
+                'available_customer_fields': CustomerFieldSerializer(
+                    available_fields, many=True).data,
+                'display_customer_fields': [field.name for field in display_fields],
+            }
+        else:
+            return Http404
 
         return Response(data)
 
@@ -47,31 +70,44 @@ class CustomerList(APIView):
         """
         client = get_object_or_404(Client, slug=client_slug)
 
-        # FIXME: this should be configurabe
-        page_size = int(getattr(settings, 'CUSTOMER_LIST_PAGE_SIZE', 50))
+        try:
+            limit = int(request.GET['limit'])
+        except (KeyError, ValueError):
+            limit = 50
 
-        if 'offset' in request.GET:
-            try:
-                offset = int(request.GET['offset'])
-                if offset < 0:
-                    offset = 0
-            except ValueError:
-                offset = 0
-        else:
+        try:
+            offset = int(request.GET['offset'])
+        except (KeyError, ValueError):
             offset = 0
 
-        customers = client.customer_page(offset, page_size=page_size)
-        loaded = len(customers)
+        customers = client.customers.all()
 
-        data = {
-            'customers': CustomerSerializer(customers,
-                exclude_fields=('created', 'modified', 'client'),
-                many=True).data,
-        }
-        if loaded == page_size:
-            data['next_page'] = reverse(
-                'api_customer_list', kwargs={'client_slug': client_slug}) + '?offset=%d' % (offset + page_size)
-        return Response(data)
+        if 'order' in request.GET:
+            order_by = request.GET['order'].split(',')
+            fields = [field.lstrip('-') for field in order_by]
+            customers = customers.extra(
+                select=dict(
+                    (field, "core_customer.data -> '%s'" % field)
+                    for field in fields if field not in [
+                    'id', 'created', 'modified', 'client_id'])).order_by(
+                        *order_by)
+
+        customers = customers[offset:offset + limit]
+        customers = CustomerSerializer(customers, many=True).data
+
+        if 'fields' in  request.GET:
+            fields = request.GET['fields'].split(',')
+            to_keep = set(fields)
+            for customer in customers:
+                data = customer['data']
+                to_remove = set(data.keys()) - to_keep
+                map(data.pop, to_remove)
+
+        return Response({
+            'offset': offset,
+            'limit': limit,
+            'customers': customers,
+        })
 
     def post(self, request, client_slug):
         """Create new customer

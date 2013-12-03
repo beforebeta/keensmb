@@ -3,7 +3,7 @@ import logging
 from django.shortcuts import render, get_object_or_404
 
 from keen.core.models import Client, Customer, Location
-from keen.web.views.forms import CustomerForm
+from keen.web.forms import CustomerForm
 
 
 logger = logging.getLogger(__name__)
