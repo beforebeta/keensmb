@@ -87,9 +87,12 @@ The following query string parameters can be used to contol result:
 
 			GET /api/client/abc/customers?order=-dob,last_name
 
-	``filter``
-		Controls which customers to include in response. To be explained later.
+	``search``
+		Do full-text search across customer list. Example:
 
+                        GET /api/client/abc/customers?search=John+Doe
 
 Any combination of qury string parameters is allowed as long as there is only one of each parameter.
-``limit`` and ``offset`` parameters are used after ``filter`` and ``order``.
+``limit`` and ``offset`` parameters are applied after ``search`` and ``order``, that's it customers
+are filtered by search criteria, then sorted according to ``order`` then ``offset`` and ``limit`` applied
+on resulting list.
