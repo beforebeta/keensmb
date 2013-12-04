@@ -25,15 +25,6 @@ logger = logging.getLogger(__name__)
 field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
 
 
-def get_put_params(request):
-    try:
-        content = QueryDict(request.body, request.encoding)
-        return QueryDict(content['_content'])
-    except (ValueError, KeyError):
-        logger.exception('Failed to parse PUT request parameters: %r' % request.body)
-        return {}
-
-
 class IsClientUser(BasePermission):
 
     def has_permission(self, request, view):
@@ -80,7 +71,7 @@ class ClientProfile(APIView):
         client = get_object_or_404(Client, slug=client_slug)
 
         if part == 'customer_fields':
-            params = get_put_params(request)
+            params = QueryDict(request.body, request.encoding)
             fields = params.get('display_customer_fields', '').split(',')
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
             page.fields = list(client.customer_fields.filter(name__in=fields))
