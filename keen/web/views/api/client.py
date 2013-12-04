@@ -1,4 +1,5 @@
 import re
+import logging
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
@@ -19,15 +20,9 @@ from keen.core.serializers import (
 from keen.web.forms import CustomerForm
 
 
+logger = logging.getLogger(__name__)
+
 field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
-
-
-def get_put_params(request):
-    try:
-        content = QueryDict(request.body, request.encoding)
-        return QueryDict(content['_content'], content['_content_type'])
-    except (ValueError, KeyError):
-        return QueryDict()
 
 
 class IsClientUser(BasePermission):
@@ -76,8 +71,8 @@ class ClientProfile(APIView):
         client = get_object_or_404(Client, slug=client_slug)
 
         if part == 'customer_fields':
-            params = get_put_params(request)
-            fields = params.get('display_customer_fields', '').split(',')
+            fields = request.DATA.get('display_customer_fields', '').split(',')
+            logger.debug('PUT params in %s: %r' % (request.DATA, fields))
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
             page.fields = list(client.customer_fields.filter(name__in=fields))
             page.save()
@@ -118,9 +113,8 @@ class CustomerList(APIView):
             )
 
         if 'search' in request.GET:
-            # full-text search
             customers = customers.extra(
-                where=['cast(avals(data) as text) @@ %s'],
+                where=['cast(avals(data) as text) ~ %s'],
                 params=[request.GET['search']])
 
         if 'order' in request.GET:
