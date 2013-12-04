@@ -86,7 +86,7 @@ def checkout(branch):
 
 def migrate():
     with virtualenv():
-        run('./manage.py migrate')
+        run('./manage.py migrate --merge')
 
 
 @task

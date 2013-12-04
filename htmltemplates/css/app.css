@@ -338,6 +338,9 @@ section {
   background: #fff;
 }
 
+.user-details {
+    padding-left:40px;
+}
 .user-details .social-icon {
   font-size: 34px;
   line-height: 1;

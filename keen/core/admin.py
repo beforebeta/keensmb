@@ -18,7 +18,7 @@ admin.site.register(Client, ClientAdmin)
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('client', 'source', 'get_name', 'get_email', 'enrichment_status','data')
 
 admin.site.register(Customer, CustomerAdmin)
 
@@ -42,6 +42,6 @@ admin.site.register(CustomerFieldGroup, CustomerFieldGroupAdmin)
 
 
 class CustomerFieldAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('group', 'group_ranking', 'name','title')
 
 admin.site.register(CustomerField, CustomerFieldAdmin)
