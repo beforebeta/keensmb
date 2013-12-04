@@ -12,7 +12,7 @@
 
             var lazySearch = _.debounce(function(text) {
                     $scope.customers = [];
-                    customerService.searchCustomers(text);
+                    customerService.resetCounter(text);
                     $scope.loadMoreCustomers();
             }, 300);
 
@@ -31,11 +31,22 @@
             customerService.getCustomersFields().then(function(data) {
                 var availableFields = data.data.available_customer_fields;
 
+                console.log('availableFields: ', availableFields);
+
                 $scope.availableFields = availableFields;
 
-                availableFields.length = 3;
+                // availableFields.length = 3;
+                var arr = [];
 
-                customerService.putCustomersFields(availableFields);
+                angular.forEach(availableFields, function(field, i) {
+                    arr.push(field.name);
+                });
+
+                arr.length = 3;
+
+                customerService.putCustomersFields(arr).then(function(data) {
+                    console.log('put: ', data);
+                });
             });
 
             $scope.loadingDisabled = false;
@@ -148,6 +159,7 @@
                     });
                 },
                 getCustomersFields: function() {
+                    console.log('GEET')
                     return $http({
                         url: '/api/client/'+clientSlug+'/customer_fields',
                         method: 'GET',
@@ -155,10 +167,12 @@
                     });
                 },
                 putCustomersFields: function(fields) {
+                    var fieldsString = fields.join(',');
+
                     return $http({
                         url: '/api/client/'+clientSlug+'/customer_fields',
                         method: 'PUT',
-                        data: fields.join(','),
+                        data: {display_customer_fields: fieldsString}
                     });
                 },
                 getClientCustomers: function(fields, search) {
@@ -181,9 +195,8 @@
                         params: params,
                         cache: true
                     });
-
                 },
-                searchCustomers: function(str) {
+                resetCounter: function(str) {
                     currentOffset = -10;
                 }
             };

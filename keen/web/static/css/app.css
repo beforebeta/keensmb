@@ -211,8 +211,14 @@ section {
 .profile-toolbar .navbar-nav:not(.navbar-right) > li:last-child > a {
   border-right: 2px solid #17a689 !important;
 }
-.profile-toolbar .navbar-nav > li > ul {
+.navbar.profile-toolbar .navbar-nav > li > ul {
+  -webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform:translate3d(0,0,0);
   width: 100%;
+}
+.navbar.profile-toolbar .navbar-nav > li > ul:before {
+  border-color: transparent transparent #1aba9a transparent;
 }
 .profile-toolbar .navbar-nav > li:hover > a{
   background: #48c7ad;
