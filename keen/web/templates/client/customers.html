@@ -28,226 +28,214 @@
 {% endif %}
 
 <!-- Content -->
-<section class='clearfix'>
-<h1 class='page-title mbn'>Customer Profiles</h1>
+<section class='clearfix' ng-controller='customersCtrl'>
+  <h1 class='page-title mbn'>Customer Profiles</h1>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="mll">
-      <h6>Summary</h6>
-      <div class='summary-block large mrl'>
-        <h4 class='mn'>{{ summary.total_customers }}</h4>
-        <span>Total Customers</span>
-      </div>
-      <div class='summary-block mrl'>
-        <h5 class='mn'>{{ summary.redeemers }}</h5>
-        <span>Redeemers</span>
-      </div>
-      <div class='summary-block'>
-        <h5 class='mn'>{{ summary.new_signups }}</h5>
-        <span>New Sign Ups</span>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    {% if locations %}
-    <h6>Locations</h6>
-    <div class="row profile-locations">
-      {% for location in locations %}
-      <div class="col-md-2 text-center">
-        <span>{{ location.name }}</span>
-        <span class="fui-home icon orange"></span>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-  </div>
-</div>
-
-<div class="navbar navbar-inverse mtl mbn profile-toolbar">
-  <div class="navbar-collapse navbar-collapse-03 in">
-    <ul class="nav navbar-nav">
-      <li>
-      <a href="#fakelink">
-        Import from
-        <b class="caret"></b>
-      </a>
-      <ul class='pull-right'>
-        <li><a href="#fakelink">Mailing list</a></li>
-        <li><a href="#fakelink">.CSV file</a></li>
-      </ul>
-      </li>
-      <li>
-      <a href="#fakelink">
-        Export list to
-        <b class="caret"></b>
-      </a>
-      <ul>
-        <li><a href="#fakelink">Mailing list</a></li>
-        <li><a href="#fakelink">.CSV download</a></li>
-      </ul> <!-- /Sub menu -->
-      </li>
-    </ul> <!-- /nav -->
-
-    <ul class="nav navbar-nav navbar-right">
-      <!-- <li class="divider"></li> -->
-      <li class='mrl'>
-      <form class="navbar-form navbar-left" action="#">
-        <div class="form-group">
-          <div class="input-group input-group-sm">
-            <input class="form-control"
-                   type="search"
-                   placeholder="Search in list..."
-                   ng-model='searchCustomers'>
-            <span class="input-group-btn">
-              <button type="submit" class="btn"><span class="fui-search"></span></button>
-            </span>
-          </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mll">
+        <h6>Summary</h6>
+        <div class='summary-block large mrl'>
+          <h4 class='mn'>{{ summary.total_customers }}</h4>
+          <span>Total Customers</span>
         </div>
-      </form>
-      </li>
-      <li>
-      <button class="btn btn-sm btn-embossed btn-primary mts mrl">
-        <span class='mrl'>New Customer</span>
-        <i class="fui-user mll"></i></button>
-      </li>
-      <li>
-      <button class="btn btn-sm btn-embossed btn-primary mts mrl">
-        <span class='mrl'>Create Campaign</span>
-        <i class="fui-mail mll"></i></button>
-      </li>
-    </ul> <!-- /nav -->
-  </div><!--/.navbar-collapse -->
-</div>
+        <div class='summary-block mrl'>
+          <h5 class='mn'>{{ summary.redeemers }}</h5>
+          <span>Redeemers</span>
+        </div>
+        <div class='summary-block'>
+          <h5 class='mn'>{{ summary.new_signups }}</h5>
+          <span>New Sign Ups</span>
+        </div>
 
-<div style='display: none' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
-  <div class="navbar-collapse">
-    <p class='white pull-left mtm mll mbn'>Item Actions:</p>
-    <ul class="nav navbar-nav navbar-right">
-      <li class='mrl'>
-      <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
-      </li>
-      <li>
-      <button class="btn btn-sm btn-embossed btn-primary mts mrl" disabled>
-        <span>Enrich</span>
-      </button>
-      </li>
-      <li>
-      <button class="btn btn-sm btn-embossed btn-primary mts mrl">
-        <span>Copy to...</span>
-      </button>
-      </li>
-      <li>
-      <button class="btn btn-sm btn-embossed btn-danger js-delete-customer mts mrl">
-        <span class='mrl'>Delete</span>
-        <i class="fui-cross mll"></i>
-      </button>
-      </li>
-    </ul> <!-- /nav -->
-  </div><!--/.navbar-collapse -->
-</div>
-
-<div id="deleteItemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
       </div>
-      <div class="modal-body">
-        <h4>Text in a modal</h4>
+    </div>
+
+    <div class="col-md-6">
+      {% if locations %}
+      <h6>Locations</h6>
+      <div class="row profile-locations">
+        {% for location in locations %}
+        <div class="col-md-2 text-center">
+          <span>{{ location.name }}</span>
+          <span class="fui-home icon orange"></span>
+        </div>
+        {% endfor %}
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-      </div>
+      {% endif %}
+    </div>
+  </div>
 
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+  {% verbatim  %}
 
-{% verbatim  %}
+  <div class="navbar navbar-inverse mtl mbn profile-toolbar">
+    <div class="navbar-collapse navbar-collapse-03 in">
+      <ul class="nav navbar-nav">
+        <li>
+        <a href="#fakelink">
+          Import from
+          <b class="caret"></b>
+        </a>
+        <ul class='pull-right'>
+          <li><a href="#fakelink">Mailing list</a></li>
+          <li><a href="#fakelink">.CSV file</a></li>
+        </ul>
+        </li>
+        <li>
+        <a href="#fakelink">
+          Export list to
+          <b class="caret"></b>
+        </a>
+        <ul>
+          <li><a href="#fakelink">Mailing list</a></li>
+          <li><a href="#fakelink">.CSV download</a></li>
+        </ul> <!-- /Sub menu -->
+        </li>
+      </ul> <!-- /nav -->
 
-<div class="table-responsive" ng-controller='customersCtrl' ng-cloak>
-
-<!--   <table ng-table='tableParams' class='table table-bordered customers-table'>
-  <tr ng-repeat="customer in $data">
-    <td data-title="'Name'">{{customer.first_name}} {{customer.last_name}}</td>
-    <td data-title="'Email Address'">{{customer.email}}</td>
-    <td data-title="'Age'">{{customer.age}}</td>
-    <td data-title="'Gender'">{{customer.gender}}</td>
-    <td></td>
-  </tr>
-</table> -->
-
-  <table id='customers-table' ng-cloak
-         class="table table-bordered customers-table"
-         infinite-scroll-disabled='{{ loadingDisabled }}'
-         infinite-scroll='loadMoreCustomers()',
-         infinite-scroll-immediate-check='true'>
-    <thead>
-      <tr>
-        <th width='60' class='text-center'>
-            <label class="checkbox no-label toggle-all" for="checkbox-table-1">
-                <input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox">
-            </label>
-        </th>
-        <th ng-repeat='field in customerFields'>{{ field.title }}</th>
-        <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
-          <i class='text-muted'>New field</i>
-        </th>
-      </tr>
-    </thead>
-    <tbody class="infinite-container">
-        <tr ng-repeat='customer in customers' class='fade-onload'>
-            <td><label class="checkbox no-label" for="checkbox-table-{{$index}}"><input type="checkbox" value="" id="checkbox-table-{{$index}}" data-toggle="checkbox"></label></td>
-            <td>{{ customer.data.first_name }}</td>
-            <td>{{ customer.data.last_name }}</td>
-            <td>{{ customer.data.email }}</td>
-            <td>{{ customer.data.age }}</td>
-            <td>{{ customer.data.gender }}</td>
-            <td></td>
-        </tr>
-    </tbody>
-  </table>
-
-  <!-- new field modal -->
-    <div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header header-primary">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-              <i class="fui-cross"></i>
-            </button>
-            <h4 class="modal-title">Select Fields to Add</h4>
-          </div>
-          <div class="modal-body" ng-repeat='field in availableFields'>
-            <div class="row mbl">
-              <div class="col-md-3"><span>{{ field.title }}</span></div>
-              <div class="col-md-6 text-simple"><span>Description</span></div>
-
-              <div class="col-md-3">
-                <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
-                  <span class='mrl'>Add Field</span>
-                  <i class="fui-plus"></i>
-                </button>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li class="divider"></li> -->
+        <li class='mrl'>
+          <form ng-submit='submitSearch()' class="navbar-form navbar-left">
+            <div class="form-group">
+              <div class="input-group input-group-sm">
+                <input class="form-control"
+                       type="search"
+                       placeholder="Search in list..."
+                       ng-model='searchParam'>
+                <span class="input-group-btn">
+                  <button type="submit" class="btn"><span class="fui-search"></span></button>
+                </span>
               </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Add Field(s)</button>
-            <button type="button" class="btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
-          </div>
+          </form>
+        </li>
+        <li>
+        <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+          <span class='mrl'>New Customer</span>
+          <i class="fui-user mll"></i></button>
+        </li>
+        <li>
+        <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+          <span class='mrl'>Create Campaign</span>
+          <i class="fui-mail mll"></i></button>
+        </li>
+      </ul> <!-- /nav -->
+    </div><!--/.navbar-collapse -->
+  </div>
 
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-</div>
-{% endverbatim %}
+  <div style='display: none' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
+    <div class="navbar-collapse">
+      <p class='white pull-left mtm mll mbn'>Item Actions:</p>
+      <ul class="nav navbar-nav navbar-right">
+        <li class='mrl'>
+          <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
+        </li>
+        <li>
+        <button class="btn btn-sm btn-embossed btn-primary mts mrl" disabled>
+          <span>Enrich</span>
+        </button>
+        </li>
+        <li>
+        <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+          <span>Copy to...</span>
+        </button>
+        </li>
+        <li>
+        <button class="btn btn-sm btn-embossed btn-danger js-delete-customer mts mrl">
+          <span class='mrl'>Delete</span>
+          <i class="fui-cross mll"></i>
+        </button>
+        </li>
+      </ul> <!-- /nav -->
+    </div><!--/.navbar-collapse -->
+  </div>
+
+  <div class="table-responsive" ng-cloak>
+
+  <!--   <table ng-table='tableParams' class='table table-bordered customers-table'>
+    <tr ng-repeat="customer in $data">
+      <td data-title="'Name'">{{customer.first_name}} {{customer.last_name}}</td>
+      <td data-title="'Email Address'">{{customer.email}}</td>
+      <td data-title="'Age'">{{customer.age}}</td>
+      <td data-title="'Gender'">{{customer.gender}}</td>
+      <td></td>
+    </tr>
+  </table> -->
+
+    <table id='customers-table' ng-cloak
+           class="table table-bordered customers-table"
+
+           infinite-scroll='loadMoreCustomers()',
+           infinite-scroll-immediate-check='true'>
+      <thead>
+        <tr>
+          <th width='60' class='text-center'>
+              <label class="checkbox no-label toggle-all" for="checkbox-table-1">
+                  <input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox">
+              </label>
+          </th>
+
+          <th ng-repeat='field in customerFields'
+              ng-click='sortBy(field.name);'
+              ng-class='{active: activeSort == field.name}'>{{ field.title }}</th>
+
+          <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
+            <i class='text-muted'>New field</i>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="infinite-container">
+          <tr ng-repeat='customer in customers' class='fade-onload'>
+              <td><label class="checkbox no-label" for="checkbox-table-{{$index}}"><input type="checkbox" value="" id="checkbox-table-{{$index}}" data-toggle="checkbox"></label></td>
+
+              <!-- <td ng-repeat='(name, title) in customerFields'>{{ customer.data[name] }}</td> -->
+
+              <td>{{ customer.data.first_name }}</td>
+              <td>{{ customer.data.last_name }}</td>
+              <td>{{ customer.data.email }}</td>
+              <td>{{ customer.data.age }}</td>
+              <td>{{ customer.data.gender }}</td>
+
+              <td></td>
+          </tr>
+      </tbody>
+    </table>
+
+    <!-- new field modal -->
+      <div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header header-primary">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fui-cross"></i>
+              </button>
+              <h4 class="modal-title">Select Fields to Add</h4>
+            </div>
+            <div class="modal-body" ng-repeat='field in availableFields'>
+              <div class="row mbl">
+                <div class="col-md-3"><span>{{ field.title }}</span></div>
+                <div class="col-md-6 text-simple"><span>Description</span></div>
+
+                <div class="col-md-3">
+                  <button class='btn btn-sm btn-primary btn-secondary btn-embossed'>
+                    <span class='mrl'>Add Field</span>
+                    <i class="fui-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Add Field(s)</button>
+              <button type="button" class="btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+            </div>
+
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+  </div>
+  {% endverbatim %}
 
 </section>
 

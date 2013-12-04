@@ -286,6 +286,13 @@ section {
 .customers-table tr > th:last-child {
   border: 1px dashed #ebeff0 !important;
 }
+.table.customers-table thead tr th:hover {
+  cursor: pointer;
+  background: #e7e7e7;
+}
+.table.customers-table thead tr th.active {
+    box-shadow: inset 0 -2px 2px -2px #000;
+}
 .table.table-bordered thead tr {
   background: #f2f2f2;
 }

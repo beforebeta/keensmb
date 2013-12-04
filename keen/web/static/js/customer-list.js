@@ -6,15 +6,18 @@
     angular.module('keen')
         .controller('customersCtrl', ['$scope', '$timeout', 'customerService', 'ngTableParams', function($scope, $timeout, customerService, ngTableParams){
 
-            $scope.$watch('searchCustomers', function(newVal) {
-                lazySearch(newVal);
-            });
+            $scope.submitSearch = function() {
+                resetList();
+            };
 
-            var lazySearch = _.debounce(function(text) {
-                    $scope.customers = [];
-                    customerService.resetCounter(text);
-                    $scope.loadMoreCustomers();
-            }, 300);
+            var clearCustomers = false;
+            function resetList() {
+                console.log('reset');
+                // $scope.customers = [];
+                clearCustomers = true;
+                customerService.resetCounter();
+                $scope.loadMoreCustomers();
+            }
 
             customerService.getClientData().then(function(data) {
                 var customerFields = data.data.customer_fields;
@@ -26,6 +29,7 @@
                     {name: 'age', title: 'Age'},
                     {name: 'gender', title: 'Gender'},
                 ];
+
             });
 
             customerService.getCustomersFields().then(function(data) {
@@ -44,66 +48,50 @@
 
                 arr.length = 3;
 
-                customerService.putCustomersFields(arr).then(function(data) {
-                    console.log('put: ', data);
-                });
+                // customerService.putCustomersFields(arr).then(function(data) {
+                //     console.log('put: ', data);
+                // });
             });
 
             $scope.loadingDisabled = false;
 
             $scope.customers = [];
+            $scope.searchParam = '';
             // TODO: hardcoded
             var fields = ['first_name','last_name','email', 'age', 'gender'];
-            // $scope.loadMoreCustomers = function() {
-            //     customerService.getClientCustomers(fields, $scope.searchCustomers).then(function(data) {
-            //         console.log('more: ', data.data);
-            //         var customers = data.data.customers;
 
-            //         // TODO hardcoded limit
-            //         if (customers.length < 25) {
-            //             $scope.loadingDisabled = true;
-            //         }
+            $scope.sortBy = function(name) {
+                $scope.activeSort = name;
 
-            //         $scope.customers = $scope.customers.concat(customers);
+                if ($scope.sortParam == name) {
+                    $scope.sortParam = '-' + name;
+                } else {
+                    $scope.sortParam = name;
+                }
+                resetList();
+            };
+            $scope.loadMoreCustomers = function() {
+                console.log('se ', $scope.searchParam)
 
-            //         initCheckbox();
-            //     });
-            // };
-
-            $scope.loadMoreCustomers = _.debounce(function() {
-                customerService.getClientCustomers(fields, $scope.searchCustomers).then(function(data) {
+                customerService.getClientCustomers(fields, $scope.searchParam, $scope.sortParam).then(function(data) {
                     console.log('more: ', data.data);
                     var customers = data.data.customers;
 
                     // TODO hardcoded limit
-                    if (customers.length < 25) {
+                    if (customers.length < 50) {
                         $scope.loadingDisabled = true;
                     }
 
-                    $scope.customers = $scope.customers.concat(customers);
+                    if (!clearCustomers) {
+                        $scope.customers = $scope.customers.concat(customers);
+                    } else {
+                        $scope.customers = customers;
+                        clearCustomers = false;
+                    }
 
                     initCheckbox();
                 });
-            }, 150);
-
-
-            // customerService.getClientCustomers(fields).then(function(data) {
-            //     console.log('customers: ', data.data);
-            //     var tableData = [];
-            //     angular.forEach(data.data.customers, function(item, index) {
-            //         tableData.push(item.data);
-            //     });
-
-            //     $scope.tableParams = new ngTableParams({
-            //         page: 1,            // show first page
-            //         count: 9999          // count per page
-            //     }, {
-            //         total: data.length, // length of data
-            //         getData: function($defer, params) {
-            //             $defer.resolve(tableData);
-            //         }
-            //     });
-            // });
+            };
 
             var checkItemActions = function() {
                 var $customersTable = $('#customers-table'),
@@ -144,22 +132,22 @@
 
         }]).factory('customerService', ['$http', function($http) {
 
+            window.$http = $http;
+
             var clientSlug = $('#clientSlug').text(),
                 // TODO: fix
-                currentOffset = -10,
-                limit = 25;
+                currentOffset = -50,
+                limit = 50;
 
             return {
                 getClientData: function() {
                     return $http({
                         url: '/api/client/'+clientSlug,
-                        method: "GET",
-                        // params: {fields: 'customer_fields'},
+                        method: 'GET',
                         cache: true
                     });
                 },
                 getCustomersFields: function() {
-                    console.log('GEET')
                     return $http({
                         url: '/api/client/'+clientSlug+'/customer_fields',
                         method: 'GET',
@@ -175,7 +163,7 @@
                         data: {display_customer_fields: fieldsString}
                     });
                 },
-                getClientCustomers: function(fields, search) {
+                getClientCustomers: function(fields, search, sort) {
                     currentOffset += limit;
 
                     var params = {
@@ -189,6 +177,11 @@
                         params.offset = 0;
                     }
 
+                    if (sort) {
+                        params.order = sort;
+                        params.offset = 0;
+                    }
+
                     return $http({
                         url: '/api/client/'+clientSlug+'/customers',
                         method: 'GET',
@@ -196,8 +189,8 @@
                         cache: true
                     });
                 },
-                resetCounter: function(str) {
-                    currentOffset = -10;
+                resetCounter: function() {
+                    currentOffset = -50;
                 }
             };
         }]);
