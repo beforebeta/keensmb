@@ -51,7 +51,7 @@ class Location(Timestamps):
         unique_together = ('name', 'client')
 
     def __unicode__(self):
-        return name
+        return self.name
 
 
 class CustomerFieldGroup(Timestamps):
