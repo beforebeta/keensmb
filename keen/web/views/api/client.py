@@ -113,9 +113,8 @@ class CustomerList(APIView):
             )
 
         if 'search' in request.GET:
-            # full-text search
             customers = customers.extra(
-                where=['cast(avals(data) as text) @@ %s'],
+                where=['cast(avals(data) as text) ~ %s'],
                 params=[request.GET['search']])
 
         if 'order' in request.GET:
