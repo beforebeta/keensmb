@@ -1,5 +1,5 @@
 {% extends "page.html" %}
-
+{% load static %}
 {% block content %}
   <section class='clearfix'>
     <h1 class='page-title mbn'>Customer Profile</h1>
@@ -7,7 +7,7 @@
     <div class="row mtl">
       <div class="col-md-4 user-details">
         <div class="center-block text-center">
-          <img src="../images/icons/dude.svg" alt="user name" style='width: 170px'>
+          <img src="{% static "images/icons/dude.svg" %}" alt="user name" style='width: 170px'>
         </div>
         <div class="mtl">
           <table>
@@ -54,7 +54,7 @@
             <span class='mrl'>Edit Profile</span>
             <i class="fui-new"></i>
           </button>
-          <img src="../images/icons/retina.svg" alt="" class='dib mid mrl' style='width: 40px;'>
+          <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;'>
           <span class='dib mid mtn mbn'>Prodile was enriched on date</span>
         </div>
 

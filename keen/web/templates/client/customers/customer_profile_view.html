@@ -1,0 +1,148 @@
+{% extends "page.html" %}
+{% load static %}
+{% load web_tags %}
+{% block content %}
+
+      <!-- Content -->
+      <section class='clearfix'>
+        <h1 class='page-title mbn'>Customer Profile</h1>
+
+        <div class="row mtl">
+          <div class="col-md-4 user-details">
+            <div class="center-block text-center">
+              <img src="{% static "images/icons/dude.svg" %}" alt="user name" style='width: 170px'>
+            </div>
+            <div class="mtl">
+              <table>
+                <div class='row'>
+                  <div class='col-sm-3'><span class="text-muted mtl mrs dib">Name:</span></div>
+                  <div class='col-sm-9'><span class='dib mtl'>{{ customer.get_name|nonempty }}</span></div>
+                </div>
+                <div class='row'>
+                  <div class='col-sm-3'><span class="text-muted mtl mrs dib">DOB:</span></div>
+                  <div class='col-sm-9'><small class='dib mtl'>{{ customer.get_dob|nonempty }}</small></div>
+                </div>
+                <div class='row'>
+                  <div class='col-sm-3'><span class="text-muted mtl mrs dib">Gender:</span></div>
+                  <div class='col-sm-9'><small class='dib mtl'>{{ customer.get_formatted_gender|nonempty }}</small></div>
+                </div>
+              </table>
+
+              <div class="row mtl">
+                <div class="col-md-3">
+                  <span class="fui-facebook text-blue social-icon"></span>
+                </div>
+                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_facebook_username|nonempty }}</span></div>
+              </div>
+
+              <div class="row mtm">
+                <div class="col-md-3">
+                  <span class="fui-twitter text-blue social-icon"></span>
+                </div>
+                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_twitter_username|nonempty }}</span></div>
+              </div>
+
+              <div class="row mtm">
+                <div class="col-md-3">
+                  <span class="fui-googleplus text-blue social-icon"></span>
+                </div>
+                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_googleplus_username|nonempty }}</span></div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-8">
+            <div class='mbs'>
+              <button class="btn btn-sm btn-primary btn-secondary btn-embossed btn-wide pull-right">
+                <span class='mrl'>Edit Profile</span>
+                <i class="fui-new"></i>
+              </button>
+                {% if customer.is_enriched %}
+                  <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;'>
+                  <span class='dib mid mtn mbn'>Profile was enriched on {{ customer.enrichment_date }}</span>
+                {% else %}
+                  <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;opacity:0.1;'>
+                  <span class='dib mid mtn mbn text-muted'>Profile has not been enriched</span>
+                {% endif %}
+            </div>
+
+            <div class="kn-section active mtl">
+              <div class="kn-section-header">
+                <span class='fui-book text-blue  dib mid'></span>
+                <h6 class='mll dib mid mbn mtn'>Basic Information</h6>
+              </div>
+              <div class="kn-section-content">
+                <div class="row small">
+                    {% for field in customer.get_field_list %}
+                        {% if field.group == 'basic' and field.group_ranking >= 500%}
+                          <div class="col-md-3">
+                            <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
+                          </div>
+                          <div class="col-md-9">
+                            <span>{{ field.value|nonempty }}</span>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div class="kn-section mtl {% if not customer.has_custom_fields %}mbl{% endif %}">
+              <div class="kn-section-header">
+                <i class='pull-right small {% if not customer.is_enriched %}text-muted{% endif %}'>{% if not customer.is_enriched %}Not {% endif %}Enriched</i>
+                <span class='fui-home text-blue dib mid'></span>
+                <h6 class='mll dib mid mbn mtn'>Household Information</h6>
+              </div>
+              <div class="kn-section-content">
+                <div class="row small">
+                    {% for field in customer.get_field_list %}
+                        {% if field.group == 'household' %}
+                          <div class="col-md-5">
+                            <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
+                          </div>
+                          <div class="col-md-7">
+                            <span>{{ field.value|nonempty }}</span>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+
+
+          {% if customer.has_custom_fields %}
+            <div class="kn-section mtl mbl">
+              <div class="kn-section-header">
+                <i class='pull-right small {% if not customer.is_enriched %}text-muted{% endif %}'>{% if not customer.is_enriched %}Not {% endif %}Enriched</i>
+                <span class='fui-gear text-blue dib mid'></span>
+                <h6 class='mll dib mid mbn mtn'>Custom Fields</h6>
+              </div>
+              <div class="kn-section-content">
+                <div class="row small">
+                    {% for field in customer.get_field_list %}
+                        {% if field.group == 'custom' and field.is_client_relevant %}
+                          <div class="col-md-7">
+                            <span class='text-muted'>{{ field.name|cf_display_name }}:</span>
+                          </div>
+                          <div class="col-md-5">
+                            <span>{{ field.value|nonempty }}</span>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+
+
+          </div>
+        </div>
+
+      </section>
+      <!-- /.container -->
+
+{% endblock %}
+
+
