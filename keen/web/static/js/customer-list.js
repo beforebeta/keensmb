@@ -30,6 +30,7 @@
 
             customerService.getCustomersFields().then(function(data) {
                 var availableFields = data.data.available_customer_fields;
+                console.table(availableFields)
 
                 $scope.availableFields = availableFields;
                 $scope.customerFields = data.data.display_customer_fields;
@@ -37,11 +38,6 @@
                 // var arr = ['first_name', 'last_name', 'email'];
 
                 $scope.loadMoreCustomers();
-
-                // customerService.putCustomersFields(arr).then(function(data) {
-                //     $scope.customerFields = data.data.display_customer_fields;
-                //     resetList();
-                // });
             });
 
             $scope.loadingDisabled = false;
@@ -75,12 +71,41 @@
                     if (!clearCustomers) {
                         $scope.customers = $scope.customers.concat(customers);
                     } else {
+                        scrollToTop();
                         $scope.customers = customers;
                         clearCustomers = false;
                     }
 
                     initCheckbox();
                 });
+            };
+
+            var updateFields = function() {
+                customerService.putCustomersFields($scope.customerFields).then(function(data) {
+                    $scope.customerFields = data.data.display_customer_fields;
+                    resetList();
+                });
+            };
+
+            $scope.addField = function(name) {
+                if (!$scope.checkField(name)) {
+                    $scope.customerFields.push(name);
+                    updateFields();
+                }
+            };
+            $scope.removeField = function(name) {
+                if ($scope.checkField(name)) {
+                    $scope.customerFields = _.without($scope.customerFields, name);
+                    updateFields();
+                }
+            };
+
+            $scope.checkField = function(name) {
+                return _.contains($scope.customerFields, name);
+            };
+
+            var scrollToTop = function() {
+                $(window).scrollTop(0);
             };
 
             var checkItemActions = function() {

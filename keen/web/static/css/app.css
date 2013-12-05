@@ -284,6 +284,10 @@ section {
   padding-right: 5px;
   border: 1px solid #ebeff0 !important;
 }
+.table.table-bordered tr > td:first-child,
+.table.table-bordered tr > th:first-child {
+  padding-left: 28px;
+}
 .customers-table {
     table-layout: fixed;
 }
@@ -329,8 +333,18 @@ section {
   -o-transition: color .2s;
   transition: color .2s;
 }
+.fixed-customers-top {
+    position: fixed;
+    top: 75px;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+}
+.fixed-customers-top > .container > section {
+    padding-top: 1px;
+}
 .customers-list {
-
+  margin-top: 160px;
 }
 
 
