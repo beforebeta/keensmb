@@ -56,16 +56,19 @@ Each customer field object consists of the following fields:
 PUT /api/client/:client_slug/customer_fields
 --------------------------------------------
 
-Update customer fields to display on customer list. Request body should have the following parameters
-encoded using **application/x-www-form-urlencoed** method:
+Update customer fields to display on customer list. Request JSON-encoded body should have
+the following parameters:
 
         ``display_customer_fields``
-                Comma separeted list of customer field **names**
+                List of customer field **names**
 
 Response is JSON-encoded objec/hash and includes the following fields:
 
         ``display_customers_fields``
-                Comma separated list of customer field **names** as it's been saved on server
+                List of customer field **names** as it's been saved on server.
+                
+                **Note** This can be different from what was in request due to filtering
+                and other reasons.
 
 
 GET /api/client/:client_slug/customers

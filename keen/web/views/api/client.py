@@ -71,8 +71,7 @@ class ClientProfile(APIView):
         client = get_object_or_404(Client, slug=client_slug)
 
         if part == 'customer_fields':
-            fields = request.DATA.get('display_customer_fields', '').split(',')
-            logger.debug('PUT params in %s: %r' % (request.DATA, fields))
+            fields = request.DATA.get('display_customer_fields', [])
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
             page.fields = list(client.customer_fields.filter(name__in=fields))
             page.save()
