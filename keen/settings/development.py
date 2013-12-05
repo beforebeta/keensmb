@@ -1,4 +1,4 @@
-from .base import *
+from . import *
 
 
 DEBUG = TEMPLATE_DEBUG = DEV = True
