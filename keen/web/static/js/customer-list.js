@@ -12,8 +12,6 @@
 
             var clearCustomers = false;
             function resetList() {
-                console.log('reset');
-                // $scope.customers = [];
                 clearCustomers = true;
                 customerService.resetCounter();
                 $scope.loadMoreCustomers();
@@ -22,34 +20,27 @@
             customerService.getClientData().then(function(data) {
                 var customerFields = data.data.customer_fields;
 
-                $scope.customerFields = [
-                    {name: 'first_name', title: 'First Name'},
-                    {name: 'last_name', title: 'Last Name'},
-                    {name: 'email', title: 'Email Address'},
-                    {name: 'age', title: 'Age'},
-                    {name: 'gender', title: 'Gender'},
-                ];
+                var fieldsMap = {};
+                _.each(customerFields, function(item) {
+                    fieldsMap[item.name] = item.title;
+                });
 
+                $scope.fieldsMap = fieldsMap;
             });
 
             customerService.getCustomersFields().then(function(data) {
                 var availableFields = data.data.available_customer_fields;
 
-                console.log('availableFields: ', availableFields);
-
                 $scope.availableFields = availableFields;
+                $scope.customerFields = data.data.display_customer_fields;
 
-                // availableFields.length = 3;
-                var arr = [];
+                // var arr = ['first_name', 'last_name', 'email'];
 
-                angular.forEach(availableFields, function(field, i) {
-                    arr.push(field.name);
-                });
-
-                arr.length = 3;
+                $scope.loadMoreCustomers();
 
                 // customerService.putCustomersFields(arr).then(function(data) {
-                //     console.log('put: ', data);
+                //     $scope.customerFields = data.data.display_customer_fields;
+                //     resetList();
                 // });
             });
 
@@ -58,12 +49,12 @@
             $scope.customers = [];
             $scope.searchParam = '';
             // TODO: hardcoded
-            var fields = ['first_name','last_name','email', 'age', 'gender'];
+            // var fields = ['first_name','last_name','email', 'age', 'gender'];
 
             $scope.sortBy = function(name) {
                 $scope.activeSort = name;
 
-                if ($scope.sortParam == name) {
+                if ($scope.sortParam === name) {
                     $scope.sortParam = '-' + name;
                 } else {
                     $scope.sortParam = name;
@@ -71,9 +62,8 @@
                 resetList();
             };
             $scope.loadMoreCustomers = function() {
-                console.log('se ', $scope.searchParam)
-
-                customerService.getClientCustomers(fields, $scope.searchParam, $scope.sortParam).then(function(data) {
+                if (!$scope.customerFields) {return false};
+                customerService.getClientCustomers($scope.customerFields, $scope.searchParam, $scope.sortParam).then(function(data) {
                     console.log('more: ', data.data);
                     var customers = data.data.customers;
 
@@ -155,12 +145,10 @@
                     });
                 },
                 putCustomersFields: function(fields) {
-                    var fieldsString = fields.join(',');
-
                     return $http({
                         url: '/api/client/'+clientSlug+'/customer_fields',
                         method: 'PUT',
-                        data: {display_customer_fields: fieldsString}
+                        data: {display_customer_fields: fields}
                     });
                 },
                 getClientCustomers: function(fields, search, sort) {
