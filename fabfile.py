@@ -205,3 +205,12 @@ def install(repo):
     clone(repo)
     install_dependencies()
     configure_nginx()
+    print """
+    Installation is complete. Please make following changes manually:
+
+        * Edit PostgreSQL pg_hba.conf to allow user keen to connect to database
+        keen through UNIX-socket without password. This file is located at /etx/postgresql/
+        or similar directory. Insert the following line into it:
+
+            local   keen    keen    trust
+    """
