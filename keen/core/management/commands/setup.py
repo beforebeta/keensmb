@@ -267,7 +267,15 @@ def _setup_sample_data():
                 c.enrichment_date = datetime.datetime.now()
             c.save()
 
+    user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
+    user.set_password('default')
+    user.save()
+
+    client_user, created = ClientUser.objects.get_or_create(user=user, client=client)
+    if created:
+        client_user.save()
+
+
 def setup_all():
     _setup_core()
     _setup_sample_data()
-

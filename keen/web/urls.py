@@ -14,13 +14,15 @@ api_urls = patterns(
         name='api_customer_list'),
     url(r'^client/(?P<client_slug>[\w-]+)/customer/(?P<customer_id>\d+)$',
         CustomerProfile.as_view(), name='api_customer_profile'),
+    url(r'^login$', 'keen.web.views.api.user.login_view', name='login'),
+    url(r'^logout$', 'keen.web.views.api.user.logout_view', name='logout'),
 )
 
 
 urlpatterns = patterns(
     'keen.web.views',
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
-    url(r'^legal$', TemplateView.as_view(template_name='legal.html'), name='legal'),
+    url(r'^$', TemplateView.as_view(template_name='front-page/index.html'), name='home'),
+    url(r'^legal$', TemplateView.as_view(template_name='front-page/legal.html'), name='legal'),
     url(r'^client/$', 'client.dashboard', name='client_dashboard'),
     url(r'^client/promotions$', 'client.promotions', name='client_promotions'),
     url(r'^client/customers$', 'client.customers', name='client_customers'),
