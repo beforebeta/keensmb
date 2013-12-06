@@ -195,3 +195,7 @@ img.center {
 #footer span {
   line-height: 48px;
 }
+
+.modal-small .modal-content {
+  width: 450px;
+}

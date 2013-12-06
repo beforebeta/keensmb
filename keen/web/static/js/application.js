@@ -200,6 +200,11 @@ String.prototype.repeat = function(num) {
     // Typehead
     // $('.typeahead').typeahead();
 
+    $(document).on('click', '.js-submit-form', function(e) {
+        e.preventDefault();
+        $(this).closest('form').submit();
+    });
+
     // make code pretty
     window.prettyPrint && prettyPrint();
   });

@@ -44,8 +44,6 @@
 
             $scope.customers = [];
             $scope.searchParam = '';
-            // TODO: hardcoded
-            // var fields = ['first_name','last_name','email', 'age', 'gender'];
 
             $scope.sortBy = function(name) {
                 $scope.activeSort = name;
