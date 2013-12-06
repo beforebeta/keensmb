@@ -145,7 +145,7 @@ def nginx_restart():
 
 
 @task
-def deploy(profile, branch):
+def deploy(profile, branch, setup=None):
     """Deploy current branch or branch specified as argument
 
     Target host must be specified by using either "staging" or "production" command
@@ -162,7 +162,8 @@ def deploy(profile, branch):
 
     migrate()
     with virtualenv():
-        run('./manage.py setup --all')
+        if setup:
+            run('./manage.py setup --all')
         run('./manage.py collectstatic --noinput')
     with warn_only():
         uwsgi_stop()
