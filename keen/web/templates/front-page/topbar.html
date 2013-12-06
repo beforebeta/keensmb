@@ -35,6 +35,7 @@
       </div>
       <div class="modal-body">
         <form action='/api/login' id='signInForm' method="POST">
+          {% csrf_token %}
           <div class="row">
             <div class="col-md-10 col-md-offset-1">
               <div class="form-group">
