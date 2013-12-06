@@ -165,6 +165,13 @@ class CustomerProfile(APIView):
         customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
         return Response(CustomerSerializer(customer).data)
 
+    def delete(self, request, client_slug, customer_id):
+        customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
+
+        customer.delete()
+
+        return Response('Deleted')
+
     def post(self, request, client_slug, customer_id):
         """Update customer profile
         """
