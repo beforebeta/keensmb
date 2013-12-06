@@ -289,9 +289,13 @@ section {
 /*  padding-top: 0;
   padding-bottom: 0;*/
 }
+.table.table-bordered tr > th > span {
+  padding-right: 10px;
+}
 
 .table.table-bordered tr > td > span,
 .table.table-bordered tr > th > span {
+  position: relative;
   display: inline-block;
   width: 120px;
   overflow: hidden;
@@ -311,12 +315,62 @@ section {
 .customers-table tr > th:last-child {
   border: 1px dashed #ebeff0 !important;
 }
-.table.customers-table thead tr th:hover {
+.table.customers-table thead tr th:hover,
+.table.customers-table thead tr th.active {
   cursor: pointer;
   background: #e7e7e7;
 }
-.table.customers-table thead tr th.active {
-    box-shadow: inset 0 -2px 2px -2px #000;
+.table.customers-table thead tr th .sorting-header:after,
+.table.customers-table thead tr th .sorting-header:before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  right: 0;
+  border-bottom: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #000;
+  visibility: visible;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  filter: alpha(opacity=20);
+  -khtml-opacity: .2;
+  -moz-opacity: .2;
+  opacity: .2;
+}
+.table.customers-table thead tr th:hover .sorting-header:after,
+.table.customers-table thead tr th:hover .sorting-header:before {
+  filter: alpha(opacity=50);
+  -khtml-opacity: .5;
+  -moz-opacity: .5;
+  opacity: .5;
+}
+.table.customers-table thead tr th .sorting-header:before {
+  top: 4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 0;
+  border-bottom: 4px solid #000;
+}
+.table.customers-table thead tr th.active .sorting-header:before {
+  display: none;
+}
+.table.customers-table thead tr th.active .sorting-header:after {
+  filter: alpha(opacity=70);
+  -khtml-opacity: .7;
+  -moz-opacity: .7;
+  opacity: .7;
+}
+.table.customers-table thead tr th.active.des .sorting-header:after {
+  display: none;
+}
+.table.customers-table thead tr th.active.des .sorting-header:before {
+  display: block;
+  filter: alpha(opacity=70);
+  -khtml-opacity: .7;
+  -moz-opacity: .7;
+  opacity: .7;
 }
 .table.table-bordered thead tr {
   background: #f2f2f2;
@@ -360,8 +414,10 @@ section {
     padding-top: 1px;
 }
 .customers-list {
-  padding-top: 1px;
-  /*margin-top: 160px;*/
+  height: 407px;
+  overflow-y: scroll;
+  margin-right: -15px;
+  margin-bottom: 10px;
 }
 .customers-list .customers-table.space-top {
   margin-top: 51px;
@@ -582,4 +638,15 @@ section {
 .su-editable .permalink {
   font-size: 18px;
   width: 385px;
+}
+
+.new-field-modal .modal-body {
+    height: 450px;
+    overflow: auto;
+}
+.new-field-modal .modal-body  .modal-body-section{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
 }

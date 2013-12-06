@@ -30,7 +30,6 @@
 
             customerService.getCustomersFields().then(function(data) {
                 var availableFields = data.data.available_customer_fields;
-                console.table(availableFields)
 
                 $scope.availableFields = availableFields;
                 $scope.customerFields = data.data.display_customer_fields;
@@ -55,8 +54,15 @@
                 }
                 resetList();
             };
+
+            $scope.checkActiveSort = function(field) {
+                if ($scope.sortParam === '-' + field) {
+                    return true;
+                }
+            };
+
             $scope.loadMoreCustomers = function() {
-                if (!$scope.customerFields) {return false};
+                if (!$scope.customerFields) {return false;}
                 customerService.getClientCustomers($scope.customerFields, $scope.searchParam, $scope.sortParam).then(function(data) {
                     console.log('more: ', data.data);
                     var customers = data.data.customers;
@@ -102,21 +108,39 @@
                 return _.contains($scope.customerFields, name);
             };
 
+            var $customersList = $('.customers-list');
             var scrollToTop = function() {
-                $(window).scrollTop(0);
+                $customersList.scrollTop(0);
             };
 
+            var customersToDelete = [];
             var checkItemActions = function() {
-                var $customersTable = $('.customers-list'),
-                    checkboxes = $customersTable.find(':checkbox'),
-                    checkedAny = (checkboxes.filter(':checked').length !== 0);
+                var $customersTable = $customersList,
+                    $checkboxes = $customersTable.find(':checkbox'),
+                    $checked = $checkboxes.filter(':checked'),
+                    checkedAny = ($checked.length !== 0);
+
+                customersToDelete = [];
+                $checked.each(function(i, item) {
+                    customersToDelete.push($(item).closest('tr').attr('id'));
+                });
 
                 $('.js-item-selected')[checkedAny ? 'slideDown' : 'slideUp'](200);
-                $('.customers-list .customers-table')[checkedAny ? 'addClass' : 'removeClass']('space-top');
+                // $('.customers-list .customers-table')[checkedAny ? 'addClass' : 'removeClass']('space-top');
             };
 
             var deleteCustomer = function() {
 
+                _.each(customersToDelete, function(id) {
+                    customerService.deleteCustomer(id).then(function(data) {
+                        if (data.status === 200) {
+                            $('#'+id).fadeOut('fast', function() {
+                                $(this).remove();
+                            });
+                            checkItemActions();
+                        }
+                    });
+                });
                 // do ajax call here, with callback:
 
                 $('.js-customer-deleted-name').text('John Smith');
@@ -138,10 +162,18 @@
                 }, 100);
             };
 
+            var scrollList = function() {
+                var raw = $(this)[0];
+
+                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                    $scope.loadMoreCustomers();
+                }
+            };
+
             // Table: Toggle all checkboxes
             var toggleAllListCheckboxes = function() {
                 var ch = $(this).find(':checkbox').prop('checked');
-                $('.customers-list').find('tbody :checkbox').checkbox(ch ? 'check' : 'uncheck');
+                $customersList.find('tbody :checkbox').checkbox(ch ? 'check' : 'uncheck');
                 checkItemActions();
             };
 
@@ -150,6 +182,7 @@
             $(document).on('toggle', '.customers-table :checkbox', checkItemActions);
             $(document).on('click', '.js-delete-customer', deleteCustomer);
             $(document).on('click', '.global-alert .close', closeGlobalAlert);
+            $customersList.on('scroll', scrollList);
 
         }]).factory('customerService', ['$http', function($http) {
 
@@ -180,6 +213,12 @@
                         url: '/api/client/'+clientSlug+'/customer_fields',
                         method: 'PUT',
                         data: {display_customer_fields: fields}
+                    });
+                },
+                deleteCustomer: function(id) {
+                    return $http({
+                        url: '/api/client/'+clientSlug+'/customer/'+id,
+                        method: 'DELETE'
                     });
                 },
                 getClientCustomers: function(fields, search, sort) {

@@ -33,7 +33,7 @@
 
     <h1 class='page-title mbn'>Customer Profiles</h1>
 
-    <div class="row hidden">
+    <div class="row">
       <div class="col-md-6">
         <div class="mll">
           <h6>Summary</h6>
@@ -154,8 +154,9 @@
       </div><!--/.navbar-collapse -->
     </div>
 
-    <div class="table-responsive" ng-cloak>
+  <div class="tables-wrapper">
 
+    <div class="table-responsive" ng-cloak>
       <table class="table table-bordered customers-table mbn">
         <thead>
           <tr>
@@ -167,9 +168,9 @@
 
             <th ng-repeat='field in customerFields'
                 ng-click='sortBy(field);'
-                ng-class='{active: activeSort == field}'>
+                ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
 
-                <span>{{ fieldsMap[field] }}</span>
+                <span class='sorting-header'>{{ fieldsMap[field] }}</span>
             </th>
 
             <th width='100' class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
@@ -178,35 +179,36 @@
           </tr>
         </thead>
       </table>
+    </div>
 
+    <div class="table-responsive customers-list" ng-cloak>
+      <table class="table table-bordered customers-table"
+             infinite-scroll='loadMoreCustomers()'>
 
-  </div>
+        <tbody class="infinite-container">
 
-  <div class="table-responsive customers-list" ng-cloak>
-    <table class="table table-bordered customers-table"
-           infinite-scroll='loadMoreCustomers()'>
+          <tr ng-repeat='customer in customers' class='fade-onload' id='{{ customer.id }}'>
+              <td width='60' class='checkbox-cell'>
+                <label class="checkbox no-label" for="checkbox-table-{{$index}}">
+                  <input type="checkbox"
+                         id="checkbox-table-{{$index}}"
+                         data-toggle="checkbox">
+                </label>
+              </td>
 
-      <tbody class="infinite-container">
+              <td ng-repeat='field in customerFields'>
+                  <span>{{ customer.data[field] }}</span>
+              </td>
 
-        <tr ng-repeat='customer in customers' class='fade-onload'>
-            <td width='60' class='checkbox-cell'>
-              <label class="checkbox no-label" for="checkbox-table-{{$index}}">
-                <input type="checkbox" value="" id="checkbox-table-{{$index}}" data-toggle="checkbox">
-              </label>
-            </td>
+              <td width='100'></td>
+          </tr>
+        </tbody>
+      </table>
 
-            <td ng-repeat='field in customerFields'>
-                <span>{{ customer.data[field] }}</span>
-            </td>
-
-            <td width='100'></td>
-        </tr>
-      </tbody>
-    </table>
-
+    </div>
   </div>
 <!-- new field modal -->
-  <div id="newFieldModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+  <div id="newFieldModal" class="modal fade new-field-modal" tabindex="-1" role="dialog" aria-hidden="true" >
     <div class="modal-dialog">
       <div class="modal-content">
 
@@ -217,10 +219,10 @@
           <h4 class="modal-title">Select Fields to Add</h4>
         </div>
 
-        <div class="modal-body" ng-repeat='(name, title) in fieldsMap'>
-          <div class="row mbn">
-            <div class="col-md-3"><span>{{ title }}</span></div>
-            <div class="col-md-6 text-simple">
+        <div class="modal-body">
+          <div class="row modal-body-section" ng-repeat='(name, title) in fieldsMap'>
+            <div class="col-md-4"><span>{{ title }}</span></div>
+            <div class="col-md-5 text-simple">
               <span>Description</span>
             </div>
 
