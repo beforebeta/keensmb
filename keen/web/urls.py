@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url, include
+from django.views.generic import TemplateView
 
 from .views.api.client import ClientProfile, CustomerList, CustomerProfile
 
@@ -18,6 +19,8 @@ api_urls = patterns(
 
 urlpatterns = patterns(
     'keen.web.views',
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^legal$', TemplateView.as_view(template_name='legal.html'), name='legal'),
     url(r'^client/$', 'client.dashboard', name='client_dashboard'),
     url(r'^client/promotions$', 'client.promotions', name='client_promotions'),
     url(r'^client/customers$', 'client.customers', name='client_customers'),
