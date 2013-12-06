@@ -23,7 +23,9 @@ def promotions(request):
 
 @login_required(login_url='/#signin')
 def customers(request):
-    client = get_object_or_404(Client.objects.prefetch_related('customer_fields'), slug='default_client')
+    client = get_object_or_404(
+        Client.objects.prefetch_related('customer_fields'),
+        slug=request.session['client']['slug'])
     q = Customer.objects.filter(client=client)
 
     context = {}
@@ -61,7 +63,7 @@ def business_profile(request):
 
 @login_required(login_url='/#signin')
 def customer_form(request, customer_id=None):
-    client = get_object_or_404(Client, slug='default_client')
+    client = get_object_or_404(Client, slug=request.session['client']['slug'])
     if customer_id:
         customer = get_object_or_404(Customer, client=client, id=customer_id)
         form = CustomerForm(client, initial=customer.data)
