@@ -166,7 +166,8 @@ String.prototype.repeat = function(num) {
     $('.chromoselector').chromoselector();
 
     // Table: Add class row selected
-    $('.table tbody :checkbox').on('check uncheck toggle', function (e) {
+    $(document).on('check uncheck toggle', '.table tbody :checkbox', function (e) {
+      console.log('oppa')
       var $this = $(this)
         , check = $this.prop('checked')
         , toggle = e.type == 'toggle'

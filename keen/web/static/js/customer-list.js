@@ -109,11 +109,12 @@
             };
 
             var checkItemActions = function() {
-                var $customersTable = $('#customers-table'),
+                var $customersTable = $('.customers-list'),
                     checkboxes = $customersTable.find(':checkbox'),
                     checkedAny = (checkboxes.filter(':checked').length !== 0);
 
                 $('.js-item-selected')[checkedAny ? 'slideDown' : 'slideUp'](200);
+                $('.customers-list .customers-table')[checkedAny ? 'addClass' : 'removeClass']('space-top');
             };
 
             var deleteCustomer = function() {
@@ -139,9 +140,16 @@
                 }, 100);
             };
 
+            // Table: Toggle all checkboxes
+            var toggleAllListCheckboxes = function() {
+                var ch = $(this).find(':checkbox').prop('checked');
+                $('.customers-list').find('tbody :checkbox').checkbox(ch ? 'check' : 'uncheck');
+                checkItemActions();
+            };
 
             // Table: Add class row selected
-            $(document).on('toggle', '#customers-table :checkbox', checkItemActions);
+            $(document).on('click', '.table .toggle-all-customers', toggleAllListCheckboxes);
+            $(document).on('toggle', '.customers-table :checkbox', checkItemActions);
             $(document).on('click', '.js-delete-customer', deleteCustomer);
             $(document).on('click', '.global-alert .close', closeGlobalAlert);
 

@@ -344,9 +344,12 @@ section {
     padding-top: 1px;
 }
 .customers-list {
+  padding-top: 1px;
   margin-top: 160px;
 }
-
+.customers-list .customers-table.space-top {
+  margin-top: 51px;
+}
 
 .kn-section {
   border: 2px solid #ebeff0;
