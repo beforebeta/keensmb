@@ -2,6 +2,7 @@ import logging
 
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 
 from rest_framework.decorators import api_view
@@ -20,10 +21,12 @@ def login_view(request):
         email = request.POST['email']
         password = request.POST['password']
     except KeyError:
+        messages.error(request, 'Please provide e-mail and password')
         logger.warn('Request is missing email and/or password parameters: %r' % request.POST.copy())
         return HttpResponseBadRequest('Missing authentication information')
 
     user = authenticate(username=email, password=password)
+    logger.debug('Authenticate %r' % locals())
 
     if user and user.is_active:
         login(request, user)
@@ -31,12 +34,14 @@ def login_view(request):
             request.session['client'] = ClientSerializer(
                 ClientUser.objects.get(user=user).client).data
         except ClientUser.DoesNotExist:
+            messages.error(request, 'Failed to associate your account with any client')
             request.session['client'] = None
             request.session.save()
         else:
             request.session.save()
             return HttpResponseRedirect(reverse('client_customers'))
     else:
+        messages.error(request, 'Authentication failed')
         response = Response({'error': 'Authentication failed'})
 
     return HttpResponseRedirect('/#signin')
