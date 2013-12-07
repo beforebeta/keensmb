@@ -30,12 +30,16 @@ class IsClientUser(BasePermission):
     def has_permission(self, request, view):
         return (
             request.user and
-            request.user.client_slug == view.kwargs.get('client_slug'))
+            request.session and
+            'client' in request.session and
+            request.session['client'] and
+            request.session['client'].get('slug') == view.kwargs.get('client_slug')
+        )
 
 
 class ClientProfile(APIView):
 
-    # permission_classes = (IsAdminUser, IsClientUser)
+    permission_classes = (IsClientUser,)
 
     def get(self, request, client_slug, part=None):
         client = get_object_or_404(Client, slug=client_slug)
@@ -49,20 +53,25 @@ class ClientProfile(APIView):
                 'new_signups': 0,
             }
         elif part == 'customer_fields':
-            available_fields = list(client.customer_fields.all())
-            display_fields = list(
-                client.customer_fields.filter(
-                    id__in=PageCustomerField.objects.filter(
-                        client=client, page='db').values('fields__id')))
+            available_fields = list(client.customer_fields.all().order_by('group_ranking'))
+
+            try:
+                page = PageCustomerField.objects.get(page='db', client=client)
+            except PageCustomerField.DoesNotExist:
+                display_fields = None
+            else:
+                display_fields = page.fields.split(',')
 
             if not display_fields:
-                display_fields = available_fields
+                display_fields = [field.name for field in available_fields if field.required]
+
             data = {
                 'available_customer_fields': CustomerFieldSerializer(
                     available_fields, many=True).data,
-                'display_customer_fields': [field.name for field in display_fields],
+                'display_customer_fields': display_fields,
             }
         else:
+            logger.warn('ClientProfile GET request for unknown part %r' % part)
             return Http404()
 
         return Response(data)
@@ -73,18 +82,22 @@ class ClientProfile(APIView):
         if part == 'customer_fields':
             fields = request.DATA.get('display_customer_fields', [])
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
-            page.fields = list(client.customer_fields.filter(name__in=fields))
+            # ensure that we only save fields that are available for this clint
+            client_fields = set(field.name for field in client.customer_fields.filter(name__in=fields))
+            fields = [field for field in fields if field in client_fields]
+            page.fields = ','.join(fields)
             page.save()
-            data = {'display_customer_fields': [f.name for f in page.fields.all()]}
+            data = {'display_customer_fields': fields}
         else:
-            return HttpResponseNotAllowed()
+            logger.warn('ClientProfile PUT request for unknown part %r' % part)
+            return HttpResponseBadRequest()
 
         return Response(data)
 
 
 class CustomerList(APIView):
 
-    # permission_classes = (IsAdminUser, IsClientUser)
+    permission_classes = (IsClientUser,)
 
     def get(self, request, client_slug):
         """Return one page of Customer objects
@@ -113,7 +126,7 @@ class CustomerList(APIView):
 
         if 'search' in request.GET:
             customers = customers.extra(
-                where=['cast(avals(data) as text) ~ %s'],
+                where=['cast(avals(data) as text) ~* %s'],
                 params=[request.GET['search']])
 
         if 'order' in request.GET:
@@ -124,7 +137,7 @@ class CustomerList(APIView):
             # created by setup management command
             customers = customers.extra(
                 select=dict(
-                    (field, "core_customer.data -> '%s'" % field)
+                    (field, "upper(core_customer.data -> '%s')" % field)
                     for field in fields if field not in [
                     'id', 'created', 'modified', 'client_id'])).order_by(
                         *order_by)
@@ -157,7 +170,7 @@ class CustomerList(APIView):
 
 class CustomerProfile(APIView):
 
-    # permission_classes = (IsAdminUser, IsClientUser)
+    permission_classes = (IsClientUser,)
 
     def get(self, request, client_slug, customer_id):
         """Retrieve customer profile

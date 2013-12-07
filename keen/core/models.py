@@ -88,6 +88,7 @@ class CustomerField(Timestamps):
     type = models.CharField(max_length=20, choices=FIELD_TYPES)
     required = models.BooleanField(default=False)
     is_unique = models.BooleanField(default=False)
+    width = models.IntegerField(null=True, blank=True)
 
     def group_name(self):
         try:

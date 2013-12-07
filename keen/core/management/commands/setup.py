@@ -6,6 +6,7 @@ from django import db
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
+from keen.web.models import PageCustomerField
 
 
 class Command(BaseCommand):
@@ -29,13 +30,16 @@ def section(message):
 ################################################################################################################
 # Setup Core
 ################################################################################################################
-def _setup_field(group, group_ranking, name, title, field_type, length=-1):
+def _setup_field(group, group_ranking, name, title, field_type, required=False, length=None):
     print "Setup field %s-%s" % (group, name)
     obj,created = CustomerField.objects.get_or_create(group=group,
-                                             group_ranking=group_ranking,
-                                             name=name,
-                                             title=title,
-                                             type=field_type)
+                                                      group_ranking=group_ranking,
+                                                      name=name,
+                                                      title=title,
+                                                      type=field_type,
+                                                      required=required,
+                                                      width=length,
+                                                      )
 
     cast = {
         # 'date': '::date',
@@ -127,9 +131,9 @@ def _setup_core():
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
     _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.first_name], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.first_name], _string, required=True)
     _setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.last_name], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.last_name], _string, required=True)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.dob], _date)
     _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age,
@@ -137,7 +141,7 @@ def _setup_core():
     _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.gender], _string)
     _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.email,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email], _string, required=True)
     _setup_field(_basic, 600, CUSTOMER_FIELD_NAMES.address__line1,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__line1], _string)
     _setup_field(_basic, 601, CUSTOMER_FIELD_NAMES.address__line2,
@@ -271,10 +275,9 @@ def _setup_sample_data():
     user.set_password('default')
     user.save()
 
-    client_user, created = ClientUser.objects.get_or_create(user=user, client=client)
-    if created:
-        client_user.save()
+    ClientUser.objects.get_or_create(user=user, client=client)
 
+    PageCustomerField.objects.get_or_create(page='db', client=client)
 
 def setup_all():
     _setup_core()

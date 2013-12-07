@@ -13,7 +13,7 @@ class PageCustomerField(Timestamps):
 
     page = models.CharField(max_length=3, choices=PAGE_NAMES)
     client = models.ForeignKey(Client)
-    fields = models.ManyToManyField(CustomerField)
+    fields = models.CharField(max_length=1024, default='first_name,last_name,email')
 
 
 class SignupForm(Timestamps):

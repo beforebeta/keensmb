@@ -49,7 +49,7 @@ class CustomerFieldSerializer(DynamicSerializer):
     class Meta:
         model = CustomerField
         fields = ('name', 'title', 'type', 'required',
-                  'group')
+                  'group', 'width')
 
 
 class CustomerFieldGroupSerializer(DynamicSerializer):
