@@ -37,8 +37,10 @@ def _setup_field(group, group_ranking, name, title, field_type, required=False, 
                                                       name=name,
                                                       title=title,
                                                       type=field_type,
-                                                      required=required,
-                                                      width=length,
+                                                      defaults={
+                                                          'width': length,
+                                                          'required': required,
+                                                      },
                                                       )
 
     cast = {
