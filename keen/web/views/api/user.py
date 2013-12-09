@@ -4,6 +4,7 @@ from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -15,6 +16,7 @@ from keen.core.serializers import ClientSerializer
 logger = logging.getLogger(__name__)
 
 
+@ensure_csrf_cookie
 @api_view(['POST'])
 def login_view(request):
     try:
@@ -47,6 +49,7 @@ def login_view(request):
     return HttpResponseRedirect('/#signin')
 
 
+@ensure_csrf_cookie
 @api_view(['GET'])
 def logout_view(request):
     del request.session['client']
