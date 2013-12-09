@@ -4,7 +4,7 @@
 
 (function($) {
     angular.module('keen')
-        .controller('customersCtrl', ['$scope', '$timeout', 'customerService', 'ngTableParams', function($scope, $timeout, customerService, ngTableParams){
+        .controller('customersCtrl', ['$scope', '$timeout', 'customerService', function($scope, $timeout, customerService){
 
             $scope.submitSearch = function() {
                 resetList();
@@ -12,6 +12,7 @@
 
             var clearCustomers = false;
             function resetList() {
+                console.log('reset')
                 clearCustomers = true;
                 customerService.resetCounter();
                 $scope.loadMoreCustomers();
@@ -141,10 +142,9 @@
                         }
                     });
                 });
-                // do ajax call here, with callback:
 
-                $('.js-customer-deleted-name').text('John Smith');
-                $('.customer-deleted-alert').show().addClass('in');
+                // $('.js-customer-deleted-name').text('John Smith');
+                // $('.customer-deleted-alert').show().addClass('in');
             };
 
             var closeGlobalAlert = function(e) {
@@ -232,12 +232,10 @@
 
                     if (search) {
                         params.search = search;
-                        params.offset = 0;
                     }
 
                     if (sort) {
                         params.order = sort;
-                        params.offset = 0;
                     }
 
                     return $http({

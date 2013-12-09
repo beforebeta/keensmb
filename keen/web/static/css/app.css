@@ -12,6 +12,16 @@ html, body {
   box-sizing: border-box;
   padding-top: 80px; /* spacing for fixed header */
 }
+@media (min-width: 992px) {
+  .container {
+    width: 1170px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    width: 1170px;
+  }
+}
 
 /* NAVIGATION */
 
@@ -419,6 +429,15 @@ section {
   margin-right: -15px;
   margin-bottom: 10px;
 }
+.customers-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+.customers-list::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
 .customers-list .customers-table.space-top {
   margin-top: 51px;
 }
@@ -650,3 +669,14 @@ section {
     border-top: 1px solid #fff;
     border-bottom: 1px solid #ddd;
 }
+.search-form-item {
+  width: 320px;
+}
+
+.search-form-item .navbar-form {
+  width: 100%;
+  max-width: 350px;
+}
+
+
+

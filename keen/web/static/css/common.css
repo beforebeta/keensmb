@@ -95,3 +95,6 @@
 .input-group  .hasDatepicker {
   padding-right: 3px;
 }
+.navbar .nav ul li:only-child {
+  border-radius: 6px;
+}

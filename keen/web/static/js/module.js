@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('keen', ['ngTable', 'infinite-scroll']).run(['$http', function($http) {
+angular.module('keen', []).run(['$http', function($http) {
 
-    // Django csrf token for POST
+    // Django csrf token for POST, PUT, DELETE
     $http.defaults.xsrfCookieName = 'csrftoken';
     $http.defaults.xsrfHeaderName = 'X-CSRFToken';
 

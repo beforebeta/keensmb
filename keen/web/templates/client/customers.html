@@ -34,7 +34,7 @@
     <h1 class='page-title mbn'>Customer Profiles</h1>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-xs-6">
         <div class="mll">
           <h6>Summary</h6>
           <div class='summary-block large mrl'>
@@ -53,12 +53,12 @@
         </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-xs-6">
         {% if locations %}
         <h6>Locations</h6>
         <div class="row profile-locations">
           {% for location in locations %}
-          <div class="col-md-2 text-center">
+          <div class="col-xs-2 text-center">
             <span>{{ location.name }}</span>
             <span class="fui-home icon orange"></span>
           </div>
@@ -74,14 +74,14 @@
       <div class="navbar-collapse navbar-collapse-03 in">
         <ul class="nav navbar-nav">
           <li>
-          <a href="#fakelink">
-            Import from
-            <b class="caret"></b>
-          </a>
-          <ul class='pull-right'>
-            <li><a href="#fakelink">Mailing list</a></li>
-            <li><a href="#fakelink">.CSV file</a></li>
-          </ul>
+            <a href="#fakelink">
+              Import from
+              <b class="caret"></b>
+            </a>
+            <ul class='pull-right'>
+              <!-- <li><a href="#fakelink">Mailing list</a></li> -->
+              <li><a href="#fakelink">.CSV file</a></li>
+            </ul>
           </li>
           <li>
           <a href="#fakelink">
@@ -89,7 +89,7 @@
             <b class="caret"></b>
           </a>
           <ul>
-            <li><a href="#fakelink">Mailing list</a></li>
+            <!-- <li><a href="#fakelink">Mailing list</a></li> -->
             <li><a href="#fakelink">.CSV download</a></li>
           </ul> <!-- /Sub menu -->
           </li>
@@ -97,7 +97,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           <!-- <li class="divider"></li> -->
-          <li class='mrl'>
+          <li class='mrl search-form-item'>
             <form ng-submit='submitSearch()' class="navbar-form navbar-left">
               <div class="form-group">
                 <div class="input-group input-group-sm">
@@ -105,6 +105,7 @@
                          type="search"
                          placeholder="Search in list..."
                          ng-model='searchParam'>
+
                   <span class="input-group-btn">
                     <button type="submit" class="btn"><span class="fui-search"></span></button>
                   </span>
@@ -130,15 +131,15 @@
       <div class="navbar-collapse">
         <p class='white pull-left mtm mll mbn'>Item Actions:</p>
         <ul class="nav navbar-nav navbar-right">
-          <li class='mrl'>
+          <!-- temporary removed -->
+          <li class='mrl hidden'>
             <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
           </li>
-          <li>
+          <li class='hidden'>
             <button class="btn btn-sm btn-embossed btn-primary mts mrl" disabled>
               <span>Enrich</span>
             </button>
           </li>
-          <!-- temporary removed -->
           <li class='hidden'>
             <button class="btn btn-sm btn-embossed btn-primary mts mrl">
               <span>Copy to...</span>
@@ -221,14 +222,14 @@
 
         <div class="modal-body">
           <div class="row modal-body-section" ng-repeat='(name, title) in fieldsMap'>
-            <div class="col-md-4"><span>{{ title }}</span></div>
-            <div class="col-md-5 text-simple">
+            <div class="col-xs-4"><span>{{ title }}</span></div>
+            <div class="col-xs-5 text-simple">
               <span>Description</span>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-xs-3">
               <button ng-if='!checkField(name)'
-                      class='btn btn-sm btn-primary btn-secondary btn-embossed'
+                      class='btn btn-sm btn-primary btn-secondary btn-embossed col-xs-12'
                       ng-click='addField(name)'>
 
                 <span class='mrl'>Add Field</span>
@@ -236,7 +237,7 @@
               </button>
 
               <button ng-if='checkField(name)'
-                      class='btn btn-sm btn-default btn-embossed'
+                      class='btn btn-sm btn-default btn-embossed col-xs-12'
                       ng-click='removeField(name)'>
 
                 <span class='mrl'>Remove</span>
