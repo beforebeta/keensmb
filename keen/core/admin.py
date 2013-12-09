@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
 from keen.core.models import (
     Client,
@@ -8,7 +10,19 @@ from keen.core.models import (
     Address,
     CustomerFieldGroup,
     CustomerField,
+    ClientUser,
 )
+
+
+class ClientUserInline(admin.StackedInline):
+    model = ClientUser
+
+
+class ClientUserAdmin(UserAdmin):
+    inlines = (ClientUserInline,)
+
+admin.site.unregister(User)
+admin.site.register(User, ClientUserAdmin)
 
 
 class ClientAdmin(admin.ModelAdmin):
