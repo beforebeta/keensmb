@@ -1,0 +1,343 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Flat UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" >
+
+    <!-- Loading Bootstrap -->
+    <link href="{% static "/bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <!-- <link href="css/flat-ui.css" rel="stylesheet"> -->
+    <link href="{% static "/css/flat-ui-custom.css" %}" rel="stylesheet">
+
+    <link href="{% static "/css/chromoselector.min.css" %}" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="{% static "/css/app.css" %}" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{% static "/images/favicon.ico" %}">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+    <script src="{% static "/js/html5shiv.js" %}"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="main-container container">
+
+      <!-- Header -->
+      <header class="navbar navbar-default navbar-fixed-top kn-nav" role="banner">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-collapse-01"></button>
+            <a href="#fakelink" class="navbar-brand">
+              <img src="{% static "/images/logo-small.png" %}" alt="Keen">
+            </a>
+          </div>
+          <div class="navbar-collapse collapse navbar-collapse-01">
+            <ul class="nav navbar-nav">
+              <li><a href="#fakelink">Dashboard</a></li>
+              <li><a href="#fakelink">Promotions</a></li>
+              <li class="active"><a href="#fakelink">Customers</a></li>
+              <li><a href="#fakelink">Business Profile</a></li>
+            </ul> <!-- /nav -->
+
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href="#fakelink">Business/User Name</a>
+              </li>
+              <li class='dropdown'>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="fui-gear"></span>
+                </a>
+                <span class="dropdown-arrow dropdown-arrow-inverse mrm"></span>
+                <ul class="dropdown-menu pull-right">
+                  <li><a href="#fakelink">My settings</a></li>
+                  <li>
+                    <a href="#fakelink" class='highlighted' data-toggle="modal" data-target="#loginModal">
+                      Log Out <i class="fui-power pull-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.navbar-collapse -->
+
+        </div>
+      </header>
+
+      <div class="global-alert customer-deleted-alert dialog dialog-warning text-left fade" data-alert="alert" style='display: none;'>
+        <div class="container">
+          <a class="close mts" href="#" aria-hidden="true"><i class="fui-cross"></i></a>
+          <p class='mn text-left'>
+            <span class='small mll'>Customer <span class="text-danger js-customer-deleted-name"></span> was deleted</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Breadcrumbs -->
+      <ul class="breadcrumb kn-breadcrumb">
+        <li><a href="#fakelink">Customers</a></li>
+        <li><a href="#fakelink">Sign Up Forms</a></li>
+        <li class="active"><a href="#fakelink">Create New Form</a></li>
+      </ul>
+
+      <!-- Content -->
+      <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>
+        <div class="su-title su-editable row mtl mbn"
+             ng-class='{editing: title.isEditing}'>
+          <div class="col-md-10">
+            <div class="form-group mbn">
+              <input type="text"
+                     class='form-control page-title'
+                     ng-model='title.text'
+                     ng-focus='startEditing(title)'
+                     ng-blur='cancelEditing(title)'>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary btn-sm pull-right mtx"
+                    ng-click='startEditing(title)'>Save</button>
+
+            <button class="btn btn-default btn-sm pull-right mrs mtx">Cancel</button>
+          </div>
+        </div>
+
+        <div class="su-subtitle su-editable form-group row mts mbn"
+             ng-class='{editing: permalink.isEditing}'>
+          <div class="col-md-10">
+            <span class='mtx dib'><b>Permalink: </b> http://keensmb.com/slug/signup/</span>
+            <div class="form-group dib">
+              <input type="text"
+                     class='form-control input-sm permalink js-editable-trigger'
+                     ng-model='permalink.text'
+                     ng-focus='startEditing(permalink)'
+                     ng-blur='cancelEditing(permalink)'>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary btn-sm pull-right"
+                    ng-click='startEditing(permalink)'>Save</button>
+
+            <button class="btn btn-default btn-sm pull-right mrs">Cancel</button>
+          </div>
+        </div>
+
+        <div class="su-form-wrapper mbm">
+
+        <!-- Banner Logo -->
+          <div class="banner-logo js-image-container" ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'>
+            <p class="placeholder">Banner Logo</p>
+
+            <img src='' ng-src="{{bannerLogo.image.src}}" alt="" class='js-banner-preview fade in' id='banner-preview'>
+
+            <div class="instructions hover-vis">
+              <i class="fui-list dib mid"></i>
+              <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
+            </div>
+
+            <div class="btn-group photo-actions hover-vis">
+              <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover' data-content='Upload your unique logo for the banner of your sign up form' data-placement="left">
+                <i class="fui-new"></i>
+                <span class='mll'>Choose Photo</span>
+              </button>
+              <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+              <i class="dropdown-arrow dropdown-arrow-inverse"></i>
+              <ul class="dropdown-menu dropdown-inverse">
+                <li><a href="#fakelink">Choose from photos</a></li>
+                <li class="js-fileapi-wrapper" id="choose">
+                  <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
+                  <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="banner-logo" type="file" />
+                </li>
+                <li class='disabled js-reposition-banner'><a href="#fakelink">Reposition</a></li>
+              </ul>
+            </div>
+
+            <div class="action-buttons hover-vis">
+              <button class="btn btn-default btn-wide btn-embossed"
+                      ng-click='cancelEditingBanner()'>Cancel</button>
+              <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
+                      ng-click='saveEditingBanner()'>Save Changes</button>
+            </div>
+          </div>
+
+        <!-- Background Image -->
+          <div class="background-image js-image-container" ng-class='{"image-loaded" : bgImage.reposition}'>
+            <p class="placeholder">Background Image</p>
+
+            <img src="" alt="" class='js-banner-preview fade' id='background-image'>
+
+            <div class="instructions hover-vis">
+              <i class="fui-list dib mid"></i>
+              <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
+            </div>
+
+            <div class="su-form">
+              <h5 class='su-form-header'>Header 4 would have max 50 characters</h5>
+              <p class="su-form-text text-simple">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, ratione libero fugiat unde!</p>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Full Name'>
+                  </div>
+                  <div class="form-group mbm">
+                    <input type="email" class="form-control" placeholder='Email Address'>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Zip Code'>
+                  </div>
+                </div>
+                <div class="col-md-6 pln">
+                  <div class="form-group mbm">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Birthday" id="datepicker-01">
+                      <span class="input-group-btn">
+                        <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 prn">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Phone'>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mbm">
+                    <select name="gender" id="gender" class='simple full mbs'>
+                      <option value="0" selected disabled>Gender</option>
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
+
+              <p class='su-form-text text-simple mtl'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea debitis corporis molestiae.</p>
+            </div>
+
+            <div class='color-picker-wrapper hover-vis'>
+              <input type="text" class='hidden' id="color-picker-anchor">
+            </div>
+
+            <div class="btn-group photo-actions hover-vis">
+              <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover'
+                      data-content='Choose a unique image for the background of your sign up form'
+                      data-placement="left">
+                <i class="fui-new"></i>
+                <span class='mll'>Choose Photo</span>
+              </button>
+              <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+              <i class="dropdown-arrow dropdown-arrow-inverse"></i>
+              <ul class="dropdown-menu dropdown-inverse">
+                <li><a href="#fakelink">Choose from photos</a></li>
+                <li class="js-fileapi-wrapper">
+                  <a href="#fakelink" class="js-trigger" data-target='#upload-background-image'>Upload Photo</a>
+                  <input id='upload-background-image' accept="image/*" class='hidden js-upload-banner' name="background-image" type="file" />
+                </li>
+                <li class='disabled'><a href="#fakelink">Reposition</a></li>
+                <li class='disabled'><a href="#fakelink">Remvoe Photo</a></li>
+                <li class='disabled'><a href="#fakelink">Add Photo Effect</a></li>
+                <li><a href="#fakelink" class='js-trigger' data-target='#color-picker-anchor'>Choose background color</a></li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm">Save & Publish</button>
+        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
+        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Live Preview</button>
+        <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>
+      </section>
+      <!-- /.container -->
+
+      <div class="push-footer"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bottom-menu kn-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 navbar-brand">
+            <a href="#fakelink">
+              <img src="../images/logo-small.png" alt="Keen">
+            </a>
+          </div>
+
+          <div class="col-md-6">
+            <ul class="list-justify col-md-offset-2">
+              <li>
+                <a href="#fakelink">Terms of use</a>
+              </li>
+              <li>
+                <a href="#fakelink">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#fakelink">Contact Us</a>
+              </li>
+            </ul>
+            <div class='text-center'>
+              <small>Copyright Digital First Ventures. All Rights Reserved.</small>
+            </div>
+          </div>
+
+          <div class="col-md-2 col-md-offset-1">
+            <span>Try Keen for Free!</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+    <!-- Load JS here for greater good =============================-->
+    <script src="{% static "/js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
+    <script src="{% static "/js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "/js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
+    <script src="{% static "/js/vendor/jquery/jquery.tagsinput.js" %}"></script>
+    <script src="{% static "/js/vendor/jquery/jquery.placeholder.js" %}"></script>
+
+    <script src="{% static "/js/vendor/angular/angular-1.2.3.js" %}"></script>
+
+    <script src="{% static "/js/vendor/bootstrap/bootstrap.min.js" %}"></script>
+    <script src="{% static "/js/vendor/bootstrap/bootstrap-select.js" %}"></script>
+    <script src="{% static "/js/vendor/bootstrap/bootstrap-typeahead.js" %}"></script>
+    <script src="{% static "/js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
+    <script src="{% static "/js/vendor/flatui-checkbox.js" %}"></script>
+    <script src="{% static "/js/vendor/flatui-radio.js" %}"></script>
+    <script src="{% static "/js/vendor/chromoselector.min.js" %}"></script>
+    <script>
+      window.FileAPI = {
+          debug: false   // debug mode, see Console
+        , cors: false    // if used CORS, set `true`
+        , media: false   // if used WebCam, set `true`
+        , staticPath: '{% static "/js/vendor/fileapi/" %}' // path to '*.swf'
+        , postNameConcat: function (name, idx){
+          // Default: object[foo]=1&object[bar][baz]=2
+          // .NET: https://github.com/mailru/FileAPI/issues/121#issuecomment-24590395
+          return  name + (idx != null ? '['+ idx +']' : '');
+        }
+      };
+    </script>
+    <script src="{% static "/js/vendor/fileapi/FileAPI.min.js" %}"></script>
+
+    <script src="{% static "/js/application.js" %}"></script>
+
+
+    <script src="{% static "/js/module.js" %}"></script>
+    <script src="{% static "/js/profiles.js" %}"></script>
+    <script src="{% static "/js/sign-up.js" %}"></script>
+  </body>
+</html>
