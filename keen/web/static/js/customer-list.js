@@ -29,12 +29,13 @@
                 $scope.fieldsMap = fieldsMap;
             });
 
+            var tempFields = [];
             customerService.getCustomersFields().then(function(data) {
                 var availableFields = data.data.available_customer_fields;
 
                 $scope.availableFields = availableFields;
                 $scope.customerFields = data.data.display_customer_fields;
-
+                tempFields = angular.copy(data.data.display_customer_fields);
                 // var arr = ['first_name', 'last_name', 'email'];
 
                 $scope.loadMoreCustomers();
@@ -94,19 +95,31 @@
 
             $scope.addField = function(name) {
                 if (!$scope.checkField(name)) {
-                    $scope.customerFields.push(name);
-                    updateFields();
+                    tempFields.push(name);
+                    // $scope.customerFields.push(name);
+                    // updateFields();
                 }
             };
             $scope.removeField = function(name) {
                 if ($scope.checkField(name)) {
-                    $scope.customerFields = _.without($scope.customerFields, name);
-                    updateFields();
+                    tempFields = _.without(tempFields, name);
+                    // $scope.customerFields = _.without($scope.customerFields, name);
+                    // updateFields();
                 }
             };
 
+            $scope.doneAddingFields = function() {
+                // console.log(tempFields);
+                $scope.customerFields = angular.copy(tempFields);
+                updateFields();
+            };
+            $scope.cancelAddingFields = function() {
+                // console.log(tempFields);
+                tempFields = angular.copy($scope.customerFields);
+            };
+
             $scope.checkField = function(name) {
-                return _.contains($scope.customerFields, name);
+                return _.contains(tempFields, name);
             };
 
             var $customersList = $('.customers-list');
