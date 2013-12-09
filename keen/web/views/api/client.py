@@ -4,9 +4,12 @@ from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
@@ -41,6 +44,7 @@ class ClientProfile(APIView):
 
     permission_classes = (IsClientUser,)
 
+    @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug, part=None):
         client = get_object_or_404(Client, slug=client_slug)
 
@@ -76,6 +80,7 @@ class ClientProfile(APIView):
 
         return Response(data)
 
+    @method_decorator(ensure_csrf_cookie)
     def put(self, request, client_slug, part=None):
         client = get_object_or_404(Client, slug=client_slug)
 
@@ -99,6 +104,7 @@ class CustomerList(APIView):
 
     permission_classes = (IsClientUser,)
 
+    @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug):
         """Return one page of Customer objects
         """
@@ -151,6 +157,7 @@ class CustomerList(APIView):
             'customers': customers,
         })
 
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug):
         """Create new customer
         """
@@ -172,12 +179,14 @@ class CustomerProfile(APIView):
 
     permission_classes = (IsClientUser,)
 
+    @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug, customer_id):
         """Retrieve customer profile
         """
         customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
         return Response(CustomerSerializer(customer).data)
 
+    @method_decorator(ensure_csrf_cookie)
     def delete(self, request, client_slug, customer_id):
         customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
 
@@ -185,6 +194,7 @@ class CustomerProfile(APIView):
 
         return Response('Deleted')
 
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug, customer_id):
         """Update customer profile
         """
@@ -208,3 +218,16 @@ class CustomerProfile(APIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
         return Response(CustomerSerializer(customer).data)
+
+
+@ensure_csrf_cookie
+@api_view(['GET'])
+def current_client_view(request):
+    try:
+        client_slug = request.session['client']['slug']
+    except KeyError:
+        return Http404()
+
+    client = get_object_or_404(Client, slug=client_slug)
+
+    return Response(ClientSerializer(client).data)

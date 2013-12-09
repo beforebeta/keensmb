@@ -7,6 +7,12 @@ expected to return single object instance return HTTP status 404 if object canno
 be found. All API calls that return some content use JSON-encoding.
 
 
+GET /api/client/current
+-----------------------
+
+Retrieve client object matching current user
+
+
 GET /api/client/:client_slug
 ----------------------------
 
