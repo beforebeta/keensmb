@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from keen.core.models import Client, Customer, Location
 from keen.web.forms import CustomerForm
@@ -11,16 +12,19 @@ from keen.web.forms import CustomerForm
 logger = logging.getLogger(__name__)
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def dashboard(request):
     return render(request, 'client/dashboard.html')
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def promotions(request):
     render(request, 'client/promotions.html')
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def customers(request):
     client = get_object_or_404(
@@ -41,6 +45,7 @@ def customers(request):
     return render(request, 'client/customers.html', context)
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def profile(request, customer_id=None):
     context = {'breadcrumbs': [{"link": "/customers","text": 'Customers'}, {"link": "/customer","text": 'Customer'}]}
@@ -51,16 +56,19 @@ def profile(request, customer_id=None):
     return render_to_response('client/customers/customer_profile_view.html', context, context_instance=RequestContext(request))
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def signup_form_create(request):
     return render(request, 'client/signup-form-create.html')
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def business_profile(request):
     return None
 
 
+@ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def customer_form(request, customer_id=None):
     client = get_object_or_404(Client, slug=request.session['client']['slug'])
