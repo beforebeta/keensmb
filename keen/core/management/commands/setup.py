@@ -281,6 +281,18 @@ def _setup_sample_data():
 
     PageCustomerField.objects.get_or_create(page='db', client=client)
 
+    form, created = SignupForm.objects.get_or_create(client=client, slug='default')
+    form.fields = CustomerField.objects.filter(
+        client=client,
+        name__in='full_name email zipcode birthday phone gender'.split(),
+    )
+    form.data = {
+        'header': 'Default Client Sign-Up',
+        'intro': 'Sign-Up now and get free diiner for two',
+        'background_image': 'http://keensmb.com/media/default_client/images/bg.png',
+    }
+    form.save()
+
 def setup_all():
     _setup_core()
     _setup_sample_data()
