@@ -32,6 +32,10 @@ class Image(Timestamps):
     content_type = models.CharField(max_length=255)
     type = models.CharField(max_length=1, choices=IMAGE_TYPES)
 
+    @property
+    def url(self):
+        return self.file.url()
+
 
 class Address(Timestamps):
 

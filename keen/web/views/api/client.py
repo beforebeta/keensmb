@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
 from keen.core.models import Client, Customer
-from keen.web.models import PageCustomerField
+from keen.web.models import PageCustomerField, SignupForm
 from keen.web.serializers import (
     ClientSerializer,
     CustomerSerializer,
@@ -280,28 +280,25 @@ class SignupFormList(APIView):
         return Response('', status=status.HTTP_201_CREATED)
 
 
-class SignupForm(APIView):
+class SignupFormView(APIView):
 
     permission_classes = (IsClientUser,)
 
     @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug, form_id):
+    def get(self, request, client_slug, form_slug):
         """Retrieve form information
         """
         client = get_object_or_404(Client, slug=client_slug)
-        form = get_object_or_404(SignupForm, client=client, pk=form_id)
+        form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
         return Result(SignupFormSerializer(form).data)
 
     @method_decorator(ensure_csrf_cookie)
-    def put(self, request, client_slug, form_id):
+    def put(self, request, client_slug, form_slug):
         """Update form information
         """
         client = get_object_or_404(Client, slug=client_slug)
-        form = get_object_or_404(SignupForm, client=client, pk=form_id)
-
-        if 'slug' in request.DATA:
-            form.slug = request.DATA['slug'].strip()
+        form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
         if 'data' in request.DATA:
             form.data = request.DATA['data']
@@ -315,9 +312,9 @@ class SignupForm(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @method_decorator(ensure_csrf_cookie)
-    def delete(self, request, client_slug, form_id):
+    def delete(self, request, client_slug, form_slg):
         client = get_object_or_404(Client, slug=client_slug)
-        form = get_object_or_404(SignupForm, clinet=client, pk=form_id)
+        form = get_object_or_404(SignupForm, clinet=client, slug=form_slug)
 
         try:
             form.delete()

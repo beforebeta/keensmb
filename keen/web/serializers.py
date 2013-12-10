@@ -3,6 +3,7 @@ from rest_framework.serializers import (
     RelatedField,
     PrimaryKeyRelatedField,
     SlugRelatedField,
+    SerializerMethodField,
     )
 
 from keen.core.models import (
@@ -84,18 +85,20 @@ class CustomerSerializer(DynamicSerializer):
 
 class ImageSerializer(DynamicSerializer):
 
-    client = SlugRelatedField(slug_field='slug')
+    url = SerializerMethodField('get_url')
+
+    def get_url(self, image):
+        return image.file.url
 
     class Meta:
         model = Image
-        fields = ('client', 'type', 'content_type', 'file')
+        fields = ('type', 'content_type', 'url')
 
 
 class SignupFormSerializer(DynamicSerializer):
 
-    client = SlugRelatedField(slug_field='slug')
     fields = CustomerFieldSerializer(many=True)
 
     class Meta:
         model = SignupForm
-        fields = ('client', 'slug', 'fields', 'status', 'data')
+        fields = ('slug', 'fields', 'status', 'data')
