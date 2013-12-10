@@ -6,7 +6,7 @@ from django import db
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
-from keen.web.models import PageCustomerField
+from keen.web.models import PageCustomerField, SignupForm
 
 
 class Command(BaseCommand):
