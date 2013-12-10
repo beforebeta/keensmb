@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from django_hstore import hstore
@@ -13,6 +14,11 @@ class Timestamps(models.Model):
         abstract = True
 
 
+def image_upload_path(image, filename):
+    return os.path.join(
+        settings.MEDIA_ROOT, image.client.slug, 'images', filename)
+
+
 class Image(Timestamps):
 
     IMAGE_TYPES = Choices(
@@ -22,7 +28,7 @@ class Image(Timestamps):
     )
 
     client = models.ForeignKey('Client', related_name='images')
-    file = models.ImageField(upload_to='')
+    file = models.ImageField(upload_to=image_upload_path)
     content_type = models.CharField(max_length=255)
     type = models.CharField(max_length=1, choices=IMAGE_TYPES)
 
