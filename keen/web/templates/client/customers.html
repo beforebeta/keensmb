@@ -119,7 +119,8 @@
             <i class="fui-user mll"></i></button>
           </li>
           <li>
-          <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+          <!-- Hidden temporary -->
+          <button class="hidden btn btn-sm btn-embossed btn-primary mts mrl">
             <span class='mrl'>Create Campaign</span>
             <i class="fui-mail mll"></i></button>
           </li>
@@ -198,7 +199,13 @@
               </td>
 
               <td ng-repeat='field in customerFields'>
-                  <span>{{ customer.data[field] }}</span>
+                  <span>
+                    <a class='fui-eye detail-link'
+                       target='_blank'
+                       ng-if='field == "first_name"'
+                       ng-href='/customer_profile/{{ customer.id }}'></a>
+                    {{ customer.data[field] }}
+                  </span>
               </td>
 
               <td width='100'></td>

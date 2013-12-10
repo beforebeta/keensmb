@@ -178,10 +178,11 @@
             var scrollList = function() {
                 var raw = $(this)[0];
 
-                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight - 500) {
                     $scope.loadMoreCustomers();
                 }
             };
+            var lazyScrollList = _.throttle(scrollList, 200);
 
             // Table: Toggle all checkboxes
             var toggleAllListCheckboxes = function() {
@@ -195,7 +196,7 @@
             $(document).on('toggle', '.customers-table :checkbox', checkItemActions);
             $(document).on('click', '.js-delete-customer', deleteCustomer);
             $(document).on('click', '.global-alert .close', closeGlobalAlert);
-            $customersList.on('scroll', scrollList);
+            $customersList.on('scroll', lazyScrollList);
 
         }]).factory('customerService', ['$http', function($http) {
 
@@ -207,6 +208,7 @@
                 limit = 50;
 
             return {
+                clientSlug: '',
                 getClientData: function() {
                     return $http({
                         url: '/api/client/'+clientSlug,
