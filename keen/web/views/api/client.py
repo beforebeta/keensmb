@@ -15,7 +15,7 @@ from rest_framework.permissions import BasePermission, IsAdminUser
 
 from keen.core.models import Client, Customer
 from keen.web.models import PageCustomerField
-from keen.core.serializers import (
+from keen.web.serializers import (
     ClientSerializer,
     CustomerSerializer,
     CustomerFieldSerializer,

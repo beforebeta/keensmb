@@ -14,6 +14,7 @@ from keen.core.models import (
     CustomerField,
     Image,
     )
+from keen.web.models import SignupForm
 
 
 class DynamicSerializer(ModelSerializer):
@@ -83,6 +84,18 @@ class CustomerSerializer(DynamicSerializer):
 
 class ImageSerializer(DynamicSerializer):
 
+    client = SlugRelatedField(slug_field='slug')
+
     class Meta:
         model = Image
         fields = ('client', 'type', 'content_type', 'file')
+
+
+class SignupFormSerializer(DynamicSerializer):
+
+    client = SlugRelatedField(slug_field='slug')
+    fields = CustomerFieldSerializer(many=True)
+
+    class Meta:
+        model = SignupForm
+        fields = ('client', 'slug', 'fields', 'status', 'data')

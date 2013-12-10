@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from keen.core.models import ClientUser
-from keen.core.serializers import ClientSerializer
+from keen.web.serializers import ClientSerializer
 
 
 logger = logging.getLogger(__name__)
