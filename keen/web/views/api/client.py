@@ -20,6 +20,7 @@ from keen.core.serializers import (
     CustomerSerializer,
     CustomerFieldSerializer,
     ImageSerializer,
+    SignupFormSerializer,
 )
 from keen.web.forms import CustomerForm
 
