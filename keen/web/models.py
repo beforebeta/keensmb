@@ -24,7 +24,7 @@ class SignupForm(Timestamps):
         ('published', 'Published'),
     )
 
-    client = models.ForeignKey(Client)
+    client = models.ForeignKey(Client, related_name='signup_forms')
     slug = models.SlugField()
     fields = models.ManyToManyField(CustomerField)
     status = models.CharField(max_length=32, choices=STATUS_NAMES,
