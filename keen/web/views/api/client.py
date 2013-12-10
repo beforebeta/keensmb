@@ -251,7 +251,7 @@ class SignupFormList(APIView):
             return Result(('not found', 'found')[found])
         else:
             forms = list(client.signup_forms.all())
-            return Result(SignupFormSerializer(forms, many=True).data)
+            return Response(SignupFormSerializer(forms, many=True).data)
 
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug):
