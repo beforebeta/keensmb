@@ -1,23 +1,37 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 
-from .views.api.client import ClientProfile, CustomerList, CustomerProfile
+from .views.api.client import (ClientProfile, CustomerList, CustomerProfile,
+                               SignupFormList, SignupForm, ImageList)
 
+
+client_api_urls = patterns(
+    'keen.web.views.api.client',
+    url(r'^current$', 'current_client_view',
+        name='current_client'),
+    url(r'^(?P<client_slug>[\w-]+)(?:/|$)', include(patterns(
+        '',
+        url(r'^$', ClientProfile.as_view(),
+        name='client_profile'),
+        url(r'^(?P<part>summary|customer_fields)$',
+            ClientProfile.as_view(), name='client_profile'),
+        url(r'^customers$', CustomerList.as_view(),
+            name='api_customer_list'),
+        url(r'^customer/(?P<customer_id>\d+)$', CustomerProfile.as_view(),
+            name='api_customer_profile'),
+        url(r'^signup_forms$', SignupFormList.as_view(),
+            name='api_signup_forms'),
+        url(r'^signup_form/(?P<form_id>\d+)$', SignupForm.as_view(),
+            name='api_signup_form'),
+        url(r'^images$', ImageList.as_view(), name='api_images'),
+    ))),
+)
 
 api_urls = patterns(
     'keen.web.views.api',
-    url(r'^client/current$', 'client.current_client_view',
-        name='current_client'),
-    url(r'^client/(?P<client_slug>[\w-]+)$', ClientProfile.as_view(),
-        name='client_profile'),
-    url(r'^client/(?P<client_slug>[\w-]+)/(?P<part>summary|customer_fields)$',
-        ClientProfile.as_view(), name='client_profile'),
-    url(r'^client/(?P<client_slug>[\w-]+)/customers$', CustomerList.as_view(),
-        name='api_customer_list'),
-    url(r'^client/(?P<client_slug>[\w-]+)/customer/(?P<customer_id>\d+)$',
-        CustomerProfile.as_view(), name='api_customer_profile'),
     url(r'^login$', 'user.login_view', name='login'),
     url(r'^logout$', 'user.logout_view', name='logout'),
+    url(r'^client/', include(client_api_urls)),
 )
 
 

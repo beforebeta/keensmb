@@ -8,8 +8,8 @@ Django>=1.6
 
 django-hstore
 djangorestframework
-deform
-colander
+
+pil
 
 # Templates
 django_compressor

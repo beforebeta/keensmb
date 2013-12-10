@@ -5,7 +5,6 @@ from model_utils import Choices
 import operator
 
 
-
 class Timestamps(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -22,9 +21,10 @@ class Image(Timestamps):
         ('b', 'Big'),
     )
 
-    url = models.CharField(max_length=255)
+    client = models.ForeignKey('Client', related_name='images')
+    file = models.ImageField(upload_to='')
+    content_type = models.CharField(max_length=255)
     type = models.CharField(max_length=1, choices=IMAGE_TYPES)
-    client = models.ForeignKey('Client')
 
 
 class Address(Timestamps):
@@ -68,6 +68,7 @@ class CustomerFieldGroup(Timestamps):
     def __unicode__(self):
         return self.name
 
+
 class CustomerField(Timestamps):
 
     FIELD_TYPES = Choices(
@@ -104,7 +105,8 @@ class Client(Timestamps):
 
     slug = models.CharField(max_length=255, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
-    main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
+    main_location = models.ForeignKey('Location', null=True, blank=True,
+                                      related_name='+')
     customer_fields = models.ManyToManyField(CustomerField)
 
     def customer_page(self, offset=0, filter=None, page_size=100):
@@ -137,7 +139,7 @@ class CustomerSource(Timestamps):
     # this may be a reference to a specific web.models.SignupForm model or a
     # mailchimp list or anything else
     ref_id = models.IntegerField(null=True, blank=True)
-    ref_source = models.CharField(max_length=50,null=True, blank=True)
+    ref_source = models.CharField(max_length=50, null=True, blank=True)
 
     def __unicode__(self):
         return self.slug
@@ -183,23 +185,27 @@ CUSTOMER_FIELD_NAMES = Choices(
     ('purchase__automotive', 'Purchases Automotive Goods'),
     ('purchase__baby', 'Has Bought a Baby Product'),
     ('purchase__beauty', 'Purchases Beauty Products'),
-    ('purchase__charitable', 'Indicates liklihood of Being a Charitable Donor'),
+    ('purchase__charitable',
+     'Indicates liklihood of Being a Charitable Donor'),
     ('purchase__cooking', 'Purchases cooking magazines; interest in cooking'),
     ('purchase__discount', 'Purchase behavior: Interest in discounts'),
-    ('purchase__high_end_brands', 'Has bought a premium CPG brand in the past 18 months '),
+    ('purchase__high_end_brands',
+     'Has bought a premium CPG brand in the past 18 months '),
     ('purchase__home_garden', 'Purchases Home & Garden Products'),
     ('purchase__home_improvement', 'Purchases Home Improvement Products'),
     ('purchase__luxury', 'Purchases Luxury Items'),
     ('purchase__magazine', 'Purchases Magazine Subscriptions'),
     ('purchase__outdoor', 'Purchases Outdoor and Adventure Products'),
     ('purchase__pets', 'Purchases Pet Related Products'),
-    ('purchase__power_shopper', 'Purchases Items from Multiple Retail Channels'),
+    ('purchase__power_shopper',
+     'Purchases Items from Multiple Retail Channels'),
     ('purchase__sports', 'Purchases Sporting Goods / Sports Related Products'),
     ('purchase__technology', 'Purchases Technology Products'),
     ('purchase__travel', 'Purchases Travel Related Goods')
 )
 
 CUSTOMER_FIELD_NAMES_DICT = dict(CUSTOMER_FIELD_NAMES)
+
 
 class Customer(Timestamps):
 
@@ -212,8 +218,11 @@ class Customer(Timestamps):
     client = models.ForeignKey('Client', related_name='customers')
     source = models.ForeignKey(CustomerSource)
     data = hstore.DictionaryField()
-    locations = models.ManyToManyField(Location, related_name='customers', null=True, blank=True)
-    enrichment_status = models.CharField(max_length=3, choices=ENRICHMENT_STATUS, default="ne")
+    locations = models.ManyToManyField(Location, related_name='customers',
+                                       null=True, blank=True)
+    enrichment_status = models.CharField(max_length=3,
+                                         choices=ENRICHMENT_STATUS,
+                                         default="ne")
     enrichment_date = models.DateTimeField(null=True, blank=True)
 
     objects = hstore.HStoreManager()
@@ -296,14 +305,15 @@ class Customer(Timestamps):
 
     def get_field_list(self):
         """ returns customer field data in the following format:
-            [
-                field 1 - {"name":"", "value":"", "group":"", "group_ranking:""},
-                field 2 - {"name":"", "value":"", "group":"", "group_ranking:""}
-            ]
-            orders by group and group_ranking
+        [
+        field 1 - {"name":"", "value":"", "group":"", "group_ranking:""},
+        field 2 - {"name":"", "value":"", "group":"", "group_ranking:""}
+        ]
+        orders by group and group_ranking
         """
         fields = []
-        field_ids = [cf.id for cf in self.client.customer_fields.all().only("id")]
+        field_ids = [cf.id for cf in
+                     self.client.customer_fields.all().only("id")]
         for field in self.data.keys():
             cf = CustomerField.objects.get(name=field)
             fields.append({"name": field,
@@ -311,12 +321,14 @@ class Customer(Timestamps):
                            "group": cf.group.name,
                            "group_ranking": cf.group_ranking,
                            "is_client_relevant": cf.id in field_ids
-                          })
-        return sorted(fields, key=operator.itemgetter("group", "group_ranking"))
+                           })
+        return sorted(fields,
+                      key=operator.itemgetter("group", "group_ranking"))
 
     def has_custom_fields(self):
         return self.client.customer_fields.filter(
-            group=CustomerFieldGroup.objects.get(name=CustomerFieldGroup.FIELD_GROUPS.custom)).count() > 0
+            group=CustomerFieldGroup.objects.get(
+                name=CustomerFieldGroup.FIELD_GROUPS.custom)).count() > 0
 
     def __unicode__(self):
         return self.get_name()

@@ -19,6 +19,7 @@ from keen.core.serializers import (
     ClientSerializer,
     CustomerSerializer,
     CustomerFieldSerializer,
+    ImageSerializer,
 )
 from keen.web.forms import CustomerForm
 
@@ -231,3 +232,127 @@ def current_client_view(request):
     client = get_object_or_404(Client, slug=client_slug)
 
     return Response(ClientSerializer(client).data)
+
+
+class SignupFormList(APIView):
+
+    permission_classes = (IsClientUser,)
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, client_slug):
+        client = get_object_or_404(Client, slug=client_slug)
+
+        if 'check' in request.GET:
+            # check if form with this permalink exists
+            permalink = request.GET['check'].strip()
+            if not permalink:
+                return Result(status=status.HTTP_400_BAD_REQUEST)
+            found = client.signup_forms.filter(permalink=permalink).exists()
+            return Result(('not found', 'found')[found])
+        else:
+            forms = list(client.signup_forms.all())
+            return Result(SignupFormSerializer(forms, many=True).data)
+
+    @method_decorator(ensure_csrf_cookie)
+    def post(self, request, client_slug):
+        client = get_object_or_404(Client, slug=client_slug)
+
+        try:
+            slug = request.POST['slug']
+            fields = request.POST['fields']
+            data = request.POST['data']
+        except KeyError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        form, created = SignupForm.objects.get_or_create(client=client, slug=slug)
+        if not created:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        form.fields = list(client.customer_fields.filter(name__in=fields))
+        form.data = data
+        try:
+            form.save()
+        except DatabaseError:
+            logger.exception('Failed to create signup form')
+            raise
+
+        return Response('', status=status.HTTP_201_CREATED)
+
+
+class SignupForm(APIView):
+
+    permission_classes = (IsClientUser,)
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, client_slug, form_id):
+        """Retrieve form information
+        """
+        client = get_object_or_404(Client, slug=client_slug)
+        form = get_object_or_404(SignupForm, client=client, pk=form_id)
+
+        return Result(SignupFormSerializer(form).data)
+
+    @method_decorator(ensure_csrf_cookie)
+    def put(self, request, client_slug, form_id):
+        """Update form information
+        """
+        client = get_object_or_404(Client, slug=client_slug)
+        form = get_object_or_404(SignupForm, client=client, pk=form_id)
+
+        if 'slug' in request.DATA:
+            form.slug = request.DATA['slug'].strip()
+
+        if 'data' in request.DATA:
+            form.data = request.DATA['data']
+
+        try:
+            form.save()
+        except DatabaseError:
+            logger.exception('Failed to save signup form')
+            raise
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @method_decorator(ensure_csrf_cookie)
+    def delete(self, request, client_slug, form_id):
+        client = get_object_or_404(Client, slug=client_slug)
+        form = get_object_or_404(SignupForm, clinet=client, pk=form_id)
+
+        try:
+            form.delete()
+        except DatabaseError:
+            logger.exception('Failed to delete signup form')
+            raise
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ImageList(APIView):
+
+    permission_classes = (IsClientUser,)
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, client_slug):
+        client = get_object_or_404(Client, slug=client_slug)
+
+        return Response(ImageSerializer(client.images.all(), many=True).data)
+
+    @method_decorator(ensure_csrf_cookie)
+    def post(self, request, client_slug):
+        client = get_object_or_404(Client, slug=client_slug)
+        file = request.FIELS.get('file')
+        if not file:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        image = Image()
+        image.client = client
+        image.file = file
+        image.content_type = file.media_type
+
+        try:
+            image.save()
+        except DatabasError:
+            logger.exception('Failed to save image')
+            raise
+
+        return Response(ImageSerializer(image).data, status=status.HTTP_201_CREATED)

@@ -12,6 +12,7 @@ from keen.core.models import (
     Customer,
     CustomerFieldGroup,
     CustomerField,
+    Image,
     )
 
 
@@ -78,3 +79,10 @@ class CustomerSerializer(DynamicSerializer):
     class Meta:
         model = Customer
         fields = ('id', 'client', 'data')
+
+
+class ImageSerializer(DynamicSerializer):
+
+    class Meta:
+        model = Image
+        fields = ('client', 'type', 'content_type', 'file')

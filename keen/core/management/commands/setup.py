@@ -30,7 +30,7 @@ def section(message):
 ################################################################################################################
 # Setup Core
 ################################################################################################################
-def _setup_field(group, group_ranking, name, title, field_type, required=False, length=None):
+def _setup_field(group, group_ranking, name, title, field_type, required=False, length=15):
     print "Setup field %s-%s" % (group, name)
     obj,created = CustomerField.objects.get_or_create(group=group,
                                                       group_ranking=group_ranking,
