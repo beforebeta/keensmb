@@ -163,8 +163,7 @@ CUSTOMER_FIELD_NAMES = Choices(
     ('social__facebook', 'Facebook'),
     ('social__twitter', 'Twitter'),
     ('social__googleplus', 'Google Plus'),
-    ('first_name', 'First Name'),
-    ('last_name', 'Last Name'),
+    ('full_name', 'Full Name'),
     ('dob', 'Birthday'),
     ('age', 'Age'),
     ('email', 'Email'),
@@ -253,12 +252,7 @@ class Customer(Timestamps):
             return "/static/images/icons/dude.svg"
 
     def get_name(self):
-        first_name = self._return_field(CUSTOMER_FIELD_NAMES.first_name)
-        last_name = self._return_field(CUSTOMER_FIELD_NAMES.last_name)
-        if first_name or last_name:
-            return "%s %s" % (first_name, last_name)
-        else:
-            return ""
+        return  self.data.get(CUSTOMER_FIELD_NAMES.full_name, '')
     get_name.short_description = 'Name'
 
     def get_email(self):
