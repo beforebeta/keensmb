@@ -75,8 +75,7 @@ def _setup_core():
     #_setup_field(_basic, 1, CUSTOMER_FIELD_NAMES.social__facebook, "Facebook", _string)
     #_setup_field(_basic, 2, CUSTOMER_FIELD_NAMES.social__twitter, "Twitter", _string)
     #_setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus, "Google Plus", _string)
-    #_setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name, "First Name", _string)
-    #_setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name, "Last Name", _string)
+    #_setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name, "Full Name", _string)
     #_setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob, "Birthday", _date)
     #_setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age, "Age", _string)
     #_setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender, "Gender", _string)
@@ -132,10 +131,8 @@ def _setup_core():
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__twitter], _string)
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
-    _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.first_name], _string, required=True)
-    _setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.last_name], _string, required=True)
+    _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name,
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name], _string, required=True)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.dob], _date)
     _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age,
@@ -243,6 +240,8 @@ def _setup_sample_data():
     customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
     csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
     all_customer_fields = dict([(c.title,c) for c in CustomerField.objects.all()])
+    all_customer_fields['First Name'] = CustomerField(name='first_name', title='First Name')
+    all_customer_fields['Last Name'] = CustomerField(name='last_name', title='Last Name')
     clients_customer_fields = map(lambda x:
                                   all_customer_fields[process.extractOne(x, all_customer_fields.keys())[0]],
                                   csv_schema_fields)
@@ -271,6 +270,11 @@ def _setup_sample_data():
                 c.data[CUSTOMER_FIELD_NAMES.marital_status]:
                 c.enrichment_status = Customer.ENRICHMENT_STATUS.en
                 c.enrichment_date = datetime.datetime.now()
+            c.data['full_name'] = ' '.join((c.data[field] for field in
+                                           ('first_name', 'last_name')
+                                           if field in c.data))
+            c.data.pop('first_name', None)
+            c.data.pop('last_name', None)
             c.save()
 
     user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
