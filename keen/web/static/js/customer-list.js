@@ -17,7 +17,6 @@
                 customerService.resetCounter();
                 $scope.loadMoreCustomers();
             }
-
             customerService.getClientData().then(function(data) {
                 var customerFields = data.data.customer_fields;
 

@@ -6,6 +6,7 @@
     angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', function($scope, $timeout){
 
         // Initial data:
+
         $scope.title = {text: 'some title', isEditing: false};
         $scope.permalink = {text: 'some-perma-link', isEditing: false};
 
@@ -23,7 +24,8 @@
 
         var lastBannerLogo = {
             image: {
-                src: 'http://static.freepik.com/free-photo/fantasy-banner_8479.jpg',
+                src: '',
+                // src: 'http://static.freepik.com/free-photo/fantasy-banner_8479.jpg',
                 top: 0,
                 left: 0
             },
@@ -104,6 +106,7 @@
                     FileAPI.Image(file).resize(contWidth, contHeight, 'min').get(function (err, img){
 
                         FileAPI.readAsDataURL(img, function (evt){
+
                             if( evt.type == 'load' ){
                                 // Success
                                 var dataURL = evt.result;
@@ -115,7 +118,9 @@
 
                                 // Update angular scope
                                 $timeout(function() {
+                                    $scope.oppa = 'wefwef';
                                     $scope.bannerLogo.image.src = url;
+                                    console.log($scope.bannerLogo.image.src);
                                     $scope.bannerLogo.editing = true;
                                     $this.val('');
                                 });
