@@ -131,6 +131,8 @@ def _setup_core():
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__twitter], _string)
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
+    _setup_field(_basic, 98, 'first_name', 'First Name', _string)
+    _setup_field(_basic, 99, 'last_name', 'Last Name', _string)
     _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name], _string, required=True)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
@@ -240,8 +242,6 @@ def _setup_sample_data():
     customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
     csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
     all_customer_fields = dict([(c.title,c) for c in CustomerField.objects.all()])
-    all_customer_fields['First Name'] = CustomerField(name='first_name', title='First Name')
-    all_customer_fields['Last Name'] = CustomerField(name='last_name', title='Last Name')
     clients_customer_fields = map(lambda x:
                                   all_customer_fields[process.extractOne(x, all_customer_fields.keys())[0]],
                                   csv_schema_fields)
@@ -273,9 +273,9 @@ def _setup_sample_data():
             c.data['full_name'] = ' '.join((c.data[field] for field in
                                            ('first_name', 'last_name')
                                            if field in c.data))
-            c.data.pop('first_name', None)
-            c.data.pop('last_name', None)
             c.save()
+
+    client.customer_fields.filter(name__in=('first_name', 'last_name')).delete()
 
     user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
     user.set_password('default')
