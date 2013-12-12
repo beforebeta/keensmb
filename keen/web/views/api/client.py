@@ -5,6 +5,7 @@ from base64 import b64decode
 
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
+from django.db import DatabaseError
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
