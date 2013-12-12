@@ -336,3 +336,55 @@ class Customer(Timestamps):
 
     def __unicode__(self):
         return self.get_name()
+
+
+########################################################################################################################
+# Promotions
+########################################################################################################################
+
+class PromotionMedium(Timestamps):
+    PROMOTION_PLATFORMS = Choices(
+        ('email', 'E-mail'),
+        ('fb', 'Facebook'),
+        ('tw', 'Twitter'),
+        ('pin', 'Pinterest'),
+    )
+
+    client = models.ForeignKey(Client)
+    platform = models.CharField(max_length=10, choices=PROMOTION_PLATFORMS)
+    account_info = hstore.DictionaryField() #account into per medium
+
+class PromotionManager(models.Manager):
+
+    def get_active_promotions(self, order_by='-valid_to'):
+        return self.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)
+
+
+class Promotion(Timestamps):
+    PROMOTION_STATUS = Choices(
+        ('draft', 'Draft'),
+        ('inapproval', 'In Approval'),
+        ('scheduled', 'Scheduled'),
+        ('active', 'Active'),
+        ('expired', 'Expired'),
+    )
+
+    client = models.ForeignKey(Client)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=15, choices=PROMOTION_STATUS)
+    description = models.TextField(null=True, blank=True)
+    short_code = models.CharField(max_length=255, null=True, blank=True)
+    valid_from = models.DateTimeField(null=True, blank=True)
+    valid_to = models.DateTimeField(null=True, blank=True)
+    restrictions = models.TextField(null=True, blank=True)
+    additional_information = models.TextField(null=True, blank=True)
+    redemption_instructions = models.TextField(null=True, blank=True)
+    mediums = models.ManyToManyField(PromotionMedium, null=True, blank=True)
+    banner_url = models.CharField(max_length=255, null=True, blank=True)
+    image_url = models.CharField(max_length=255, null=True, blank=True)
+    send_schedule = models.DateTimeField(null=True, blank=True)
+    target_customers = models.ManyToManyField(Customer, null=True, blank=True)
+
+    analytics = hstore.DictionaryField(null=True, blank=True)
+
+    objects = PromotionManager()

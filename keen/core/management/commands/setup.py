@@ -6,8 +6,8 @@ from django import db
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
-from keen.web.models import PageCustomerField, SignupForm
-
+from keen.web.models import PageCustomerField, SignupForm, Dashboard
+from dateutil.relativedelta import *
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -226,6 +226,127 @@ def _setup_core():
     _setup_field(_custom, 1700, CUSTOMER_FIELD_NAMES.purchase__travel,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.purchase__travel], _bool)
 
+def _setup_sample_data_promotions(client):
+    dashboard, created = Dashboard.objects.get_or_create(client=client)
+    now = datetime.datetime.now()
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Black Friday Campaign",
+        status=Promotion.PROMOTION_STATUS.active,
+        description="Come to MDO for Exciting Black Friday deals. Get the best deals on Gap, Banana Republic, Old Navy and many more. We have the best deals in New England.",
+        short_code="Black Friday Deals"
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Free coupon book valued at $750",
+        status=Promotion.PROMOTION_STATUS.active,
+        description="HOLIDAY SHOPPING IS MAGICAL IN MANCHESTER, VERMONT. Signup to our newsletter at keensmb.com/mdo.signup and receive A COUPON BOOK VALUED AT $750. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Coupon Book Promo"
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Draft Promotion 1",
+        status=Promotion.PROMOTION_STATUS.draft,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now,
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Draft Promotion 2",
+        status=Promotion.PROMOTION_STATUS.draft,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=-1),
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="In Approval Promotion 1",
+        status=Promotion.PROMOTION_STATUS.inapproval,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now,
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="In Approval Promotion 2",
+        status=Promotion.PROMOTION_STATUS.inapproval,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=-1),
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Scheduled Promotion 1",
+        status=Promotion.PROMOTION_STATUS.scheduled,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now+relativedelta(months=+1),
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Scheduled Promotion 2",
+        status=Promotion.PROMOTION_STATUS.scheduled,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=+1),
+        valid_to=now+relativedelta(years=+2)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Expired Promotion 1",
+        status=Promotion.PROMOTION_STATUS.expired,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now+relativedelta(years=-1),
+        valid_to=now+relativedelta(months=-1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Expired Promotion 2",
+        status=Promotion.PROMOTION_STATUS.expired,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=-2),
+        valid_to=now+relativedelta(years=-1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    dashboard.refresh()
+
 def _setup_sample_data():
     section("Creating Customer Database")
 
@@ -296,6 +417,7 @@ def _setup_sample_data():
         'background_image': 'http://keensmb.com/media/default_client/images/bg.png',
     }
     form.save()
+    _setup_sample_data_promotions(client)
 
 def setup_all():
     _setup_core()

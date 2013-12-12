@@ -11,6 +11,8 @@ from keen.core.models import (
     CustomerFieldGroup,
     CustomerField,
     ClientUser,
+    Promotion,
+    PromotionMedium
 )
 
 
@@ -59,3 +61,13 @@ class CustomerFieldAdmin(admin.ModelAdmin):
     list_display = ('group', 'group_ranking', 'name','title')
 
 admin.site.register(CustomerField, CustomerFieldAdmin)
+
+class PromotionAdmin(admin.ModelAdmin):
+    list_display = ('client', 'name', 'status','short_code','valid_from','valid_to')
+
+admin.site.register(Promotion, PromotionAdmin)
+
+class PromotionMediumAdmin(admin.ModelAdmin):
+    list_display = ('client', 'platform')
+
+admin.site.register(PromotionMedium, PromotionMediumAdmin)

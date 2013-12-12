@@ -1,8 +1,9 @@
 from django.db import models
 from django_hstore import hstore
 from model_utils import Choices
-from keen.core.models import Timestamps, Client, CustomerField
-
+from keen import util
+from keen.core.models import Timestamps, Client, CustomerField, Customer, Promotion
+from django.db.models import Q
 
 class PageCustomerField(Timestamps):
 
@@ -34,3 +35,22 @@ class SignupForm(Timestamps):
 
     class Meta:
         unique_together = ('client', 'slug')
+
+class Dashboard(Timestamps):
+    client = models.ForeignKey(Client)
+
+    #analytics
+    total_customers = models.IntegerField(default=0)
+    new_customers = models.IntegerField(default=0)
+    promotions_this_month = models.IntegerField(default=0)
+    redemptions = models.IntegerField(default=0)
+
+    def refresh(self):
+        self.total_customers = Customer.objects.filter(client=self.client).count()
+        self.new_customers = Customer.objects.filter(client=self.client, created__gte=util.get_first_day_of_month_as_dt()).count()
+        self.promotions_this_month = Promotion.objects.filter(
+                                    Q(valid_from__gte=util.get_first_day_of_month_as_dt()) | Q(valid_from__isnull=True),
+                                    Q(valid_to__lte=util.get_last_day_of_month_as_dt()) | Q(valid_to__isnull=True),
+                                    client=self.client).count()
+        self.redemptions = 0
+        self.save()
