@@ -1,9 +1,13 @@
 import re
 import logging
+from hashlib import sha256
+from base64 import b64decode
+
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.core.files.base import ContentFile
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 
@@ -338,14 +342,26 @@ class ImageList(APIView):
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug):
         client = get_object_or_404(Client, slug=client_slug)
-        file = request.FIELS.get('file')
-        if not file:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            content_type = request.DATA['type']
+            content = request.DATA['data']
+        except KeyError:
+            logger.exception('Failed to get expected request data')
+            return Response(status=status.HTTP_BAD_REQUEST)
+
+        try:
+            content = b64decode(content)
+        except TypeError:
+            logger.exception('Failed to decode image content using BASE64')
+            return Response(status=status.HTTP_BAD_REQUEST)
+
+        name = sha256(content).hexdigest()
 
         image = Image()
         image.client = client
-        image.file = file
-        image.content_type = file.media_type
+        image.file = ContentFile(content, name)
+        image.content_type = content_type
 
         try:
             image.save()
