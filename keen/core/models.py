@@ -29,7 +29,8 @@ class Image(Timestamps):
     )
 
     client = models.ForeignKey('Client', related_name='images')
-    file = models.ImageField(upload_to=image_upload_path, max_length=1024)
+    #file = models.ImageField(upload_to=image_upload_path, max_length=1024)
+    file = models.ImageField(max_length=1024)
     content_type = models.CharField(max_length=255)
     type = models.CharField(max_length=1, choices=IMAGE_TYPES)
 

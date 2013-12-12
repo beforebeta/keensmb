@@ -1,3 +1,4 @@
+import os
 import re
 import logging
 from hashlib import sha256
@@ -360,6 +361,7 @@ class ImageList(APIView):
 
         name = '.'.join((sha256(content).hexdigest(),
                          content_type.split('/', 1)[1]))
+        name = os.path.join('client', client.slug, 'images', name)
         content = default_storage.save(name, ContentFile(content))
 
         image = Image()
