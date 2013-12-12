@@ -3,23 +3,27 @@
 'use strict';
 
 (function($) {
-    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', function($scope, $timeout){
+    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', function($scope, $timeout, suService){
+
+        suService.getClienImages().then(function(data) {
+            console.log(data);
+        });
 
         // Initial data:
 
         $scope.title = {text: 'some title', isEditing: false};
         $scope.permalink = {text: 'some-perma-link', isEditing: false};
-
         var tempData;
         $scope.startEditing = function(item) {
             tempData = angular.copy(item.text);
             item.isEditing = true;
         };
         $scope.cancelEditing = function(item) {
-            $timeout(function() {
-                item.text = tempData;
-                item.isEditing = false;
-            }, 100);
+            item.text = tempData;
+            item.isEditing = false;
+        };
+        $scope.saveEditing = function(item) {
+            item.isEditing = false;
         };
 
         var lastBannerLogo = {
@@ -69,9 +73,9 @@
         });
 
         $('#color-picker-anchor').chromoselector({
-            panel: true,
-            panelAlpha: true,
-            panelMode: 'hsl',
+            // panel: true,
+            // panelAlpha: true,
+            // panelMode: 'hsl',
             target: '.color-picker-wrapper',
             update: function () {
                 // Show a preview in the background of the input element
@@ -118,11 +122,30 @@
 
                                 // Update angular scope
                                 $timeout(function() {
-                                    $scope.oppa = 'wefwef';
                                     $scope.bannerLogo.image.src = url;
-                                    console.log($scope.bannerLogo.image.src);
                                     $scope.bannerLogo.editing = true;
+                                    startEditingBanner();
                                     $this.val('');
+
+                                    var cleanUrl = url.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, "");
+                                    // console.log(cleanUrl);
+
+                                    suService.uploadClientImage(url, file.type).then(function(data) {
+                                        console.log('success');
+                                        console.log(data.data);
+                                    });
+
+                                        // var xhr = FileAPI.upload({
+                                        //     url: '/api/client/default_client/images',
+                                        //     files: {img: img},
+                                        //     headers: {
+                                        //         'Content-Type': file.type,
+                                        //         'Content-Transfer-Encoding': 'BASE64'
+                                        //     },
+                                        //     upload: function (xhr, options){
+                                        //         console.log('op');
+                                        //     }
+                                        // });
                                 });
 
                                 var y1 = contHeight,
@@ -162,6 +185,29 @@
                 }
             });
         });
+    }]).factory('signUpFormService', ['$http', function($http) {
+        console.log('opp');
+        window.$http = $http;
+        var clientSlug = 'default_client';
+
+        return {
+            getClienImages: function() {
+                return $http({
+                    url: '/api/client/'+clientSlug+'/images',
+                    method: 'GET'
+                });
+            },
+            uploadClientImage: function(src, type) {
+                return $http({
+                    url: '/api/client/'+clientSlug+'/images',
+                    method: 'POST',
+                    data: {
+                        data: src,
+                        type: type
+                    }
+                });
+            }
+        };
     }]);
 
 })(jQuery);

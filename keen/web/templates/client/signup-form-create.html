@@ -16,15 +16,15 @@
               <input type="text"
                      class='form-control page-title'
                      ng-model='title.text'
-                     ng-focus='startEditing(title)'
-                     ng-blur='cancelEditing(title)'>
+                     ng-focus='saveEditing(title)'>
             </div>
           </div>
           <div class="col-md-2">
             <button class="btn btn-primary btn-sm pull-right mtx"
                     ng-click='startEditing(title)'>Save</button>
 
-            <button class="btn btn-default btn-sm pull-right mrs mtx">Cancel</button>
+            <button class="btn btn-default btn-sm pull-right mrs mtx"
+                    ng-click='cancelEditing(title)'>Cancel</button>
           </div>
         </div>
 
@@ -36,15 +36,15 @@
               <input type="text"
                      class='form-control input-sm permalink js-editable-trigger'
                      ng-model='permalink.text'
-                     ng-focus='startEditing(permalink)'
-                     ng-blur='cancelEditing(permalink)'>
+                     ng-focus='startEditing(permalink)'>
             </div>
           </div>
           <div class="col-md-2">
             <button class="btn btn-primary btn-sm pull-right"
-                    ng-click='startEditing(permalink)'>Save</button>
+                    ng-click='saveEditing(permalink)'>Save</button>
 
-            <button class="btn btn-default btn-sm pull-right mrs">Cancel</button>
+            <button class="btn btn-default btn-sm pull-right mrs"
+                    ng-click='cancelEditing(permalink)'>Cancel</button>
           </div>
         </div>
 
@@ -71,7 +71,7 @@
               </button>
               <i class="dropdown-arrow dropdown-arrow-inverse"></i>
               <ul class="dropdown-menu dropdown-inverse">
-                <li><a href="#fakelink">Choose from photos</a></li>
+                <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
                 <li class="js-fileapi-wrapper" id="choose">
                   <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
                   <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="banner-logo" type="file" />
@@ -162,7 +162,7 @@
               </button>
               <i class="dropdown-arrow dropdown-arrow-inverse"></i>
               <ul class="dropdown-menu dropdown-inverse">
-                <li><a href="#fakelink">Choose from photos</a></li>
+                <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
                 <li class="js-fileapi-wrapper">
                   <a href="#fakelink" class="js-trigger" data-target='#upload-background-image'>Upload Photo</a>
                   <input id='upload-background-image' accept="image/*" class='hidden js-upload-banner' name="background-image" type="file" />

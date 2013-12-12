@@ -574,7 +574,7 @@ section {
   user-select: none;
   pointer-events: none;
 }
-.su-form-wrapper .image-loaded .instructions {
+.su-form-wrapper .editing .instructions {
   display: block;
 }
 .su-form-wrapper .instructions > i {
