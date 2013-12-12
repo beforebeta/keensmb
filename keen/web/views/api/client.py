@@ -366,7 +366,7 @@ class ImageList(APIView):
 
         try:
             image.save()
-        except DatabasError:
+        except DatabaseError:
             logger.exception('Failed to save image')
             raise
 
