@@ -9,6 +9,7 @@ from django.db import DatabaseError
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 
@@ -357,11 +358,13 @@ class ImageList(APIView):
             logger.exception('Failed to decode image content using BASE64')
             return Response(status=status.HTTP_BAD_REQUEST)
 
-        name = sha256(content).hexdigest()
+        name = '.'.join((sha256(content).hexdigest(),
+                         content_type.split('/', 1)[1]))
+        content = default_storage.save(name, ContentFile(content))
 
         image = Image()
         image.client = client
-        image.file = ContentFile(content, name)
+        image.file = content
         image.content_type = content_type
 
         try:

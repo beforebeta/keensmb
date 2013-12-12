@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django_hstore import hstore
@@ -28,7 +29,7 @@ class Image(Timestamps):
     )
 
     client = models.ForeignKey('Client', related_name='images')
-    file = models.ImageField(upload_to=image_upload_path)
+    file = models.ImageField(upload_to=image_upload_path, max_length=1024)
     content_type = models.CharField(max_length=255)
     type = models.CharField(max_length=1, choices=IMAGE_TYPES)
 
