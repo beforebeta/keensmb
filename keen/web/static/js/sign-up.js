@@ -28,8 +28,8 @@
 
         var lastBannerLogo = {
             image: {
-                src: '',
-                // src: 'http://static.freepik.com/free-photo/fantasy-banner_8479.jpg',
+                // src: '',
+                src: 'http://static.freepik.com/free-photo/fantasy-banner_8479.jpg',
                 top: 0,
                 left: 0
             },
@@ -44,8 +44,10 @@
             lastBannerLogo = angular.copy($scope.bannerLogo);
         };
         $scope.cancelEditingBanner = function() {
-            stopEditingBanner();
-            $scope.bannerLogo = angular.copy(lastBannerLogo);
+            $timeout(function() {
+                $scope.bannerLogo = angular.copy(lastBannerLogo);
+                stopEditingBanner(lastBannerLogo);
+            });
         };
         function startEditingBanner() {
             $scope.bannerLogo.editing = true;
@@ -122,16 +124,14 @@
 
                                 // Update angular scope
                                 $timeout(function() {
-                                    $scope.bannerLogo.image.src = url;
+                                    var cleanUrl = url.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, "");
                                     $scope.bannerLogo.editing = true;
                                     startEditingBanner();
                                     $this.val('');
 
-                                    var cleanUrl = url.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, "");
-                                    // console.log(cleanUrl);
-
-                                    suService.uploadClientImage(url, file.type).then(function(data) {
+                                    suService.uploadClientImage(cleanUrl, file.type).then(function(data) {
                                         console.log('success');
+                                        $scope.bannerLogo.image.src = data.data.url;
                                         console.log(data.data);
                                     });
 
@@ -169,7 +169,10 @@
                                         }
                                     },
                                     stop: function(event, ui) {
-                                        //####
+                                        $timeout(function() {
+                                            $scope.bannerLogo.image.top = ui.position.top;
+                                            $scope.bannerLogo.image.left = ui.position.left;
+                                        });
                                     }
                                 });
                             } else if( evt.type =='progress' ){
@@ -186,7 +189,6 @@
             });
         });
     }]).factory('signUpFormService', ['$http', function($http) {
-        console.log('opp');
         window.$http = $http;
         var clientSlug = 'default_client';
 
