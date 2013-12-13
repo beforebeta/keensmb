@@ -22,10 +22,13 @@ def signup_view(request, client_slug, form_slug):
     if request.method == 'POST':
         form = CustomerForm(client, request.POST)
         if form.is_valid():
-            customer = Customer(**form.cleaned_data)
+            customer = Customer()
             customer.client = client
             customer.source = CustomerSource.objects.filter(
                 slug=form_slug).first()
+            for name, value in form.cleaned_data.items():
+                setattr(customer, name, value)
+
             try:
                 customer.save()
             except DatabaseError:

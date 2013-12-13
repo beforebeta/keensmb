@@ -17,7 +17,13 @@
       <div class="w1">
         <header id="header">
         <div class="header-holder">
-          <strong class="logo"><a href="{{ client.url }}">{{ client.name }}</a></strong>
+          <strong class="logo">
+            {% if client.url %}
+            <a href="{{ client.url }}">{{ client.name }}</a>
+            {% else %}
+            {{ client.name }}
+            {% endif %}
+          </strong>
 
           {% comment %}
 
@@ -80,13 +86,13 @@
                   {{ form.email }}
                 </div>
                 <div class="row">
-                  <div class="col">
+                  <div class="col span-4">
                     {{ form.dob }}
                   </div>
-                  <div class="col">
+                  <div class="col span-4">
                     {{ form.address__zipcode }}
                   </div>
-                  <div class="col">
+                  <div class="col span-4">
                     {{ form.phone }}
                   </div>
                 </div>
