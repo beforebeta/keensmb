@@ -149,7 +149,7 @@ def _setup_core():
     _setup_field(_basic, 700, CUSTOMER_FIELD_NAMES.address__city,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__city], _string)
     _setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string, required=True)
     _setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__state], _string)
     _setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country,
