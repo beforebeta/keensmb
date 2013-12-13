@@ -156,12 +156,20 @@ Create new signup form. Expects JSON-formatted object with the following fields:
 		renderer.
 
 
-
-GET /api/client/:client_slug/signup_form/:form_slug
+GET /api/client/:client_slug/signup_forms/:form_slug
 ---------------------------------------------------
 
 Retrieve information on signup form with given slug. Returns single JSON-encoded signup form object.
 This can be used to verify if form with some slug already exists.
+
+
+PUT /api/client/:client_slug/signup_forms/:form_slug
+---------------------------------------------------
+
+Update form. Expects JSON-encoded object with the following fields:
+
+	``data``
+		Object with unspecified content
 
 
 GET /api/client/:client_slug/images

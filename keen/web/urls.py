@@ -21,7 +21,7 @@ client_api_urls = patterns(
             name='api_customer_profile'),
         url(r'^signup_forms$', SignupFormList.as_view(),
             name='api_signup_forms'),
-        url(r'^signup_form/(?P<form_slug>[\w-]+)$', SignupFormView.as_view(),
+        url(r'^signup_forms/(?P<form_slug>[\w-]+)$', SignupFormView.as_view(),
             name='api_signup_form'),
         url(r'^images$', ImageList.as_view(), name='api_images'),
     ))),
