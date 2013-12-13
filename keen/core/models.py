@@ -133,14 +133,20 @@ class Client(Timestamps):
     def get_dashboard(self):
         return self.dashboard_set.all()[0]
 
+    def get_top_customers(self):
+        return self.customers.extra(select={'full_name': "upper(core_customer.data -> 'full_name')"}).order_by('-full_name') #TODO: Change
+
     #Promotions
     def get_top_promotions(self, order_by='-valid_to'):
+        #TODO: Change
         return self.promotions.extra(select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}).order_by(order_by).order_by('-redemptions_percentage')
 
     def get_active_promotions(self, order_by='-valid_to'):
+        #TODO: Change
         return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)
 
     def get_active_promotions_count(self):
+        #TODO: Change
         return self.get_active_promotions().count()
 
 

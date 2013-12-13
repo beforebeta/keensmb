@@ -114,40 +114,18 @@
                     <th>Rank</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Location</th>
+{#                    <th>Location</th>#}
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Jhon Doe</td>
-                    <td>jhondoe@mail.com</td>
-                    <td>New York</td>
-                  </tr>
-                  <tr>
-                    <td>1<img src="{% static "images/icons/basket.svg" %}" width="30" height="30" alt=""></td></td>
-                    <td>Jhon Doe</td>
-                    <td>jhondoe@mail.com</td>
-                    <td>New York</td>
-                  </tr>
-                  <tr>
-                    <td>1<img src="{% static "images/icons/basket.svg" %}" width="30" height="30" alt=""></td></td>
-                    <td>Jhon Doe</td>
-                    <td>jhondoe@mail.com</td>
-                    <td>New York</td>
-                  </tr>
-                  <tr>
-                    <td>1<img src="{% static "images/icons/basket.svg" %}" width="30" height="30" alt=""></td></td>
-                    <td>Jhon Doe</td>
-                    <td>jhondoe@mail.com</td>
-                    <td>New York</td>
-                  </tr>
-                  <tr>
-                    <td>1<img src="{% static "images/icons/basket.svg" %}" width="30" height="30" alt=""></td></td>
-                    <td>Jhon Doe</td>
-                    <td>jhondoe@mail.com</td>
-                    <td>New York</td>
-                  </tr>
+                  {% for customer in dashboard.get_top_customers %}
+                      <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ customer.get_name }}</td>
+                        <td>{{ customer.get_email }}</td>
+{#                        <td>New York</td>#}
+                      </tr>
+                  {% endfor %}
                 </tbody>
               </table>
               <a class="dib" href="#">See more...</a>
@@ -158,7 +136,8 @@
     <div class="col-xs-5">
       <div class="kn-section active">
           <div class="kn-section-header">
-            <div class="mbn mtn">Updates</div>
+              <h6 class="mbn mtn">Active Promotions</h6>
+{#            <div class="mbn mtn">Updates</div>#}
           </div>
           <div class="kn-section-content">
             <div class="row small">
@@ -247,41 +226,41 @@
                     <span class="dib mbl">some text #4</span>
                   </div>
                 </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
               </ul>
             </div>
           </div>

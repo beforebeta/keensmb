@@ -82,7 +82,8 @@ html, body {
   margin-bottom: 0;
   background: #446cb2;
   border-radius: 0;
-  border-bottom: 1px solid #6b8bc2;
+  /*border-bottom: 1px solid #6b8bc2;*/
+  border-bottom: 1px solid #446cb2;
 }
 
 .kn-nav .navbar-brand {

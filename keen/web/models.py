@@ -55,6 +55,9 @@ class Dashboard(Timestamps):
         self.redemptions = 0
         self.save()
 
+    def get_top_customers(self):
+        return self.client.get_top_customers()[:5]
+
     def get_top_promotions(self):
         return self.client.get_top_promotions()[:4]
 
