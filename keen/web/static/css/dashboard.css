@@ -166,7 +166,7 @@
 }
 
 .dashboard .table tr td:first-child {
-  padding: 9px 10px 9px 0;
+  padding: 9px 10px 9px 10px;
 }
 
 .dashboard .table tr td {

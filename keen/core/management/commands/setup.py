@@ -227,6 +227,8 @@ def _setup_core():
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.purchase__travel], _bool)
 
 def _setup_sample_data_promotions(client):
+    section("Creating Sample Promotions")
+
     dashboard, created = Dashboard.objects.get_or_create(client=client)
     now = datetime.datetime.now()
     p, created = Promotion.objects.get_or_create(

@@ -15,8 +15,12 @@ logger = logging.getLogger(__name__)
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def dashboard(request):
-    return render(request, 'client/dashboard.html')
-
+    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    context = {
+        'client': client,
+        'dashboard': client.get_dashboard()
+    }
+    return render_to_response('client/dashboard.html', context, context_instance=RequestContext(request))
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')

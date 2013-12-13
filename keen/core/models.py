@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django_hstore import hstore
 from model_utils import Choices
 import operator
-
+import random
 
 class Timestamps(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -129,6 +129,19 @@ class Client(Timestamps):
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
+
+    def get_dashboard(self):
+        return self.dashboard_set.all()[0]
+
+    #Promotions
+    def get_top_promotions(self, order_by='-valid_to'):
+        return self.promotions.extra(select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}).order_by(order_by).order_by('-redemptions_percentage')
+
+    def get_active_promotions(self, order_by='-valid_to'):
+        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)
+
+    def get_active_promotions_count(self):
+        return self.get_active_promotions().count()
 
 
 class ClientUser(Timestamps):
@@ -354,12 +367,6 @@ class PromotionMedium(Timestamps):
     platform = models.CharField(max_length=10, choices=PROMOTION_PLATFORMS)
     account_info = hstore.DictionaryField() #account into per medium
 
-class PromotionManager(models.Manager):
-
-    def get_active_promotions(self, order_by='-valid_to'):
-        return self.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)
-
-
 class Promotion(Timestamps):
     PROMOTION_STATUS = Choices(
         ('draft', 'Draft'),
@@ -369,7 +376,7 @@ class Promotion(Timestamps):
         ('expired', 'Expired'),
     )
 
-    client = models.ForeignKey(Client)
+    client = models.ForeignKey(Client, related_name='promotions')
     name = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=15, choices=PROMOTION_STATUS)
     description = models.TextField(null=True, blank=True)
@@ -387,4 +394,11 @@ class Promotion(Timestamps):
 
     analytics = hstore.DictionaryField(null=True, blank=True)
 
-    objects = PromotionManager()
+    def save(self, *args, **kwargs):
+        if not self.analytics:
+            self.analytics = {
+                "total_sent"    : str(random.randrange(500, 1000)),
+                "redemptions"   : str(random.randrange(100, 500)),
+            }
+            self.analytics["redemptions_percentage"] = str(int((float(self.analytics["redemptions"])/float(self.analytics["total_sent"]))*100))
+        super(Promotion, self).save(*args, **kwargs)
