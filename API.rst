@@ -175,6 +175,9 @@ GET /api/client/:client_slug/images
 
 Retrieve JSON-encoded list of Image objects. Each object contains following fields:
 
+        ``id``
+                Unique image ID
+
 	``type``
 		Information about image type. Currently, this filed can have one of the following values:
 
@@ -194,9 +197,31 @@ Retrieve JSON-encoded list of Image objects. Each object contains following fiel
 POST /api/client/:client_slug/images
 ------------------------------------
 
-Upload new image. Content-Type request header must be set to actual image format, ex. "image/png".
-Content-Transfer-Encoding request header must be set to BASE64. Body of POST request must be
-BASE64-encoded image data.
+Upload new image. Expects JSON-formatted objects with the following fields:
+
+	``type``
+		MIME type of file being uploaded
+
+	``data``
+		Base64-encoded file content
+
 
 If request handled without errors response will have JSON-encoded image object matching uploaded image
-with fields as in above API GET call to the same URL.
+with the following fields:
+
+        ``id``
+                Unique image ID
+
+	``content_type``
+		MIME type of file
+	
+	``url``
+		URL of file. This URL is generated based on file content so uploading exactly the same
+		file more than once would be responded with HTTP 400 status code.
+
+
+DELETE /api/client/:client_slug/:image_id
+-----------------------------------------
+
+Delete existing image. Returns response with 204 HTTP status code and no content if image was deleted.
+Returns HTTP code 404 if image was not found and code 400 if image was not deleted for any other reson.

@@ -1,6 +1,8 @@
 from django.db import models
-from django_hstore import hstore
+
 from model_utils import Choices
+from jsonfield import JSONField
+
 from keen.core.models import Timestamps, Client, CustomerField
 
 
@@ -26,11 +28,9 @@ class SignupForm(Timestamps):
 
     client = models.ForeignKey(Client, related_name='signup_forms')
     slug = models.SlugField()
-    fields = models.ManyToManyField(CustomerField)
     status = models.CharField(max_length=32, choices=STATUS_NAMES,
                               default=STATUS_NAMES.draft)
-    data = hstore.DictionaryField(db_index=True)
-    objects = hstore.HStoreManager()
+    data = JSONField()
 
     class Meta:
         unique_together = ('client', 'slug')

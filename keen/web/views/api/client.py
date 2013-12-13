@@ -338,12 +338,16 @@ class ImageList(APIView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug):
+        """Retrieve list of images
+        """
         client = get_object_or_404(Client, slug=client_slug)
 
         return Response(ImageSerializer(client.images.all(), many=True).data)
 
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug):
+        """Upload new image
+        """
         client = get_object_or_404(Client, slug=client_slug)
 
         try:
@@ -376,3 +380,21 @@ class ImageList(APIView):
             raise
 
         return Response(ImageSerializer(image).data, status=status.HTTP_201_CREATED)
+
+    @method_decorator(ensure_csrf_cookie)
+    def delete(self, client_slug, image_id):
+        """Delete image
+        """
+        client = get_object_or_404(Client, slug=client_slug)
+        try:
+            Image.objects.get(client=client, id=int(image_id)).delete()
+        except Image.DoesNotExist:
+            logger.error('Attempt to delete non-existing image')
+            status = status.HTTP_404_NOT_FOUND
+        except DatabaseError:
+            logger.exception('Failed to delete image')
+            status = status.HTTP_500_INTERNAL_SERVICE_ERROR
+        else:
+            status = status.HTTP_204_NO_CONTENT
+
+        return Response(status=status)

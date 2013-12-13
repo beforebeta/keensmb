@@ -9,7 +9,7 @@ Django>=1.6
 django-hstore
 djangorestframework
 
-pil
+django-jsonfield
 
 # Templates
 django_compressor
