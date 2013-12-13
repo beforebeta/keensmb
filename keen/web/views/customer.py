@@ -26,7 +26,10 @@ def signup_view(request, client_slug, form_slug):
             customer.client = client
             customer.source = CustomerSource.objects.filter(
                 slug=form_slug).first()
-            customer.data = form.cleaned_data
+
+            for name, value in form.cleaned_data.items():
+                customer.data[name] = value
+
             try:
                 customer.save()
             except DatabaseError:
