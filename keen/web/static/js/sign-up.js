@@ -8,6 +8,9 @@
         suService.getClienImages().then(function(data) {
             console.log(data);
         });
+        suService.getClientForms().then(function(data) {
+            console.log(data);
+        });
 
         // Initial data:
 
@@ -241,20 +244,34 @@
                 }
             };
 
-            var bannerLogoImgData = suService.uploadClientImage(cleanBase64($scope.bannerLogo.image.src), $scope.bannerLogo.image.type),
-                backgroundImageData = suService.uploadClientImage(cleanBase64($scope.backgroundImage.image.src), $scope.backgroundImage.image.type);
+            var imagesData = [];
 
-            $q.all([bannerLogoImgData, backgroundImageData]).then(function(images) {
-                var bannerLogoSrc = images[0].data.url,
-                    backgroundImageSrc = images[1].data.url;
+            if ($scope.bannerLogo.image.src !== defaultImageSrc) {
+                var bannerLogoImgData = suService.uploadClientImage(cleanBase64($scope.bannerLogo.image.src), $scope.bannerLogo.image.type);
+                imagesData.push(bannerLogoImgData);
+            }
 
-                formData.bannerLogo.imageSrc = bannerLogoSrc;
-                formData.backgroundImage.imageSrc = backgroundImageSrc;
+            if ($scope.backgroundImage.image.src !== defaultImageSrc) {
+                var backgroundImageData = suService.uploadClientImage(cleanBase64($scope.backgroundImage.image.src), $scope.backgroundImage.image.type);
+                imagesData.push(backgroundImageData);
+            }
 
-                suService.uploadFormData(formData, $scope.permalink.text).then(function(res) {
-                    console.log('res: ', res);
+            $q.all(imagesData).then(function(images) {
+                _.each(images, function(image) {
+                    if (image.data.target === 'banner') {
+                        formData.bannerLogo.imageSrc = image.data.url;
+                    } else if (image.data.target === 'background') {
+                        formData.backgroundImage.imageSrc = image.data.url;
+                    }
                 });
 
+                suService.uploadFormData(formData, $scope.permalink.text).then(function(res) {
+                    alert('FORM Created');
+                    console.log('res: ', res);
+                }, function(err) {console.error(err);});
+
+            }, function(err) {
+                console.error(err);
             });
 
         };
@@ -363,18 +380,19 @@
             });
         });
     }]).factory('signUpFormService', ['$http', function($http) {
-        var clientSlug = $('#clientSlug').text();
+        var clientSlug = $('#clientSlug').text(),
+            apiClientUrl = '/api/client/'+clientSlug;
 
         return {
             getClienImages: function() {
                 return $http({
-                    url: '/api/client/'+clientSlug+'/images',
+                    url: apiClientUrl+'/images',
                     method: 'GET'
                 });
             },
             uploadClientImage: function(src, type) {
                 return $http({
-                    url: '/api/client/'+clientSlug+'/images',
+                    url: apiClientUrl+'/images',
                     method: 'POST',
                     data: {
                         data: src,
@@ -382,13 +400,19 @@
                     }
                 });
             },
+            getClientForms: function() {
+                return $http({
+                    url: apiClientUrl+'/signup_forms',
+                    method: 'GET'
+                });
+            },
             uploadFormData: function(data, slug) {
                 return $http({
-                    url: '/api/client/'+clientSlug+'/signup_forms',
+                    url: apiClientUrl+'/signup_forms',
                     method: 'POST',
                     data: {
-                        slug: slug,
-                        data: data
+                        data: data,
+                        slug: slug
                     }
                 });
             }
