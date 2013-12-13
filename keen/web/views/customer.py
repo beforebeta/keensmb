@@ -28,7 +28,7 @@ def signup_view(request, client_slug, form_slug):
                 slug=form_slug).first()
 
             for name, value in form.cleaned_data.items():
-                customer.data[name] = value
+                customer.data[name] = str(value)
 
             try:
                 customer.save()
