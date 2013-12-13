@@ -543,6 +543,11 @@ section {
   -ms-transition: opacity .3s;
   -o-transition: opacity .3s;
   transition: opacity .3s;
+  opacity: 1;
+}
+.su-form:not(:hover) .hover-vis {
+  opacity: 0;
+  visibility: hidden;
 }
 /*.su-form-wrapper .banner-logo:hover .hover-vis,
 .su-form-wrapper .background-image:hover .hover-vis {
@@ -628,8 +633,17 @@ section {
   width: 300px;
 }
 
+.su-form-appearance {
+  display: block;
+  position: absolute;
+  left: 100%;
+  top: 14px;
+  padding-left: 3px;
+}
+
 .su-form-header {
-  font-size: 24px;
+  font-size: 22px;
+  line-height: 1.1;
 }
 .su-form .su-form-text {
   font-size: 16px;
@@ -656,6 +670,7 @@ section {
 .su-editable:not(.editing) .form-control {
   border-color: transparent;
   padding-left: 0;
+  background: none;
 }
 .su-editable:not(.editing) .form-control:hover {
   border: 2px dashed #bdc3c7;

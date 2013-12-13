@@ -16,12 +16,12 @@
               <input type="text"
                      class='form-control page-title'
                      ng-model='title.text'
-                     ng-focus='saveEditing(title)'>
+                     ng-focus='startEditing(title)'>
             </div>
           </div>
           <div class="col-md-2">
             <button class="btn btn-primary btn-sm pull-right mtx"
-                    ng-click='startEditing(title)'>Save</button>
+                    ng-click='saveEditing(title)'>Save</button>
 
             <button class="btn btn-default btn-sm pull-right mrs mtx"
                     ng-click='cancelEditing(title)'>Cancel</button>
@@ -51,10 +51,12 @@
         <div class="su-form-wrapper mbm">
 
         <!-- Banner Logo -->
-          <div class="banner-logo js-image-container" ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'>
+          <div class="banner-logo js-image-container"
+               ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'
+               data-scope-object='bannerLogo'>
             <p class="placeholder">Banner Logo</p>
 
-            <img src='' ng-src="{{bannerLogo.image.src}}" alt="" class='js-banner-preview fade in' id='banner-preview'>
+            <img src='' ng-src="{{ bannerLogo.image.src }}" alt="" class='js-banner-preview fade in' id='banner-preview'>
 
             <div class="instructions hover-vis">
               <i class="fui-list dib mid"></i>
@@ -76,7 +78,10 @@
                   <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
                   <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="banner-logo" type="file" />
                 </li>
-                <li class='disabled js-reposition-banner'><a href="#fakelink">Reposition</a></li>
+                <li ng-class='{disabled: !bannerLogo.uploaded}'
+                    ng-click='startRepositionBanner()'>
+                  <a href="#fakelink">Reposition</a>
+                </li>
               </ul>
             </div>
 
@@ -87,22 +92,66 @@
                       ng-click='saveEditingBanner()'>Save Changes</button>
             </div>
           </div>
-          <div>{{ bannerLogo | json }}</div>
 
         <!-- Background Image -->
-          <div class="background-image js-image-container" ng-class='{"image-loaded" : bgImage.reposition}'>
+          <div class="background-image js-image-container"
+               ng-class='{"image-loaded" : backgroundImage.reposition, "editing": backgroundImage.editing}'
+               data-scope-object='backgroundImage'>
+
+
             <p class="placeholder">Background Image</p>
 
-            <img src="" alt="" class='js-banner-preview fade' id='background-image'>
+            <img src="" ng-src='{{ backgroundImage.image.src }}' alt="" class='js-banner-preview fade in' id='background-image'>
 
-            <div class="instructions hover-vis">
+            <div class="instructions hover-vis" ng-if='backgroundImage.reposition'>
               <i class="fui-list dib mid"></i>
               <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
             </div>
 
             <div class="su-form">
-              <h5 class='su-form-header'>Header 4 would have max 50 characters</h5>
-              <p class="su-form-text text-simple">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, ratione libero fugiat unde!</p>
+              <div class='hover-vis'>
+                <button class="btn btn-wide btn-sm btn-primary btn-secondary photo-actions"
+                        ng-click='toggleFormAppearance();'>
+                  <span class='mrl'>Edit Appearance</span>
+                  <i ng-if='!formAppearanceEditing' class="fui-arrow-right"></i>
+                  <i ng-if='formAppearanceEditing' class="fui-arrow-left"></i>
+                </button>
+
+                <div ng-show='formAppearanceEditing' class="su-form-appearance hover-vis">
+                  <div class="su-bg-color">
+                    <button class='btn btn-primary btn-wide'>Background Color</button>
+                    <input type="text" id="su-bg-color" class='hidden'>
+                  </div>
+
+                  <div class="su-text-color mtl">
+                    <button class='btn btn-primary btn-wide'>Text Color</button>
+                    <input type="text" id="su-text-color" class='hidden'>
+                  </div>
+                </div>
+              </div>
+
+              <div class='su-editable'
+                   ng-class='{"editing": formTitle.isEditing}'>
+                <textarea class='su-form-header col-xs-12 form-control non-resizing'
+                          rows='3'
+                          maxlength='75'
+                          ng-keypress='blurOnEnter($event)'
+                          ng-focus='startEditing(formTitle)'
+                          ng-blur='saveEditing(formTitle)'
+                          ng-model='formTitle.text'></textarea>
+              </div>
+
+              <p class="su-form-text text-simple su-editable"
+                 ng-class='{"editing": formDescription.isEditing}'>
+                <textarea class='col-xs-12 form-control non-resizing'
+                          rows='5'
+                          maxlength='75'
+                          ng-keypress='blurOnEnter($event)'
+                          ng-focus='startEditing(formDescription)'
+                          ng-blur='saveEditing(formDescription)'
+                          ng-model='formDescription.text'></textarea>
+              </p>
+
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group mbm">
@@ -120,7 +169,7 @@
                 <div class="col-md-6 pln">
                   <div class="form-group mbm">
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Birthday" id="datepicker-01">
+                      <input type="text" class="form-control datapicker" placeholder="Birthday">
                       <span class="input-group-btn">
                         <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
                       </span>
@@ -143,8 +192,6 @@
                 </div>
               </div>
               <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
-
-              <p class='su-form-text text-simple mtl'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea debitis corporis molestiae.</p>
             </div>
 
             <div class='color-picker-wrapper hover-vis'>
@@ -165,20 +212,42 @@
               <ul class="dropdown-menu dropdown-inverse">
                 <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
                 <li class="js-fileapi-wrapper">
-                  <a href="#fakelink" class="js-trigger" data-target='#upload-background-image'>Upload Photo</a>
-                  <input id='upload-background-image' accept="image/*" class='hidden js-upload-banner' name="background-image" type="file" />
+                  <a href="#fakelink"
+                     class="js-trigger"
+                     data-target='#upload-background-image'>Upload Photo</a>
+                  <input id='upload-background-image'
+                         accept="image/*"
+                         class='hidden js-upload-banner'
+                         name="background-image"
+                         type="file" />
                 </li>
-                <li class='disabled'><a href="#fakelink">Reposition</a></li>
-                <li class='disabled'><a href="#fakelink">Remvoe Photo</a></li>
+                <li ng-class='{disabled: !backgroundImage.uploaded}'
+                    ng-click='startRepositionBgImage()'>
+
+                  <a href="#fakelink">Reposition</a>
+                </li>
+                <li ng-class='{disabled: !backgroundImage.uploaded}'
+                    ng-click='removeBgImage()'>
+                  <a href="#fakelink">Remove Photo</a>
+                </li>
                 <li class='disabled'><a href="#fakelink">Add Photo Effect</a></li>
-                <li><a href="#fakelink" class='js-trigger' data-target='#color-picker-anchor'>Choose background color</a></li>
+                <li>
+                  <a href="#fakelink" ng-click='changeBgImageBgColor()'>Choose background color</a>
+                </li>
               </ul>
             </div>
 
+            <div class="action-buttons hover-vis">
+              <button class="btn btn-default btn-wide btn-embossed"
+                      ng-click='cancelEditingBgImage()'>Cancel</button>
+              <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
+                      ng-click='saveEditingBgImage()'>Save Changes</button>
+            </div>
           </div>
         </div>
 
-        <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm">Save & Publish</button>
+        <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm"
+                ng-click='saveForm()'>Save & Publish</button>
         <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
         <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Live Preview</button>
         <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>

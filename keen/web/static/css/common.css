@@ -299,3 +299,7 @@
 .navbar .nav ul li:only-child {
   border-radius: 6px;
 }
+
+.non-resizing {
+  resize: none;
+}

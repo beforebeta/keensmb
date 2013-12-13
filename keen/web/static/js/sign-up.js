@@ -3,7 +3,7 @@
 'use strict';
 
 (function($) {
-    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', function($scope, $timeout, suService){
+    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', function($scope, $timeout, suService, $q){
 
         suService.getClienImages().then(function(data) {
             console.log(data);
@@ -13,23 +13,37 @@
 
         $scope.title = {text: 'some title', isEditing: false};
         $scope.permalink = {text: 'some-perma-link', isEditing: false};
-        var tempData;
+        $scope.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false};
+        $scope.formDescription = {text: 'Description would have max 75 characters', isEditing: false};
+
+        $scope.blurOnEnter = function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+
+                $timeout(function() {
+                    $(e.currentTarget).trigger('blur');
+                });
+
+            }
+        };
+
         $scope.startEditing = function(item) {
-            tempData = angular.copy(item.text);
+            item.tempData = angular.copy(item.text);
             item.isEditing = true;
         };
         $scope.cancelEditing = function(item) {
-            item.text = tempData;
+            item.text = item.tempData;
             item.isEditing = false;
         };
         $scope.saveEditing = function(item) {
             item.isEditing = false;
         };
 
+        var defaultImageSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
         var lastBannerLogo = {
             image: {
-                // src: '',
-                src: 'http://static.freepik.com/free-photo/fantasy-banner_8479.jpg',
+                // transparent pixel
+                src: defaultImageSrc,
                 top: 0,
                 left: 0
             },
@@ -44,49 +58,212 @@
             lastBannerLogo = angular.copy($scope.bannerLogo);
         };
         $scope.cancelEditingBanner = function() {
-            $timeout(function() {
-                $scope.bannerLogo = angular.copy(lastBannerLogo);
-                stopEditingBanner(lastBannerLogo);
-            });
+            $scope.bannerLogo = angular.copy(lastBannerLogo);
+            stopEditingBanner(lastBannerLogo);
+            $('#banner-preview').css({'left': $scope.bannerLogo.image.left, 'top': $scope.bannerLogo.image.top});
         };
+
+        $scope.startRepositionBanner = function() {
+            if (!$scope.bannerLogo.editing) {
+                startEditingBanner();
+            }
+        };
+
+        var $bannerLogo = $('.banner-logo .js-banner-preview');
         function startEditingBanner() {
             $scope.bannerLogo.editing = true;
-            $('.banner-logo .js-banner-preview').draggable('enable');
+            $scope.bannerLogo.uploaded = true;
+
+            if ($bannerLogo.hasClass('ui-draggable')) {
+                $bannerLogo.draggable('enable');
+            }
         }
         function stopEditingBanner() {
             $scope.bannerLogo.editing = false;
-            $('.banner-logo .js-banner-preview').draggable('disable');
+
+            if ($bannerLogo.hasClass('ui-draggable')) {
+                $bannerLogo.draggable('disable');
+            }
         }
 
-        $scope.bgImage = {
+        var lastBackgroundImage = {
+            image: {
+                // transparent pixel
+                src: defaultImageSrc,
+                top: 0,
+                left: 0
+            },
+            backgroundColor: '',
             uploaded: false,
-            reposition: false
+            reposition: false,
+            editing: false,
         };
 
+        $scope.backgroundImage = angular.copy(lastBackgroundImage);
+        $scope.saveEditingBgImage = function() {
+            stopEditingBgImage();
+            lastBackgroundImage = angular.copy($scope.backgroundImage);
+        };
 
-        $('.instructions-wrap').on('selectstart, dragstart', function(e) {
-            e.preventdefault();
-        });
+        $scope.cancelEditingBgImage = function() {
+            $scope.backgroundImage = angular.copy(lastBackgroundImage);
+            stopEditingBgImage(lastBackgroundImage);
+            $('#banner-preview').css({'left': $scope.backgroundImage.image.left, 'top': $scope.backgroundImage.image.top});
+        };
 
-        $('.js-editable-section').on('focus', '.js-editable-trigger', function () {
-            $(this).closest('.js-editable-section').addClass('editing');
-        }).on('blur', '.js-editable-trigger', function () {
-            $(this).closest('.js-editable-section').removeClass('editing');
-        });
+        $scope.startRepositionBgImage = function() {
+            if (!$scope.backgroundImage.editing) {
+                startEditingBgImage();
+            }
+        };
 
-        $('#color-picker-anchor').chromoselector({
+        var $backgroundImage = $('.background-image .js-banner-preview');
+        function startEditingBgImage() {
+            $scope.backgroundImage.editing = true;
+            $scope.backgroundImage.uploaded = true;
+            $scope.backgroundImage.reposition = true;
+
+            if ($backgroundImage.hasClass('ui-draggable')) {
+                $backgroundImage.draggable('enable');
+            }
+        }
+
+        function stopEditingBgImage() {
+            $scope.backgroundImage.editing = false;
+            $scope.backgroundImage.reposition = false;
+
+            if ($backgroundImage.hasClass('ui-draggable')) {
+                $backgroundImage.draggable('disable');
+            }
+
+            $('.background-image').css('background-color', $scope.backgroundImage.backgroundColor);
+            $('#color-picker-anchor').chromoselector('hide');
+        }
+
+        $scope.removeBgImage = function() {
+            $scope.backgroundImage.image.src = defaultImageSrc;
+            $scope.backgroundImage.uploaded = false;
+        };
+
+        var $bgImageColorPicker = $('#color-picker-anchor');
+
+        $bgImageColorPicker.chromoselector({
             // panel: true,
             // panelAlpha: true,
             // panelMode: 'hsl',
             target: '.color-picker-wrapper',
-            update: function () {
-                // Show a preview in the background of the input element
-                $('.background-image').css(
-                    'background-color',
-                    $(this).chromoselector('getColor').getHexString()
-                );
-            }
+            update: updateBgImageBgColor
         });
+
+        $scope.changeBgImageBgColor = function() {
+            $bgImageColorPicker.chromoselector('show');
+            $scope.backgroundImage.editing = true;
+        };
+
+        function updateBgImageBgColor() {
+            // Show a preview in the background of the input element
+            var color = $bgImageColorPicker.chromoselector('getColor').getHexString();
+            $('.background-image').css('background-color', color);
+
+            $scope.backgroundImage.backgroundColor = color;
+        }
+
+        $scope.form = {};
+        var $formBgColorPicker = $('#su-bg-color');
+        $formBgColorPicker.chromoselector({
+            target: '.su-bg-color',
+            update: updateFormBgColor
+        });
+        function updateFormBgColor() {
+            // Show a preview in the background of the input element
+            var color = $formBgColorPicker.chromoselector('getColor').getHexString();
+            $('.su-form').css('background-color', color);
+
+            $scope.form.textColor = color;
+        }
+
+        var $formTextColorPicker = $('#su-text-color');
+        $formTextColorPicker.chromoselector({
+            target: '.su-text-color',
+            update: updateFormTextColor
+        });
+
+        function updateFormTextColor() {
+            // Show a preview in the background of the input element
+            var color = $formTextColorPicker.chromoselector('getColor').getHexString();
+            $('.su-form').find('textarea').css('color', color);
+
+            $scope.form.backgroundColor = color;
+
+        }
+
+        $scope.formAppearanceEditing = false;
+        $scope.toggleFormAppearance = function() {
+            if (!$scope.formAppearanceEditing) {
+                $formBgColorPicker.chromoselector('show');
+                $formTextColorPicker.chromoselector('show');
+            }
+
+            $scope.formAppearanceEditing = !$scope.formAppearanceEditing;
+        };
+
+        var cleanBase64 = function(str) {
+            return str.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, '');
+        };
+
+        $scope.saveForm = function() {
+            var formData = {
+                pageTitle: $scope.title.text,
+                permalink: $scope.permalink.text,
+
+                bannerLogo: {
+                    imageSrc: '',
+                    position: {
+                        top: $scope.bannerLogo.image.top,
+                        left: $scope.bannerLogo.image.left
+                    }
+                },
+
+                backgroundImage: {
+                    imageSrc: '',
+                    position: {
+                        top: $scope.backgroundImage.image.top,
+                        left: $scope.backgroundImage.image.left
+                    },
+                    backgroundColor: $scope.backgroundImage.backgroundColor
+                },
+
+                form: {
+                    backgroundColor: $scope.form.backgroundColor,
+                    textColor: $scope.form.textColor,
+                    title: $scope.formTitle.text,
+                    description: $scope.formDescription.text
+                }
+            };
+
+            var bannerLogoImgData = suService.uploadClientImage(cleanBase64($scope.bannerLogo.image.src), $scope.bannerLogo.image.type),
+                backgroundImageData = suService.uploadClientImage(cleanBase64($scope.backgroundImage.image.src), $scope.backgroundImage.image.type);
+
+            $q.all([bannerLogoImgData, backgroundImageData]).then(function(images) {
+                var bannerLogoSrc = images[0].data.url,
+                    backgroundImageSrc = images[1].data.url;
+
+                formData.bannerLogo.imageSrc = bannerLogoSrc;
+                formData.backgroundImage.imageSrc = backgroundImageSrc;
+
+                suService.uploadFormData(formData, $scope.permalink.text).then(function(res) {
+                    console.log('res: ', res);
+                });
+
+            });
+
+        };
+
+        // $('.js-editable-section').on('focus', '.js-editable-trigger', function () {
+        //     $(this).closest('.js-editable-section').addClass('editing');
+        // }).on('blur', '.js-editable-trigger', function () {
+        //     $(this).closest('.js-editable-section').removeClass('editing');
+        // });
 
         $('.js-upload-banner').on('change', function(evt) {
 
@@ -95,7 +272,8 @@
                 $container = $this.closest('.js-image-container'),
                 $imgEl = $container.find('.js-banner-preview'),
                 contWidth = $container.width(),
-                contHeight = $container.height();
+                contHeight = $container.height(),
+                scopeObject = $container.data('scope-object');
 
             FileAPI.filterFiles(files, function (file, info){
                 if( /^image/.test(file.type) ){
@@ -115,7 +293,7 @@
 
                             if( evt.type == 'load' ){
                                 // Success
-                                var dataURL = evt.result;
+                                // var dataURL = evt.result;
                                 var url = img.toDataURL(file.type);
 
                                 // $imgEl.attr('src', url).addClass('in');
@@ -123,29 +301,20 @@
                                 $container.addClass('image-loaded');
 
                                 // Update angular scope
+
                                 $timeout(function() {
-                                    var cleanUrl = url.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, "");
-                                    $scope.bannerLogo.editing = true;
-                                    startEditingBanner();
+                                    if (scopeObject == 'bannerLogo') {
+                                        $scope.bannerLogo.editing = true;
+                                        $scope.bannerLogo.image.src = url;
+                                        $scope.bannerLogo.image.type = file.type;
+                                        startEditingBanner();
+                                    } else if (scopeObject == 'backgroundImage') {
+                                        $scope.backgroundImage.editing = true;
+                                        $scope.backgroundImage.image.src = url;
+                                        $scope.backgroundImage.image.type = file.type;
+                                        startEditingBgImage();
+                                    }
                                     $this.val('');
-
-                                    suService.uploadClientImage(cleanUrl, file.type).then(function(data) {
-                                        console.log('success');
-                                        $scope.bannerLogo.image.src = data.data.url;
-                                        console.log(data.data);
-                                    });
-
-                                        // var xhr = FileAPI.upload({
-                                        //     url: '/api/client/default_client/images',
-                                        //     files: {img: img},
-                                        //     headers: {
-                                        //         'Content-Type': file.type,
-                                        //         'Content-Transfer-Encoding': 'BASE64'
-                                        //     },
-                                        //     upload: function (xhr, options){
-                                        //         console.log('op');
-                                        //     }
-                                        // });
                                 });
 
                                 var y1 = contHeight,
@@ -170,8 +339,13 @@
                                     },
                                     stop: function(event, ui) {
                                         $timeout(function() {
-                                            $scope.bannerLogo.image.top = ui.position.top;
-                                            $scope.bannerLogo.image.left = ui.position.left;
+                                            if (scopeObject === 'bannerLogo') {
+                                                $scope.bannerLogo.image.top = ui.position.top;
+                                                $scope.bannerLogo.image.left = ui.position.left;
+                                            } else if (scopeObject === 'backgroundImage') {
+                                                $scope.backgroundImage.image.top = ui.position.top;
+                                                $scope.backgroundImage.image.left = ui.position.left;
+                                            }
                                         });
                                     }
                                 });
@@ -189,8 +363,7 @@
             });
         });
     }]).factory('signUpFormService', ['$http', function($http) {
-        window.$http = $http;
-        var clientSlug = 'default_client';
+        var clientSlug = $('#clientSlug').text();
 
         return {
             getClienImages: function() {
@@ -208,8 +381,23 @@
                         type: type
                     }
                 });
+            },
+            uploadFormData: function(data, slug) {
+                return $http({
+                    url: '/api/client/'+clientSlug+'/signup_forms',
+                    method: 'POST',
+                    data: {
+                        slug: slug,
+                        data: data
+                    }
+                });
             }
         };
     }]);
+
+    $('.instructions-wrap').on('selectstart, dragstart', function(e) {
+        e.preventdefault();
+    });
+
 
 })(jQuery);
