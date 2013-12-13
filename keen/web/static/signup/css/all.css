@@ -325,7 +325,7 @@ figure {margin:0; padding:0;}
 	clear:both;
 }
 .container .account-form .row+.row{margin:10px 0 0;}
-.account-form #dob, .account-form #zip, .account-form #phone {
+.account-form #dob, .account-form #address__zipcode, .account-form #phone {
 	width: 111px;
 }
 .container .account-form .col{
