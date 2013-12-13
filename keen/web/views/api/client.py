@@ -179,7 +179,7 @@ class CustomerList(APIView):
                 customer.save()
             except DatabaseError:
                 logger.exception('Failed to save new customer')
-                return Result(status=status.HTTTP_500_SERVER_ERROR)
+                return Response(status=status.HTTTP_500_SERVER_ERROR)
 
         return Response(CustomerSerializer(customer).data, status=status.HTTP_201_CREATED)
 
@@ -254,9 +254,9 @@ class SignupFormList(APIView):
             # check if form with this permalink exists
             permalink = request.GET['check'].strip()
             if not permalink:
-                return Result(status=status.HTTP_400_BAD_REQUEST)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             found = client.signup_forms.filter(permalink=permalink).exists()
-            return Result(('not found', 'found')[found])
+            return Response(('not found', 'found')[found])
         else:
             forms = list(client.signup_forms.all())
             return Response(SignupFormSerializer(forms, many=True).data)
@@ -298,7 +298,7 @@ class SignupFormView(APIView):
         client = get_object_or_404(Client, slug=client_slug)
         form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
-        return Result(SignupFormSerializer(form).data)
+        return Response(SignupFormSerializer(form).data)
 
     @method_decorator(ensure_csrf_cookie)
     def put(self, request, client_slug, form_slug):
