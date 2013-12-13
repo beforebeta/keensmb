@@ -353,6 +353,7 @@ class ImageList(APIView):
         try:
             content_type = request.DATA['type']
             content = request.DATA['data']
+            target = request.DATA['target']
         except KeyError:
             logger.exception('Failed to get expected request data')
             return Response(status=status.HTTP_BAD_REQUEST)
@@ -372,6 +373,7 @@ class ImageList(APIView):
         image.client = client
         image.file = content
         image.content_type = content_type
+        image.type = target
 
         try:
             image.save()
