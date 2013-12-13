@@ -1,0 +1,231 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+
+{% block content %}
+  <!-- Content -->
+  <section class='clearfix promotions'>
+
+   <div class="row">
+    <div class="col-xs-3 pln">
+      <ul class="promotions-list">
+        <li class="prom-active active"><a href="#">Active Promotions</a></li>
+        <li class="prom-upcoming active"><a href="#">Upcoming Promotions</a></li>
+        <li class="prom-awaiting active"><a href="#">Awaiting Approval</a></li>
+        <li class="prom-expired active"><a href="#">Expired Promotions</a></li>
+      </ul>
+    </div>
+    <div class="col-xs-9 promotions-border-right">
+      <div class="row">
+        <div class="col-xs-3 mll mtm pll">
+          <select class="simple full promotions-select">
+            <option value="sort by" disabled selected>sort by</option>
+            <option value="0">My Profile</option>
+            <option value="1">My Friends</option>
+            <option value="2">Messages</option>
+            <option value="3">My Settings</option>
+          </select>
+        </div>
+        <div class="col-xs-4 pull-right mtm">
+          <button class="btn btn btn-sm btn-default pull-right">
+            <span class="mrl">Create New Form</span>
+            <i class="fui-plus mll"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 mtl mll mbm pll">
+          <div class="kn-section promotions-section prom-active">
+            <div class="kn-section-header">
+              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
+              <time class="small pull-right white italic">
+                Expiring
+                <strong>Nov 2.2013</strong>
+              </time>
+            </div>
+            <div class="kn-section-content promotions-news">
+              <article class="col-sx-12 small">
+                <div>
+                  <h6 class="mts mbs">Name of campaing</h6>
+                </div>
+                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
+                <time class="dib mbl mtl">
+                  <em>Launched</em>
+                  Nov 2.2013
+                </time>
+                <div class="progress">
+                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1 promotions-button mtl">
+          <button href="#" class="btn btn-lg btn-primary pbs">
+            <i class="fui-new dib"></i>
+            <span class="dib small">Edit</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-default pbs mts">
+            <i class="fui-eye dib"></i>
+            <span class="dib small">Preview</span>
+          </button>
+          <button href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts">
+            <i class="fui-cross dib"></i>
+            <span class="dib small">Delete</span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 mtl mll mbm pll">
+          <div class="kn-section promotions-section prom-upcoming">
+            <div class="kn-section-header">
+              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
+              <time class="small pull-right white italic">
+                Expiring
+                <strong>Nov 2.2013</strong>
+              </time>
+            </div>
+            <div class="kn-section-content promotions-news">
+              <article class="col-sx-12 small">
+                <div>
+                  <h6 class="mts mbs">Name of campaing</h6>
+                </div>
+                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
+                <time class="dib mbl mtl">
+                  <em>Launched</em>
+                  Nov 2.2013
+                </time>
+                <div class="progress">
+                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1 promotions-button mtl">
+          <button href="#" class="btn btn-lg btn-primary pbs">
+            <i class="fui-new dib"></i>
+            <span class="dib small">Edit</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-default pbs mts">
+            <i class="fui-eye dib"></i>
+            <span class="dib small">Preview</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-danger pbs mts">
+            <i class="fui-cross dib"></i>
+            <span class="dib small">Delete</span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 mtl mll mbm pll">
+          <div class="kn-section promotions-section prom-awaiting">
+            <div class="kn-section-header">
+              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
+              <time class="small pull-right white italic">
+                Expiring
+                <strong>Nov 2.2013</strong>
+              </time>
+            </div>
+            <div class="kn-section-content promotions-news">
+              <article class="col-sx-12 small">
+                <div>
+                  <h6 class="mts mbs">Name of campaing</h6>
+                </div>
+                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
+                <time class="dib mbl mtl">
+                  <em>Launched</em>
+                  Nov 2.2013
+                </time>
+                <div class="progress">
+                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1 promotions-button mtl">
+          <button href="#" class="btn btn-lg btn-primary pbs">
+            <i class="fui-new dib"></i>
+            <span class="dib small">Edit</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-default pbs mts">
+            <i class="fui-eye dib"></i>
+            <span class="dib small">Preview</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-danger pbs mts">
+            <i class="fui-cross dib"></i>
+            <span class="dib small">Delete</span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 mtl mll mbm pll">
+          <div class="kn-section promotions-section prom-expired">
+            <div class="kn-section-header">
+              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
+              <time class="small pull-right white italic">
+                Expiring
+                <strong>Nov 2.2013</strong>
+              </time>
+            </div>
+            <div class="kn-section-content promotions-news">
+              <article class="col-sx-12 small">
+                <div>
+                  <h6 class="mts mbs">Name of campaing</h6>
+                </div>
+                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
+                <time class="dib mbl mtl">
+                  <em>Launched</em>
+                  Nov 2.2013
+                </time>
+                <div class="progress">
+                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1 promotions-button mtl">
+          <button href="#" class="btn btn-lg btn-primary pbs">
+            <i class="fui-new dib"></i>
+            <span class="dib small">Edit</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-default pbs mts">
+            <i class="fui-eye dib"></i>
+            <span class="dib small">Preview</span>
+          </button>
+          <button href="#" class="btn btn-lg btn-danger pbs mts">
+            <i class="fui-cross dib"></i>
+            <span class="dib small">Delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+   </div>
+
+  </section>
+
+  <div id="promotionsModal" class="modal fade modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content center-block">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h4 class="modal-title">Are you sure?</h4>
+        </div>
+        <div class="modal-body">
+            <p class="mbn text-default">Are you sure you want to delete this promotion? This action is permanent and cannot be undone.</p>
+        </div>
+        <div class="modal-footer ptm pbn">
+          <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>
+          <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+{% endblock %}

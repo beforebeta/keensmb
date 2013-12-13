@@ -80,7 +80,7 @@
             </a>
             <ul class='pull-right'>
               <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-              <li><a href="#fakelink">.CSV file</a></li>
+              <li><a data-toggle='modal' data-target="#ModalCsvImport" href="#fakelink">.CSV file</a></li>
             </ul>
           </li>
           <li>
@@ -263,6 +263,118 @@
                   class="btn btn-default btn-wide btn-embossed pull-right"
                   data-dismiss="modal"
                   ng-click='cancelAddingFields()'>Cancel</button>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div id="ModalCsvImport" class="ModalCsvImport modal fade in" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h6 class="modal-title">Import .CSV File</h6>
+        </div>
+        <div class="modal-body mbl">
+            <div class="steps mbl">
+              <div class="step-one progres">1
+                <span>Upload File</span>
+              </div>
+              <div class="progres-line"></div>
+              <div class="step-two">2
+                <span>Selecy Mapping</span>
+              </div>
+              <div class="progres-line"></div>
+              <div class="step-three">3
+                <span>Import Status</span>
+              </div>
+            </div>
+            <div class="upload ptm pbl mbl">
+              <span class="mtx">Drag Files Here</span>
+              <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">
+                Browse...
+                <input type="file" id="popup-ulpoad-csvfile" value="Browse...">
+              </div>
+            </div>
+            <div  class="added-file mtl">
+              <div>
+                <span>filname.csv (125MB)</span>
+                <button type="button" class="close">
+                  <i class="fui-cross"></i>
+                </button>
+              </div>
+              <button type="button" class="pts pbs btn btn-default btn-embossed pull-right">Upload</button>
+            </div>
+            <div class="download-success text-primary">Sucess!</div>
+            <div style=""  class="download-progress mtl ptm text-muted small">
+              <div class="result pbs">
+                <span class="pull-left">
+                  Reading file...
+                </span>
+                <span class="pull-right">
+                  25MB of 100MB
+                </span>
+              </div>
+              <div class="progress mbn">
+                <div class="progress-bar" style="width: 40%;"></div>
+              </div>
+              <div class="result pts">
+                <span class="pull-left">
+                  Time remaining
+                </span>
+                <span class="pull-right">
+                  38 seconds
+                </span>
+              </div>
+            </div>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>text1</td>
+                  <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
+                  <td>
+                    <div class="input-group pull-right chosen">
+                      <input type="text" class="form-control input-sm prx" placeholder="Search for field" value="Email">
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn input-sm pln"><i class="dib fui-cross"></i></button>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>text1</td>
+                  <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
+                  <td>
+                    <div class="input-group pull-right">
+                      <input type="text" class="form-control input-sm prx" placeholder="Search for field">
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>text1</td>
+                  <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
+                  <td>
+                    <div class="input-group pull-right">
+                      <input type="text" class="form-control input-sm prx" placeholder="Search for field">
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <div class="modal-footer mtl ptn pbn">
+          <button type="button" class="mtl mbm btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Next</button>
+          <button type="button" class="mtl mbm btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
 
       </div><!-- /.modal-content -->
