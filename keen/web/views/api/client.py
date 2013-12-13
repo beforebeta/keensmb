@@ -355,14 +355,14 @@ class ImageList(APIView):
             content = request.DATA['data']
             target = request.DATA['target']
         except KeyError:
-            logger.exception('Failed to get expected request data')
-            return Response(status=status.HTTP_BAD_REQUEST)
+            logger.exception('Failed to get expected request data: %r' % request.DATA)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
             content = b64decode(content)
         except TypeError:
             logger.exception('Failed to decode image content using BASE64')
-            return Response(status=status.HTTP_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         name = '.'.join((sha256(content).hexdigest(),
                          content_type.split('/', 1)[1]))
