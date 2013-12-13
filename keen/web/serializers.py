@@ -92,7 +92,7 @@ class ImageSerializer(DynamicSerializer):
 
     class Meta:
         model = Image
-        fields = ('id', 'target', 'content_type', 'url')
+        fields = ('id', 'type', 'content_type', 'url')
 
 
 class SignupFormSerializer(DynamicSerializer):
