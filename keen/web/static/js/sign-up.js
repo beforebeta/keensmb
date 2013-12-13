@@ -42,6 +42,14 @@
             item.isEditing = false;
         };
 
+        $scope.validateSlug = function(slug) {
+            suService.checkFormSlug(slug.text).then(function(res) {
+                alert('Slug: "'+slug.text+'" already exists');
+            }, function(err) {
+                $scope.saveEditing(slug);
+            });
+        };
+
         var defaultImageSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
         var lastBannerLogo = {
             image: {
@@ -215,6 +223,16 @@
         };
 
         $scope.saveForm = function() {
+
+            // validate slug
+            suService.checkFormSlug($scope.permalink.text).then(function(res) {
+                alert('Slug: "'+ $scope.permalink.text+ '" already exists');
+            }, function(err) {
+                saveFormData();
+            });
+        };
+
+        var saveFormData = function() {
             var formData = {
                 pageTitle: $scope.title.text,
                 permalink: $scope.permalink.text,
@@ -247,12 +265,12 @@
             var imagesData = [];
 
             if ($scope.bannerLogo.image.src !== defaultImageSrc) {
-                var bannerLogoImgData = suService.uploadClientImage(cleanBase64($scope.bannerLogo.image.src), $scope.bannerLogo.image.type);
+                var bannerLogoImgData = suService.uploadClientImage(cleanBase64($scope.bannerLogo.image.src), $scope.bannerLogo.image.type, 'banner');
                 imagesData.push(bannerLogoImgData);
             }
 
             if ($scope.backgroundImage.image.src !== defaultImageSrc) {
-                var backgroundImageData = suService.uploadClientImage(cleanBase64($scope.backgroundImage.image.src), $scope.backgroundImage.image.type);
+                var backgroundImageData = suService.uploadClientImage(cleanBase64($scope.backgroundImage.image.src), $scope.backgroundImage.image.type, 'background');
                 imagesData.push(backgroundImageData);
             }
 
@@ -273,7 +291,6 @@
             }, function(err) {
                 console.error(err);
             });
-
         };
 
         // $('.js-editable-section').on('focus', '.js-editable-trigger', function () {
@@ -390,14 +407,21 @@
                     method: 'GET'
                 });
             },
-            uploadClientImage: function(src, type) {
+            uploadClientImage: function(src, type, target) {
                 return $http({
                     url: apiClientUrl+'/images',
                     method: 'POST',
                     data: {
                         data: src,
-                        type: type
+                        type: type,
+                        target: target
                     }
+                });
+            },
+            checkFormSlug: function(slug) {
+                return $http({
+                    url: apiClientUrl+'/signup_forms/'+slug,
+                    method: 'HEAD'
                 });
             },
             getClientForms: function() {
