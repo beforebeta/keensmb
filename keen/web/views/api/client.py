@@ -266,10 +266,10 @@ class SignupFormList(APIView):
         client = get_object_or_404(Client, slug=client_slug)
 
         try:
-            slug = request.POST['slug']
-            data = request.POST['data']
+            slug = request.DATA['slug']
+            data = request.DATA['data']
         except KeyError:
-            logger.exception('Missing mandatory field')
+            logger.exception('Missing mandatory field %r' % request.DATA)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         form, created = SignupForm.objects.get_or_create(client=client, slug=slug)
@@ -277,7 +277,6 @@ class SignupFormList(APIView):
             logger.error('Form with slug %s already exists' % slug)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        form.fields = list(client.customer_fields.filter(name__in=fields))
         form.data = data
         try:
             form.save()
