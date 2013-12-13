@@ -178,7 +178,7 @@ String.prototype.repeat = function(num) {
     });
 
     // jQuery UI Datepicker
-    var datepickerSelector = '#datepicker-01';
+    var datepickerSelector = '.datapicker';
     $(datepickerSelector).datepicker({
       showOtherMonths: true,
       selectOtherMonths: true,

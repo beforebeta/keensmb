@@ -4,6 +4,7 @@
 @import 'dashboard.css';
 @import 'promotions.css';
 @import 'import-popups.css';
+@import 'signup-overview.css';
 
 html, body {
   height: 100%;
