@@ -22,16 +22,15 @@ def image_upload_path(image, filename):
 
 class Image(Timestamps):
 
-    IMAGE_TYPES = Choices(
-        ('s', 'Small'),
-        ('m', 'Medium'),
-        ('b', 'Big'),
+    IMAGE_TARGETS = Choices(
+        ('banner', 'Top Banner'),
+        ('background', 'Background Image'),
     )
 
     client = models.ForeignKey('Client', related_name='images')
     file = models.ImageField(upload_to=image_upload_path, max_length=1024)
     content_type = models.CharField(max_length=255)
-    type = models.CharField(max_length=1, choices=IMAGE_TYPES)
+    target = models.CharField(max_length=32, choices=IMAGE_TARGETS)
 
     @property
     def url(self):

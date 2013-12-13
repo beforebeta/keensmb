@@ -373,7 +373,7 @@ class ImageList(APIView):
         image.client = client
         image.file = content
         image.content_type = content_type
-        image.type = target
+        image.target = target
 
         try:
             image.save()
