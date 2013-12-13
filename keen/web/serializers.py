@@ -97,8 +97,6 @@ class ImageSerializer(DynamicSerializer):
 
 class SignupFormSerializer(DynamicSerializer):
 
-    fields = CustomerFieldSerializer(many=True)
-
     class Meta:
         model = SignupForm
-        fields = ('slug', 'fields', 'status', 'data')
+        fields = ('slug', 'status', 'data')
