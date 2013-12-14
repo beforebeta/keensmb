@@ -170,6 +170,9 @@ class CustomerSource(Timestamps):
     ref_id = models.IntegerField(null=True, blank=True)
     ref_source = models.CharField(max_length=50, null=True, blank=True)
 
+    #name = models.CharField(Client)
+    #is_bulk = models.BooleanField(default=False) #is this a source that creats customers in bulk - like mailchimp or setup
+
     def __unicode__(self):
         return self.slug
 

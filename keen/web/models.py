@@ -66,3 +66,4 @@ class Dashboard(Timestamps):
 
     def get_active_promotions_count(self):
         return self.client.get_active_promotions_count()
+

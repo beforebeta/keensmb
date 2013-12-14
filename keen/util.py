@@ -15,3 +15,4 @@ def get_last_day_of_month_as_dt():
     today = date.today()
     last_day = calendar.monthrange(today.year, today.month)[1]
     return datetime(year=today.year, month=today.month, day=last_day, hour=23, minute=59, second=59)
+
