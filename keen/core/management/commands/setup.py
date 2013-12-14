@@ -86,8 +86,7 @@ def _setup_core():
     #_setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode, "ZipCode", _string)
     #_setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state, "State", _string)
     #_setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country, "Country", _string)
-    #_setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone__mobile, "Mobile Phone", _string)
-    #_setup_field(_basic, 1200, CUSTOMER_FIELD_NAMES.phone__home, "Home Phone", _string)
+    #_setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone, "Phone", _string)
     #_setup_field(_basic, 1300, CUSTOMER_FIELD_NAMES.occupation, "Occupation", _string)
     #_setup_field(_basic, 1400, CUSTOMER_FIELD_NAMES.education, "Education", _string)
     #
@@ -150,15 +149,13 @@ def _setup_core():
     _setup_field(_basic, 700, CUSTOMER_FIELD_NAMES.address__city,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__city], _string)
     _setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string, required=True)
     _setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__state], _string)
     _setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__country], _string)
-    _setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone__mobile,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.phone__mobile], _string)
-    _setup_field(_basic, 1200, CUSTOMER_FIELD_NAMES.phone__home,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.phone__home], _string)
+    _setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone,
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.phone], _string)
     _setup_field(_basic, 1300, CUSTOMER_FIELD_NAMES.occupation,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.occupation], _string)
     _setup_field(_basic, 1400, CUSTOMER_FIELD_NAMES.education,
@@ -408,15 +405,15 @@ def _setup_sample_data():
 
     PageCustomerField.objects.get_or_create(page='db', client=client)
 
-    form, created = SignupForm.objects.get_or_create(client=client, slug='default')
+    form, created = SignupForm.objects.get_or_create(client=client, slug='signup')
     form.fields = CustomerField.objects.filter(
         client=client,
-        name__in='full_name email zipcode birthday phone gender'.split(),
+        name__in='full_name email address__zipcode dob phone gender'.split(),
     )
     form.data = {
-        'header': 'Default Client Sign-Up',
+        'title': 'Default Client Sign-Up',
         'intro': 'Sign-Up now and get free diiner for two',
-        'background_image': 'http://keensmb.com/media/default_client/images/bg.png',
+        'background_img': 'http://keensmb.com/static/special/clients/mdo/images/img11.png',
     }
     form.save()
     _setup_sample_data_promotions(client)

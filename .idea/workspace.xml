@@ -2,15 +2,64 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3646c680-0a28-4401-b1f7-8b7e8af1b0f4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/client/events/event_base.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/client/events/promo_new.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/css/dashboard.css" afterPath="$PROJECT_DIR$/keen/web/static/css/dashboard.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templates/client/dashboard.html" afterPath="$PROJECT_DIR$/keen/web/templates/client/dashboard.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/bg-container.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/bg-container_old.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/bg-intro-box.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/bg-nav-separator.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img10.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img11.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img4.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img5.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img6.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img7.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img8.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/img9.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/mauve_pixel.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite_purple.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite_purple2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite_purple3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite_purple4.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/sprite_purple5.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/images/white_pixel.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/migrations/0005_auto__del_field_signupform_data.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/migrations/0006_auto__add_field_signupform_data.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/core/migrations/0006_auto__chg_field_image_file.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/core/migrations/0007_auto__del_field_image_type__add_field_image_target.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/css/all.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/js/ie.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/css/import-popups.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/js/jquery-1.8.3.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/signup/js/jquery.main.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tracking/middleware.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/client/promotions-create.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/css/promotions.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/client/promotions.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/client/signup-form-overview.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/static/css/signup-overview.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/customer/signup.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/keen/web/templates/customer/signup_success.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/API.rst" afterPath="$PROJECT_DIR$/API.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/css/app.css" afterPath="$PROJECT_DIR$/keen/web/static/css/app.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/js/application.js" afterPath="$PROJECT_DIR$/keen/web/static/js/application.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/views/client.py" afterPath="$PROJECT_DIR$/keen/web/views/client.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/views/api/client.py" afterPath="$PROJECT_DIR$/keen/web/views/api/client.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/css/common.css" afterPath="$PROJECT_DIR$/keen/web/static/css/common.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/js/customer-list.js" afterPath="$PROJECT_DIR$/keen/web/static/js/customer-list.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/views/customer.py" afterPath="$PROJECT_DIR$/keen/web/views/customer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templates/client/customers.html" afterPath="$PROJECT_DIR$/keen/web/templates/client/customers.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/forms.py" afterPath="$PROJECT_DIR$/keen/web/forms.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/core/models.py" afterPath="$PROJECT_DIR$/keen/core/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/events/models.py" afterPath="$PROJECT_DIR$/keen/events/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/models.py" afterPath="$PROJECT_DIR$/keen/web/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templatetags/web_tags.py" afterPath="$PROJECT_DIR$/keen/web/templatetags/web_tags.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements/production.txt" afterPath="$PROJECT_DIR$/requirements/production.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/serializers.py" afterPath="$PROJECT_DIR$/keen/web/serializers.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/core/management/commands/setup.py" afterPath="$PROJECT_DIR$/keen/core/management/commands/setup.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/js/sign-up.js" afterPath="$PROJECT_DIR$/keen/web/static/js/sign-up.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templates/client/signup-form-create.html" afterPath="$PROJECT_DIR$/keen/web/templates/client/signup-form-create.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/urls.py" afterPath="$PROJECT_DIR$/keen/web/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="keensmb.iws" />
@@ -33,7 +82,28 @@
     <favorites_list name="keensmb" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/keen/web/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="0" selection-start="362" selection-end="362" vertical-scroll-proportion="-6.6" vertical-offset="0" max-vertical-offset="1185">
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="production.txt" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/requirements/production.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="0" selection-start="134" selection-end="150" vertical-scroll-proportion="0.18792711" vertical-offset="0" max-vertical-offset="878">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -65,8 +135,8 @@
         <option value="$PROJECT_DIR$/keen/core/models.py" />
         <option value="$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html" />
         <option value="$PROJECT_DIR$/keen/web/templates/client/events/promo_new.html" />
-        <option value="$PROJECT_DIR$/keen/web/models.py" />
         <option value="$PROJECT_DIR$/keen/web/static/css/dashboard.css" />
+        <option value="$PROJECT_DIR$/keen/web/models.py" />
       </list>
     </option>
   </component>
@@ -146,6 +216,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="requirements" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keensmb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keensmb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="keen" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -165,54 +249,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="keensmb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="keensmb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="keen" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="keensmb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="keensmb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="keen" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -227,8 +263,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/keen/web/templates" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -329,6 +365,9 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -350,9 +389,6 @@
       <option name="PUREUNITTEST" value="true" />
       <option name="PARAMS" value="" />
       <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -425,23 +461,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1680" height="1024" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289183" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21848226" sideWeight="0.57190263" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22154222" sideWeight="0.5717439" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21848226" sideWeight="0.42699116" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22154222" sideWeight="0.4271523" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32964602" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289183" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -461,22 +497,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/keen/events/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="33" selection-start="33" selection-end="33" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="851">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keen/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="617" selection-end="617" vertical-scroll-proportion="0.3172738" vertical-offset="0" max-vertical-offset="851">
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/keen/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="16" selection-start="27" selection-end="27" vertical-scroll-proportion="0.017626323" vertical-offset="0" max-vertical-offset="851">
@@ -495,16 +515,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/templates/page.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="48" selection-start="663" selection-end="663" vertical-scroll-proportion="-5.0" vertical-offset="165" max-vertical-offset="1575">
-          <folding />
-        </state>
+        <state line="19" column="48" selection-start="663" selection-end="663" vertical-scroll-proportion="-5.0" vertical-offset="165" max-vertical-offset="1575" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/templates/client/dashboard.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="27" selection-end="44" vertical-scroll-proportion="-1.25" vertical-offset="0" max-vertical-offset="4395">
-          <folding />
-        </state>
+        <state line="2" column="17" selection-start="27" selection-end="44" vertical-scroll-proportion="-1.25" vertical-offset="0" max-vertical-offset="4395" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/templatetags/web_tags.py">
@@ -527,15 +543,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="202" column="18" selection-start="3531" selection-end="3531" vertical-scroll-proportion="0.5410959" vertical-offset="2556" max-vertical-offset="4425">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="70" selection-start="1975" selection-end="1975" vertical-scroll-proportion="0.5417156" vertical-offset="349" max-vertical-offset="1200">
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -582,6 +589,29 @@
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="878">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="362" selection-end="362" vertical-scroll-proportion="-6.6" vertical-offset="0" max-vertical-offset="1185">
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements/production.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="134" selection-end="150" vertical-scroll-proportion="0.18792711" vertical-offset="0" max-vertical-offset="878">
+          <folding />
         </state>
       </provider>
     </entry>

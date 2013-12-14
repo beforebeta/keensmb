@@ -63,7 +63,13 @@ def profile(request, customer_id=None):
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def signup_form_create(request):
-    return render(request, 'client/signup-form-create.html')
+    client = get_object_or_404(
+        Client.objects.prefetch_related('customer_fields'),
+        slug=request.session['client']['slug'])
+    context = {
+        'client': client,
+    }
+    return render(request, 'client/signup-form-create.html', context)
 
 
 @ensure_csrf_cookie

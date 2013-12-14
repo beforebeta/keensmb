@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ form_data.title }}</title>
+    <link media="all" rel="stylesheet" href="{% static "signup/css/all.css"%}?d=10">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link href='http://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="{% static "signup/js/jquery-1.8.3.min.js"%}"></script>
+    <script type="text/javascript" src="{% static "signup/js/jquery.main.js"%}"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!--[if IE]><script type="text/javascript" src="{% static "signup/ie.js"%}"></script><![endif]-->
+  </head>
+  <body>
+    <div id="wrapper">
+      <div class="w1">
+        <header id="header">
+        <div class="header-holder">
+          <strong class="logo">
+            {% if client.url %}
+            <a href="{{ client.url }}">{{ client.name }}</a>
+            {% else %}
+            {{ client.name }}
+            {% endif %}
+          </strong>
+
+          {% comment %}
+
+          {% if form_data.social_links %}
+          <div class="top-block">
+            <ul class="social-networks">
+              <li>find us on</li>
+              {% for link in form_data.social_links %}
+              <li>
+              <a href="{{ link.url }}">
+                {% if link.img %}
+                <img src="{{ link.img.url }}" width="18" height="18" alt="{{ link.img.alt }}">
+                {% endif %}
+                {{ link.label }}
+              </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          {% if form_data.extra_nav %}
+          <nav class="top-nav">
+          <ul>
+            {% for link in form_data.extra_links %}
+            <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+            {% endfor %}
+          </ul>
+          </nav>
+          {% endcomment %}
+
+        </div>
+        <nav id="nav">
+        <ul>
+          {% for link in form_data.main_nav_links %}
+          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+          {% endfor %}
+        </ul>
+        </nav>
+        </header>
+
+        <div id="main">
+
+          <img src="{{ form_data.background_img }}" width="940" height="759">
+
+          <section class="container">
+          <div class="info-box">
+            <h1>{{ form_data.title }}</h1>
+            <p style="margin-top:14px;">Complete the information below and receive<br> A COUPON BOOK VALUED AT $750.</p>
+            <form class="account-form" action="" method="post">
+              {% csrf_token %}
+              {% if list_id %}
+              <input type="hidden" name="list_id" value="{{ list_id }}">
+              {% endif %}
+              <fieldset>
+                <span class="required">*Required</span>
+                <div class="row">
+                  {{ form.full_name }}
+                </div>
+                <div class="row">
+                  {{ form.email }}
+                </div>
+                <div class="row">
+                  <div class="col span-4">
+                    {{ form.dob }}
+                  </div>
+                  <div class="col span-4">
+                    {{ form.address__zipcode }}
+                  </div>
+                  <div class="col span-4">
+                    {{ form.phone }}
+                  </div>
+                </div>
+                <input type="submit" value="submit">
+              </fieldset>
+            </form>
+            <p>We will email you a voucher shortly.<br>You can redeem it for your valuable coupon book at <br/>the Brooks Brothers outlet location. </p>
+            <span class="notes">By submitting your information, you agree to receive<br>additional special offers and promotions from MDO.</span>
+          </div>
+          <div class="intro-box">
+            <div class="text-holder">
+              <p><strong>SAVE UP TO 70%</strong><br>on top designer brands</p>
+              <p>Marvel at the spectacular<br><strong>COLORS OF FALL</strong> in New England’s<br>#1 Fall Foliage destination.</p>
+            </div>
+          </div>
+          </section>
+        </div>
+        <footer id="footer">
+        <div class="footer-holder">
+          <div class="column">
+            <strong class="title">email sign up</strong>
+            <form class="subscribe-form" action="#">
+              <fieldset>
+                <label for="sign">Sign up for our email newsletter to receive offers and discounts</label>
+              </fieldset>
+            </form>
+          </div>
+          <div class="column">
+            <strong class="title">stay connected</strong>
+            <ul>
+              {% for link in form_data.social_links %}
+              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="column">
+            <strong class="title">more</strong>
+            <ul>
+              {% for link in form_data.extra_links %}
+              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="contact-box">
+            <strong class="title">find us</strong>
+            <a href="http://manchesterdesigneroutlets.com/en/map-directions"><img src="{% static "special/clients/mdo/images/img7.png"%}" width="217" height="124" alt="image description"></a>
+            <p>Phone: 800 955 SHOP</p>
+            <p>Fax: 802 362 5192</p>
+            <p><a href="mailto:info@manchesterdesigneroutlets.com">info@manchesterdesigneroutlets.com</a></p>
+          </div>
+        </div>
+        {% comment %}
+        <div class="footer-block">
+          <div class="copyright">
+            <p>Copyright 2012<br></p>
+            <a href="http://manchesterdesigneroutlets.com/">Manchester Designer Outlets</a>
+          </div>
+          <strong class="partner-logo"><a href="http://manchesterdesigneroutlets.com/">VERMONT</a></strong>
+        </div>
+        {% endcomment %}
+        </footer>
+      </div>
+    </div>
+    <script>
+      $(function() {
+        $("#dob").datepicker();
+      });
+    </script>
+    {# include 'snippets/ga_tracking.html' #}
+  </body>
+</html>

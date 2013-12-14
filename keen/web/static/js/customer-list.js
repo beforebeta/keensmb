@@ -6,6 +6,20 @@
     angular.module('keen')
         .controller('customersCtrl', ['$scope', '$timeout', 'customerService', function($scope, $timeout, customerService){
 
+            customerService.getClientData().then(function(data) {
+                var customerFields = data.data.customer_fields,
+                    slug = data.data.slug;
+
+                var fieldsMap = {};
+                _.each(customerFields, function(item) {
+                    fieldsMap[item.name] = item.title;
+                });
+
+                $scope.fieldsMap = fieldsMap;
+
+                customerService.clientSlug = slug;
+            });
+
             $scope.submitSearch = function() {
                 resetList();
             };
@@ -17,16 +31,6 @@
                 customerService.resetCounter();
                 $scope.loadMoreCustomers();
             }
-            customerService.getClientData().then(function(data) {
-                var customerFields = data.data.customer_fields;
-
-                var fieldsMap = {};
-                _.each(customerFields, function(item) {
-                    fieldsMap[item.name] = item.title;
-                });
-
-                $scope.fieldsMap = fieldsMap;
-            });
 
             var tempFields = [];
             customerService.getCustomersFields().then(function(data) {
@@ -35,7 +39,6 @@
                 $scope.availableFields = availableFields;
                 $scope.customerFields = data.data.display_customer_fields;
                 tempFields = angular.copy(data.data.display_customer_fields);
-                // var arr = ['first_name', 'last_name', 'email'];
 
                 $scope.loadMoreCustomers();
             });
@@ -210,7 +213,7 @@
                 clientSlug: '',
                 getClientData: function() {
                     return $http({
-                        url: '/api/client/'+clientSlug,
+                        url: '/api/client/current',
                         method: 'GET',
                         cache: true
                     });

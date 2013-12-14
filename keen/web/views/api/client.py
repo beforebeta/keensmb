@@ -1,9 +1,16 @@
+import os
 import re
 import logging
+from hashlib import sha256
+from base64 import b64decode
+
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
+from django.db import DatabaseError
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 
@@ -13,7 +20,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
-from keen.core.models import Client, Customer
+from keen.core.models import Client, Customer, Image
 from keen.web.models import PageCustomerField, SignupForm
 from keen.web.serializers import (
     ClientSerializer,
@@ -172,7 +179,7 @@ class CustomerList(APIView):
                 customer.save()
             except DatabaseError:
                 logger.exception('Failed to save new customer')
-                return Result(status=status.HTTTP_500_SERVER_ERROR)
+                return Response(status=status.HTTTP_500_SERVER_ERROR)
 
         return Response(CustomerSerializer(customer).data, status=status.HTTP_201_CREATED)
 
@@ -247,9 +254,9 @@ class SignupFormList(APIView):
             # check if form with this permalink exists
             permalink = request.GET['check'].strip()
             if not permalink:
-                return Result(status=status.HTTP_400_BAD_REQUEST)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             found = client.signup_forms.filter(permalink=permalink).exists()
-            return Result(('not found', 'found')[found])
+            return Response(('not found', 'found')[found])
         else:
             forms = list(client.signup_forms.all())
             return Response(SignupFormSerializer(forms, many=True).data)
@@ -259,17 +266,17 @@ class SignupFormList(APIView):
         client = get_object_or_404(Client, slug=client_slug)
 
         try:
-            slug = request.POST['slug']
-            fields = request.POST['fields']
-            data = request.POST['data']
+            slug = request.DATA['slug']
+            data = request.DATA['data']
         except KeyError:
+            logger.exception('Missing mandatory field %r' % request.DATA)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         form, created = SignupForm.objects.get_or_create(client=client, slug=slug)
         if not created:
+            logger.error('Form with slug %s already exists' % slug)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        form.fields = list(client.customer_fields.filter(name__in=fields))
         form.data = data
         try:
             form.save()
@@ -291,7 +298,7 @@ class SignupFormView(APIView):
         client = get_object_or_404(Client, slug=client_slug)
         form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
-        return Result(SignupFormSerializer(form).data)
+        return Response(SignupFormSerializer(form).data)
 
     @method_decorator(ensure_csrf_cookie)
     def put(self, request, client_slug, form_slug):
@@ -331,26 +338,65 @@ class ImageList(APIView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug):
+        """Retrieve list of images
+        """
         client = get_object_or_404(Client, slug=client_slug)
 
         return Response(ImageSerializer(client.images.all(), many=True).data)
 
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug):
+        """Upload new image
+        """
         client = get_object_or_404(Client, slug=client_slug)
-        file = request.FIELS.get('file')
-        if not file:
+
+        try:
+            content_type = request.DATA['type']
+            content = request.DATA['data']
+            target = request.DATA['target']
+        except KeyError:
+            logger.exception('Failed to get expected request data: %r' % request.DATA)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            content = b64decode(content)
+        except TypeError:
+            logger.exception('Failed to decode image content using BASE64')
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        name = '.'.join((sha256(content).hexdigest(),
+                         content_type.split('/', 1)[1]))
+        name = os.path.join('client', client.slug, 'images', name)
+        content = default_storage.save(name, ContentFile(content))
 
         image = Image()
         image.client = client
-        image.file = file
-        image.content_type = file.media_type
+        image.file = content
+        image.content_type = content_type
+        image.target = target
 
         try:
             image.save()
-        except DatabasError:
+        except DatabaseError:
             logger.exception('Failed to save image')
             raise
 
         return Response(ImageSerializer(image).data, status=status.HTTP_201_CREATED)
+
+    @method_decorator(ensure_csrf_cookie)
+    def delete(self, client_slug, image_id):
+        """Delete image
+        """
+        client = get_object_or_404(Client, slug=client_slug)
+        try:
+            Image.objects.get(client=client, id=int(image_id)).delete()
+        except Image.DoesNotExist:
+            logger.error('Attempt to delete non-existing image')
+            status = status.HTTP_404_NOT_FOUND
+        except DatabaseError:
+            logger.exception('Failed to delete image')
+            status = status.HTTP_500_INTERNAL_SERVICE_ERROR
+        else:
+            status = status.HTTP_204_NO_CONTENT
+
+        return Response(status=status)

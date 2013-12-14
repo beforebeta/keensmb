@@ -1,0 +1,145 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+
+{% block content %}
+
+  <!-- Content -->
+  <section class='clearfix promotions'>
+    <h1 class='page-title mtl'>Customer Profiles</h1>
+    <p class="text-muted">Promoution Information</p>
+    <div class="row mbl">
+      <div class="col-xs-3 small pll">
+        <span class="pll mll">Promotion Name:</span>
+      </div>
+      <div class="col-xs-8">
+        <input type="text" value="" placeholder="Some text" class="form-control input-sm">
+      </div>
+    </div>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Promotion Description:</span>
+      </div>
+      <div class="col-xs-8">
+        <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Short Description:</span>
+      </div>
+      <div class="col-xs-3">
+        <input type="text" value="" placeholder="Some text" class="form-control input-sm">
+      </div>
+    </div>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Valid Through:</span>
+      </div>
+      <div class="col-xs-3">
+        <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn" type="button"><span class="fui-calendar"></span></button>
+              </span>
+              <input type="text" class="form-control" value="14 March, 2013" id="datepicker-01">
+            </div>
+      </div>
+      <div class="col-xs-1 ">
+       <span class="pll mll">To:</span>
+      </div>
+      <div class="col-xs-3">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn" type="button"><span class="fui-calendar"></span></button>
+          </span>
+          <input type="text" class="form-control datepicker" value="14 March, 2013" id="datepicker-02">
+        </div>
+      </div>
+    </div>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Restrictions:</span>
+      </div>
+      <div class="col-xs-8">
+        <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Additional Information:</span>
+      </div>
+      <div class="col-xs-8">
+        <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+      </div>
+    </div>
+    <p class="text-muted mtl">Images and Buttons</p>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Logo Banner Image:</span>
+      </div>
+      <div class="col-xs-8">
+        <div class="col-xs-9 pln">
+          <div class="prom-new-logo ptl pbl">
+            <span>Logo Banner Image Here</span>
+          </div>
+        </div>
+        <button class="btn btn-default btn-embossed pull-right">Change Image</button>
+      </div>
+    </div>
+    <div class="row mbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Promotion Image:</span>
+      </div>
+        <div class="col-xs-8">
+      <div class="row prm">
+          <div class="col-xs-6">
+            <div class="prom-new-img">
+              <span>Promotion Image Here</span>
+            </div>
+          </div>
+          <div class="col-xs-6 prom-new-img-text pln prn">
+            <span class="small">filename.jpg</span>
+            <button type="button" class="close mts">
+              <i class="fui-cross small"></i>
+            </button>
+          </div>
+          <button class="btn btn-default btn-embossed pull-right mtl">Change Image</button>
+        </div>
+      </div>
+    </div>
+    <p class="text-muted mtl">Schedule Promotion</p>
+    <div class="row mbl pbl">
+      <div class="col-xs-3 small">
+        <span class="pll mll">Active from:</span>
+      </div>
+      <div class="col-xs-3">
+        <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn" type="button"><span class="fui-calendar"></span></button>
+              </span>
+              <input type="text" class="form-control datepicker" value="14 March, 2013">
+            </div>
+      </div>
+      <div class="col-xs-1 ">
+        <span class="text-muted">Until:</span>
+      </div>
+      <div class="col-xs-3">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn" type="button"><span class="fui-calendar"></span></button>
+          </span>
+          <input type="text" class="form-control datepicker" value="14 March, 2013">
+        </div>
+      </div>
+      <div class="col-xs-1 prom-new-checkbox">
+        <label class="checkbox small" for="checkbox1">
+        <span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">
+        Same as Above
+      </label>
+      </div>
+    </div>
+  </section>
+  <!-- /.container -->
+
+{% endblock %}
