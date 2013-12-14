@@ -139,8 +139,8 @@
 }
 
 .dashboard article p {
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 13px;
+  line-height: 17px;
 }
 
 .dashboard .progress {
@@ -185,6 +185,14 @@
 .news .row article:first-child {
   padding-top: 0;
   border-top: none;
+}
+
+.dashboard .table {
+    font-size: 14px
+}
+
+.dashboard .table th {
+    font-size: 16px
 }
 
 .dashboard .kn-section-content .row > a:hover {

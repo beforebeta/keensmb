@@ -136,96 +136,101 @@
     <div class="col-xs-5">
       <div class="kn-section active">
           <div class="kn-section-header">
-              <h6 class="mbn mtn">Active Promotions</h6>
+              <h6 class="mbn mtn">Updates</h6>
 {#            <div class="mbn mtn">Updates</div>#}
           </div>
           <div class="kn-section-content">
             <div class="row small">
               <ul class="dashboard-list">
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem ipsum <strong>dolor sit amet, consectetur adipisicing</strong> elit. Voluptates, eveniet.</p>
-                    <span class="dib mbl">some text #1</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem ipsum dolor sit amet, consectetur <strong>dolor sit amet, consectetur adipisicing</strong></p>
-                    <span class="dib mbl">some text #2</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem<strong>dolor sit amet, consectetur adipisicing</strong> adipisicing elit. Provident, in.</p>
-                    <span class="dib mbl">some text #3</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
-                <li>
-                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>
-                  <div>
-                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>
-                    <span class="dib mbl">some text #4</span>
-                  </div>
-                </li>
+                  {% for event in dashboard.get_updates %}
+                      {% include event|get_template_for_event %}
+                  {% empty %}
+                      No new activity.
+                  {% endfor %}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem ipsum <strong>dolor sit amet, consectetur adipisicing</strong> elit. Voluptates, eveniet.</p>#}
+{#                    <span class="dib mbl">some text #1</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem ipsum dolor sit amet, consectetur <strong>dolor sit amet, consectetur adipisicing</strong></p>#}
+{#                    <span class="dib mbl">some text #2</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem<strong>dolor sit amet, consectetur adipisicing</strong> adipisicing elit. Provident, in.</p>#}
+{#                    <span class="dib mbl">some text #3</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
 {#                <li>#}
 {#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
 {#                  <div>#}

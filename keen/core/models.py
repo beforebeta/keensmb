@@ -273,6 +273,13 @@ class Customer(Timestamps):
         except:
             return "/static/images/icons/dude.svg"
 
+    def name(self):
+        _name=self.get_name()
+        if _name.strip():
+            return _name
+        else:
+            return self.get_email()
+
     def get_name(self):
         return  self.data.get(CUSTOMER_FIELD_NAMES.full_name, '')
     get_name.short_description = 'Name'

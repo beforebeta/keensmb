@@ -53,3 +53,7 @@ def truncatesmart(value, limit=80):
 
     # Join the words and return
     return ' '.join(words) + '...'
+
+@register.filter
+def get_template_for_event(event):
+    return "client/events/%s.html" % event.data['type']

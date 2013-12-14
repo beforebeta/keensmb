@@ -4,6 +4,8 @@ from model_utils import Choices
 from keen import util
 from keen.core.models import Timestamps, Client, CustomerField, Customer, Promotion
 from django.db.models import Q
+from keen.events import Event
+
 
 class PageCustomerField(Timestamps):
 
@@ -54,6 +56,9 @@ class Dashboard(Timestamps):
                                     client=self.client).count()
         self.redemptions = 0
         self.save()
+
+    def get_updates(self):
+        return Event.objects.all().order_by('-occurrence_datetime')[:14]
 
     def get_top_customers(self):
         return self.client.get_top_customers()[:5]

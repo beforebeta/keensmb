@@ -99,3 +99,9 @@ class Event(Timestamps):
         if self.data:
             self.data = dict((name, json.dumps(value)) for name, value in self.data.items())
         super(Event, self).save(*args, **kwargs)
+
+    def subject(self):
+        s =  ContentType.objects.get_for_id(self.data['subject_type_id']).get_object_for_this_type(
+                                                                                            id=self.data['subject_id'])
+        print s
+        return s
