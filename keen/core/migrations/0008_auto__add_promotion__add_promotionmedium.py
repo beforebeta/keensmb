@@ -8,14 +8,71 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Promotion'
+        db.create_table(u'core_promotion', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('client', self.gf('django.db.models.fields.related.ForeignKey')(related_name='promotions', to=orm['core.Client'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('status', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('short_code', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('valid_from', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('valid_to', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('restrictions', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('additional_information', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('redemption_instructions', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('banner_url', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('image_url', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('send_schedule', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('analytics', self.gf('django_hstore.fields.DictionaryField')(db_index=True, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'core', ['Promotion'])
 
-        # Changing field 'Promotion.analytics'
-        db.alter_column(u'core_promotion', 'analytics', self.gf('django_hstore.fields.DictionaryField')(null=True))
+        # Adding M2M table for field mediums on 'Promotion'
+        m2m_table_name = db.shorten_name(u'core_promotion_mediums')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('promotion', models.ForeignKey(orm[u'core.promotion'], null=False)),
+            ('promotionmedium', models.ForeignKey(orm[u'core.promotionmedium'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['promotion_id', 'promotionmedium_id'])
+
+        # Adding M2M table for field target_customers on 'Promotion'
+        m2m_table_name = db.shorten_name(u'core_promotion_target_customers')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('promotion', models.ForeignKey(orm[u'core.promotion'], null=False)),
+            ('customer', models.ForeignKey(orm[u'core.customer'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['promotion_id', 'customer_id'])
+
+        # Adding model 'PromotionMedium'
+        db.create_table(u'core_promotionmedium', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Client'])),
+            ('platform', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('account_info', self.gf('django_hstore.fields.DictionaryField')(db_index=True)),
+        ))
+        db.send_create_signal(u'core', ['PromotionMedium'])
+
 
     def backwards(self, orm):
+        # Deleting model 'Promotion'
+        db.delete_table(u'core_promotion')
 
-        # Changing field 'Promotion.analytics'
-        db.alter_column(u'core_promotion', 'analytics', self.gf('django_hstore.fields.DictionaryField')(default={}))
+        # Removing M2M table for field mediums on 'Promotion'
+        db.delete_table(db.shorten_name(u'core_promotion_mediums'))
+
+        # Removing M2M table for field target_customers on 'Promotion'
+        db.delete_table(db.shorten_name(u'core_promotion_target_customers'))
+
+        # Deleting model 'PromotionMedium'
+        db.delete_table(u'core_promotionmedium')
+
 
     models = {
         u'auth.group': {
@@ -134,10 +191,10 @@ class Migration(SchemaMigration):
             'client': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': u"orm['core.Client']"}),
             'content_type': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '1024'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'})
+            'target': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         },
         u'core.location': {
             'Meta': {'unique_together': "(('name', 'client'),)", 'object_name': 'Location'},
@@ -153,7 +210,7 @@ class Migration(SchemaMigration):
             'additional_information': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'analytics': ('django_hstore.fields.DictionaryField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'banner_url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'client': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Client']"}),
+            'client': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'promotions'", 'to': u"orm['core.Client']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
