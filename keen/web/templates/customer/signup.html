@@ -1,156 +1,96 @@
+{% extends "page.html" %}
+
 {% load static %}
-<!DOCTYPE HTML>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>{{ form_data.pageTitle }}</title>
-    <link media="all" rel="stylesheet" href="{% static "signup/css/all.css"%}?d=10">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <link href='http://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="{% static "signup/js/jquery-1.8.3.min.js"%}"></script>
-    <script type="text/javascript" src="{% static "signup/js/jquery.main.js"%}"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <!--[if IE]><script type="text/javascript" src="{% static "signup/ie.js"%}"></script><![endif]-->
-  </head>
-  <body>
-    <div id="wrapper">
-      <div class="w1">
-        <header id="header">
-        <div class="header-holder">
-          <strong class="logo">
-            {% if form_data.home_url %}
-            <a href="{{ form_data.home_url }}">{{ client.name }}</a>
-            {% else %}
-            {{ client.name }}
-            {% endif %}
-          </strong>
+{% load compress %}
 
-          {% comment %}
+{% block content %}
+      <!-- Content -->
 
-          {% if form_data.social_links %}
-          <div class="top-block">
-            <ul class="social-networks">
-              <li>find us on</li>
-              {% for link in form_data.social_links %}
-              <li>
-              <a href="{{ link.url }}">
-                {% if link.img %}
-                <img src="{{ link.img.url }}" width="18" height="18" alt="{{ link.img.alt }}">
+
+      <section class='clearfix'>
+        <div class="su-title row mtl mbn">
+          <p class="page-title">{{ form_data.pageTitle }}</p>
+        </div>
+
+        <div class="su-form-wrapper su-form-overview mbm">
+
+        <!-- Banner Logo -->
+          <div class="banner-logo">
+            <img src='{{ form_data.bannerLogo.imageSrc }}'
+                 class='banner-preview'
+                 alt=""
+                 style='top:{{ form_data.bannerLogo.position.top }}px;
+                        left:{{ form_data.bannerLogo.position.left }}px'>
+          </div>
+
+        <!-- Background Image -->
+          <div class="background-image"
+               style='background:{{ form_data.backgroundImage.backgroundColor }}'>
+            <img src='{{ form_data.backgroundImage.imageSrc }}'
+                 class='banner-preview'
+                 alt="" id='background-image'
+                 style='top:{{ form_data.backgroundImage.position.top }}px;
+                        left:{{ form_data.backgroundImage.position.left }}px'>
+
+            <form class="su-form mbl"
+                  action=""
+                  method="post"
+                  style='background:{{ form_data.form.backgroundColor }};
+                         color:{{ form_data.form.textColor }}'>
+              <div>
+                <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
+                <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
+
+              <div class="row">
+                {% csrf_token %}
+                {% if list_id %}
+                <input type="hidden" name="list_id" value="{{ list_id }}">
                 {% endif %}
-                {{ link.label }}
-              </a>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
 
-          {% if form_data.extra_nav %}
-          <nav class="top-nav">
-          <ul>
-            {% for link in form_data.extra_nav %}
-            <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-            {% endfor %}
-          </ul>
-          </nav>
-          {% endcomment %}
-
-        </div>
-        <nav id="nav">
-        <ul>
-          {% for link in form_data.main_nav %}
-          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-          {% endfor %}
-        </ul>
-        </nav>
-        </header>
-
-        <div id="main">
-
-          <img src="{{ form_data.backgroundImage.imageSrc }}" width="940" height="759">
-
-          <section class="container">
-          <div class="info-box">
-            <h1>{{ form_data.pageTitle }}</h1>
-            <form class="account-form" action="" method="post">
-              {% csrf_token %}
-              {% if list_id %}
-              <input type="hidden" name="list_id" value="{{ list_id }}">
-              {% endif %}
-              <fieldset>
-                <span class="required">*Required</span>
-                <div class="row">
-                  {{ form.full_name }}
-                </div>
-                <div class="row">
-                  {{ form.email }}
-                </div>
-                <div class="row">
-                  <div class="col span-4">
-                    {{ form.dob }}
+                <div class="col-md-12">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Full Name'>
                   </div>
-                  <div class="col span-4">
-                    {{ form.address__zipcode }}
-                  </div>
-                  <div class="col span-4">
-                    {{ form.phone }}
+                  <div class="form-group mbm">
+                    <input type="email" class="form-control" placeholder='Email Address'>
                   </div>
                 </div>
-                <input type="submit" value="submit">
-              </fieldset>
+                <div class="col-md-6">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Zip Code'>
+                  </div>
+                </div>
+                <div class="col-md-6 pln">
+                  <div class="form-group mbm">
+                    <div class="input-group">
+                      <input type="text" class="form-control datapicker" placeholder="Birthday">
+                      <span class="input-group-btn">
+                        <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 prn">
+                  <div class="form-group mbm">
+                    <input type="text" class="form-control" placeholder='Phone'>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mbm">
+                    <select name="gender" id="gender" class='simple full mbs'>
+                      <option value="0" selected disabled>Gender</option>
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
             </form>
-            <p>{{ form_data.form.title }}</p>
-          </div>
-          <div class="intro-box">
-            <div class="text-holder">
-              <p>{{ form_data.form.description }}</p>
-            </div>
-          </div>
-          </section>
-        </div>
-        <footer id="footer">
-        <div class="footer-holder">
-          <div class="column">
-            <strong class="title">email sign up</strong>
-            <form class="subscribe-form" action="#">
-              <fieldset>
-                <label for="sign">Sign up for our email newsletter to receive offers and discounts</label>
-              </fieldset>
-            </form>
-          </div>
-          <div class="column">
-            <strong class="title">stay connected</strong>
-            <ul>
-              {% for link in form_data.social_links %}
-              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="column">
-            <strong class="title">more</strong>
-            <ul>
-              {% for link in form_data.extra_links %}
-              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="contact-box">
-            <strong class="title">find us</strong>
+
           </div>
         </div>
-        {% comment %}
-        <div class="footer-block">
-          <div class="copyright">
-          </div>
-        </div>
-        {% endcomment %}
-        </footer>
-      </div>
-    </div>
-    <script>
-      $(function() {
-        $("input[type=date]").datepicker();
-      });
-    </script>
-    {# include 'snippets/ga_tracking.html' #}
-  </body>
-</html>
+      </section>
+      <!-- /.container -->
+
+{% endblock %}
