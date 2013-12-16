@@ -15,6 +15,7 @@ django-jsonfield
 django_compressor
 
 Fabric
+PIL
 
 # Security
 bleach
