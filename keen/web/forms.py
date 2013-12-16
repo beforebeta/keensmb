@@ -46,7 +46,7 @@ class CustomerForm(forms.Form):
     """Dynamically built customer form
     """
     DEFAULT_FIELDS = ('full_name', 'email', 'dob', 'address__zipcode',
-                      'phone')
+                      'phone', 'gender')
 
     def __init__(self, client, *args, **kw):
         super(CustomerForm, self).__init__(*args, **kw)

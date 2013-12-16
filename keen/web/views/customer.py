@@ -24,6 +24,12 @@ def signup_view(request, client_slug, form_slug):
         if form.is_valid():
             customer = Customer()
             customer.client = client
+            if 'visitor' in request.session:
+                try:
+                    customer.visitor = Visitor.objects.get(uuid=request.session['visitor'])
+                except Visitor.DoesNotExist:
+                    logger.warn('Failed to locate Visitor wirh UUID=%s' % request.session['visitor'])
+
             customer.source = CustomerSource.objects.filter(
                 slug=form_slug).first()
 
