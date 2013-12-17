@@ -43,9 +43,8 @@ class IsClientUser(BasePermission):
         return (
             request.user and
             request.session and
-            'client' in request.session and
-            request.session['client'] and
-            request.session['client'].get('slug') == view.kwargs.get('client_slug')
+            'client_slug' in request.session and
+            request.session['client_slug'] == view.kwargs.get('client_slug')
         )
 
 
@@ -233,7 +232,7 @@ class CustomerProfile(APIView):
 @api_view(['GET'])
 def current_client_view(request):
     try:
-        client_slug = request.session['client']['slug']
+        client_slug = request.session['client_slug']
     except KeyError:
         return Http404()
 
@@ -355,7 +354,7 @@ class ImageList(APIView):
             content = request.DATA['data']
             target = request.DATA['target']
         except KeyError:
-            logger.exception('Failed to get expected request data: %r' % request.DATA)
+            logger.exception('Failed to get expected request data: %r' % request.DATA.keys())
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:

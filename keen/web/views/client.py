@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def dashboard(request):
-    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     context = {
         'client': client,
         'dashboard': client.get_dashboard()
@@ -34,7 +34,7 @@ def promotions(request):
 def customers(request):
     client = get_object_or_404(
         Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client']['slug'])
+        slug=request.session['client_slug'])
     q = Customer.objects.filter(client=client)
 
     context = {}
@@ -64,7 +64,7 @@ def profile(request, customer_id=None):
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def signup_form_list(request):
-    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     forms = SignupForm.objects.filter(client=client).order_by('-status', 'slug')
     context = {
         'client': client,
@@ -79,7 +79,7 @@ def signup_form_list(request):
 def signup_form_create(request):
     client = get_object_or_404(
         Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client']['slug'])
+        slug=request.session['client_slug'])
     context = {
         'client': client,
     }
@@ -95,7 +95,7 @@ def business_profile(request):
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def customer_form(request, customer_id=None):
-    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     if customer_id:
         customer = get_object_or_404(Customer, client=client, id=customer_id)
         form = CustomerForm(client, initial=customer.data)
