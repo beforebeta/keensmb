@@ -9,21 +9,11 @@
 		{% include 'front-page/topbar.html' %}
 
 
-		<section id="persons"></section>
-
-
-		<section id="blueline">
-			<div class="text-center">
-				<h6>keen helps you <strong>acquire new customers</strong> and <strong>learn more</strong> about existing ones</h6>
+		<section class="main-page-block first default"><a href="" name="what-is-keen"></a>
+			<div class="offset2 span8 keen-title">
+				<h2>What is Keen?</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, officia, blanditiis adipisci magnam illo illum enim veniam alias quidem porro.</p>
 			</div>
-		</section>
-
-
-		<section id="logoline">
-			<img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="center">
-		</section>
-
-		<section id="bulletpoints">
 			<div class="row">
 				<div class="span4">
 					<div class="media">
@@ -97,67 +87,48 @@
 			</div>
 		</section>
 
-		<section id="howWorks">
-
-			<header class="text-center">
-				<h3>How Keen Works</h3>
-			</header>
-
-			<div class="boxes">
-				<div class="row-fluid">
-					<div class="span4">
-						<p class="text-center">
-							<span class="badge badge-warning">1</span>
-						</p>
-						<div class="box color1">
-							<div class="content">
-								<p>Safely share telephone records, emails, mailing lists, point-of-sale system data and social media profiles with Keen. Keen will keep your records secure in an encrypted contact database, automatically identify potential customers, and enhance your customer profiles with relevant data.</p>
-							</div>
-							<img class="center w1" src="{% static "assets/pic11.png" %}" alt="">
-						</div>
-					</div>
-					<div class="span4">
-						<p class="text-center">
-							<span class="badge badge-success">2</span>
-						</p>
-						<div class="box color2">
-							<div class="content">
-								<p>Keen’s proprietary algorithm will automatically identify key customer segments, suggest relevant offers and promotions for each segment, and create targeted email, SMS and social media promotional campaigns to drive customers to your store.</p>
-							</div>
-							<img class="center w1" src="{% static "assets/pic12.png" %}" alt="">
-						</div>
-					</div>
-					<div class="span4">
-						<p class="text-center">
-							<span class="badge badge-important">3</span>
-						</p>
-						<div class="box color3">
-							<div class="content">
-								<p>Keen will constantly monitor the performance of your customer engagement efforts and your promotional campaigns, analyze and recommend improvements along the way, and enable you to review progress online using a real-time dashboard.</p>
-							</div>
-							<img class="center w1" src="{% static "assets/pic11.png" %}" alt="">
-						</div>
-					</div>
+		<section class="main-page-block">
+			<div class="row">
+				<div class="span6">
+					<img src="../../static/images/email.png" width="518" height="487" alt="">
+				</div>
+				<div class="span6 mln">
+					<h6>Connect width Your customers directly by sending them automated email promotions</h6>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, velit, voluptatum, sint quos unde consequuntur quidem quis impedit reiciendis accusamus nulla quae at! Vitae, aspernatur tempore labore aliquam at. Mollitia, explicabo, in, fugit eaque laudantium ad nisi maxime sed dicta vero neque minus fugiat odio consectetur repudiandae esse similique incidunt quo molestiae eligendi unde sit porro harum ea quidem distinctio.</p>
+					<small>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, nulla, odit, placeat iste repudiandae saepe tempore nesciunt esse amet eligendi eos id perspiciatis non laudantium.</small>
 				</div>
 			</div>
-
 		</section>
 
 
-		<section id="dashboard">
-			<div class="text-center">
-				<h3>The Keen Dashboard: Know What’s Working</h3>
-				<p>Keen's dashboard lets you to monitor the performance of your promotion campaigns, learn more about your customers and make better decisions</p>
-				<img src="{% static "assets/dashboard.png" %}" alt="Dashboard example">
-			</div>￼
+		<section class="main-page-block default">
+			<div class="row">
+				<div class="span6">
+					<img src="../../static/images/skitch.jpg" width="518" height="387" alt="">
+				</div>
+				<div class="span6 mln">
+					<h6>Lets potential customers find you online easily increase the size of your customer database</h6>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, velit, voluptatum, sint quos unde consequuntur quidem quis impedit reiciendis accusamus nulla quae at! Vitae, aspernatur tempore labore aliquam at. Mollitia, explicabo, in, fugit eaque laudantium ad nisi maxime sed dicta vero neque minus fugiat odio consectetur repudiandae esse similique incidunt quo molestiae eligendi unde sit porro harum ea quidem distinctio.</p>
+				</div>
+			</div>
 		</section>
 
+		<section class="main-page-block">
+			<div class="row">
+				<div class="span6">
+					<img src="{% static "assets/dashboard.png" %}"  width="518" height="350" alt="Dashboard example">
+				</div>
+				<div class="span6 mln">
+					<h6>Easy Monitor the Performance of Your Promotion</h6>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia, fuga, dolore, dolorum, sed consectetur eius quas corporis pariatur doloribus omnis cum ratione alias rerum praesentium ab non deleniti illum eligendi facilis soluta tenetur commodi porro!.</p>
+				</div>
+			</div>
+		</section>
 
 		<section id="pricing">
 
 			<div class="text-center">
-				<h3>Pricing</h3>
-				<p>Try Keen for <strong>Free</strong> for 30 days*</p>
+				<h3>Try Keen for <strong>Free</strong> for 30 days*</h3>
 			</div>
 
 			<div class="boxes">
@@ -167,7 +138,7 @@
 							<div class="head clearfix">
 								<h6>
 									<div class="left">Basic*</div>
-									<div class="right">$99/mo</div>
+									<div class="right"><span>$99</span>/mo</div>
 								</h6>
 							</div>
 							<div class="content">
@@ -183,8 +154,7 @@
 							</div>
 						</div>
 						<div class="box-footer">
-              <b>+ $0.40 per Customer Profile Data Enhancement</b>
-              (this includes email, phone, and demographic &amp; household data append)*
+              <b>+ $0.40</b> per Customer Profile Data Enhancement
 						</div>
 					</div>
 					<div class="span4">
@@ -192,7 +162,7 @@
 							<div class="head clearfix">
 								<h6>
 									<div class="left">Premium*</div>
-									<div class="right">$149/mo</div>
+									<div class="right"><span>$149</span>/mo</div>
 								</h6>
 							</div>
 							<div class="content">
@@ -208,8 +178,7 @@
 							</div>
 						</div>
 						<div class="box-footer">
-              <b>+ $0.35 per Customer Profile Data Enhancement</b>
-              (this includes email, phone, and demographic &amp; household data append)*
+              <b>+ $0.35</b> per Customer Profile Data Enhancement
 						</div>
 					</div>
 					<div class="span4">
@@ -217,7 +186,7 @@
 							<div class="head clearfix">
 								<h6>
 									<div class="left">Pro*</div>
-									<div class="right">$199/mo</div>
+									<div class="right"><span>$199</span>/mo</div>
 								</h6>
 							</div>
 							<div class="content">
@@ -233,8 +202,7 @@
 							</div>
 						</div>
 						<div class="box-footer">
-              <b>+ $0.30 per Customer Profile Data Enhancement</b>
-              (this includes email, phone, and demographic &amp; household data append)*
+              <b>+ $0.30</b> per Customer Profile Data Enhancement
 						</div>
 					</div>
 				</div>
@@ -253,7 +221,7 @@
 					<li><a href="legal">privacy policy</a></li>
 					<li><a href="mailto:info@keensmb.com">contact us</a></li>
 				</ul>
-				<p class="small muted">Copyright Digital First Ventures. All Rights Reserved.</p>
+				<p class="small text-muted">Copyright Digital First Ventures. All Rights Reserved.</p>
 			</div>
 
 		</section>
