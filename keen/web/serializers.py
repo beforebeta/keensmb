@@ -1,4 +1,5 @@
 from rest_framework.serializers import (
+    DateTimeField,
     ModelSerializer,
     RelatedField,
     PrimaryKeyRelatedField,
@@ -33,7 +34,7 @@ class AddressSerializer(DynamicSerializer):
     class Meta:
         model = Address
         fields = ('street', 'city', 'postal_code',
-                  'state_province', 'country', 'created', 'modified')
+                  'state_province', 'country')
 
 
 class LocationSerializer(DynamicSerializer):
@@ -42,7 +43,7 @@ class LocationSerializer(DynamicSerializer):
 
     class Meta:
         model = Location
-        fields = ('name', 'address', 'created', 'modified')
+        fields = ('name', 'address')
 
 
 class CustomerFieldSerializer(DynamicSerializer):
@@ -52,14 +53,14 @@ class CustomerFieldSerializer(DynamicSerializer):
     class Meta:
         model = CustomerField
         fields = ('name', 'title', 'type', 'required',
-                  'group', 'width', 'created', 'modified')
+                  'group', 'width')
 
 
 class CustomerFieldGroupSerializer(DynamicSerializer):
 
     class Meta:
         model = CustomerFieldGroup
-        fields = ('name', 'title', 'created', 'modified')
+        fields = ('name', 'title')
 
 
 class ClientSerializer(DynamicSerializer):
@@ -80,7 +81,7 @@ class CustomerSerializer(DynamicSerializer):
 
     class Meta:
         model = Customer
-        fields = ('id', 'client', 'data', 'created', 'modified')
+        fields = ('id', 'client', 'data')
 
 
 class ImageSerializer(DynamicSerializer):
@@ -92,10 +93,13 @@ class ImageSerializer(DynamicSerializer):
 
     class Meta:
         model = Image
-        fields = ('id', 'target', 'content_type', 'url', 'created', 'modified')
+        fields = ('id', 'target', 'content_type', 'url')
 
 
 class SignupFormSerializer(DynamicSerializer):
+
+    created = DateTimeField()
+    modified = DateTimeField()
 
     class Meta:
         model = SignupForm
