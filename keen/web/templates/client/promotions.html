@@ -10,10 +10,10 @@
    <div class="row">
     <div class="col-xs-3 pln">
       <ul class="promotions-list">
-        <li class="prom-active active"><a href="#">Active Promotions</a></li>
-        <li class="prom-upcoming active"><a href="#">Upcoming Promotions</a></li>
-        <li class="prom-awaiting active"><a href="#">Awaiting Approval</a></li>
-        <li class="prom-expired active"><a href="#">Expired Promotions</a></li>
+        <li class="prom-active {% if tab == 'active' %}active{% endif %}"><a href="/promotions/active">Active Promotions</a></li>
+        <li class="prom-upcoming {% if tab == 'upcoming' %}active{% endif %}"><a href="/promotions/upcoming">Upcoming Promotions</a></li>
+        <li class="prom-awaiting {% if tab == 'awaiting' %}active{% endif %}"><a href="/promotions/awaiting">Awaiting Approval</a></li>
+        <li class="prom-expired {% if tab == 'expired' %}active{% endif %}"><a href="/promotions/expired">Expired Promotions</a></li>
       </ul>
     </div>
     <div class="col-xs-9 promotions-border-right">

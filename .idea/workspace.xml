@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3646c680-0a28-4401-b1f7-8b7e8af1b0f4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/events/models.py" afterPath="$PROJECT_DIR$/keen/events/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/views/client.py" afterPath="$PROJECT_DIR$/keen/web/views/client.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/css/promotions.css" afterPath="$PROJECT_DIR$/keen/web/static/css/promotions.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templates/client/promotions.html" afterPath="$PROJECT_DIR$/keen/web/templates/client/promotions.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/urls.py" afterPath="$PROJECT_DIR$/keen/web/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="keensmb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,21 +29,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/keen/web/models.py">
+      <file leaf-file-name="promotions.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/keen/web/static/css/promotions.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="19" selection-start="2129" selection-end="2129" vertical-scroll-proportion="-22.04" vertical-offset="334" max-vertical-offset="1185">
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/keen/events/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="105" column="0" selection-start="3976" selection-end="3976" vertical-scroll-proportion="0.89424205" vertical-offset="724" max-vertical-offset="1575">
+            <state line="50" column="27" selection-start="1000" selection-end="1000" vertical-scroll-proportion="0.8561644" vertical-offset="0" max-vertical-offset="3540">
               <folding />
             </state>
           </provider>
@@ -63,10 +56,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/keen/events/__init__.py" />
-        <option value="$PROJECT_DIR$/keen/events/signals.py" />
-        <option value="$PROJECT_DIR$/keen/events/admin.py" />
-        <option value="$PROJECT_DIR$/keen/util.py" />
         <option value="$PROJECT_DIR$/keen/__init__.py" />
         <option value="$PROJECT_DIR$/keen/web/templates/client/events/update_cust_new.html" />
         <option value="$PROJECT_DIR$/keen/web/templates/client/dashboard.html" />
@@ -79,6 +68,10 @@
         <option value="$PROJECT_DIR$/keen/web/static/css/dashboard.css" />
         <option value="$PROJECT_DIR$/keen/web/models.py" />
         <option value="$PROJECT_DIR$/keen/events/models.py" />
+        <option value="$PROJECT_DIR$/keen/web/views/client.py" />
+        <option value="$PROJECT_DIR$/keen/web/templates/client/promotions.html" />
+        <option value="$PROJECT_DIR$/keen/web/urls.py" />
+        <option value="$PROJECT_DIR$/keen/web/static/css/promotions.css" />
       </list>
     </option>
   </component>
@@ -181,6 +174,54 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keensmb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keensmb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keensmb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keensmb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -192,8 +233,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/keen/web/templates" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -294,9 +335,6 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
-      <method />
-    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -318,6 +356,9 @@
       <option name="PUREUNITTEST" value="true" />
       <option name="PARAMS" value="" />
       <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -397,9 +438,9 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22154222" sideWeight="0.57190263" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22460221" sideWeight="0.57190263" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22154222" sideWeight="0.42699116" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22460221" sideWeight="0.42699116" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32964602" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -426,37 +467,9 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/keen/settings/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="57" selection-start="5376" selection-end="5385" vertical-scroll-proportion="0.33333334" vertical-offset="2125" max-vertical-offset="4080">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/templates/page.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="48" selection-start="663" selection-end="663" vertical-scroll-proportion="-5.0" vertical-offset="165" max-vertical-offset="1575" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/templates/client/dashboard.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="27" selection-end="44" vertical-scroll-proportion="-1.25" vertical-offset="0" max-vertical-offset="4395" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/templatetags/web_tags.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="55" selection-start="1369" selection-end="1369" vertical-scroll-proportion="-30.44" vertical-offset="109" max-vertical-offset="960">
-          <folding>
-            <element signature="e#0#27#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/keen/events/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="6" selection-start="165" selection-end="165" vertical-scroll-proportion="-3.0" vertical-offset="0" max-vertical-offset="255">
-          <folding />
-        </state>
+        <state line="5" column="6" selection-start="165" selection-end="165" vertical-scroll-proportion="-3.0" vertical-offset="0" max-vertical-offset="255" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/static/css/dashboard.css">
@@ -468,23 +481,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/events/signals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="816" selection-end="816" vertical-scroll-proportion="0.2467685" vertical-offset="0" max-vertical-offset="851">
-          <folding />
-        </state>
+        <state line="17" column="0" selection-start="816" selection-end="816" vertical-scroll-proportion="0.2467685" vertical-offset="0" max-vertical-offset="851" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/templates/client/events/event_base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="309" selection-end="309" vertical-scroll-proportion="0.15845071" vertical-offset="0" max-vertical-offset="852">
-          <folding />
-        </state>
+        <state line="9" column="0" selection-start="309" selection-end="309" vertical-scroll-proportion="0.15845071" vertical-offset="0" max-vertical-offset="852" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/templates/client/events/promo_new.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="27" selection-start="163" selection-end="163" vertical-scroll-proportion="0.0528169" vertical-offset="0" max-vertical-offset="852">
-          <folding />
-        </state>
+        <state line="3" column="27" selection-start="163" selection-end="163" vertical-scroll-proportion="0.0528169" vertical-offset="0" max-vertical-offset="852" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html">
@@ -524,18 +531,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/keen/events/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="58" column="30" selection-start="2348" selection-end="2348" vertical-scroll-proportion="0.06799531" vertical-offset="722" max-vertical-offset="1575">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="19" selection-start="2129" selection-end="2129" vertical-scroll-proportion="-22.04" vertical-offset="334" max-vertical-offset="1185">
+        <state line="63" column="0" selection-start="2268" selection-end="2268" vertical-scroll-proportion="0.96717465" vertical-offset="0" max-vertical-offset="1065">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/templates/client/promotions.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="36" selection-start="905" selection-end="905" vertical-scroll-proportion="0.35756853" vertical-offset="0" max-vertical-offset="3555">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/views/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="25" selection-start="1055" selection-end="1055" vertical-scroll-proportion="0.4159812" vertical-offset="81" max-vertical-offset="1500">
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keen/events/models.py">
+    <entry file="file://$PROJECT_DIR$/keen/web/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="105" column="0" selection-start="3976" selection-end="3976" vertical-scroll-proportion="0.89424205" vertical-offset="724" max-vertical-offset="1575">
+        <state line="46" column="0" selection-start="1759" selection-end="1759" vertical-scroll-proportion="0.8108108" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/static/css/promotions.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="27" selection-start="1000" selection-end="1000" vertical-scroll-proportion="0.8561644" vertical-offset="0" max-vertical-offset="3540">
           <folding />
         </state>
       </provider>

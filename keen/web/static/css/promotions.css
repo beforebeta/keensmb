@@ -3,7 +3,8 @@
 }
 
 .promotions .promotions-list {
-    padding: 0;
+    /*padding: 80px 0 0 0;*/
+    padding:0;
 }
 
 .promotions .promotions-list li {
@@ -43,30 +44,30 @@
 .promotions .promotions-list .prom-active.active a {
     background-color: #169e83;
 }
-.promotions .promotions-list .prom-active.active a:after {
-    border-left-color: #169e83;
-}
+/*.promotions .promotions-list .prom-active.active a:after {*/
+    /*border-left-color: #169e83;*/
+/*}*/
 
 .promotions .promotions-list .prom-upcoming.active a {
     background-color: #446cb3;
 }
-.promotions .promotions-list .prom-upcoming.active a:after {
-    border-left-color: #446cb3;
-}
+/*.promotions .promotions-list .prom-upcoming.active a:after {*/
+    /*border-left-color: #446cb3;*/
+/*}*/
 
 .promotions .promotions-list .prom-awaiting.active a {
     background-color: #fb9b2e;
 }
-.promotions .promotions-list .prom-awaiting.active a:after {
-    border-left-color: #fb9b2e;
-}
+/*.promotions .promotions-list .prom-awaiting.active a:after {*/
+    /*border-left-color: #fb9b2e;*/
+/*}*/
 
 .promotions .promotions-list .prom-expired.active a {
     background-color: #e96151;
 }
-.promotions .promotions-list .prom-expired.active a:after {
-    border-left-color: #e96151;
-}
+/*.promotions .promotions-list .prom-expired.active a:after {*/
+    /*border-left-color: #e96151;*/
+/*}*/
 
 .promotions .promotions-border-right {
     border-left: 1px solid #ebeff0;
