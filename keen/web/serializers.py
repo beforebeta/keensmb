@@ -33,7 +33,7 @@ class AddressSerializer(DynamicSerializer):
     class Meta:
         model = Address
         fields = ('street', 'city', 'postal_code',
-                  'state_province', 'country')
+                  'state_province', 'country', 'created', 'modified')
 
 
 class LocationSerializer(DynamicSerializer):
@@ -42,7 +42,7 @@ class LocationSerializer(DynamicSerializer):
 
     class Meta:
         model = Location
-        fields = ('name', 'address')
+        fields = ('name', 'address', 'created', 'modified')
 
 
 class CustomerFieldSerializer(DynamicSerializer):
@@ -52,14 +52,14 @@ class CustomerFieldSerializer(DynamicSerializer):
     class Meta:
         model = CustomerField
         fields = ('name', 'title', 'type', 'required',
-                  'group', 'width')
+                  'group', 'width', 'created', 'modified')
 
 
 class CustomerFieldGroupSerializer(DynamicSerializer):
 
     class Meta:
         model = CustomerFieldGroup
-        fields = ('name', 'title')
+        fields = ('name', 'title', 'created', 'modified')
 
 
 class ClientSerializer(DynamicSerializer):
@@ -71,7 +71,7 @@ class ClientSerializer(DynamicSerializer):
     class Meta:
         model = Client
         fields = ('slug', 'name', 'locations',
-                  'main_location', 'customer_fields')
+                  'main_location', 'customer_fields', 'created', 'modified')
 
 
 class CustomerSerializer(DynamicSerializer):
@@ -80,7 +80,7 @@ class CustomerSerializer(DynamicSerializer):
 
     class Meta:
         model = Customer
-        fields = ('id', 'client', 'data')
+        fields = ('id', 'client', 'data', 'created', 'modified')
 
 
 class ImageSerializer(DynamicSerializer):
@@ -92,11 +92,11 @@ class ImageSerializer(DynamicSerializer):
 
     class Meta:
         model = Image
-        fields = ('id', 'target', 'content_type', 'url')
+        fields = ('id', 'target', 'content_type', 'url', 'created', 'modified')
 
 
 class SignupFormSerializer(DynamicSerializer):
 
     class Meta:
         model = SignupForm
-        fields = ('slug', 'status', 'data')
+        fields = ('slug', 'status', 'data', 'created', 'modified')

@@ -1,11 +1,11 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, render_to_response
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from keen.core.models import Client, Customer, Location
+from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
 
 
@@ -20,7 +20,8 @@ def dashboard(request):
         'client': client,
         'dashboard': client.get_dashboard()
     }
-    return render_to_response('client/dashboard.html', context, context_instance=RequestContext(request))
+    return render(request, 'client/dashboard.html', context)
+
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -56,8 +57,21 @@ def profile(request, customer_id=None):
     customer = Customer.objects.get(id=customer_id)
     context["customer"] = customer
     context["client"] = customer.client
-    print customer.get_email()
-    return render_to_response('client/customers/customer_profile_view.html', context, context_instance=RequestContext(request))
+
+    return render(request, 'client/customers/customer_profile_view.html', context)
+
+
+@ensure_csrf_cookie
+@login_required(login_url='/#signin')
+def signup_form_list(request):
+    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    forms = SignupForm.objects.filter(client=client).order_by('-status', 'slug')
+    context = {
+        'client': client,
+        'forms': forms,
+    }
+
+    return render(request, 'client/signup-form-list.html', context)
 
 
 @ensure_csrf_cookie
@@ -87,4 +101,5 @@ def customer_form(request, customer_id=None):
         form = CustomerForm(client, initial=customer.data)
     else:
         form = CustomerForm(client)
+
     return render(request, 'client/customer_form.html', {'form': form})
