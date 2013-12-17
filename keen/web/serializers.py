@@ -71,7 +71,7 @@ class ClientSerializer(DynamicSerializer):
     class Meta:
         model = Client
         fields = ('slug', 'name', 'locations',
-                  'main_location', 'customer_fields', 'created', 'modified')
+                  'main_location', 'customer_fields')
 
 
 class CustomerSerializer(DynamicSerializer):
