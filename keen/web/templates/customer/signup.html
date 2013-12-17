@@ -1,51 +1,66 @@
-{% extends "page.html" %}
-
 {% load static %}
 {% load compress %}
 
-{% block content %}
-      <!-- Content -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        {% compress css %}
+        <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+        <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
+        <link href="{% static "css/app.css" %}" rel="stylesheet">
+        {% endcompress %}
 
-      <section class='clearfix'>
-        <div class="su-title row mtl mbn">
-          <p class="page-title">{{ form_data.pageTitle }}</p>
+        <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+
+        {% compress js %}
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+        <!--[if lt IE 9]>
+        <script src="{% static "js/html5shiv.js" %}"></script>
+        <![endif]-->
+        {% endcompress %}
+    </head>
+
+  <body>
+    <div class="container">
+
+      <div class="su-title row mtl mbn">
+        <p class="page-title">{{ form_data.pageTitle }}</p>
+      </div>
+
+      <div class="su-form-wrapper su-form-overview mbm">
+
+        <div class="banner-logo">
+          <img src='{{ form_data.bannerLogo.imageSrc }}'
+          class='banner-preview'
+          alt=""
+          style='top:{{ form_data.bannerLogo.position.top }}px;
+          left:{{ form_data.bannerLogo.position.left }}px'>
         </div>
 
-        <div class="su-form-wrapper su-form-overview mbm">
+        <div class="background-image"
+          style='background:{{ form_data.backgroundImage.backgroundColor }}'>
+          <img src='{{ form_data.backgroundImage.imageSrc }}'
+          class='banner-preview'
+          alt="" id='background-image'
+          style='top:{{ form_data.backgroundImage.position.top }}px;
+          left:{{ form_data.backgroundImage.position.left }}px'>
 
-        <!-- Banner Logo -->
-          <div class="banner-logo">
-            <img src='{{ form_data.bannerLogo.imageSrc }}'
-                 class='banner-preview'
-                 alt=""
-                 style='top:{{ form_data.bannerLogo.position.top }}px;
-                        left:{{ form_data.bannerLogo.position.left }}px'>
-          </div>
-
-        <!-- Background Image -->
-          <div class="background-image"
-               style='background:{{ form_data.backgroundImage.backgroundColor }}'>
-            <img src='{{ form_data.backgroundImage.imageSrc }}'
-                 class='banner-preview'
-                 alt="" id='background-image'
-                 style='top:{{ form_data.backgroundImage.position.top }}px;
-                        left:{{ form_data.backgroundImage.position.left }}px'>
-
-            <form class="su-form mbl"
-                  action=""
-                  method="post"
-                  style='background:{{ form_data.form.backgroundColor }};
-                         color:{{ form_data.form.textColor }}'>
-              <div>
-                <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
-                <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
+          <form class="su-form mbl"
+            action=""
+            method="post"
+            style='background:{{ form_data.form.backgroundColor }};
+            color:{{ form_data.form.textColor }}'>
+            <div>
+              <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
+              <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
 
               <div class="row">
                 {% csrf_token %}
-                {% if list_id %}
-                <input type="hidden" name="list_id" value="{{ list_id }}">
-                {% endif %}
+                {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
 
                 <div class="col-md-12">
                   <div class="form-group mbm">
@@ -55,6 +70,7 @@
                     <input type="email" class="form-control" placeholder='Email Address'>
                   </div>
                 </div>
+
                 <div class="col-md-6">
                   <div class="form-group mbm">
                     <input type="text" class="form-control" placeholder='Zip Code'>
@@ -90,7 +106,20 @@
 
           </div>
         </div>
-      </section>
-      <!-- /.container -->
 
-{% endblock %}
+    {% compress js %}
+    <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
+    <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
+    <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
+    <script src="{% static "js/application.js" %}"></script>
+    {% endcompress %}
+
+  </body>
+</html>
