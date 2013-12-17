@@ -27,11 +27,11 @@
   <body>
     <div class="container">
 
-      <div class="su-title row mtl mbn">
-        <p class="page-title">{{ form_data.pageTitle }}</p>
+      <div class="su-title mtl mbn mll">
+        <h1 class="page-title">{{ form_data.pageTitle }}</h1>
       </div>
 
-      <div class="su-form-wrapper su-form-overview mbm">
+      <div class="su-form-wrapper su-form-overview mbm mrl mll">
 
         <div class="banner-logo">
           <img src='{{ form_data.bannerLogo.imageSrc }}'
@@ -54,58 +54,58 @@
             method="post"
             style='background:{{ form_data.form.backgroundColor }};
             color:{{ form_data.form.textColor }}'>
-            <div>
-              <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
-              <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
+            <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
+            <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
 
-              <div class="row">
-                {% csrf_token %}
-                {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
+            <div class="row">
+              {% csrf_token %}
+              {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
 
-                <div class="col-md-12">
-                  <div class="form-group mbm {% if form.full_name.errors %}has-error{% endif %}">
-                    <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
-                  </div>
-                  <div class="form-group mbm {% if form.email.errors %}has-error{% endif %}">
-                    <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
-                  </div>
+              <div class="col-md-12">
+                <div class="form-group mbm {% if form.full_name.errors %}has-error{% endif %}">
+                  <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
                 </div>
+                <div class="form-group mbm {% if form.email.errors %}has-error{% endif %}">
+                  <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
+                </div>
+              </div>
 
-                <div class="col-md-6">
-                  <div class="form-group mbm {% if form.address__zipcode.errors %}has-error{% endif %}">
-                    <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
-                  </div>
+              <div class="col-md-6">
+                <div class="form-group mbm {% if form.address__zipcode.errors %}has-error{% endif %}">
+                  <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
                 </div>
-                <div class="col-md-6 pln">
-                  <div class="form-group mbm {% if form.dob.errors %}has-error{% endif %}">
-                    <div class="input-group">
-                      <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
-                      <span class="input-group-btn">
-                        <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 prn">
-                  <div class="form-group mbm {% if form.phone.errors %}has-error{% endif %}">
-                    <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group mbm {% if form.gender.errors %}has-error{% endif %}">
-                    <select name="gender" id="gender" class='simple full mbs'>
-                      <option value="0" selected disabled>Gender</option>
-                      <option value="1">Male</option>
-                      <option value="2">Female</option>
-                    </select>
+              </div>
+              <div class="col-md-6 pln">
+                <div class="form-group mbm {% if form.dob.errors %}has-error{% endif %}">
+                  <div class="input-group">
+                    <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
+                    <span class="input-group-btn">
+                      <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                    </span>
                   </div>
                 </div>
               </div>
-              <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
-            </form>
+              <div class="col-md-6 prn">
+                <div class="form-group mbm {% if form.phone.errors %}has-error{% endif %}">
+                  <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group mbm {% if form.gender.errors %}has-error{% endif %}">
+                  <select name="gender" id="gender" class='simple full mbs'>
+                    <option value="0" selected disabled>Gender</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
+          </form>
 
-          </div>
         </div>
+      </div>
+    </div>
 
     {% compress js %}
     <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
