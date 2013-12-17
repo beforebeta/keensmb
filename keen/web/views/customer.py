@@ -32,8 +32,8 @@ def signup_view(request, client_slug, form_slug):
                 except Visitor.DoesNotExist:
                     logger.warn('Failed to locate Visitor wirh UUID=%s' % request.session['visitor'])
 
-            customer.source = CustomerSource.objects.filter(
-                slug=form_slug).first()
+            customer.source, created = CustomerSource.objects.get_or_create(
+                client=client, slug=form_slug)
 
             for name, value in form.cleaned_data.items():
                 customer.data[name] = str(value)
