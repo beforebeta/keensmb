@@ -7,6 +7,8 @@ from keen.core.models import Client, Customer, CustomerSource
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
 
+from tracking.models import Visitor
+
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +44,8 @@ def signup_view(request, client_slug, form_slug):
                 logger.exception('Failed to save new customer')
             else:
                 return render(request, 'customer/signup_success.html')
+        else:
+            logger.debug('Signup form validation error(s): %r' % form.errors)
     else:
         form = CustomerForm(client)
 
