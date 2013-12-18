@@ -25,6 +25,26 @@
             window.location.hash = target;
         });
     });
+    
+    var topbarHeight = $('#topbar').outerHeight();
+    var $scrollMenu = $('.scroll-menu');
 
+    $(document).on('scroll', function() {
+        if($(this).scrollTop() >= topbarHeight){
+            $scrollMenu.fadeIn('fast');
+        } else {
+            $scrollMenu.fadeOut();
+        }
+    });
+
+
+    $('.js-preload-image').each(function(index, item){
+        var $item = $(item),
+            imgSrc = $item.data('image-bg');
+            
+        $item.css('background-image', 'url(' + imgSrc + ')');
+    });
+
+    $('.carousel').carousel({interval: 5000});
 
 })(jQuery);
