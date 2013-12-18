@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3646c680-0a28-4401-b1f7-8b7e8af1b0f4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html" afterPath="$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/static/css/dashboard.css" afterPath="$PROJECT_DIR$/keen/web/static/css/dashboard.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/urls.py" afterPath="$PROJECT_DIR$/keen/web/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/views/client.py" afterPath="$PROJECT_DIR$/keen/web/views/client.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keen/web/templates/client/promotions.html" afterPath="$PROJECT_DIR$/keen/web/templates/client/promotions.html" />
     </list>
     <ignored path="keensmb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,28 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="promotions.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="promotions.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/keen/web/templates/client/promotions.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="100" selection-start="358" selection-end="358" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="1980">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cust_new.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="100" selection-start="236" selection-end="236" vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="135">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dashboard.css" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/keen/web/static/css/dashboard.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="181" column="16" selection-start="3237" selection-end="3237" vertical-scroll-proportion="0.523918" vertical-offset="2255" max-vertical-offset="4560">
+            <state line="34" column="0" selection-start="1036" selection-end="1689" vertical-scroll-proportion="0.60642093" vertical-offset="0" max-vertical-offset="1980">
               <folding />
             </state>
           </provider>
@@ -93,7 +74,7 @@
       <file leaf-file-name="client.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/keen/web/views/client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="37" selection-start="1190" selection-end="1190" vertical-scroll-proportion="-8.72" vertical-offset="157" max-vertical-offset="1440">
+            <state line="31" column="0" selection-start="1134" selection-end="1134" vertical-scroll-proportion="-7.52" vertical-offset="157" max-vertical-offset="1395">
               <folding />
             </state>
           </provider>
@@ -137,11 +118,11 @@
         <option value="$PROJECT_DIR$/keen/core/models.py" />
         <option value="$PROJECT_DIR$/keen/web/templatetags/web_tags.py" />
         <option value="$PROJECT_DIR$/keen/web/static/css/promotions.css" />
-        <option value="$PROJECT_DIR$/keen/web/templates/client/promotions.html" />
-        <option value="$PROJECT_DIR$/keen/web/views/client.py" />
         <option value="$PROJECT_DIR$/keen/web/urls.py" />
         <option value="$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html" />
         <option value="$PROJECT_DIR$/keen/web/static/css/dashboard.css" />
+        <option value="$PROJECT_DIR$/keen/web/views/client.py" />
+        <option value="$PROJECT_DIR$/keen/web/templates/client/promotions.html" />
       </list>
     </option>
   </component>
@@ -619,13 +600,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/views/client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="37" selection-start="1190" selection-end="1190" vertical-scroll-proportion="-8.72" vertical-offset="157" max-vertical-offset="1440">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/keen/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="386" column="8" selection-start="12940" selection-end="12940" vertical-scroll-proportion="-3.6" vertical-offset="5595" max-vertical-offset="6435">
@@ -656,13 +630,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/templates/client/promotions.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="100" selection-start="358" selection-end="358" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="1980">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/keen/web/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="45" column="93" selection-start="1975" selection-end="1991" vertical-scroll-proportion="-24.6" vertical-offset="0" max-vertical-offset="795">
@@ -670,16 +637,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html">
+    <entry file="file://$PROJECT_DIR$/keen/web/static/css/dashboard.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="100" selection-start="236" selection-end="236" vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="135">
+        <state line="191" column="1" selection-start="3378" selection-end="3378" vertical-scroll-proportion="0.6947608" vertical-offset="2255" max-vertical-offset="4560">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keen/web/static/css/dashboard.css">
+    <entry file="file://$PROJECT_DIR$/keen/web/templates/client/events/cust_new.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="181" column="16" selection-start="3237" selection-end="3237" vertical-scroll-proportion="0.523918" vertical-offset="2255" max-vertical-offset="4560">
+        <state line="3" column="100" selection-start="236" selection-end="236" vertical-scroll-proportion="0.05350773" vertical-offset="0" max-vertical-offset="841">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/views/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="0" selection-start="1134" selection-end="1134" vertical-scroll-proportion="-7.52" vertical-offset="157" max-vertical-offset="1395">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keen/web/templates/client/promotions.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="0" selection-start="1036" selection-end="1689" vertical-scroll-proportion="0.60642093" vertical-offset="0" max-vertical-offset="1980">
           <folding />
         </state>
       </provider>

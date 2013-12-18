@@ -28,9 +28,6 @@ def promotions(request, tab='active'):
     context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'},
                                {"link": "/promotions/%s" % tab, "text": '%s Promotions' % tab.title()}],
                'tab': tab}
-    promotions = None
-    if request.POST:
-        print request.POST.get("sorting")
     promotions = Promotion.objects.get_promotions_for_status(tab)
     context["promotions"] = promotions
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
