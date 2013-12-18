@@ -303,3 +303,6 @@
 .non-resizing {
   resize: none;
 }
+.non-resizing-gorizontal {
+  resize: vertical;
+}

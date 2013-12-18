@@ -1,9 +1,14 @@
+html, body {
+  min-height: 100%;
+  height: 100%;
+}
+
 img.center {
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
-.flat-font {
+/*.flat-font {
   font-family: "Flat-UI-Icons";
   font-size: 23.996px;
   font-style: normal;
@@ -11,12 +16,12 @@ img.center {
   -webkit-font-smoothing: antialiased;
   font-weight: 500;
   text-shadow: none;
-}
+}*/
 .w1 {
   width: 200px;
 }
 
-.login {
+#topbar .login {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -24,8 +29,15 @@ img.center {
 #topbar {
   position: relative;
   height: 470px;
-  background-image: url('../images/exaple-image-new.jpg');
+}
+#topbar .item {
+  overflow: hidden;
+  min-height: 470px;
   background-size: cover;
+}
+#topbar .item > img {
+  position: absolute;
+  z-index: 0;
 }
 #topbar div.logo {
   margin: 0 auto;
@@ -47,19 +59,14 @@ img.center {
 #topbar .signup {
   max-width: 152px;
   margin: 0 auto;
-  margin-top: 45px;
-}
-#topbar .signup a {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+  margin-top: -185px;
+  position: relative;
 }
 #topbar .main-navigation {
   text-align: justify;
   float: none;
   margin: 0 auto;
-  margin-top: 116px;
-  margin-bottom: -10px;
+  margin-top: 111px;
   z-index: 1;
   position: relative;
 }
@@ -84,20 +91,20 @@ img.center {
   color: #ffffff;
   display: inline-block;
   font-size: 13px;
+  font-weight: bold;
 }
 #topbar .shadow-after {
   position: relative;
+  margin-top: -22px;
 }
 #topbar .shadow-after:after {
   content: '';
   position: absolute;
-  display: block;
   left: 0;
-  bottom: 0;
+  bottom: 5px;
   width: 100%;
-  max-width: 1140px;
-  max-height: 70px;
   height: 100%;
+  min-height: 76px;
   background-color: #000000;
   opacity: 0.7;
 }
@@ -254,3 +261,115 @@ img.center {
 .main-page-block.default {
   background-color: #f1f1f1;
 }
+
+.scroll-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px;
+  background-color: #fff;
+  z-index: 3;
+}
+
+.scroll-menu ul {
+  padding-left: 300px;
+  margin: 0;
+  border-bottom: 8px solid #dbdbdb;
+  float: left;
+  width: 77%;
+}
+.scroll-menu ul li {
+  float: left;
+  list-style-type: none;
+  margin-left: 30px;
+}
+.scroll-menu ul li a {
+  line-height: 68px;
+  display: inline-block;
+  margin-bottom: -8px;
+  font-size: 14px;
+  color: #999999;
+  border-bottom: 8px solid transparent;
+  padding: 0;
+}
+
+.scroll-menu ul li a:hover {
+  color: #000;
+  background-color: transparent;
+}
+
+.scroll-menu ul .active a {
+  border-bottom: 8px solid red;
+  color: #000;
+}
+
+.scroll-menu .logo {
+  line-height: 76px;
+  margin: 0 30px;
+}
+.scroll-menu .login-link {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.scroll-menu > a {
+  margin-top: 20px;
+}
+
+
+
+/* landing page 2 */
+
+.wrapper {
+  min-height: 100%;
+  height: 100%;
+  background: url('../images/landing-2-bg.jpg');
+  background-size: cover;
+}
+
+.landing2 .login {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  z-index: 2;
+  font-weight: bold;
+  -webkit-border-radius: 0 0 7px 7px;
+  -moz-border-radius: 0 0 7px 7px;
+  border-radius: 0 0 7px 7px;
+}
+
+.landing2 .white-label {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 20px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.landing2 .logo {
+  text-align: center;
+}
+
+.landing2 .logo img {
+  margin: 80px 0 50px;
+}
+
+.landing2 .logo figcaption {
+  text-align: left;
+  font-size: 28px;
+  line-height: 45px;
+  color: #000;
+  font-weight: bold;
+}
+
+.landing2 .offer-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.landing2 .offer-list li {
+  list-style-type: none;
+}
+

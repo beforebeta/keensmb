@@ -9,6 +9,7 @@ from keen.core.models import Client, Customer, Location, Promotion
 from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
+from keen.web.serializers import SignupFormSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ def signup_form_list(request):
     forms = SignupForm.objects.filter(client=client).order_by('-status', 'slug')
     context = {
         'client': client,
-        'forms': forms,
+        'forms': SignupFormSerializer(forms, many=True).data,
     }
 
     return render(request, 'client/signup-form-list.html', context)
@@ -94,18 +95,35 @@ def signup_form_create(request):
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
-def business_profile(request):
-    return None
+def signup_form_edit(request, slug):
+    client = get_object_or_404(
+        Client.objects.prefetch_related('customer_fields'),
+        slug=request.session['client_slug'])
+    form = get_object_or_404(SignupForm, client=client, slug=slug)
+    context = {
+        'client': client,
+        'form': form,
+    }
+    return render(request, 'client/signup-form-edit.html', context)
 
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
-def customer_form(request, customer_id=None):
-    client = get_object_or_404(Client, slug=request.session['client_slug'])
-    if customer_id:
-        customer = get_object_or_404(Customer, client=client, id=customer_id)
-        form = CustomerForm(client, initial=customer.data)
-    else:
-        form = CustomerForm(client)
+def signup_form_preview(request, slug):
+    client = get_object_or_404(
+        Client.objects.prefetch_related('customer_fields'),
+        slug=request.session['client_slug'])
+    signup_form = get_object_or_404(SignupForm, client=client, slug=slug)
+    form = CustomerForm(client)
+    context = {
+        'client': client,
+        'form_data': signup_form.data,
+        'form': form,
+    }
+    return render(request, 'customer/signup.html', context)
 
-    return render(request, 'client/customer_form.html', {'form': form})
+
+@ensure_csrf_cookie
+@login_required(login_url='/#signin')
+def business_profile(request):
+    return None
