@@ -33,11 +33,11 @@ def login_view(request):
     if user and user.is_active:
         login(request, user)
         try:
-            request.session['client'] = ClientSerializer(
-                ClientUser.objects.get(user=user).client).data
+            request.session['client_slug'] = ClientUser.objects.get(
+                user=user).client.slug
         except ClientUser.DoesNotExist:
             messages.error(request, 'Failed to associate your account with any client')
-            request.session['client'] = None
+            request.session['client_slug'] = None
             request.session.save()
         else:
             request.session.save()
@@ -52,7 +52,7 @@ def login_view(request):
 @ensure_csrf_cookie
 @api_view(['GET'])
 def logout_view(request):
-    del request.session['client']
+    request.session.pop('client_slug', None)
     logout(request)
 
     return HttpResponseRedirect(reverse('home'))

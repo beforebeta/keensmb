@@ -1,11 +1,16 @@
 import os
+import operator
+import random
+
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django_hstore import hstore
+
 from model_utils import Choices
-import operator
-import random
+
+from tracking.models import Visitor
+
 
 class Timestamps(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -247,6 +252,7 @@ class Customer(Timestamps):
 
     client = models.ForeignKey('Client', related_name='customers')
     source = models.ForeignKey(CustomerSource)
+    visitor = models.ForeignKey(Visitor, null=True)
     data = hstore.DictionaryField()
     locations = models.ManyToManyField(Location, related_name='customers',
                                        null=True, blank=True)

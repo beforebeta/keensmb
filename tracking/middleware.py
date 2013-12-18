@@ -3,6 +3,7 @@ import logging
 from uuid import uuid4
 from datetime import datetime
 
+from django.db import DatabaseError
 from django.utils.timezone import now
 
 from tracking.models import Visitor
@@ -28,13 +29,18 @@ def get_visitor(request):
     """Extract visitor tracking information from Google Analytics cookie and
     use that to create Visitor object.
     """
-    visitor = Visitor()
-    visitor.uuid = str(uuid4())
-
-    # get information from request
-    visitor.ip_address = request.META.get('REMOTE_ADDR', '')
-    visitor.user_agent = request.META.get('HTTP_USER_AGENT', '')
-    visitor.referrer = request.META.get('HTTP_REFERER', '')
+    current_time = now()
+    visitor, created = Visitor.objects.get_or_create(
+        uuid=str(uuid4()),
+        defaults={
+            'ip_address': request.META.get('REMOTE_ADDR', ''),
+            'user_agent': request.META.get('HTTP_USER_AGENT', ''),
+            'referrer': request.META.get('HTTP_REFERER', ''),
+            'first_visit': current_time,
+            'last_visit': current_time,
+            'visits': 1,
+        },
+    )
 
     # extract visits information from GA cookies
     cookie = request.COOKIES.get('__utma')
@@ -49,10 +55,6 @@ def get_visitor(request):
             visitor.first_visit = first_visit
             visitor.last_visit = last_visit
             visitor.visits = visits
-
-    if not visitor.visits:
-        visitor.last_visit = visitor.first_visit = now()
-        visitor.visits = 1
 
     # get acquisition source information
     cookie = request.COOKIES.get('__utmz')
@@ -77,6 +79,10 @@ def get_visitor(request):
     ):
         if not getattr(visitor, attr):
             setattr(visitor, attr, request.GET.get(param, 'direct'))
+    try:
+        visitor.save()
+    except DatabaseError:
+        logger.exception('Failed to save visitor')
 
     return visitor
 

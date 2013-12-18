@@ -46,6 +46,7 @@ urlpatterns = patterns(
     url(r'^customer_profile/(?P<customer_id>[\d]+)', 'client.profile', name='customer_profile'),
     url(r'^business_profile', 'client.business_profile', name='business_profile'),
     url(r'^signup-form/create$', 'client.signup_form_create', name='signup_form_create'),
+    url(r'^signup_forms$', 'client.signup_form_list', name='client_signup_form_list'),
     url(r'^api/', include(api_urls)),
     url(r'^(?P<client_slug>[\w-]+)/(?P<form_slug>[\w-]+)$', 'customer.signup_view', name='customer_signup'),
 )

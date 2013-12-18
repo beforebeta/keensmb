@@ -1,166 +1,125 @@
 {% load static %}
-<!DOCTYPE HTML>
+{% load compress %}
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>{{ form_data.title }}</title>
-    <link media="all" rel="stylesheet" href="{% static "signup/css/all.css"%}?d=10">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <link href='http://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="{% static "signup/js/jquery-1.8.3.min.js"%}"></script>
-    <script type="text/javascript" src="{% static "signup/js/jquery.main.js"%}"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <!--[if IE]><script type="text/javascript" src="{% static "signup/ie.js"%}"></script><![endif]-->
-  </head>
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% compress css %}
+        <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+        <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
+        <link href="{% static "css/app.css" %}" rel="stylesheet">
+        {% endcompress %}
+
+        <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+
+        {% compress js %}
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+        <!--[if lt IE 9]>
+        <script src="{% static "js/html5shiv.js" %}"></script>
+        <![endif]-->
+        {% endcompress %}
+    </head>
+
   <body>
-    <div id="wrapper">
-      <div class="w1">
-        <header id="header">
-        <div class="header-holder">
-          <strong class="logo">
-            {% if client.url %}
-            <a href="{{ client.url }}">{{ client.name }}</a>
-            {% else %}
-            {{ client.name }}
-            {% endif %}
-          </strong>
+    <div class="container">
 
-          {% comment %}
+      <div class="su-title mtl mbn mll">
+        <h1 class="page-title">{{ form_data.pageTitle }}</h1>
+      </div>
 
-          {% if form_data.social_links %}
-          <div class="top-block">
-            <ul class="social-networks">
-              <li>find us on</li>
-              {% for link in form_data.social_links %}
-              <li>
-              <a href="{{ link.url }}">
-                {% if link.img %}
-                <img src="{{ link.img.url }}" width="18" height="18" alt="{{ link.img.alt }}">
-                {% endif %}
-                {{ link.label }}
-              </a>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
+      <div class="su-form-wrapper su-form-overview mbm mrl mll">
 
-          {% if form_data.extra_nav %}
-          <nav class="top-nav">
-          <ul>
-            {% for link in form_data.extra_links %}
-            <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-            {% endfor %}
-          </ul>
-          </nav>
-          {% endcomment %}
-
+        <div class="banner-logo">
+          <img src='{{ form_data.bannerLogo.imageSrc }}'
+          class='banner-preview'
+          alt=""
+          style='top:{{ form_data.bannerLogo.position.top }}px;
+          left:{{ form_data.bannerLogo.position.left }}px'>
         </div>
-        <nav id="nav">
-        <ul>
-          {% for link in form_data.main_nav_links %}
-          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-          {% endfor %}
-        </ul>
-        </nav>
-        </header>
 
-        <div id="main">
+        <div class="background-image"
+          style='background:{{ form_data.backgroundImage.backgroundColor }}'>
+          <img src='{{ form_data.backgroundImage.imageSrc }}'
+          class='banner-preview'
+          alt="" id='background-image'
+          style='top:{{ form_data.backgroundImage.position.top }}px;
+          left:{{ form_data.backgroundImage.position.left }}px'>
 
-          <img src="{{ form_data.background_img }}" width="940" height="759">
+          <form class="su-form mbl"
+            action=""
+            method="post"
+            style='background:{{ form_data.form.backgroundColor }};
+            color:{{ form_data.form.textColor }}'>
+            <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
+            <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
 
-          <section class="container">
-          <div class="info-box">
-            <h1>{{ form_data.title }}</h1>
-            <p style="margin-top:14px;">Complete the information below and receive<br> A COUPON BOOK VALUED AT $750.</p>
-            <form class="account-form" action="" method="post">
+            <div class="row">
               {% csrf_token %}
-              {% if list_id %}
-              <input type="hidden" name="list_id" value="{{ list_id }}">
-              {% endif %}
-              <fieldset>
-                <span class="required">*Required</span>
-                <div class="row">
-                  {{ form.full_name }}
+              {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
+
+              <div class="col-md-12">
+                <div class="form-group mbm {% if form.full_name.errors %}has-error{% endif %}">
+                  <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
                 </div>
-                <div class="row">
-                  {{ form.email }}
+                <div class="form-group mbm {% if form.email.errors %}has-error{% endif %}">
+                  <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
                 </div>
-                <div class="row">
-                  <div class="col span-4">
-                    {{ form.dob }}
-                  </div>
-                  <div class="col span-4">
-                    {{ form.address__zipcode }}
-                  </div>
-                  <div class="col span-4">
-                    {{ form.phone }}
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group mbm {% if form.address__zipcode.errors %}has-error{% endif %}">
+                  <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
+                </div>
+              </div>
+              <div class="col-md-6 pln">
+                <div class="form-group mbm {% if form.dob.errors %}has-error{% endif %}">
+                  <div class="input-group">
+                    <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
+                    <span class="input-group-btn">
+                      <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                    </span>
                   </div>
                 </div>
-                <input type="submit" value="submit">
-              </fieldset>
-            </form>
-            <p>We will email you a voucher shortly.<br>You can redeem it for your valuable coupon book at <br/>the Brooks Brothers outlet location. </p>
-            <span class="notes">By submitting your information, you agree to receive<br>additional special offers and promotions from MDO.</span>
-          </div>
-          <div class="intro-box">
-            <div class="text-holder">
-              <p><strong>SAVE UP TO 70%</strong><br>on top designer brands</p>
-              <p>Marvel at the spectacular<br><strong>COLORS OF FALL</strong> in New England’s<br>#1 Fall Foliage destination.</p>
+              </div>
+              <div class="col-md-6 prn">
+                <div class="form-group mbm {% if form.phone.errors %}has-error{% endif %}">
+                  <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group mbm {% if form.gender.errors %}has-error{% endif %}">
+                  <select name="gender" id="gender" class='simple full mbs'>
+                    <option value="0" selected disabled>Gender</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
-          </section>
+            <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
+          </form>
+
         </div>
-        <footer id="footer">
-        <div class="footer-holder">
-          <div class="column">
-            <strong class="title">email sign up</strong>
-            <form class="subscribe-form" action="#">
-              <fieldset>
-                <label for="sign">Sign up for our email newsletter to receive offers and discounts</label>
-              </fieldset>
-            </form>
-          </div>
-          <div class="column">
-            <strong class="title">stay connected</strong>
-            <ul>
-              {% for link in form_data.social_links %}
-              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="column">
-            <strong class="title">more</strong>
-            <ul>
-              {% for link in form_data.extra_links %}
-              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="contact-box">
-            <strong class="title">find us</strong>
-            <a href="http://manchesterdesigneroutlets.com/en/map-directions"><img src="{% static "special/clients/mdo/images/img7.png"%}" width="217" height="124" alt="image description"></a>
-            <p>Phone: 800 955 SHOP</p>
-            <p>Fax: 802 362 5192</p>
-            <p><a href="mailto:info@manchesterdesigneroutlets.com">info@manchesterdesigneroutlets.com</a></p>
-          </div>
-        </div>
-        {% comment %}
-        <div class="footer-block">
-          <div class="copyright">
-            <p>Copyright 2012<br></p>
-            <a href="http://manchesterdesigneroutlets.com/">Manchester Designer Outlets</a>
-          </div>
-          <strong class="partner-logo"><a href="http://manchesterdesigneroutlets.com/">VERMONT</a></strong>
-        </div>
-        {% endcomment %}
-        </footer>
       </div>
     </div>
-    <script>
-      $(function() {
-        $("#dob").datepicker();
-      });
-    </script>
-    {# include 'snippets/ga_tracking.html' #}
+
+    {% compress js %}
+    <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
+    <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
+    <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
+    <script src="{% static "js/application.js" %}"></script>
+    {% endcompress %}
+
   </body>
 </html>

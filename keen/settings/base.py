@@ -55,10 +55,10 @@ INSTALLED_APPS = (
     # Application base, containing global templates.
 
     # Local apps, referenced via appname
+    'tracking',
     'keen.core',
     'keen.web',
     'keen.events',
-    'tracking',
 )
 
 # Place bcrypt first in the list, so it will be the default password hashing
@@ -144,6 +144,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tracking.middleware.VisitorMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [

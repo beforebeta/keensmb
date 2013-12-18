@@ -35,7 +35,7 @@ module.exports = function (grunt) {
       //   tasks: ['copy:styles']
       // },
       css: {
-        files: '<%= yeoman.app %>/css/*.css',
+        files: '<%= yeoman.app %>/css/{,*/}*.css',
         tasks: [],
         options: {
           livereload: LIVERELOAD_PORT
@@ -75,7 +75,7 @@ module.exports = function (grunt) {
     },
     connect: {
       options: {
-        port: 9000,
+        port: 9001,
         hostname: '0.0.0.0'
       },
       livereload: {

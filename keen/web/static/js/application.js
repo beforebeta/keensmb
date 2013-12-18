@@ -163,7 +163,9 @@ String.prototype.repeat = function(num) {
     });
 
     // Chromoselector
-    $('.chromoselector').chromoselector();
+    if( $('.chromoselector').chromoselector ) {
+      $('.chromoselector').chromoselector();
+    }
 
     // Table: Add class row selected
     $(document).on('check uncheck toggle', '.table tbody :checkbox', function (e) {

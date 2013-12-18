@@ -7,6 +7,8 @@ from keen.core.models import Client, Customer, CustomerSource
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
 
+from tracking.models import Visitor
+
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +26,14 @@ def signup_view(request, client_slug, form_slug):
         if form.is_valid():
             customer = Customer()
             customer.client = client
-            customer.source = CustomerSource.objects.filter(
-                slug=form_slug).first()
+            if 'visitor' in request.session:
+                try:
+                    customer.visitor = Visitor.objects.get(uuid=request.session['visitor'])
+                except Visitor.DoesNotExist:
+                    logger.warn('Failed to locate Visitor wirh UUID=%s' % request.session['visitor'])
+
+            customer.source, created = CustomerSource.objects.get_or_create(
+                client=client, slug=form_slug)
 
             for name, value in form.cleaned_data.items():
                 customer.data[name] = str(value)
@@ -36,6 +44,8 @@ def signup_view(request, client_slug, form_slug):
                 logger.exception('Failed to save new customer')
             else:
                 return render(request, 'customer/signup_success.html')
+        else:
+            logger.debug('Signup form validation error(s): %r' % form.errors)
     else:
         form = CustomerForm(client)
 

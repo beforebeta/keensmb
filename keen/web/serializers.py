@@ -1,4 +1,5 @@
 from rest_framework.serializers import (
+    DateTimeField,
     ModelSerializer,
     RelatedField,
     PrimaryKeyRelatedField,
@@ -97,6 +98,9 @@ class ImageSerializer(DynamicSerializer):
 
 class SignupFormSerializer(DynamicSerializer):
 
+    created = DateTimeField()
+    modified = DateTimeField()
+
     class Meta:
         model = SignupForm
-        fields = ('slug', 'status', 'data')
+        fields = ('slug', 'status', 'data', 'created', 'modified')

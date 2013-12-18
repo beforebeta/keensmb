@@ -523,8 +523,8 @@ section {
 
 /* Signup page */
 
-.su-form-wrapper {
-  border: 1px dashed #b3b3b3;
+.su-form-wrapper.su-form-overview {
+  border: 1px solid #fff;
 }
 
 .su-form-wrapper .banner-logo {
@@ -533,9 +533,9 @@ section {
   overflow: hidden;
   background: #bdc3c7;
 }
-.su-form-wrapper .banner-logo .banner-preview {
+.su-form-wrapper .banner-logo .banner-preview,
+.su-form-wrapper .background-image .banner-preview  {
   position: absolute;
-  z-index: 2;
 }
 .su-form-wrapper .banner-logo:not(:hover) .hover-vis,
 .su-form-wrapper .background-image:not(:hover) .hover-vis {

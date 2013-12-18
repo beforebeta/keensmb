@@ -6,6 +6,8 @@ from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from keen.core.models import Client, Customer, Location, Promotion
+from keen.core.models import Client, Customer, Location
+from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
 
 
@@ -15,12 +17,13 @@ logger = logging.getLogger(__name__)
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def dashboard(request):
-    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     context = {
         'client': client,
         'dashboard': client.get_dashboard()
     }
-    return render_to_response('client/dashboard.html', context, context_instance=RequestContext(request))
+    return render(request, 'client/dashboard.html', context)
+
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -39,7 +42,7 @@ def promotions(request, tab='active'):
 def customers(request):
     client = get_object_or_404(
         Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client']['slug'])
+        slug=request.session['client_slug'])
     q = Customer.objects.filter(client=client)
 
     context = {}
@@ -67,10 +70,22 @@ def profile(request, customer_id=None):
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
+def signup_form_list(request):
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
+    forms = SignupForm.objects.filter(client=client).order_by('-status', 'slug')
+    context = {
+        'client': client,
+        'forms': forms,
+    }
+
+    return render(request, 'client/signup-form-list.html', context)
+
+@ensure_csrf_cookie
+@login_required(login_url='/#signin')
 def signup_form_create(request):
     client = get_object_or_404(
         Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client']['slug'])
+        slug=request.session['client_slug'])
     context = {
         'client': client,
     }
@@ -86,10 +101,11 @@ def business_profile(request):
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def customer_form(request, customer_id=None):
-    client = get_object_or_404(Client, slug=request.session['client']['slug'])
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     if customer_id:
         customer = get_object_or_404(Customer, client=client, id=customer_id)
         form = CustomerForm(client, initial=customer.data)
     else:
         form = CustomerForm(client)
+
     return render(request, 'client/customer_form.html', {'form': form})

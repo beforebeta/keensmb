@@ -190,7 +190,7 @@
             var color = $formBgColorPicker.chromoselector('getColor').getHexString();
             $('.su-form').css('background-color', color);
 
-            $scope.form.textColor = color;
+            $scope.form.backgroundColor = color;
         }
 
         var $formTextColorPicker = $('#su-text-color');
@@ -204,7 +204,7 @@
             var color = $formTextColorPicker.chromoselector('getColor').getHexString();
             $('.su-form').find('textarea').css('color', color);
 
-            $scope.form.backgroundColor = color;
+            $scope.form.textColor = color;
 
         }
 
@@ -309,6 +309,9 @@
                 contHeight = $container.height(),
                 scopeObject = $container.data('scope-object');
 
+            // disabling retina ratio
+            Caman.prototype.hiDPIDisabled = function() {return true};
+
             FileAPI.filterFiles(files, function (file, info){
                 if( /^image/.test(file.type) ){
                     if (info.width >= contWidth && info.height >= contHeight) {
@@ -321,11 +324,14 @@
             }, function (files, rejected){
                 if( files.length ){
                     var file = files[0];
-                    FileAPI.Image(file).resize(contWidth, contHeight, 'min').get(function (err, img){
+                    FileAPI.Image(file)
+                    .resize(contWidth, contHeight, 'min')
+                    // .filter('vintage')
+                    .get(function (err, img){
 
                         FileAPI.readAsDataURL(img, function (evt){
 
-                            if( evt.type == 'load' ){
+                            if( evt.type === 'load' ){
                                 // Success
                                 // var dataURL = evt.result;
                                 var url = img.toDataURL(file.type);
@@ -337,12 +343,12 @@
                                 // Update angular scope
 
                                 $timeout(function() {
-                                    if (scopeObject == 'bannerLogo') {
+                                    if (scopeObject === 'bannerLogo') {
                                         $scope.bannerLogo.editing = true;
                                         $scope.bannerLogo.image.src = url;
                                         $scope.bannerLogo.image.type = file.type;
                                         startEditingBanner();
-                                    } else if (scopeObject == 'backgroundImage') {
+                                    } else if (scopeObject === 'backgroundImage') {
                                         $scope.backgroundImage.editing = true;
                                         $scope.backgroundImage.image.src = url;
                                         $scope.backgroundImage.image.type = file.type;

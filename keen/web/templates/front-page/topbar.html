@@ -2,21 +2,35 @@
 
 <section id="topbar">
 	<div class="row">
-		<div class="span2">
-			<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+		<div class="span12">
+			<div class="logo">
+				<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+			</div>
+			<div class="login">
+				<a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#loginModal">
+	                    <strong>Log In</strong>
+	            </a>
+			</div>
 		</div>
-		<div class="span7">
-			<h6 class="flat-font tagline">Delivering Customers to Your Doorstep</h6>
+		<div class="span12">
+			<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
 		</div>
-		<div class="span3">
+		<div class="span12">
 			<div class="signup">
-				<a href="mailto:info@keensmb.com" class="btn btn-large btn-primary"><strong>Try Keen for Free!</strong></a>
+				<a href="mailto:info@keensmb.com" class="btn btn-large btn-info"><strong>Try Keen for Free!</strong></a>
                 <!-- <a href="{% url "client_customers" %}" class="btn btn-large btn-success">
                     <strong>Log In</strong>
                 </a> -->
-                <a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#loginModal">
-                    <strong>Log In</strong>
-                </a>
+			</div>
+		</div>
+		<div class="span12 shadow-after">
+			<div class="span6 main-navigation" id="main-navigation">
+				<ul>
+					<li><a class="js-animate-scroll" href="#what-is-keen">What is Keen?</a></li>
+					<li><a class="js-animate-scroll" href="#email-letter">Connect with your Customers</a></li>
+					<li><a class="js-animate-scroll" href="#online">See what Your business is doing</a></li>
+					<li><a class="js-animate-scroll" href="#pricing">Pricing</a></li>
+				</ul>
 			</div>
 		</div>
 	</div>
