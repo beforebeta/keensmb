@@ -185,7 +185,8 @@ String.prototype.repeat = function(num) {
       showOtherMonths: true,
       selectOtherMonths: true,
       dateFormat: "d M, y",
-      yearRange: '-1:+1'
+      changeMonth: true,
+      changeYear: true
     }).prev('.btn').on('click', function (e) {
       e && e.preventDefault();
       $(datepickerSelector).focus();
