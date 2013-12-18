@@ -42,6 +42,7 @@ urlpatterns = patterns(
     url(r'^landing$', TemplateView.as_view(template_name='front-page/landing2.html'), name='home'),
     url(r'^dashboard$', 'client.dashboard', name='client_dashboard'),
     url(r'^promotions$', 'client.promotions', name='client_promotions'),
+    url(r'^promotions/create$', 'client.create_promotion', name='client_create_promotion'),
     url(r'^promotions/(?P<tab>[\w-]+)$', 'client.promotions', name='client_promotions_tab'),
     url(r'^customers$', 'client.customers', name='client_customers'),
     url(r'^customer_profile/(?P<customer_id>[\d]+)', 'client.profile', name='customer_profile'),

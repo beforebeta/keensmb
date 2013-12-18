@@ -37,6 +37,9 @@ def promotions(request, tab='active'):
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
     #return render(request, 'client/promotions.html')
 
+def create_promotion(request):
+    context={}
+    return render_to_response('client/promotions-create.html', context, context_instance=RequestContext(request))
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
