@@ -43,7 +43,7 @@ urlpatterns = patterns(
     url(r'^promotions$', 'client.promotions', name='client_promotions'),
     url(r'^promotions/(?P<tab>[\w-]+)$', 'client.promotions', name='client_promotions_tab'),
     url(r'^customers$', 'client.customers', name='client_customers'),
-    url(r'^customer_profile/(?P<customer_id>[\d]+)', 'client.profile', name='client_profile'),
+    url(r'^customer_profile/(?P<customer_id>[\d]+)', 'client.profile', name='customer_profile'),
     url(r'^business_profile', 'client.business_profile', name='business_profile'),
     url(r'^signup-form/create$', 'client.signup_form_create', name='signup_form_create'),
     url(r'^api/', include(api_urls)),
