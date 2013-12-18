@@ -20,7 +20,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
-from keen.core.models import Client, Customer, Image
+from keen.core.models import Client, Customer, Image, CustomerSource
 from keen.web.models import PageCustomerField, SignupForm
 from keen.web.serializers import (
     ClientSerializer,
