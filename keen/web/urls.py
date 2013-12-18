@@ -37,14 +37,11 @@ api_urls = patterns(
 
 urlpatterns = patterns(
     'keen.web.views',
-    url(r'^$', TemplateView.as_view(template_name='front-page/index.html'),
-        name='home'),
-    url(r'^legal$',
-        TemplateView.as_view(template_name='front-page/legal.html'),
-        name='legal'),
+    url(r'^$', TemplateView.as_view(template_name='front-page/index.html'), name='home'),
+    url(r'^legal$', TemplateView.as_view(template_name='front-page/legal.html'), name='legal'),
     url(r'^dashboard$', 'client.dashboard', name='client_dashboard'),
     url(r'^promotions$', 'client.promotions', name='client_promotions'),
-    url(r'^promotions/(?P<tab>[\w-]+)$', 'client.promotions', name='client_promotions'),
+    url(r'^promotions/(?P<tab>[\w-]+)$', 'client.promotions', name='client_promotions_tab'),
     url(r'^customers$', 'client.customers', name='client_customers'),
     url(r'^customer_profile/(?P<customer_id>[\d]+)', 'client.profile', name='client_profile'),
     url(r'^business_profile', 'client.business_profile', name='business_profile'),

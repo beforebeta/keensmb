@@ -382,6 +382,15 @@ class PromotionMedium(Timestamps):
     platform = models.CharField(max_length=10, choices=PROMOTION_PLATFORMS)
     account_info = hstore.DictionaryField() #account into per medium
 
+class PromotionsManager(models.Manager):
+
+    def get_promotions_for_status(self, status):
+        alias_mapping = dict([(key[0],key[0]) for key in Promotion.PROMOTION_STATUS])
+        alias_mapping['awaiting'] = 'inapproval'
+        alias_mapping['upcoming'] = 'scheduled'
+        _status = alias_mapping[status]
+        return self.filter(status=_status)
+
 class Promotion(Timestamps):
     PROMOTION_STATUS = Choices(
         ('draft', 'Draft'),
@@ -408,6 +417,8 @@ class Promotion(Timestamps):
     target_customers = models.ManyToManyField(Customer, null=True, blank=True)
 
     analytics = hstore.DictionaryField(null=True, blank=True)
+
+    objects = PromotionsManager()
 
     def save(self, *args, **kwargs):
         if not self.analytics:

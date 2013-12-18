@@ -2,206 +2,101 @@
 
 {% load static %}
 {% load compress %}
+{% load web_tags %}
+
 
 {% block content %}
   <!-- Content -->
   <section class='clearfix promotions'>
 
    <div class="row">
-    <div class="col-xs-3 pln">
+    <div class="col-xs-3 pln pbl">
       <ul class="promotions-list">
-        <li class="prom-active {% if tab == 'active' %}active{% endif %}"><a href="/promotions/active">Active Promotions</a></li>
-        <li class="prom-upcoming {% if tab == 'upcoming' %}active{% endif %}"><a href="/promotions/upcoming">Upcoming Promotions</a></li>
-        <li class="prom-awaiting {% if tab == 'awaiting' %}active{% endif %}"><a href="/promotions/awaiting">Awaiting Approval</a></li>
-        <li class="prom-expired {% if tab == 'expired' %}active{% endif %}"><a href="/promotions/expired">Expired Promotions</a></li>
+        <li class="prom-active {% if tab == 'active' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'active' %}">Active Promotions</a></li>
+        <li class="prom-upcoming {% if tab == 'upcoming' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'upcoming' %}">Upcoming Promotions</a></li>
+        <li class="prom-awaiting {% if tab == 'awaiting' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'awaiting' %}">Awaiting Approval</a></li>
+        <li class="prom-expired {% if tab == 'expired' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'expired' %}">Expired Promotions</a></li>
       </ul>
     </div>
-    <div class="col-xs-9 promotions-border-right">
+    <div class="col-xs-9 promotions-border-left pbl">
       <div class="row">
         <div class="col-xs-3 mll mtm pll">
-          <select class="simple full promotions-select">
-            <option value="sort by" disabled selected>sort by</option>
-            <option value="0">My Profile</option>
-            <option value="1">My Friends</option>
-            <option value="2">Messages</option>
-            <option value="3">My Settings</option>
-          </select>
+            <form role="form" action="{% url 'client_promotions_tab' tab %}" method="POST">
+                {% csrf_token %}
+                <select name="sorting" class="simple full promotions-select" onchange="this.form.submit()">
+                    <option value="sort by" disabled selected>Sort By</option>
+                    <option value="launched">Launched</option>
+                    <option value="performance">Performance</option>
+                    <option value="expiring">Expiring</option>
+                    <option value="name">Name</option>
+                </select>
+            </form>
+
         </div>
         <div class="col-xs-4 pull-right mtm">
           <button class="btn btn btn-sm btn-default pull-right">
-            <span class="mrl">Create New Form</span>
+            <span class="mrl">Create New Promotion</span>
             <i class="fui-plus mll"></i>
           </button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-xs-10 mtl mll mbm pll">
-          <div class="kn-section promotions-section prom-active">
-            <div class="kn-section-header">
-              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
-              <time class="small pull-right white italic">
-                Expiring
-                <strong>Nov 2.2013</strong>
-              </time>
+
+        {% for promotion in promotions %}
+          <div class="row">
+            <div class="col-xs-10 mtl mll mbm pll">
+              <div class="kn-section promotions-section prom-{{ tab }}">
+                <div class="kn-section-header">
+                  <h6 class="mbn mtn pull-left white">{{ promotion.name }}</h6>
+                  <time class="small pull-right white italic">
+                      {% if promotion.valid_to %}
+                        <em>Expiring</em>
+                        {{ promotion.valid_to.date }}
+                      {% else %}
+                        <em>Does not expire</em>
+                      {% endif %}
+                  </time>
+                </div>
+                <div class="kn-section-content promotions-news">
+                  <article class="col-sx-12 small">
+{#                    <div>#}
+{#                      <h6 class="mts mbs">Name of campaing</h6>#}
+{#                    </div>#}
+                    <p class="mts mbn">{{ promotion.description|truncatesmart:300 }}</p>
+                    <time class="dib mbl mtl">
+                      <em>{{ tab|text_launched }}</em>
+                      {% if promotion.valid_from %}
+                        {{ promotion.valid_from.date }}
+                      {% else %}
+                        {{ promotion.created.date }}
+                      {% endif %}
+                    </time>
+                    {% if promotion.status == 'active' or promotion.status == 'expired' %}
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div> Total Sent <strong>{{ promotion.analytics.total_sent }}</strong>
+                    </div>
+                  {% endif %}
+                  </article>
+                </div>
+              </div>
             </div>
-            <div class="kn-section-content promotions-news">
-              <article class="col-sx-12 small">
-                <div>
-                  <h6 class="mts mbs">Name of campaing</h6>
-                </div>
-                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
-                <time class="dib mbl mtl">
-                  <em>Launched</em>
-                  Nov 2.2013
-                </time>
-                <div class="progress">
-                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-1 promotions-button mtl">
-          <button href="#" class="btn btn-lg btn-primary pbs">
-            <i class="fui-new dib"></i>
-            <span class="dib small">Edit</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-default pbs mts">
-            <i class="fui-eye dib"></i>
-            <span class="dib small">Preview</span>
-          </button>
-          <button href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts">
-            <i class="fui-cross dib"></i>
-            <span class="dib small">Delete</span>
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-10 mtl mll mbm pll">
-          <div class="kn-section promotions-section prom-upcoming">
-            <div class="kn-section-header">
-              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
-              <time class="small pull-right white italic">
-                Expiring
-                <strong>Nov 2.2013</strong>
-              </time>
-            </div>
-            <div class="kn-section-content promotions-news">
-              <article class="col-sx-12 small">
-                <div>
-                  <h6 class="mts mbs">Name of campaing</h6>
-                </div>
-                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
-                <time class="dib mbl mtl">
-                  <em>Launched</em>
-                  Nov 2.2013
-                </time>
-                <div class="progress">
-                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
-                </div>
-              </article>
+
+            <div class="col-xs-1 promotions-button mtl">
+              <button href="#" class="btn btn-lg btn-primary pbs">
+                <i class="fui-new dib"></i>
+                <span class="dib small">Edit</span>
+              </button>
+              <button href="#" class="btn btn-lg btn-default pbs mts">
+                <i class="fui-eye dib"></i>
+                <span class="dib small">Preview</span>
+              </button>
+              <button href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts">
+                <i class="fui-cross dib"></i>
+                <span class="dib small">Delete</span>
+              </button>
             </div>
           </div>
-        </div>
-        <div class="col-xs-1 promotions-button mtl">
-          <button href="#" class="btn btn-lg btn-primary pbs">
-            <i class="fui-new dib"></i>
-            <span class="dib small">Edit</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-default pbs mts">
-            <i class="fui-eye dib"></i>
-            <span class="dib small">Preview</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-danger pbs mts">
-            <i class="fui-cross dib"></i>
-            <span class="dib small">Delete</span>
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-10 mtl mll mbm pll">
-          <div class="kn-section promotions-section prom-awaiting">
-            <div class="kn-section-header">
-              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
-              <time class="small pull-right white italic">
-                Expiring
-                <strong>Nov 2.2013</strong>
-              </time>
-            </div>
-            <div class="kn-section-content promotions-news">
-              <article class="col-sx-12 small">
-                <div>
-                  <h6 class="mts mbs">Name of campaing</h6>
-                </div>
-                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
-                <time class="dib mbl mtl">
-                  <em>Launched</em>
-                  Nov 2.2013
-                </time>
-                <div class="progress">
-                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-1 promotions-button mtl">
-          <button href="#" class="btn btn-lg btn-primary pbs">
-            <i class="fui-new dib"></i>
-            <span class="dib small">Edit</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-default pbs mts">
-            <i class="fui-eye dib"></i>
-            <span class="dib small">Preview</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-danger pbs mts">
-            <i class="fui-cross dib"></i>
-            <span class="dib small">Delete</span>
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-10 mtl mll mbm pll">
-          <div class="kn-section promotions-section prom-expired">
-            <div class="kn-section-header">
-              <h6 class="mbn mtn pull-left white">Current Promotions</h6>
-              <time class="small pull-right white italic">
-                Expiring
-                <strong>Nov 2.2013</strong>
-              </time>
-            </div>
-            <div class="kn-section-content promotions-news">
-              <article class="col-sx-12 small">
-                <div>
-                  <h6 class="mts mbs">Name of campaing</h6>
-                </div>
-                <p class="mts mbn">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, repellat, eaque, itaque illo voluptatum quam similique doloribus quisquam exercitationem facere mollitia qui saepe nulla quae fugit laborum quod commodi! Quibusdam.</p>
-                <time class="dib mbl mtl">
-                  <em>Launched</em>
-                  Nov 2.2013
-                </time>
-                <div class="progress">
-                  <div class="progress-bar" style="width: 40%;"><strong>37</strong> <span>Redeems</span></div> <span>Total Sent</span> <strong>126</strong>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-1 promotions-button mtl">
-          <button href="#" class="btn btn-lg btn-primary pbs">
-            <i class="fui-new dib"></i>
-            <span class="dib small">Edit</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-default pbs mts">
-            <i class="fui-eye dib"></i>
-            <span class="dib small">Preview</span>
-          </button>
-          <button href="#" class="btn btn-lg btn-danger pbs mts">
-            <i class="fui-cross dib"></i>
-            <span class="dib small">Delete</span>
-          </button>
-        </div>
-      </div>
+        {% endfor %}
+
     </div>
    </div>
 

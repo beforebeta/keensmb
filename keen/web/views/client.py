@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from keen.core.models import Client, Customer, Location
+from keen.core.models import Client, Customer, Location, Promotion
 from keen.web.forms import CustomerForm
 
 
@@ -28,6 +28,11 @@ def promotions(request, tab='active'):
     context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'},
                                {"link": "/promotions/%s" % tab, "text": '%s Promotions' % tab.title()}],
                'tab': tab}
+    promotions = None
+    if request.POST:
+        print request.POST.get("sorting")
+    promotions = Promotion.objects.get_promotions_for_status(tab)
+    context["promotions"] = promotions
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
     #return render(request, 'client/promotions.html')
 
@@ -60,7 +65,6 @@ def profile(request, customer_id=None):
     customer = Customer.objects.get(id=customer_id)
     context["customer"] = customer
     context["client"] = customer.client
-    print customer.get_email()
     return render_to_response('client/customers/customer_profile_view.html', context, context_instance=RequestContext(request))
 
 

@@ -57,3 +57,11 @@ def truncatesmart(value, limit=80):
 @register.filter
 def get_template_for_event(event):
     return "client/events/%s.html" % event.data['type']
+
+@register.filter
+def text_launched(tab):
+    _tab = tab.lower()
+    if _tab == 'upcoming':
+        return 'Launching'
+    else:
+        return 'Launched'
