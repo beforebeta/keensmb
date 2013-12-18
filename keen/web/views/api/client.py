@@ -20,7 +20,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
-from keen.core.models import Client, Customer, Image
+from keen.core.models import Client, Customer, Image, CustomerSource
 from keen.web.models import PageCustomerField, SignupForm
 from keen.web.serializers import (
     ClientSerializer,
@@ -247,18 +247,10 @@ class SignupFormList(APIView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug):
-        client = get_object_or_404(Client, slug=client_slug)
+        forms = SignupForm.objects.filter(client__slug=client_slug)\
+                .order_by('-status', 'slug')
 
-        if 'check' in request.GET:
-            # check if form with this permalink exists
-            permalink = request.GET['check'].strip()
-            if not permalink:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            found = client.signup_forms.filter(permalink=permalink).exists()
-            return Response(('not found', 'found')[found])
-        else:
-            forms = list(client.signup_forms.all())
-            return Response(SignupFormSerializer(forms, many=True).data)
+        return Response(SignupFormSerializer(forms, many=True).data)
 
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, client_slug):
@@ -279,6 +271,8 @@ class SignupFormList(APIView):
         form.data = data
         try:
             form.save()
+            CustomerSource(client=client, slug='signup:%s' % slug, ref_source='signup',
+                           ref_id=form.id).save()
         except DatabaseError:
             logger.exception('Failed to create signup form')
             raise
