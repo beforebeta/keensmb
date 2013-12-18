@@ -39,6 +39,8 @@ urlpatterns = patterns(
     'keen.web.views',
     url(r'^$', TemplateView.as_view(template_name='front-page/index.html'),
         name='home'),
+    url(r'^landing$', TemplateView.as_view(template_name='front-page/landing2.html'),
+        name='home'),
     url(r'^legal$',
         TemplateView.as_view(template_name='front-page/legal.html'),
         name='legal'),
