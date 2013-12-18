@@ -28,12 +28,14 @@ def signup_view(request, client_slug, form_slug):
             customer.client = client
             if 'visitor' in request.session:
                 try:
-                    customer.visitor = Visitor.objects.get(uuid=request.session['visitor'])
+                    customer.visitor = Visitor.objects.get(
+                        uuid=request.session['visitor'])
                 except Visitor.DoesNotExist:
-                    logger.warn('Failed to locate Visitor wirh UUID=%s' % request.session['visitor'])
+                    logger.warn('Failed to locate Visitor wirh UUID=%s' %
+                                request.session['visitor'])
 
-            customer.source, created = CustomerSource.objects.get_or_create(
-                client=client, slug=form_slug)
+            customer.source = CustomerSource.objects.filter(
+                ref_source='signup', ref_id=signup_form.id).first()
 
             for name, value in form.cleaned_data.items():
                 customer.data[name] = str(value)

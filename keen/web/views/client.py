@@ -7,6 +7,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
+from keen.web.serializers import SignupFormSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -68,7 +69,7 @@ def signup_form_list(request):
     forms = SignupForm.objects.filter(client=client).order_by('-status', 'slug')
     context = {
         'client': client,
-        'forms': forms,
+        'forms': SignupFormSerializer(forms, many=True).data,
     }
 
     return render(request, 'client/signup-form-list.html', context)
