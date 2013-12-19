@@ -45,7 +45,7 @@ def signup_view(request, client_slug, form_slug):
             except DatabaseError:
                 logger.exception('Failed to save new customer')
             else:
-                return render(request, 'customer/signup_success.html')
+                context['success'] = 'You have successfully signed up!'
         else:
             logger.debug('Signup form validation error(s): %r' % form.errors)
     else:

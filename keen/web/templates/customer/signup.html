@@ -49,6 +49,23 @@
             style='top:{{ form_data.backgroundImage.position.top }}px;
             left:{{ form_data.backgroundImage.position.left }}px'>
 
+          {% if success %}
+          <div class="modal">
+            <div class="modal-dialog">
+              <div class="modal-content center-block">
+                <div class="modal-header">
+                  <h4 class="modal-title">Congratulations!</h4>
+                </div>
+                <div class="modal-body">
+                  <p>{{ success }}</p>
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
           <form class="su-form"
             action=""
             method="post"
@@ -151,7 +168,6 @@
             </div>
             <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
           </form>
-
         </div>
       </div>
     </div>
