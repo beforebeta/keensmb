@@ -9,19 +9,6 @@
       {% verbatim  %}
 
       <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>
-        <div class="global-alert dialog dialog-danger text-left fade" ng-class='{"in": globalAlert}'>
-          <div class="container">
-            <a class="close mts"
-               ng-click='globalAlert = false;'
-               href="#fakelink">
-               <i class="fui-cross"></i>
-             </a>
-            <p class='mn text-left bold'>
-              <b class='small mll'>{{ alertText }}</b>
-            </p>
-          </div>
-        </div>
-
         <div class="su-title su-editable row mtl mbn"
              ng-class='{editing: title.isEditing}'>
           <div class="col-md-10">
@@ -132,36 +119,36 @@
 
                 <div ng-show='formAppearanceEditing' class="su-form-appearance hover-vis">
                   <div class="su-bg-color">
-                    <button class='btn btn-primary btn-wide btn-sm'>Background Color</button>
+                    <button class='btn btn-primary btn-wide'>Background Color</button>
                     <input type="text" id="su-bg-color" class='hidden'>
                   </div>
 
                   <div class="su-text-color mtl">
-                    <button class='btn btn-primary btn-wide btn-sm'>Text Color</button>
+                    <button class='btn btn-primary btn-wide'>Text Color</button>
                     <input type="text" id="su-text-color" class='hidden'>
                   </div>
                 </div>
               </div>
 
-              <div class='su-editable js-resize-wrapper'
+              <div class='su-editable'
                    ng-class='{"editing": formTitle.isEditing}'>
-                <textarea class='su-form-header col-xs-12 form-control non-resizing-gorizontal js-resize-area'
+                <textarea class='su-form-header col-xs-12 form-control non-resizing'
                           rows='3'
                           maxlength='75'
                           ng-keypress='blurOnEnter($event)'
                           ng-focus='startEditing(formTitle)'
-                          ng-blur='saveEditing(formTitle); checkSize($event, formTitle);'
+                          ng-blur='saveEditing(formTitle)'
                           ng-model='formTitle.text'></textarea>
               </div>
 
-              <p class="text-simple su-editable js-resize-wrapper"
+              <p class="su-form-text text-simple su-editable"
                  ng-class='{"editing": formDescription.isEditing}'>
-                <textarea class='su-form-text col-xs-12 form-control non-resizing-gorizontal js-resize-area'
-                          rows='3'
+                <textarea class='col-xs-12 form-control non-resizing'
+                          rows='5'
                           maxlength='75'
                           ng-keypress='blurOnEnter($event)'
                           ng-focus='startEditing(formDescription)'
-                          ng-blur='saveEditing(formDescription); checkSize($event, formDescription)'
+                          ng-blur='saveEditing(formDescription)'
                           ng-model='formDescription.text'></textarea>
               </p>
 
@@ -207,8 +194,7 @@
               <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
             </div>
 
-            <div ng-show='!formAppearanceEditing'
-                 class='color-picker-wrapper hover-vis'>
+            <div class='color-picker-wrapper hover-vis'>
               <input type="text" class='hidden' id="color-picker-anchor">
             </div>
 
@@ -263,8 +249,7 @@
         <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm"
                 ng-click='saveForm()'>Save & Publish</button>
         <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
-        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm"
-                ng-click='saveFormAsPreview()'>Gene Preview</button>
+        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Live Preview</button>
         <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>
       </section>
       <!-- /.container -->

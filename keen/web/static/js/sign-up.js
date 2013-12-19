@@ -5,19 +5,27 @@
 (function($) {
     angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', function($scope, $timeout, suService, $q){
 
-        suService.getClienImages().then(function(data) {
-            console.log(data);
-        });
-        suService.getClientForms().then(function(data) {
-            console.log(data);
-        });
+        // suService.getClienImages().then(function(data) {
+        //     console.log(data);
+        // });
+        // suService.getClientForms().then(function(data) {
+        //     console.log(data);
+        // });
 
         // Initial data:
 
         $scope.title = {text: 'some title', isEditing: false};
         $scope.permalink = {text: 'some-perma-link', isEditing: false};
-        $scope.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false};
-        $scope.formDescription = {text: 'Description would have max 75 characters', isEditing: false};
+        $scope.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false, height: 70};
+        $scope.formDescription = {text: 'Description would have max 75 characters', isEditing: false, height: 70};
+
+        $scope.globalAlert = false;
+        var notify = function(text) {
+            $timeout(function() {
+                $scope.alertText = text;
+                $scope.globalAlert = true;
+            });
+        };
 
         $scope.blurOnEnter = function(e) {
             if (e.keyCode === 13) {
@@ -28,6 +36,9 @@
                 });
 
             }
+        };
+        $scope.checkSize = function(e, item) {
+            item.height = $(e.target).outerHeight();
         };
 
         $scope.startEditing = function(item) {
@@ -44,7 +55,8 @@
 
         $scope.validateSlug = function(slug) {
             suService.checkFormSlug(slug.text).then(function(res) {
-                alert('Slug: "'+slug.text+'" already exists');
+                // alert('Slug: "'+slug.text+'" already exists');
+                notify('Slug: "'+slug.text+'" already exists');
             }, function(err) {
                 $scope.saveEditing(slug);
             });
@@ -159,16 +171,19 @@
         var $bgImageColorPicker = $('#color-picker-anchor');
 
         $bgImageColorPicker.chromoselector({
-            // panel: true,
+            panel: true,
+            autoshow: false,
             // panelAlpha: true,
-            // panelMode: 'hsl',
+            panelMode: 'hsl',
+            preview: false,
             target: '.color-picker-wrapper',
             update: updateBgImageBgColor
         });
 
         $scope.changeBgImageBgColor = function() {
-            $bgImageColorPicker.chromoselector('show');
+            $bgImageColorPicker.chromoselector('show', 0).chromoselector('resize', 200);
             $scope.backgroundImage.editing = true;
+            $scope.formAppearanceEditing = false;
         };
 
         function updateBgImageBgColor() {
@@ -182,6 +197,11 @@
         $scope.form = {};
         var $formBgColorPicker = $('#su-bg-color');
         $formBgColorPicker.chromoselector({
+            panel: true,
+            autoshow: false,
+            // panelAlpha: true,
+            panelMode: 'hsl',
+            preview: false,
             target: '.su-bg-color',
             update: updateFormBgColor
         });
@@ -195,6 +215,11 @@
 
         var $formTextColorPicker = $('#su-text-color');
         $formTextColorPicker.chromoselector({
+            panel: true,
+            autoshow: false,
+            // panelAlpha: true,
+            panelMode: 'hsl',
+            preview: false,
             target: '.su-text-color',
             update: updateFormTextColor
         });
@@ -211,8 +236,8 @@
         $scope.formAppearanceEditing = false;
         $scope.toggleFormAppearance = function() {
             if (!$scope.formAppearanceEditing) {
-                $formBgColorPicker.chromoselector('show');
-                $formTextColorPicker.chromoselector('show');
+                $formBgColorPicker.chromoselector('show').chromoselector('resize', 150);
+                $formTextColorPicker.chromoselector('show').chromoselector('resize', 150);
             }
 
             $scope.formAppearanceEditing = !$scope.formAppearanceEditing;
@@ -226,13 +251,28 @@
 
             // validate slug
             suService.checkFormSlug($scope.permalink.text).then(function(res) {
-                alert('Slug: "'+ $scope.permalink.text+ '" already exists');
+                notify('Slug: "'+ $scope.permalink.text+ '" already exists');
             }, function(err) {
                 saveFormData();
             });
         };
 
-        var saveFormData = function() {
+        $scope.saveFormAsPreview = function() {
+
+            // wait for all blur events
+            $timeout(function() {
+                // validate slug
+                suService.checkFormSlug($scope.permalink.text).then(function(res) {
+                    ('Slug: "'+ $scope.permalink.text+ '" already exists');
+                }, function(err) {
+                    saveFormAsPreviewData();
+                });
+            }, 100);
+        };
+
+        var prepareFormData = function() {
+            var defer = $q.defer();
+
             var formData = {
                 pageTitle: $scope.title.text,
                 permalink: $scope.permalink.text,
@@ -258,19 +298,30 @@
                     backgroundColor: $scope.form.backgroundColor,
                     textColor: $scope.form.textColor,
                     title: $scope.formTitle.text,
-                    description: $scope.formDescription.text
+                    titleHeight: $scope.formTitle.height,
+                    description: $scope.formDescription.text,
+                    descriptionHeight: $scope.formDescription.height
                 }
             };
+            console.log(formData.form);
 
             var imagesData = [];
 
             if ($scope.bannerLogo.image.src !== defaultImageSrc) {
-                var bannerLogoImgData = suService.uploadClientImage(cleanBase64($scope.bannerLogo.image.src), $scope.bannerLogo.image.type, 'banner');
+                var bannerLogoImgData = suService.uploadClientImage(
+                        cleanBase64($scope.bannerLogo.image.src), // img base64 data
+                        $scope.bannerLogo.image.type,             // img type
+                        'banner'                                  // img target
+                    );
                 imagesData.push(bannerLogoImgData);
             }
 
             if ($scope.backgroundImage.image.src !== defaultImageSrc) {
-                var backgroundImageData = suService.uploadClientImage(cleanBase64($scope.backgroundImage.image.src), $scope.backgroundImage.image.type, 'background');
+                var backgroundImageData = suService.uploadClientImage(
+                        cleanBase64($scope.backgroundImage.image.src), // img base64 data
+                        $scope.backgroundImage.image.type,             // img type
+                        'background'                                   // img target
+                    );
                 imagesData.push(backgroundImageData);
             }
 
@@ -283,21 +334,41 @@
                     }
                 });
 
-                suService.uploadFormData(formData, $scope.permalink.text).then(function(res) {
-                    alert('FORM Created');
-                    console.log('res: ', res);
-                }, function(err) {console.error(err);});
+                defer.resolve(formData);
 
             }, function(err) {
                 console.error(err);
             });
+
+            return defer.promise;
         };
 
-        // $('.js-editable-section').on('focus', '.js-editable-trigger', function () {
-        //     $(this).closest('.js-editable-section').addClass('editing');
-        // }).on('blur', '.js-editable-trigger', function () {
-        //     $(this).closest('.js-editable-section').removeClass('editing');
-        // });
+        var saveFormData = function() {
+            prepareFormData()
+                .then(function(formData) {
+                    suService.uploadFormData(formData, $scope.permalink.text)
+                        .then(function(res) {
+                            alert('FORM Created');
+                            console.log('res: ', res);
+                        }, function(err) {console.error(err);});
+                });
+
+        };
+        var saveFormAsPreviewData = function() {
+            var previewSlug = 'preview-' + $scope.permalink.text;
+            prepareFormData()
+                .then(function(formData) {
+                    suService.uploadFormData(formData, previewSlug)
+                        .then(function(res) {
+                            alert('FORM preview Created');
+                            suService.goToFormView(previewSlug);
+                            // window.open('www.yourdomain.com','_blank');
+                            console.log('res: ', res);
+                        }, function(err) {console.error(err);});
+                });
+
+        };
+
 
         $('.js-upload-banner').on('change', function(evt) {
 
@@ -317,7 +388,8 @@
                     if (info.width >= contWidth && info.height >= contHeight) {
                         return true;
                     } else {
-                        alert('too small');
+                        var msg = 'Your image is too small ('+info.width+'x'+info.height+' pixels). Should be at least ' + contWidth + 'x' + contHeight + ' pixels.';
+                        notify(msg);
                     }
                 }
                 return  false;
@@ -445,6 +517,10 @@
                         slug: slug
                     }
                 });
+            },
+            goToFormView: function(formSlug) {
+                var formUrl = '/'+clientSlug+'/'+formSlug;
+                window.open('/');
             }
         };
     }]);
@@ -452,6 +528,5 @@
     $('.instructions-wrap').on('selectstart, dragstart', function(e) {
         e.preventdefault();
     });
-
 
 })(jQuery);

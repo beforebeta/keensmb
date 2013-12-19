@@ -44,18 +44,25 @@
         <div class="background-image"
           style='background:{{ form_data.backgroundImage.backgroundColor }}'>
           <img src='{{ form_data.backgroundImage.imageSrc }}'
-          class='banner-preview'
-          alt="" id='background-image'
-          style='top:{{ form_data.backgroundImage.position.top }}px;
-          left:{{ form_data.backgroundImage.position.left }}px'>
+            class='banner-preview'
+            alt="" id='background-image'
+            style='top:{{ form_data.backgroundImage.position.top }}px;
+            left:{{ form_data.backgroundImage.position.left }}px'>
 
-          <form class="su-form mbl"
+          <form class="su-form"
             action=""
             method="post"
             style='background:{{ form_data.form.backgroundColor }};
             color:{{ form_data.form.textColor }}'>
-            <h2 class='su-form-header'>{{ form_data.form.title }}</h2>
-            <p class="su-form-text text-simple">{{ form_data.form.description }}</p>
+
+            <h2 class='su-form-header mbs'
+                style='height: {{ form_data.form.titleHeight|default:70 }}px'>
+                {{ form_data.form.title }}
+            </h2>
+            <p class="su-form-text text-simple"
+               style='height: {{ form_data.form.descriptionHeight|default:70 }}px'>
+               {{ form_data.form.description }}
+            </p>
 
             <div class="row">
               {% csrf_token %}
@@ -65,7 +72,12 @@
                 <div class="form-group mbm {% if form.full_name.errors %}has-error{% endif %}">
                   <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
                 </div>
-                <div class="form-group mbm {% if form.email.errors %}has-error{% endif %}">
+                <div class="form-group mbm {% if form.email.errors %}has-error js-popover-hover{% endif %}"
+                     {% if form.email.errors %}
+                       data-toggle='popover'
+                       data-content='Please, provide valid email'
+                       data-placement="right"
+                     {% endif %}>
                   <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
                 </div>
               </div>

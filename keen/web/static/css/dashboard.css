@@ -177,6 +177,15 @@
   line-height: normal;
 }
 
+.dashboard .kn-section-content li a {
+  text-decoration: none;
+  color: #34495e;
+}
+
+.dashboard .kn-section-content li a:hover {
+  color: #446cb3;
+}
+
 .news article {
   padding-top: 10px;
   border-top: 1px solid #a7e5d9;
