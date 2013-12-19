@@ -20,6 +20,7 @@ from fabric.contrib.files import exists
 
 
 env.use_ssh_config = True
+env.forward_agent = True
 
 env.virtualenv = '/var/apps/keensmb.com'
 env.project_name = 'keen'
