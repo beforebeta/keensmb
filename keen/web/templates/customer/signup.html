@@ -108,7 +108,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-5">
                 {% if form.address__zipcode.errors %}
                 <div class="form-group mbm has-error"
                   data-toggle='popover' data-content='{% for error in form.address__zipcode.errors %}
@@ -120,7 +120,7 @@
                   <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
                 </div>
               </div>
-              <div class="col-md-6 pln">
+              <div class="col-md-7 pln">
                 {% if form.dob.errors %}
                 <div class="form-group mbm has-error"
                   data-toggle='popover' data-content='{% for error in form.dob.errors %}
@@ -137,7 +137,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 prn">
+              <div class="col-md-7">
                 {% if form.phone.errors %}
                 <div class="form-group mbm has-error js-popover-hover"
                   data-toggle='popover' data-content='{% for error in form.phone.errors %}
@@ -149,7 +149,7 @@
                   <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-5 pln">
                 {% if form.gender.errors %}
                 <div class="form-group mbm has-error js-popover-hover"
                   data-toggle='popover' data-content='{% for error in form.gender.errors %}

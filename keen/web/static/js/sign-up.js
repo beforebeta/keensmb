@@ -263,7 +263,7 @@
             $timeout(function() {
                 // validate slug
                 suService.checkFormSlug($scope.permalink.text).then(function(res) {
-                    ('Slug: "'+ $scope.permalink.text+ '" already exists');
+                    notify('Slug: "'+ $scope.permalink.text+ '" already exists');
                 }, function(err) {
                     saveFormAsPreviewData();
                 });

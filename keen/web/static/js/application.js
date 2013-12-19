@@ -184,7 +184,7 @@ String.prototype.repeat = function(num) {
     $(datepickerSelector).datepicker({
       showOtherMonths: true,
       selectOtherMonths: true,
-      dateFormat: "d M, y",
+      dateFormat: "mm/dd/yy",
       changeMonth: true,
       changeYear: true
     }).prev('.btn').on('click', function (e) {
