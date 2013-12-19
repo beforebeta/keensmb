@@ -107,7 +107,7 @@ def signup_form_edit(request, slug):
         'client': client,
         'form': form,
     }
-    return render(request, 'client/signup-form-edit.html', context)
+    return render(request, 'client/signup-form-create.html', context)
 
 
 @ensure_csrf_cookie
