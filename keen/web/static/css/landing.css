@@ -373,3 +373,14 @@ img.center {
   list-style-type: none;
 }
 
+
+
+/* popup  */
+
+.row-push-left {
+  margin-left: -15px;
+}
+
+textarea.textarea-static-height {
+  height: 146px;
+}
