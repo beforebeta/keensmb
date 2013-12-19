@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.core.urlresolvers import reverse
 
 from rest_framework.serializers import (
     DateTimeField,
@@ -101,13 +102,22 @@ class ImageSerializer(DynamicSerializer):
 
 class SignupFormSerializer(DynamicSerializer):
 
+    url = SerializerMethodField('get_url')
+    edit_url = SerializerMethodField('get_edit_url')
     total_signups = SerializerMethodField('get_total_signups')
     total_visits = SerializerMethodField('get_total_visits')
 
     class Meta:
         model = SignupForm
         fields = ('slug', 'status', 'data', 'created', 'modified',
-                  'total_signups', 'total_visits')
+                  'url', 'edit_url', 'total_signups', 'total_visits')
+
+    def get_url(self, form):
+        return reverse('customer_signup', kwargs=dict(
+            client_slug=form.client.slug, form_slug=form.slug))
+
+    def get_edit_url(self, form):
+        return reverse('client_signup_form_edit', kwargs=dict(slug=form.slug))
 
     def get_total_signups(self, form):
         return Customer.objects.filter(
