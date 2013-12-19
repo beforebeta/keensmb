@@ -8,266 +8,294 @@
 
       {% verbatim  %}
 
-      <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>
-        <div class="global-alert dialog dialog-danger text-left fade" ng-class='{"in": globalAlert}'>
-          <div class="container">
-            <a class="close mts"
-               ng-click='globalAlert = false;'
-               href="#fakelink">
-               <i class="fui-cross"></i>
-             </a>
-            <p class='mn text-left bold'>
-              <b class='small mll'>{{ alertText }}</b>
-            </p>
-          </div>
+  <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>
+    <div class="global-alert dialog dialog-danger text-left fade" ng-class='{"in": globalAlert}'>
+      <div class="container">
+        <a class="close mts"
+           ng-click='globalAlert = false;'
+           href="#fakelink">
+           <i class="fui-cross"></i>
+         </a>
+        <p class='mn text-left bold'>
+          <b class='small mll'>{{ alertText }}</b>
+        </p>
+      </div>
+    </div>
+
+    <div class="su-title su-editable row mtl mbn"
+         ng-class='{editing: title.isEditing}'>
+      <div class="col-md-10">
+        <div class="form-group mbn">
+          <input type="text"
+                 class='form-control page-title'
+                 ng-model='title.text'
+                 ng-focus='startEditing(title)'>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary btn-sm pull-right mtx"
+                ng-click='saveEditing(title)'>Save</button>
+
+        <button class="btn btn-default btn-sm pull-right mrs mtx"
+                ng-click='cancelEditing(title)'>Cancel</button>
+      </div>
+    </div>
+
+    <div class="su-subtitle su-editable form-group row mts mbn"
+         ng-class='{editing: permalink.isEditing}'>
+      <div class="col-md-10">
+        <span class='mtx dib'><b>Permalink:</b> http://keensmb.com/&lt;actual_client_slig&gt;/signup/</span>
+        <div class="form-group dib">
+          <input type="text"
+                 class='form-control input-sm permalink js-editable-trigger'
+                 ng-model='permalink.text'
+                 ng-focus='startEditing(permalink)'>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary btn-sm pull-right"
+                ng-click='validateSlug(permalink)'>Save</button>
+
+        <button class="btn btn-default btn-sm pull-right mrs"
+                ng-click='cancelEditing(permalink)'>Cancel</button>
+      </div>
+    </div>
+
+    <div class="su-form-wrapper mbm">
+
+    <!-- Banner Logo -->
+      <div class="banner-logo js-image-container"
+           ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'
+           data-scope-object='bannerLogo'>
+        <p class="placeholder">Banner Logo</p>
+
+        <img src='' ng-src="{{ bannerLogo.image.src }}" alt="" class='js-banner-preview fade in' id='banner-preview'>
+
+        <div class="instructions hover-vis">
+          <i class="fui-list dib mid"></i>
+          <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
         </div>
 
-        <div class="su-title su-editable row mtl mbn"
-             ng-class='{editing: title.isEditing}'>
-          <div class="col-md-10">
-            <div class="form-group mbn">
-              <input type="text"
-                     class='form-control page-title'
-                     ng-model='title.text'
-                     ng-focus='startEditing(title)'>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <button class="btn btn-primary btn-sm pull-right mtx"
-                    ng-click='saveEditing(title)'>Save</button>
-
-            <button class="btn btn-default btn-sm pull-right mrs mtx"
-                    ng-click='cancelEditing(title)'>Cancel</button>
-          </div>
+        <div class="btn-group photo-actions hover-vis">
+          <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover' data-content='Upload your unique logo for the banner of your sign up form' data-placement="left">
+            <i class="fui-new"></i>
+            <span class='mll'>Choose Photo</span>
+          </button>
+          <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <i class="dropdown-arrow dropdown-arrow-inverse"></i>
+          <ul class="dropdown-menu dropdown-inverse">
+            <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
+            <li class="js-fileapi-wrapper" id="choose">
+              <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
+              <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="banner-logo" type="file" />
+            </li>
+            <li ng-class='{disabled: !bannerLogo.uploaded}'
+                ng-click='startRepositionBanner()'>
+              <a href="#fakelink">Reposition</a>
+            </li>
+          </ul>
         </div>
 
-        <div class="su-subtitle su-editable form-group row mts mbn"
-             ng-class='{editing: permalink.isEditing}'>
-          <div class="col-md-10">
-            <span class='mtx dib'><b>Permalink:</b> http://keensmb.com/&lt;actual_client_slig&gt;/signup/</span>
-            <div class="form-group dib">
-              <input type="text"
-                     class='form-control input-sm permalink js-editable-trigger'
-                     ng-model='permalink.text'
-                     ng-focus='startEditing(permalink)'>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <button class="btn btn-primary btn-sm pull-right"
-                    ng-click='validateSlug(permalink)'>Save</button>
+        <div class="action-buttons hover-vis">
+          <button class="btn btn-default btn-wide btn-embossed"
+                  ng-click='cancelEditingBanner()'>Cancel</button>
+          <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
+                  ng-click='saveEditingBanner()'>Save Changes</button>
+        </div>
+      </div>
 
-            <button class="btn btn-default btn-sm pull-right mrs"
-                    ng-click='cancelEditing(permalink)'>Cancel</button>
-          </div>
+    <!-- Background Image -->
+      <div class="background-image js-image-container"
+           ng-class='{"image-loaded" : backgroundImage.reposition, "editing": backgroundImage.editing}'
+           data-scope-object='backgroundImage'>
+
+
+        <p class="placeholder">Background Image</p>
+
+        <img src="" ng-src='{{ backgroundImage.image.src }}' alt="" class='js-banner-preview fade in' id='background-image'>
+
+        <div class="instructions hover-vis" ng-if='backgroundImage.reposition'>
+          <i class="fui-list dib mid"></i>
+          <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
         </div>
 
-        <div class="su-form-wrapper mbm">
+        <div class="su-form">
+          <div class='hover-vis'>
+            <button class="btn btn-wide btn-sm btn-primary btn-secondary photo-actions"
+                    ng-click='toggleFormAppearance();'>
+              <span class='mrl'>Edit Appearance</span>
+              <i ng-if='!formAppearanceEditing' class="fui-arrow-right"></i>
+              <i ng-if='formAppearanceEditing' class="fui-arrow-left"></i>
+            </button>
 
-        <!-- Banner Logo -->
-          <div class="banner-logo js-image-container"
-               ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'
-               data-scope-object='bannerLogo'>
-            <p class="placeholder">Banner Logo</p>
-
-            <img src='' ng-src="{{ bannerLogo.image.src }}" alt="" class='js-banner-preview fade in' id='banner-preview'>
-
-            <div class="instructions hover-vis">
-              <i class="fui-list dib mid"></i>
-              <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
-            </div>
-
-            <div class="btn-group photo-actions hover-vis">
-              <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover' data-content='Upload your unique logo for the banner of your sign up form' data-placement="left">
-                <i class="fui-new"></i>
-                <span class='mll'>Choose Photo</span>
-              </button>
-              <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-              </button>
-              <i class="dropdown-arrow dropdown-arrow-inverse"></i>
-              <ul class="dropdown-menu dropdown-inverse">
-                <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
-                <li class="js-fileapi-wrapper" id="choose">
-                  <a href="#fakelink" class="js-trigger" data-target='#upload-banner-logo'>Upload Photo</a>
-                  <input id='upload-banner-logo' accept="image/*" class='hidden js-upload-banner' name="banner-logo" type="file" />
-                </li>
-                <li ng-class='{disabled: !bannerLogo.uploaded}'
-                    ng-click='startRepositionBanner()'>
-                  <a href="#fakelink">Reposition</a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="action-buttons hover-vis">
-              <button class="btn btn-default btn-wide btn-embossed"
-                      ng-click='cancelEditingBanner()'>Cancel</button>
-              <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
-                      ng-click='saveEditingBanner()'>Save Changes</button>
-            </div>
-          </div>
-
-        <!-- Background Image -->
-          <div class="background-image js-image-container"
-               ng-class='{"image-loaded" : backgroundImage.reposition, "editing": backgroundImage.editing}'
-               data-scope-object='backgroundImage'>
-
-
-            <p class="placeholder">Background Image</p>
-
-            <img src="" ng-src='{{ backgroundImage.image.src }}' alt="" class='js-banner-preview fade in' id='background-image'>
-
-            <div class="instructions hover-vis" ng-if='backgroundImage.reposition'>
-              <i class="fui-list dib mid"></i>
-              <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
-            </div>
-
-            <div class="su-form">
-              <div class='hover-vis'>
-                <button class="btn btn-wide btn-sm btn-primary btn-secondary photo-actions"
-                        ng-click='toggleFormAppearance();'>
-                  <span class='mrl'>Edit Appearance</span>
-                  <i ng-if='!formAppearanceEditing' class="fui-arrow-right"></i>
-                  <i ng-if='formAppearanceEditing' class="fui-arrow-left"></i>
-                </button>
-
-                <div ng-show='formAppearanceEditing' class="su-form-appearance hover-vis">
-                  <div class="su-bg-color">
-                    <button class='btn btn-primary btn-wide btn-sm'>Background Color</button>
-                    <input type="text" id="su-bg-color" class='hidden'>
-                  </div>
-
-                  <div class="su-text-color mtl">
-                    <button class='btn btn-primary btn-wide btn-sm'>Text Color</button>
-                    <input type="text" id="su-text-color" class='hidden'>
-                  </div>
-                </div>
+            <div ng-show='formAppearanceEditing' class="su-form-appearance hover-vis">
+              <div class="su-bg-color">
+                <button class='btn btn-primary btn-wide btn-sm'>Background Color</button>
+                <input type="text" id="su-bg-color" class='hidden'>
               </div>
 
-              <div class='su-editable js-resize-wrapper'
-                   ng-class='{"editing": formTitle.isEditing}'>
-                <textarea class='su-form-header col-xs-12 form-control non-resizing-gorizontal js-resize-area'
-                          rows='3'
-                          maxlength='75'
-                          ng-keypress='blurOnEnter($event)'
-                          ng-focus='startEditing(formTitle)'
-                          ng-blur='saveEditing(formTitle); checkSize($event, formTitle);'
-                          ng-model='formTitle.text'></textarea>
+              <div class="su-text-color mtl">
+                <button class='btn btn-primary btn-wide btn-sm'>Text Color</button>
+                <input type="text" id="su-text-color" class='hidden'>
               </div>
-
-              <p class="text-simple su-editable js-resize-wrapper"
-                 ng-class='{"editing": formDescription.isEditing}'>
-                <textarea class='su-form-text col-xs-12 form-control non-resizing-gorizontal js-resize-area'
-                          rows='3'
-                          maxlength='75'
-                          ng-keypress='blurOnEnter($event)'
-                          ng-focus='startEditing(formDescription)'
-                          ng-blur='saveEditing(formDescription); checkSize($event, formDescription)'
-                          ng-model='formDescription.text'></textarea>
-              </p>
-
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group mbm">
-                    <input type="text" class="form-control" placeholder='Full Name'>
-                  </div>
-                  <div class="form-group mbm">
-                    <input type="email" class="form-control" placeholder='Email Address'>
-                  </div>
-                </div>
-                <div class="col-md-5">
-                  <div class="form-group mbm">
-                    <input type="text" class="form-control" placeholder='Zip Code'>
-                  </div>
-                </div>
-                <div class="col-md-7 pln">
-                  <div class="form-group mbm">
-                    <div class="input-group">
-                      <input type="text" class="form-control datapicker" placeholder="Birthday">
-                      <span class="input-group-btn">
-                        <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-7">
-                  <div class="form-group mbm">
-                    <input type="text" class="form-control" placeholder='Phone'>
-                  </div>
-                </div>
-                <div class="col-md-5 pln">
-                  <div class="form-group mbm">
-                    <select name="gender" id="gender" class='simple full mbs'>
-                      <option value="0" selected disabled>Gender</option>
-                      <option value="1">Male</option>
-                      <option value="2">Female</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
-            </div>
-
-            <div ng-show='!formAppearanceEditing'
-                 class='color-picker-wrapper hover-vis'>
-              <input type="text" class='hidden' id="color-picker-anchor">
-            </div>
-
-            <div class="btn-group photo-actions hover-vis">
-              <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover'
-                      data-content='Choose a unique image for the background of your sign up form'
-                      data-placement="left">
-                <i class="fui-new"></i>
-                <span class='mll'>Choose Photo</span>
-              </button>
-              <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-              </button>
-              <i class="dropdown-arrow dropdown-arrow-inverse"></i>
-              <ul class="dropdown-menu dropdown-inverse">
-                <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
-                <li class="js-fileapi-wrapper">
-                  <a href="#fakelink"
-                     class="js-trigger"
-                     data-target='#upload-background-image'>Upload Photo</a>
-                  <input id='upload-background-image'
-                         accept="image/*"
-                         class='hidden js-upload-banner'
-                         name="background-image"
-                         type="file" />
-                </li>
-                <li ng-class='{disabled: !backgroundImage.uploaded}'
-                    ng-click='startRepositionBgImage()'>
-
-                  <a href="#fakelink">Reposition</a>
-                </li>
-                <li ng-class='{disabled: !backgroundImage.uploaded}'
-                    ng-click='removeBgImage()'>
-                  <a href="#fakelink">Remove Photo</a>
-                </li>
-                <li class='disabled'><a href="#fakelink">Add Photo Effect</a></li>
-                <li>
-                  <a href="#fakelink" ng-click='changeBgImageBgColor()'>Choose background color</a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="action-buttons hover-vis">
-              <button class="btn btn-default btn-wide btn-embossed"
-                      ng-click='cancelEditingBgImage()'>Cancel</button>
-              <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
-                      ng-click='saveEditingBgImage()'>Save Changes</button>
             </div>
           </div>
+
+          <div class='su-editable js-resize-wrapper'
+               ng-class='{"editing": formTitle.isEditing}'>
+            <textarea class='su-form-header col-xs-12 form-control non-resizing-gorizontal js-resize-area'
+                      maxlength='75'
+                      ng-keypress='blurOnEnter($event)'
+                      ng-focus='startEditing(formTitle)'
+                      ng-blur='saveEditing(formTitle); checkSize($event, formTitle);'
+                      ng-model='formTitle.text'></textarea>
+          </div>
+
+          <p class="text-simple su-editable js-resize-wrapper"
+             ng-class='{"editing": formDescription.isEditing}'>
+            <textarea class='su-form-text col-xs-12 form-control non-resizing-gorizontal js-resize-area'
+                      maxlength='75'
+                      ng-keypress='blurOnEnter($event)'
+                      ng-focus='startEditing(formDescription)'
+                      ng-blur='saveEditing(formDescription); checkSize($event, formDescription)'
+                      ng-model='formDescription.text'></textarea>
+          </p>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group mbm">
+                <input type="text" class="form-control" placeholder='Full Name'>
+              </div>
+              <div class="form-group mbm">
+                <input type="email" class="form-control" placeholder='Email Address'>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group mbm">
+                <input type="text" class="form-control" placeholder='Zip Code'>
+              </div>
+            </div>
+            <div class="col-md-7 pln">
+              <div class="form-group mbm">
+                <div class="input-group">
+                  <input type="text" class="form-control datapicker" placeholder="Birthday">
+                  <span class="input-group-btn">
+                    <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="form-group mbm">
+                <input type="text" class="form-control" placeholder='Phone'>
+              </div>
+            </div>
+            <div class="col-md-5 pln">
+              <div class="form-group mbm">
+                <select name="gender" id="gender" class='simple full mbs'>
+                  <option value="0" selected disabled>Gender</option>
+                  <option value="1">Male</option>
+                  <option value="2">Female</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
         </div>
 
-        <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm"
-                ng-click='saveForm()'>Save & Publish</button>
-        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
-        <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm"
-                ng-click='saveFormAsPreview()'>Generate Preview</button>
-        <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>
-      </section>
-      <!-- /.container -->
+        <div ng-show='!formAppearanceEditing'
+             class='color-picker-wrapper hover-vis'>
+          <input type="text" class='hidden' id="color-picker-anchor">
+        </div>
+
+        <div class="btn-group photo-actions hover-vis">
+          <button class="btn btn-sm btn-primary btn-secondary js-popover-hover"  data-toggle='popover'
+                  data-content='Choose a unique image for the background of your sign up form'
+                  data-placement="left">
+            <i class="fui-new"></i>
+            <span class='mll'>Choose Photo</span>
+          </button>
+          <button class="btn btn-primary btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <i class="dropdown-arrow dropdown-arrow-inverse"></i>
+          <ul class="dropdown-menu dropdown-inverse">
+            <li class='hidden'><a href="#fakelink">Choose from photos</a></li>
+            <li class="js-fileapi-wrapper">
+              <a href="#fakelink"
+                 class="js-trigger"
+                 data-target='#upload-background-image'>Upload Photo</a>
+              <input id='upload-background-image'
+                     accept="image/*"
+                     class='hidden js-upload-banner'
+                     name="background-image"
+                     type="file" />
+            </li>
+            <li ng-class='{disabled: !backgroundImage.uploaded}'
+                ng-click='startRepositionBgImage()'>
+
+              <a href="#fakelink">Reposition</a>
+            </li>
+            <li ng-class='{disabled: !backgroundImage.uploaded}'
+                ng-click='removeBgImage()'>
+              <a href="#fakelink">Remove Photo</a>
+            </li>
+            <li class='disabled'><a href="#fakelink">Add Photo Effect</a></li>
+            <li>
+              <a href="#fakelink" ng-click='changeBgImageBgColor()'>Choose background color</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="action-buttons hover-vis">
+          <button class="btn btn-default btn-wide btn-embossed"
+                  ng-click='cancelEditingBgImage()'>Cancel</button>
+          <button class="btn btn-primary btn-secondary btn-wide btn-embossed"
+                  ng-click='saveEditingBgImage()'>Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm"
+            ng-click='saveForm()'>Save & Publish</button>
+    <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
+    <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm"
+            ng-click='saveFormAsPreview()'>Generate Preview</button>
+    <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>
+
+    <!-- Form created modal -->
+    <div id="formCreatedModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fui-cross"></i>
+            </button>
+            <h4 class="modal-title">Form <span ng-if='createdIsPreview'>preview</span> created</h4>
+          </div>
+
+          <div class="modal-body">
+            <a href="" ng-href='{{ formCreatedLink }}' target='blank'>
+              <span class='mrm'>{{ title.text }}</span>
+              <i class='fui-export'></i>
+            </a>
+          </div>
+          <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-default btn-wide btn-embossed pull-right"
+                    data-dismiss="modal"
+                    ng-click='cancelAddingFields()'>Close</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </section>
+<!-- /.container -->
+
 
       {% endverbatim %}
 

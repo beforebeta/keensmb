@@ -348,9 +348,13 @@
                 .then(function(formData) {
                     suService.uploadFormData(formData, $scope.permalink.text)
                         .then(function(res) {
-                            alert('FORM Created');
-                            console.log('res: ', res);
-                        }, function(err) {console.error(err);});
+                            $scope.createdIsPreview = false;
+                            $scope.formCreatedLink = suService.getFormLink($scope.permalink.text);
+                            $('#formCreatedModal').modal('show');
+                        }, function(err) {
+                            console.warn(err);
+                            notify('Some error occured while saving your form.');
+                        });
                 });
 
         };
@@ -360,11 +364,13 @@
                 .then(function(formData) {
                     suService.uploadFormData(formData, previewSlug)
                         .then(function(res) {
-                            alert('FORM preview Created');
-                            suService.goToFormView(previewSlug);
-                            // window.open('www.yourdomain.com','_blank');
-                            console.log('res: ', res);
-                        }, function(err) {console.error(err);});
+                            $scope.createdIsPreview = true;
+                            $scope.formCreatedLink = suService.getFormLink(previewSlug);
+                            $('#formCreatedModal').modal('show');
+                        }, function(err) {
+                            console.warn(err);
+                            notify('Some error occured while saving your form.');
+                        });
                 });
 
         };
@@ -499,7 +505,8 @@
             checkFormSlug: function(slug) {
                 return $http({
                     url: apiClientUrl+'/signup_forms/'+slug,
-                    method: 'HEAD'
+                    method: 'HEAD',
+                    cache: true
                 });
             },
             getClientForms: function() {
@@ -518,9 +525,8 @@
                     }
                 });
             },
-            goToFormView: function(formSlug) {
-                var formUrl = '/'+clientSlug+'/'+formSlug;
-                window.open('/');
+            getFormLink: function(slug) {
+                return '/'+clientSlug+'/'+slug;
             }
         };
     }]);
