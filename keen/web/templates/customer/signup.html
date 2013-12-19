@@ -50,22 +50,29 @@
             left:{{ form_data.backgroundImage.position.left }}px'>
 
           {% if success %}
-          <div class="modal">
+          <div class="show modal fade-in">
             <div class="modal-dialog">
               <div class="modal-content center-block">
                 <div class="modal-header">
-                  <h4 class="modal-title">Congratulations!</h4>
+                  <!--
+                  <button class="close" aria-hidden="true" data-dismiss="modal" type="button">
+                    <i class="fui-cross"></i>
+                  </button>
+                  -->
+                  <h4 class="modal-title">Thank you for signing up!</h4>
                 </div>
                 <div class="modal-body">
-                  <p>{{ success }}</p>
+                  <strong>{{ success }}</strong>
                 </div>
+                <!--
                 <div class="modal-footer">
+                  <button class="btn btn-success btn-wide btn-embossed pull-right" type="button">Close</button>
                 </div>
+                -->
               </div>
             </div>
           </div>
-          {% endif %}
-
+          {% else %}
           <form class="su-form"
             action=""
             method="post"
@@ -168,6 +175,7 @@
             </div>
             <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
           </form>
+          {% endif %}
         </div>
       </div>
     </div>
