@@ -69,26 +69,49 @@
               {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
 
               <div class="col-md-12">
-                <div class="form-group mbm {% if form.full_name.errors %}has-error{% endif %}">
+                {% if form.full_name.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.full_name.errors %}
+                  {{ error }}
+                  {% endfor %}'
+                  data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
                   <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
                 </div>
-                <div class="form-group mbm {% if form.email.errors %}has-error js-popover-hover{% endif %}"
-                     {% if form.email.errors %}
-                       data-toggle='popover'
-                       data-content='Please, provide valid email'
-                       data-placement="right"
-                     {% endif %}>
+                {% if form.email.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.email.errors %}{{ error }}{% endfor %}'
+                  data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
                   <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
                 </div>
               </div>
 
               <div class="col-md-6">
-                <div class="form-group mbm {% if form.address__zipcode.errors %}has-error{% endif %}">
+                {% if form.address__zipcode.errors %}
+                <div class="form-group mbm has-error"
+                  data-toggle='popover' data-content='{% for error in form.address__zipcode.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
                   <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
                 </div>
               </div>
               <div class="col-md-6 pln">
-                <div class="form-group mbm {% if form.dob.errors %}has-error{% endif %}">
+                {% if form.dob.errors %}
+                <div class="form-group mbm has-error"
+                  data-toggle='popover' data-content='{% for error in form.dob.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
                   <div class="input-group">
                     <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
                     <span class="input-group-btn">
@@ -98,12 +121,26 @@
                 </div>
               </div>
               <div class="col-md-6 prn">
-                <div class="form-group mbm {% if form.phone.errors %}has-error{% endif %}">
+                {% if form.phone.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.phone.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
                   <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group mbm {% if form.gender.errors %}has-error{% endif %}">
+                {% if form.gender.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.gender.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
                   <select name="gender" id="gender" class='simple full mbs'>
                     <option value="0" selected disabled>Gender</option>
                     <option value="1">Male</option>
