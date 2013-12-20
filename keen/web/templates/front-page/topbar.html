@@ -1,0 +1,55 @@
+{% load staticfiles %}
+
+<section id="topbar">
+	
+	<div id="myCarousel" class="carousel slide">
+		<div class="carousel-inner">
+			<div data-image-bg="../../static/images/exaple-image-new0.jpg" class="active item js-preload-image">
+				<div class="logo">
+					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+				</div>
+				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
+			</div>
+			<div data-image-bg="../../static/images/exaple-image-new1.jpg" class="item js-preload-image">
+				<div class="logo">
+					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+				</div>
+				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
+			</div>
+			<div data-image-bg="../../static/images/exaple-image-new2.jpg" class="item js-preload-image">
+				<div class="logo">
+					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+				</div>
+				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
+			</div>
+			<div data-image-bg="../../static/images/exaple-image-new3.jpg" class="item js-preload-image">
+				<div class="logo">
+					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+				</div>
+				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
+			</div>
+		</div>
+		<div class="login">
+			<a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#loginModal">Log In</a>
+		</div>
+		<div class="signup">
+			<a href="mailto:info@keensmb.com" class="btn btn-large btn-info" data-toggle="modal" data-target="#tryFree"><strong>Try Keen for Free!</strong></a>
+		</div>
+		<!-- Carousel nav
+		<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a> -->
+	    <!-- Carousel items -->
+		<div class="shadow-after">
+			<div class="span8 main-navigation">
+				<ul>
+					<li><a href="#" data-target="#myCarousel" data-slide-to="0" class="active">What is Keen?</a></li>
+					<li><a href="#" data-target="#myCarousel" data-slide-to="1">Connect with your Customers</a></li>
+					<li><a href="#" data-target="#myCarousel" data-slide-to="2">See what Your business is doing</a></li>
+					<li><a href="#" data-target="#myCarousel" data-slide-to="3">Pricing</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% include "front-page/login.html" %}

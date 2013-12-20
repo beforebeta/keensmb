@@ -1,0 +1,244 @@
+.promotions {
+    padding: 0 15px;
+}
+
+.promotions .promotions-list {
+    /*padding: 80px 0 0 0;*/
+    padding:0;
+}
+
+.promotions .promotions-list li {
+    list-style-type: none;
+}
+
+.promotions .promotions-list li a {
+    display: block;
+    line-height: 64px;
+    width: 240px;
+    font-size: 17px;
+    position: relative;
+    color: #000;
+    text-indent: 20px;
+}
+
+.promotions .promotions-list li a:hover {
+    background-color: #daf4ef;
+}
+
+.promotions .promotions-list .active a {
+    color: #fff;
+}
+
+.promotions .promotions-list li a:after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    right: -22px;
+    height: 0;
+    width: 0;
+    border-width: 32px 0px 32px 22px;
+    border-style: solid;
+    border-color: transparent transparent transparent transparent;
+}
+
+.promotions .promotions-list .prom-active.active a {
+    background-color: #169e83;
+}
+/*.promotions .promotions-list .prom-active.active a:after {*/
+    /*border-left-color: #169e83;*/
+/*}*/
+
+.promotions .promotions-list .prom-upcoming.active a {
+    background-color: #446cb3;
+}
+/*.promotions .promotions-list .prom-upcoming.active a:after {*/
+    /*border-left-color: #446cb3;*/
+/*}*/
+
+.promotions .promotions-list .prom-awaiting.active a {
+    background-color: #e67e22;
+}
+/*.promotions .promotions-list .prom-awaiting.active a:after {*/
+    /*border-left-color: #fb9b2e;*/
+/*}*/
+
+.promotions .promotions-list .prom-expired.active a {
+    background-color: #e96151;
+}
+/*.promotions .promotions-list .prom-expired.active a:after {*/
+    /*border-left-color: #e96151;*/
+/*}*/
+
+.promotions .promotions-border-left {
+    border-left: 1px solid #ebeff0;
+}
+
+.promotions .promotions-select .dropdown-menu {
+    background-color: #ffffff;
+    border: 1px solid #ebeff0;
+    -webkit-box-shadow: -10px 10px 0 0 rgba(0, 0, 0, 0.05);
+    box-shadow: -10px 10px 0 0 rgba(0, 0, 0, 0.05);
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+}
+
+.promotions .promotions-section .kn-section-header {
+    -webkit-border-radius: 6px 6px 0 0;
+    -moz-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.promotions .promotions-section h6 {
+    font-size:20px;
+    padding-top: 4px;
+}
+
+.promotions .promotions-section .mtl  {
+    margin-top: 10px;
+}
+
+.promotions .promotions-section .mbl {
+    margin-bottom: 10px;
+}
+
+.promotions .promotions-section.prom-active {
+    border: 1px solid #169e83;
+}
+.promotions .promotions-section.prom-active .kn-section-header {
+    background-color: #169e83;
+}
+
+.promotions .promotions-section.prom-upcoming {
+    border: 1px solid #446cb3;
+}
+.promotions .promotions-section.prom-upcoming .kn-section-header {
+    background-color: #446cb3;
+}
+
+.promotions .promotions-section.prom-awaiting {
+    border: 1px solid #e67e22;
+}
+.promotions .promotions-section.prom-awaiting .kn-section-header {
+    background-color: #e67e22;
+}
+
+.promotions .promotions-section.prom-expired {
+    border: 1px solid #e96151;
+}
+.promotions .promotions-section.prom-expired .kn-section-header {
+    background-color: #e96151;
+}
+
+.promotions .kn-section-header {
+    padding: 8px 10px;
+    overflow: hidden;
+}
+
+.promotions .kn-section-header {
+    line-height: normal;
+}
+
+.promotions .kn-section-header time {
+    font-style: italic;
+}
+
+.promotions .kn-section-content {
+    padding-bottom: 0px;
+}
+
+.promotions .promotions-section article,
+.promotions .promotions-section article div {
+    overflow: hidden;
+}
+
+.promotions .promotions-section article h6 {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.promotions .promotions-section article p {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.promotions .promotions-section .progress {
+    height: 32px;
+    padding-right: 10px;
+    line-height: 32px;
+    font-size: 14px;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: s0;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.promotions .promotions-section .progress strong {
+    font-size: 22px;
+}
+
+.promotions .promotions-section .progress span {
+    opacity: 0;
+}
+
+.promotions .promotions-section .progress:hover span  {
+    opacity: 1;
+}
+
+.promotions .promotions-section .progress > strong {
+    color: #798590;
+}
+
+.promotions .promotions-section .progress .progress-bar {
+    text-align: left;
+    font-size: 14px;
+    line-height: 32px;
+    padding-left: 10px;
+}
+
+.promotions .promotions-button button {
+    width: 57px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.promotions .promotions-button button span,
+.promotions .promotions-button button i {
+    display: block;
+}
+
+.promotions .promotions-button button span {
+    font-size: 11px;
+}
+
+
+
+.prom-new-logo,
+.prom-new-img {
+    background-color: #ebedee;
+    border: 1px dashed #d7d8d9;
+    text-align: center;
+}
+
+.prom-new-img {
+    width: 285px;
+    height: 290px;
+}
+
+.prom-new-img span {
+    line-height: 270px;
+}
+
+.prom-new-img-text {
+    border-bottom: 2px solid #95a5a6;
+}
+
+.prom-new-img-text button i {
+    line-height: normal;
+}
+
+.prom-new-checkbox label {
+    white-space: nowrap;
+    font-size: 12px;
+}

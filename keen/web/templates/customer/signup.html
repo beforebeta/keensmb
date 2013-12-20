@@ -1,0 +1,198 @@
+{% load static %}
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% compress css %}
+        <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+        <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
+        <link href="{% static "css/app.css" %}" rel="stylesheet">
+        {% endcompress %}
+
+        <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+
+        {% compress js %}
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+        <!--[if lt IE 9]>
+        <script src="{% static "js/html5shiv.js" %}"></script>
+        <![endif]-->
+        {% endcompress %}
+    </head>
+
+  <body>
+    <div class="container">
+
+      <div class="su-title mtl mbn mll">
+        <h1 class="page-title">{{ form_data.pageTitle }}</h1>
+      </div>
+
+      <div class="su-form-wrapper su-form-overview mbm mrl mll">
+
+        <div class="banner-logo">
+          <img src='{{ form_data.bannerLogo.imageSrc }}'
+          class='banner-preview'
+          alt=""
+          style='top:{{ form_data.bannerLogo.position.top }}px;
+          left:{{ form_data.bannerLogo.position.left }}px'>
+        </div>
+
+        <div class="background-image"
+          style='background:{{ form_data.backgroundImage.backgroundColor }}'>
+          <img src='{{ form_data.backgroundImage.imageSrc }}'
+            class='banner-preview'
+            alt="" id='background-image'
+            style='top:{{ form_data.backgroundImage.position.top }}px;
+            left:{{ form_data.backgroundImage.position.left }}px'>
+
+          {% if success %}
+          <div class="show modal fade-in">
+            <div class="modal-dialog">
+              <div class="modal-content center-block">
+                <div class="modal-header">
+                  <!--
+                  <button class="close" aria-hidden="true" data-dismiss="modal" type="button">
+                    <i class="fui-cross"></i>
+                  </button>
+                  -->
+                  <h4 class="modal-title">Thank you for your submission!</h4>
+                </div>
+                <div class="modal-body">
+                  <strong>{{ success }}</strong>
+                </div>
+                <!--
+                <div class="modal-footer">
+                  <button class="btn btn-success btn-wide btn-embossed pull-right" type="button">Close</button>
+                </div>
+                -->
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <form class="su-form"
+            action=""
+            method="post"
+            style='background:{{ form_data.form.backgroundColor }};
+            color:{{ form_data.form.textColor }}'>
+
+            <h2 class='su-form-header mbs'
+                style='height: {{ form_data.form.titleHeight|default:70 }}px'>
+                {{ form_data.form.title }}
+            </h2>
+            <p class="su-form-text text-simple"
+               style='height: {{ form_data.form.descriptionHeight|default:70 }}px'>
+               {{ form_data.form.description }}
+            </p>
+
+            <div class="row">
+              {% csrf_token %}
+              {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
+
+              <div class="col-md-12">
+                {% if form.full_name.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.full_name.errors %}
+                  {{ error }}
+                  {% endfor %}'
+                  data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
+                  <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
+                </div>
+                {% if form.email.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.email.errors %}{{ error }}{% endfor %}'
+                  data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
+                  <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                {% if form.address__zipcode.errors %}
+                <div class="form-group mbm has-error"
+                  data-toggle='popover' data-content='{% for error in form.address__zipcode.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
+                  <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
+                </div>
+              </div>
+              <div class="col-md-7 pln">
+                {% if form.dob.errors %}
+                <div class="form-group mbm has-error"
+                  data-toggle='popover' data-content='{% for error in form.dob.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
+                  <div class="input-group">
+                    <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
+                    <span class="input-group-btn">
+                      <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                {% if form.phone.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.phone.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
+                  <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
+                </div>
+              </div>
+              <div class="col-md-5 pln">
+                {% if form.gender.errors %}
+                <div class="form-group mbm has-error js-popover-hover"
+                  data-toggle='popover' data-content='{% for error in form.gender.errors %}
+                  {{ error }}
+                  {% endfor %}' data-placement="right">
+                {% else %}
+                <div class="form-group mbm">
+                {% endif %}
+                  <select name="gender" id="gender" class='simple full mbs'>
+                    <option value="0" selected disabled>Gender</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% compress js %}
+    <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
+    <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
+    <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
+    <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
+    <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
+    <script src="{% static "js/application.js" %}"></script>
+    {% endcompress %}
+
+  </body>
+</html>

@@ -1,3 +1,4 @@
+
 // Some general UI pack related JS
 // Extend JS String with repeat method
 String.prototype.repeat = function(num) {
@@ -22,6 +23,7 @@ String.prototype.repeat = function(num) {
     $("select[name='large']").selectpicker({style: 'btn-lg btn-danger'});
     $("select[name='info']").selectpicker({style: 'btn-info'});
     $("select[name='small']").selectpicker({style: 'btn-sm btn-warning'});
+    $("select.simple").selectpicker({style: 'btn-sm btn-default'});
 
     // Tabs
     $(".nav-tabs a").on('click', function (e) {
@@ -148,8 +150,25 @@ String.prototype.repeat = function(num) {
       $(this).closest('.table').find('tbody :checkbox').checkbox(!ch ? 'check' : 'uncheck');
     });
 
+    // Popovers
+    $('.js-popover-hover').popover({
+        'trigger': 'hover',
+        'container': 'body'
+    });
+
+    // Trigger click elements
+    $(document).on('click', '.js-trigger', function(e) {
+        var target = $(this).data('target');
+        $(target).trigger('click');
+    });
+
+    // Chromoselector
+    if( $('.chromoselector').chromoselector ) {
+      $('.chromoselector').chromoselector();
+    }
+
     // Table: Add class row selected
-    $('.table tbody :checkbox').on('check uncheck toggle', function (e) {
+    $(document).on('check uncheck toggle', '.table tbody :checkbox', function (e) {
       var $this = $(this)
         , check = $this.prop('checked')
         , toggle = e.type == 'toggle'
@@ -161,12 +180,13 @@ String.prototype.repeat = function(num) {
     });
 
     // jQuery UI Datepicker
-    var datepickerSelector = '#datepicker-01';
+    var datepickerSelector = '.datapicker';
     $(datepickerSelector).datepicker({
       showOtherMonths: true,
       selectOtherMonths: true,
-      dateFormat: "d MM, yy",
-      yearRange: '-1:+1'
+      dateFormat: "mm/dd/yy",
+      changeMonth: true,
+      changeYear: true
     }).prev('.btn').on('click', function (e) {
       e && e.preventDefault();
       $(datepickerSelector).focus();
@@ -178,6 +198,14 @@ String.prototype.repeat = function(num) {
 
     // Switch
     $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
+
+    // Typehead
+    // $('.typeahead').typeahead();
+
+    $(document).on('click', '.js-submit-form', function(e) {
+        e.preventDefault();
+        $(this).closest('form').submit();
+    });
 
     // make code pretty
     window.prettyPrint && prettyPrint();

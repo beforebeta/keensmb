@@ -2,9 +2,12 @@ from optparse import make_option
 import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django import db
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
+from keen.web.models import PageCustomerField, SignupForm, Dashboard
+from dateutil.relativedelta import *
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -27,13 +30,35 @@ def section(message):
 ################################################################################################################
 # Setup Core
 ################################################################################################################
-def _setup_field(group, group_ranking, name, title, field_type, length=-1):
+def _setup_field(group, group_ranking, name, title, field_type, required=False, length=15):
     print "Setup field %s-%s" % (group, name)
     obj,created = CustomerField.objects.get_or_create(group=group,
-                                             group_ranking=group_ranking,
-                                             name=name,
-                                             title=title,
-                                             type=field_type)
+                                                      group_ranking=group_ranking,
+                                                      name=name,
+                                                      title=title,
+                                                      type=field_type,
+                                                      defaults={
+                                                          'width': length,
+                                                          'required': required,
+                                                      },
+                                                      )
+
+    cast = {
+        # 'date': '::date',
+        'int': '::integer',
+        'float': '::float',
+        #'bool': '::bool',
+    }.get(field_type, '')
+
+    c = db.connection.cursor()
+    try:
+        index_name = 'core_customer_data_' + name.replace('#', '_')
+        c.execute('''drop index if exists %(index_name)s''' % locals())
+        c.execute('''create index %(index_name)s
+                  on core_customer(((data->'%(name)s')%(cast)s))''' % locals())
+    finally:
+        c.close()
+
 
 def _setup_core():
     section("Creating Customer Field Catalog")
@@ -50,8 +75,7 @@ def _setup_core():
     #_setup_field(_basic, 1, CUSTOMER_FIELD_NAMES.social__facebook, "Facebook", _string)
     #_setup_field(_basic, 2, CUSTOMER_FIELD_NAMES.social__twitter, "Twitter", _string)
     #_setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus, "Google Plus", _string)
-    #_setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name, "First Name", _string)
-    #_setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name, "Last Name", _string)
+    #_setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name, "Full Name", _string)
     #_setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob, "Birthday", _date)
     #_setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age, "Age", _string)
     #_setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender, "Gender", _string)
@@ -62,8 +86,7 @@ def _setup_core():
     #_setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode, "ZipCode", _string)
     #_setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state, "State", _string)
     #_setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country, "Country", _string)
-    #_setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone__mobile, "Mobile Phone", _string)
-    #_setup_field(_basic, 1200, CUSTOMER_FIELD_NAMES.phone__home, "Home Phone", _string)
+    #_setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone, "Phone", _string)
     #_setup_field(_basic, 1300, CUSTOMER_FIELD_NAMES.occupation, "Occupation", _string)
     #_setup_field(_basic, 1400, CUSTOMER_FIELD_NAMES.education, "Education", _string)
     #
@@ -107,10 +130,10 @@ def _setup_core():
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__twitter], _string)
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
-    _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.first_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.first_name], _string)
-    _setup_field(_basic, 200, CUSTOMER_FIELD_NAMES.last_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.last_name], _string)
+    _setup_field(_basic, 98, 'first_name', 'First Name', _string)
+    _setup_field(_basic, 99, 'last_name', 'Last Name', _string)
+    _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name,
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name], _string, required=True)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.dob], _date)
     _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age,
@@ -118,7 +141,7 @@ def _setup_core():
     _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.gender], _string)
     _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.email,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email], _string, required=True)
     _setup_field(_basic, 600, CUSTOMER_FIELD_NAMES.address__line1,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__line1], _string)
     _setup_field(_basic, 601, CUSTOMER_FIELD_NAMES.address__line2,
@@ -126,15 +149,13 @@ def _setup_core():
     _setup_field(_basic, 700, CUSTOMER_FIELD_NAMES.address__city,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__city], _string)
     _setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string, required=True)
     _setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__state], _string)
     _setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__country], _string)
-    _setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone__mobile,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.phone__mobile], _string)
-    _setup_field(_basic, 1200, CUSTOMER_FIELD_NAMES.phone__home,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.phone__home], _string)
+    _setup_field(_basic, 1100, CUSTOMER_FIELD_NAMES.phone,
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.phone], _string)
     _setup_field(_basic, 1300, CUSTOMER_FIELD_NAMES.occupation,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.occupation], _string)
     _setup_field(_basic, 1400, CUSTOMER_FIELD_NAMES.education,
@@ -202,12 +223,141 @@ def _setup_core():
     _setup_field(_custom, 1700, CUSTOMER_FIELD_NAMES.purchase__travel,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.purchase__travel], _bool)
 
+def _setup_sample_data_promotions(client):
+    section("Creating Sample Promotions")
+
+    dashboard, created = Dashboard.objects.get_or_create(client=client)
+    now = datetime.datetime.now()
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Black Friday Campaign",
+        status=Promotion.PROMOTION_STATUS.active,
+        description="Come to MDO for Exciting Black Friday deals. Get the best deals on Gap, Banana Republic, Old Navy and many more. We have the best deals in New England.",
+        short_code="Black Friday Deals"
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Free coupon book valued at $750",
+        status=Promotion.PROMOTION_STATUS.active,
+        description="HOLIDAY SHOPPING IS MAGICAL IN MANCHESTER, VERMONT. Signup to our newsletter at keensmb.com/mdo.signup and receive A COUPON BOOK VALUED AT $750. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Coupon Book Promo"
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Draft Promotion 1",
+        status=Promotion.PROMOTION_STATUS.draft,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now,
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Draft Promotion 2",
+        status=Promotion.PROMOTION_STATUS.draft,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=-1),
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="In Approval Promotion 1",
+        status=Promotion.PROMOTION_STATUS.inapproval,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now,
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="In Approval Promotion 2",
+        status=Promotion.PROMOTION_STATUS.inapproval,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=-1),
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Scheduled Promotion 1",
+        status=Promotion.PROMOTION_STATUS.scheduled,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now+relativedelta(months=+1),
+        valid_to=now+relativedelta(years=+1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Scheduled Promotion 2",
+        status=Promotion.PROMOTION_STATUS.scheduled,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=+1),
+        valid_to=now+relativedelta(years=+2)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Expired Promotion 1",
+        status=Promotion.PROMOTION_STATUS.expired,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 1",
+        valid_from=now+relativedelta(years=-1),
+        valid_to=now+relativedelta(months=-1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    p, created = Promotion.objects.get_or_create(
+        client=client,
+        name="Expired Promotion 2",
+        status=Promotion.PROMOTION_STATUS.expired,
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        short_code="Draft Promotion 2",
+        valid_from=now+relativedelta(years=-2),
+        valid_to=now+relativedelta(years=-1)
+    )
+    if created:
+        p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
+
+    dashboard.refresh()
+
 def _setup_sample_data():
     section("Creating Customer Database")
 
     #setup default client
     client, created = Client.objects.get_or_create(slug="default_client", name="default_client")
     customer_source, created = CustomerSource.objects.get_or_create(client=client, slug="import")
+
+    address, created = Address.objects.get_or_create(
+        street='1 Easy Str', city='Simpleville', state_province='IL',
+        country='US', postal_code='12345')
+    location = Location.objects.get_or_create(name='default_location',
+                                              client=client, address=address)
 
     customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
     csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
@@ -221,7 +371,7 @@ def _setup_sample_data():
         map(lambda x: client.customer_fields.add(x), clients_customer_fields)
         assert len(csv_schema_fields) == len(clients_customer_fields) #should map all fields
 
-    client.customer_set.all().delete()
+    client.customers.all().delete()
 
     for customer_text in customers_appended[1:]:
         customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
@@ -240,9 +390,34 @@ def _setup_sample_data():
                 c.data[CUSTOMER_FIELD_NAMES.marital_status]:
                 c.enrichment_status = Customer.ENRICHMENT_STATUS.en
                 c.enrichment_date = datetime.datetime.now()
+            c.data['full_name'] = ' '.join((c.data[field] for field in
+                                           ('first_name', 'last_name')
+                                           if field in c.data))
             c.save()
+
+    client.customer_fields.filter(name__in=('first_name', 'last_name')).delete()
+
+    user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
+    user.set_password('default')
+    user.save()
+
+    ClientUser.objects.get_or_create(user=user, client=client)
+
+    PageCustomerField.objects.get_or_create(page='db', client=client)
+
+    form, created = SignupForm.objects.get_or_create(client=client, slug='signup')
+    form.fields = CustomerField.objects.filter(
+        client=client,
+        name__in='full_name email address__zipcode dob phone gender'.split(),
+    )
+    form.data = {
+        'title': 'Default Client Sign-Up',
+        'intro': 'Sign-Up now and get free diiner for two',
+        'background_img': 'http://keensmb.com/static/special/clients/mdo/images/img11.png',
+    }
+    form.save()
+    _setup_sample_data_promotions(client)
 
 def setup_all():
     _setup_core()
     _setup_sample_data()
-

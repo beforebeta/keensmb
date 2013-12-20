@@ -1,0 +1,4 @@
+{% extends "client/events/event_base.html" %}
+{% load static %}
+{% block image_src %}{% static "images/icons/dude.svg" %}{% endblock %}
+{% block event_text %}<a href="{% url 'customer_profile' event.subject.id %}"><strong>{{  event.subject.name }}</strong></a> was added to the customer list.{% endblock %}

@@ -70,3 +70,28 @@
   padding-left: 30px;
   padding-right: 30px;
 }
+
+.popover {
+  background: #ecedef;
+  box-shadow: inset 0 -2px #ccc;
+  margin-top: 5px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.3;
+  text-align: center;
+  color: #808b8c;
+}
+.popover.left .arrow {
+  border-left-color: #ecedef;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.input-group .input-group-btn .btn-calendar {
+  padding-left: 3px;
+}
+.input-group  .hasDatepicker {
+  padding-right: 3px;
+}

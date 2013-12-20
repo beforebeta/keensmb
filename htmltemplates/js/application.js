@@ -156,6 +156,15 @@ String.prototype.repeat = function(num) {
         'container': 'body'
     });
 
+    // Trigger click elements
+    $(document).on('click', '.js-trigger', function(e) {
+        var target = $(this).data('target');
+        $(target).trigger('click');
+    });
+
+    // Chromoselector
+    $('.chromoselector').chromoselector();
+
     // Table: Add class row selected
     $('.table tbody :checkbox').on('check uncheck toggle', function (e) {
       var $this = $(this)
@@ -173,7 +182,7 @@ String.prototype.repeat = function(num) {
     $(datepickerSelector).datepicker({
       showOtherMonths: true,
       selectOtherMonths: true,
-      dateFormat: "d MM, yy",
+      dateFormat: "d M, y",
       yearRange: '-1:+1'
     }).prev('.btn').on('click', function (e) {
       e && e.preventDefault();

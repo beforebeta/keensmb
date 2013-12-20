@@ -1,0 +1,267 @@
+{% extends "front-page/base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+
+	
+		<nav class="scroll-menu">
+			<div class="logo pull-left"><img src="../../static/images/logo-small-blue.png" alt=""></div>
+			<ul class="nav">
+				<li><a class="js-animate-scroll" href="#what-is-keen">What is Keen?</a></li>
+				<li><a class="js-animate-scroll" href="#email-letter">Connect with your Customers</a></li>
+				<li><a class="js-animate-scroll" href="#online">See what Your business is doing</a></li>
+				<li><a class="js-animate-scroll" href="#pricing">Pricing</a></li>
+			</ul>
+			<a href="mailto:info@keensmb.com" class="btn btn-large btn-info login-link pull-left"><strong>Try Keen for Free!</strong></a>
+			<a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#loginModal">Log In</a>
+		</nav>
+
+	
+		{% include 'front-page/topbar.html' %}
+
+
+		<section id="what-is-keen" class="main-page-block first default">
+			<div class="container">
+				<div class="offset2 span8 keen-title">
+					<h2>What is Keen?</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, officia, blanditiis adipisci magnam illo illum enim veniam alias quidem porro.</p>
+				</div>
+				<div class="row">
+					<div class="span4">
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object" src="{% static "assets/pic4.png" %}" alt="">
+							</a>
+							<div class="media-body">
+								<h6 class="media-heading">Enhanced Customer Profiles</h6>
+								<span>Automatically analyze online and offline communication and append customer profiles with third-party data, increasing the size and quality of your customer database.</span>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object" src="{% static "assets/pic6.png" %}" alt="">
+							</a>
+							<div class="media-body">
+								<h6 class="media-heading">Tailored Offers and Promotions</h6>
+								<span>Our proprietary technology creates personalized offers and promotions tailored to your customers’ buying preferences.</span>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object" src="{% static "assets/pic8.png" %}" alt="">
+							</a>
+							<div class="media-body">
+								<h6 class="media-heading">Email Campaigns</h6>
+								<span>Engage with your customers over email and drive them back with targeted promotional offers.</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="span4">
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object" src="{% static "assets/pic5.png" %}" alt="">
+							</a>
+							<div class="media-body">
+								<h6 class="media-heading">Mobile/SMS Campaigns</h6>
+								<span>Motivate your customer base to visit your store by sending alerts and offers over SMS.</span>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object" src="{% static "assets/pic7.png" %}" alt="">
+							</a>
+							<div class="media-body">
+								<h6 class="media-heading">Social Engagement</h6>
+								<span>Improve your social presence by engaging with facebook fans, yelp reviewers and twitter followers.</span>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object" src="{% static "assets/pic9.png" %}" alt="">
+							</a>
+							<div class="media-body">
+								<h6 class="media-heading">Performance Analysis</h6>
+								<span>Identify your best customers and evaluate the performance of your promotional campaigns.</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</section>
+
+		<section id="email-letter" class="main-page-block">
+			<div class="container">
+				<div class="row">
+					<div class="span6">
+						<img src="../../static/images/email.png" width="518" height="487" alt="">
+					</div>
+					<div class="span6 mln">
+						<h6>Connect width Your customers directly by sending them automated email promotions</h6>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, velit, voluptatum, sint quos unde consequuntur quidem quis impedit reiciendis accusamus nulla quae at! Vitae, aspernatur tempore labore aliquam at. Mollitia, explicabo, in, fugit eaque laudantium ad nisi maxime sed dicta vero neque minus fugiat odio consectetur repudiandae esse similique incidunt quo molestiae eligendi unde sit porro harum ea quidem distinctio.</p>
+						<small>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, nulla, odit, placeat iste repudiandae saepe tempore nesciunt esse amet eligendi eos id perspiciatis non laudantium.</small>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<section id="online" class="main-page-block default">
+			<div class="container">
+				<div class="row">
+					<div class="span6">
+						<img src="../../static/images/skitch.jpg" width="518" height="387" alt="">
+					</div>
+					<div class="span6 mln">
+						<h6>Lets potential customers find you online easily increase the size of your customer database</h6>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, velit, voluptatum, sint quos unde consequuntur quidem quis impedit reiciendis accusamus nulla quae at! Vitae, aspernatur tempore labore aliquam at. Mollitia, explicabo, in, fugit eaque laudantium ad nisi maxime sed dicta vero neque minus fugiat odio consectetur repudiandae esse similique incidunt quo molestiae eligendi unde sit porro harum ea quidem distinctio.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="main-page-block">
+			<div class="container">
+				<div class="row">
+					<div class="span6">
+						<img src="{% static "assets/dashboard.png" %}"  width="518" height="350" alt="Dashboard example">
+					</div>
+					<div class="span6 mln">
+						<h6>Easy Monitor the Performance of Your Promotion</h6>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia, fuga, dolore, dolorum, sed consectetur eius quas corporis pariatur doloribus omnis cum ratione alias rerum praesentium ab non deleniti illum eligendi facilis soluta tenetur commodi porro!.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="pricing">
+			<div class="container">
+				<div class="text-center">
+					<h3>Try Keen for <strong>Free</strong> for 30 days*</h3>
+				</div>
+
+				<div class="boxes">
+					<div class="row-fluid">
+						<div class="span4">
+							<div class="box color1">
+								<div class="head clearfix">
+									<h6>
+										<div class="left">Basic*</div>
+										<div class="right"><span>$99</span>/mo</div>
+									</h6>
+								</div>
+								<div class="content">
+									<p class="text-center"><strong>0-1000</strong> customers</p>
+									<ul>
+										<li>Up to 100 SMS Alerts</li>
+										<li>Unlimited Email Campaigns</li>
+										<li>Automated Promotion Creation &amp; Targeting</li>
+										<li>Social Sharing Enabled</li>
+										<li>Performance Analytics</li>
+										<li>Cloud-based CRM Database</li>
+									</ul>
+								</div>
+							</div>
+							<div class="box-footer">
+	              <b>+ $0.40</b> per Customer Profile Data Enhancement
+							</div>
+						</div>
+						<div class="span4">
+							<div class="box color2">
+								<div class="head clearfix">
+									<h6>
+										<div class="left">Premium*</div>
+										<div class="right"><span>$149</span>/mo</div>
+									</h6>
+								</div>
+								<div class="content">
+									<p class="text-center"><strong>1000-5000</strong> customers</p>
+									<ul>
+										<li>Up to 1000 SMS Alerts</li>
+										<li>Unlimited Email Campaigns</li>
+										<li>Automated Promotion Creation &amp; Targeting</li>
+										<li>Social Sharing Enabled</li>
+										<li>Performance Analytics</li>
+										<li>Cloud-based CRM Database</li>
+									</ul>
+								</div>
+							</div>
+							<div class="box-footer">
+	              <b>+ $0.35</b> per Customer Profile Data Enhancement
+							</div>
+						</div>
+						<div class="span4">
+							<div class="box color3">
+								<div class="head clearfix">
+									<h6>
+										<div class="left">Pro*</div>
+										<div class="right"><span>$199</span>/mo</div>
+									</h6>
+								</div>
+								<div class="content">
+									<p class="text-center"><strong>5000 or more</strong> customers</p>
+									<ul>
+										<li>Up to 3000 SMS Alerts</li>
+										<li>Unlimited Email Campaigns</li>
+										<li>Automated Promotion Creation &amp; Targeting</li>
+										<li>Social Sharing Enabled</li>
+										<li>Performance Analytics</li>
+										<li>Cloud-based CRM Database</li>
+									</ul>
+								</div>
+							</div>
+							<div class="box-footer">
+	              <b>+ $0.30</b> per Customer Profile Data Enhancement
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<p class="text-center">*Keen will also work in building your initial customer contacts in the first 30 days</p>
+			</div>
+
+		</section>
+
+
+		<section id="legal">
+			<div class="container">
+				<div class="text-center">
+					<ul>
+						<li><a href="legal">terms of use</a></li>
+						<li><a href="legal">privacy policy</a></li>
+						<li><a href="mailto:info@keensmb.com">contact us</a></li>
+					</ul>
+					<p class="small text-muted">Copyright Digital First Ventures. All Rights Reserved.</p>
+				</div>
+			</div>
+		</section>
+
+
+		<section id="footer">
+			<div class="container">
+				<div class="row">
+					<div class="span3 offset2">
+						<span>
+							Interested?
+							<a href="mailto:info@keensmb.com">Contact us</a>
+						</span>
+					</div>
+					<div class="span5 offset1">
+						<span>You can also</span> &nbsp;
+						<a href="mailto:info@keensmb.com" class="btn btn-large btn-primary"><strong>Try Keen for Free!</strong></a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+{% endblock %}

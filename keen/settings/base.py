@@ -55,9 +55,10 @@ INSTALLED_APPS = (
     # Application base, containing global templates.
 
     # Local apps, referenced via appname
+    'tracking',
     'keen.core',
     'keen.web',
-    'tracking',
+    'keen.events',
 )
 
 # Place bcrypt first in the list, so it will be the default password hashing
@@ -105,7 +106,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'shared_static'),
-    os.path.join(PROJECT_ROOT, 'htmltemplates'),
+    #os.path.join(PROJECT_ROOT, 'htmltemplates'),
 )
 
 # If you set this to False, Django will make some optimizations so as not
@@ -139,9 +140,11 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.views.decorators.csrf._EnsureCsrfCookie',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tracking.middleware.VisitorMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
@@ -181,7 +184,7 @@ WSGI_APPLICATION = 'keen.wsgi.application'
 # Define your database connections
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django_hstore.postgresql_psycopg2',
         'NAME': 'keen',
         'USER': 'keen',
         #'PASSWORD': '',

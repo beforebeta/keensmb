@@ -1,0 +1,9 @@
+{% load static %}
+{% load humanize %}
+<li>
+  <figure><img src="{% block image_src %}images/icons/flag.svg{% endblock %}" alt="" width="30" height="30"></figure>
+  <div>
+    <p>{% block event_text %}{% endblock %}</p>
+    <span class="dib mbl">{{ event.occurrence_datetime|naturaltime }}</span>
+  </div>
+</li>

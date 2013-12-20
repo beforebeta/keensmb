@@ -25,10 +25,20 @@
         $alertBlock.removeClass('in').hide();
     };
 
+    $('#new-field-query').typeahead({
+        source: function (query, process) {
+            return ['opop', 'apap', 'ipip', 'opasd', 'asdfgh', 'jklpoiu', 'ytrewq', 'zxccvbn'];
+            // return $.get('/profile/custom-fields', { query: query }, function (data) {
+            //     return process(data.options);
+            // });
+        }
+    });
+
 
 
     // Table: Add class row selected
     $(document).on('toggle', '#customers-table :checkbox', checkItemActions);
+
     $(document).on('click', '.js-delete-customer', deleteCustomer);
     $(document).on('click', '.global-alert .close', closeGlobalAlert);
 

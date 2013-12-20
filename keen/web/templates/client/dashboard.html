@@ -1,0 +1,287 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load web_tags %}
+{% load humanize %}
+{% load compress %}
+
+{% block content %}
+
+
+  <!-- Content -->
+  <section class='clearfix dashboard'>
+    <div class="dash-wrapper">
+      <h1 class='page-title mbn mtl'>Dashboard</h1>
+      <div class="row page-head mbl">
+        <div class="col-xs-3 text-center">
+          <div class="danger">
+            <span class="label-danger">Total Customers</span>
+            <strong class="danger">{{ dashboard.total_customers }}</strong>
+          </div>
+        </div>
+        <div class="col-xs-3 text-center">
+          <div class="warning">
+            <span class="label-warning">New Customers this month</span>
+            <strong class="warning">{{ dashboard.new_customers }}</strong>
+          </div>
+        </div>
+        <div class="col-xs-3 text-center">
+          <div class="primary">
+            <span class="label-primary">Promotions this month</span>
+            <strong class="primary">{{ dashboard.promotions_this_month }}</strong>
+          </div>
+        </div>
+        <div class="col-xs-3 text-center">
+          <div class="info">
+            <span class="label-info">Redemptions this month</span>
+            <strong class="info">{{ dashboard.redemptions }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-xs-7">
+      <div class="kn-section active">
+          <div class="kn-section-header">
+            <h6 class="mbn mtn">Active Promotions</h6>
+          </div>
+          <div class="kn-section-content news">
+            <div class="row small">
+                {% if dashboard.get_active_promotions_count == 0 %}
+                  <article class="col-sx-12">
+                    <p class="mts mbn">There are currently no promotions active.</p>
+                  </article>
+                {% else %}
+                {% for promotion in dashboard.get_active_promotions %}
+                  <article class="col-sx-12">
+                    <div>
+                      <h6 class="mts mbs">{{ promotion.name }}</h6>
+                      <time class="mtx">
+                          {% if promotion.valid_to %}
+                            <em>Expiring</em>
+                            {{ promotion.valid_to.date }}
+                          {% else %}
+                            <em>Does not expire</em>
+                          {% endif %}
+                      </time>
+                    </div>
+                    <p class="mts mbn">{{ promotion.description|truncatesmart:200 }}</p>
+                    <time class="mbs dib">
+                            <em>Launched</em>
+                          {% if promotion.valid_from %}
+                            {{ promotion.valid_from.date }}
+                          {% else %}
+                            {{ promotion.created.date }}
+                          {% endif %}
+                    </time>
+                    <div class="progress">
+                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div> Total Sent <strong>{{ promotion.analytics.total_sent }}</strong>
+                    </div>
+                  </article>
+                    {% endfor %}
+                  <a href="#">See more...</a>
+                {% endif %}
+            </div>
+          </div>
+      </div>
+      <div class="kn-section active mtl">
+          <div class="kn-section-header">
+            <h6 class="mbn mtn">Top Promotions</h6>
+          </div>
+          <div class="kn-section-content">
+            <div class="row small">
+                {% for promotion in dashboard.get_top_promotions %}
+                  <article class="col-sx-12">
+                    <strong>{{ promotion.name }}</strong>
+                    <div class="progress mbn">
+                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div> Total Sent <strong>{{ promotion.analytics.total_sent }}</strong>
+                    </div>
+                  </article>
+                {% endfor %}
+              <a class="dib mtl" href="#">See more...</a>
+            </div>
+          </div>
+      </div>
+      <div class="kn-section active mtl">
+          <div class="kn-section-header">
+            <h6 class="mbn mtn">Top Customers</h6>
+          </div>
+          <div class="kn-section-content">
+            <div class="row small">
+              <table class="table table-striped table-hover mbs">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Email</th>
+{#                    <th>Location</th>#}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for customer in dashboard.get_top_customers %}
+                      <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ customer.get_name }}</td>
+                        <td>{{ customer.get_email }}</td>
+{#                        <td>New York</td>#}
+                      </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <a class="dib" href="#">See more...</a>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="col-xs-5">
+      <div class="kn-section active">
+          <div class="kn-section-header">
+              <h6 class="mbn mtn">Updates</h6>
+{#            <div class="mbn mtn">Updates</div>#}
+          </div>
+          <div class="kn-section-content">
+            <div class="row small">
+              <ul class="dashboard-list">
+                  {% for event in dashboard.get_updates %}
+                      {% include event|get_template_for_event %}
+                  {% empty %}
+                      No new activity.
+                  {% endfor %}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem ipsum <strong>dolor sit amet, consectetur adipisicing</strong> elit. Voluptates, eveniet.</p>#}
+{#                    <span class="dib mbl">some text #1</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem ipsum dolor sit amet, consectetur <strong>dolor sit amet, consectetur adipisicing</strong></p>#}
+{#                    <span class="dib mbl">some text #2</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem<strong>dolor sit amet, consectetur adipisicing</strong> adipisicing elit. Provident, in.</p>#}
+{#                    <span class="dib mbl">some text #3</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                  <figure><img src="{% static "images/icons/basket.svg" %}" alt="" width="30" height="30"></figure>#}
+{#                  <div>#}
+{#                    <p>Lorem <strong>dolor sit amet, consectetur adipisicing</strong> impedit.</p>#}
+{#                    <span class="dib mbl">some text #4</span>#}
+{#                  </div>#}
+{#                </li>#}
+              </ul>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+
+  </section>
+  <!-- /.container -->
+
+{% endblock %}
+
+{% block bottom_js %}
+
+    {% compress js %}
+    {% endcompress %}
+
+{% endblock %}
+

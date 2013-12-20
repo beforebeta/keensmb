@@ -1,0 +1,246 @@
+.ModalCsvImport .modal-dialog {
+  width: 464px;
+}
+.ModalCsvImport .modal-content {
+  width: 464px;
+  overflow: hidden;
+}
+
+.ModalCsvImport .modal-content .modal-body > * {
+  float: left;
+  width: 100%;
+}
+
+.ModalCsvImport .modal-header {
+  padding: 13px 19px 15px 15px;
+}
+
+.ModalCsvImport .modal-header h6 {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.ModalCsvImport .modal-header .close {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.ModalCsvImport .modal-body {
+  padding: 5px 30px 20px 32px;
+}
+
+.ModalCsvImport .steps {
+  overflow: hidden;
+  padding-bottom: 22px;
+}
+
+.ModalCsvImport .steps > * {
+  float: left;
+}
+
+.ModalCsvImport .steps div[class|='step'] {
+  width: 41px;
+  height: 41px;
+  background-color: #c9ced1;
+  border: 1px solid #9ca6a7;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+  text-indent: -1px;
+  position: relative;
+}
+
+.ModalCsvImport .steps div[class|='step'] span {
+  color: #95a5a6;
+  font-size: 13px;
+  position: absolute;
+  bottom: -24px;
+  left: -24px;
+  white-space: nowrap;
+  line-height: normal;
+}
+
+.ModalCsvImport .steps div.step-one span {
+  left: 0;
+}
+
+.ModalCsvImport .steps div.step-three span {
+  left: auto;
+  right: 0;
+}
+
+.ModalCsvImport .steps .progres {
+  background-color: #169e83!important;
+  border: 1px solid #17a488!important;
+}
+
+.ModalCsvImport .steps .progres span {
+  color: #169e83!important;
+}
+
+.ModalCsvImport .steps .progres-line {
+  width: 144px;
+  height: 1px;
+  border-bottom: 1px solid #c9ced1;
+  margin-top: 20px;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.ModalCsvImport .upload {
+  background-color: #ebedee;
+  border: 1px dashed #d7d8d9;
+  text-align: center;
+}
+
+.ModalCsvImport .upload span {
+  display: block;
+}
+
+.ModalCsvImport .upload div {
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+.ModalCsvImport .upload div input {
+  opacity: 0;
+  position: absolute;
+  left: 500px;
+  top: 0;
+  height: 41px;
+}
+
+.ModalCsvImport .added-file {
+  overflow: hidden;
+}
+
+.ModalCsvImport .added-file > * {
+  float: left;
+}
+
+.ModalCsvImport .added-file div {
+  width: 78%;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.ModalCsvImport .added-file div span {
+  font-size: 14px;
+}
+
+.ModalCsvImport .added-file div .close {
+  margin-top: 13px;
+  font-size: 13px;
+}
+
+.ModalCsvImport .progress {
+  height: 22px;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  width: 100%;
+}
+
+.ModalCsvImport .progress strong {
+  font-size: 22px;
+}
+
+.ModalCsvImport .progress > strong {
+  color: #798590;
+}
+
+.ModalCsvImport .progress .progress-bar {
+  text-align: left;
+  font-size: 14px;
+  line-height: 32px;
+  padding-left: 10px;
+}
+
+.ModalCsvImport .download-progress span {
+  font-size: 11px;
+  line-height: normal;
+  color: #95a5a6;
+}
+
+.ModalCsvImport .download-progress .result {
+  line-height: normal;
+  overflow: hidden;
+}
+
+.ModalCsvImport .modal-footer {
+  float: left;
+  width: 100%;
+}
+
+.ModalCsvImport table tr:first-child td {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ModalCsvImport table tr td:first-child {
+  padding-left: 0;
+  padding-right: 50px;
+}
+
+.ModalCsvImport table tr td {
+  vertical-align: middle;
+}
+
+.ModalCsvImport table .input-group {
+  width: 130px;
+}
+
+.ModalCsvImport table .input-group > * {
+  float: left;
+}
+
+.ModalCsvImport table td > input {
+  min-width: 111px;
+  max-width: 130px;
+  line-height: normal;
+}
+
+.ModalCsvImport .table [class*="fui-"] {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.ModalCsvImport .table td {
+  padding-right: 0;
+}
+
+.ModalCsvImport .download-success {
+  text-align: center;
+  font-size: 17px;
+  line-height: normal;
+  margin-top: 14px;
+  margin-bottom: -14px;
+}
+
+.ModalCsv .input-group input {
+  border-right: none;
+  width: 108px;
+  line-height: normal;
+}
+
+.input-group.chosen input,
+.input-group.chosen .btn  {
+  background-color: #ebedee;
+  color: #7f8c8d;
+  border: none;
+}
+
+.input-group.chosen .btn {
+  border-left: 2px solid transparent;
+}
+
+.input-group.chosen .btn i {
+  opacity: 0.2;
+}
+
+.input-group.chosen .btn:hover i {
+  opacity: 1;
+}

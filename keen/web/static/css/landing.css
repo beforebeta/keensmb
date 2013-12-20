@@ -1,0 +1,386 @@
+html, body {
+  min-height: 100%;
+  height: 100%;
+}
+
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+/*.flat-font {
+  font-family: "Flat-UI-Icons";
+  font-size: 23.996px;
+  font-style: normal;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 500;
+  text-shadow: none;
+}*/
+.w1 {
+  width: 200px;
+}
+
+#topbar .login {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+#topbar {
+  position: relative;
+  height: 470px;
+}
+#topbar .item {
+  overflow: hidden;
+  min-height: 470px;
+  background-size: cover;
+}
+#topbar .item > img {
+  position: absolute;
+  z-index: 0;
+}
+#topbar div.logo {
+  margin: 0 auto;
+  width: 100px;
+  margin-top: 100px;
+}
+#topbar img.logo {
+  max-width: 100px;
+}
+#topbar .tagline {
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  width: 40%;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+#topbar .signup {
+  max-width: 152px;
+  margin: 0 auto;
+  margin-top: -185px;
+  position: relative;
+}
+#topbar .main-navigation {
+  text-align: justify;
+  float: none;
+  margin: 0 auto;
+  margin-top: 111px;
+  z-index: 1;
+  position: relative;
+}
+#topbar .main-navigation ul {
+  padding: 0;
+  list-style-type: none;
+  display: inline;
+  margin-left: 15px;
+  line-height: normal;
+}
+#topbar .main-navigation ul:after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  height: 0;
+}
+#topbar .main-navigation ul li {
+  display: inline;
+}
+
+#topbar .main-navigation ul li a {
+  color: #ffffff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+}
+#topbar .shadow-after {
+  position: relative;
+  margin-top: -22px;
+}
+#topbar .shadow-after:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  width: 100%;
+  height: 100%;
+  min-height: 76px;
+  background-color: #000000;
+  opacity: 0.7;
+}
+
+.main-page-block .media {
+  margin-top: 40px;
+}
+.main-page-block .media .media-object {
+  width: 80px;
+}
+.main-page-block .media .media-body .media-heading {
+  font-size: 120%;
+  margin-bottom: 0;
+}
+
+#legal {
+  background-color: #404040;
+  padding: 10px;
+}
+#legal ul {
+  margin-bottom: 0;
+}
+#legal ul li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 20px;
+  text-transform: uppercase;
+}
+#legal ul li a {
+  color: #fff;
+  font-size: 14px;
+}
+
+#legal .small {
+  font-size: 70%;
+  margin-bottom: 5px;
+}
+#footer {
+  padding: 20px;
+}
+#footer span {
+  line-height: 48px;
+}
+
+.modal-small .modal-content {
+  width: 450px;
+}
+
+.main-page-block .keen-title h2 {
+  color: #3c4145;
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.main-page-block .keen-title p {
+  font-size: 22px;
+  line-height: 36px;
+  color: #3c4145;
+}
+
+.main-page-block .row .span4 {
+  margin-left: 22px;
+}
+.main-page-block .row .span4:first-child {
+  margin-left: 50px;
+}
+
+.main-page-block.first {
+  padding-top: 0;
+}
+
+.main-page-block {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.main-page-block h6 {
+  margin-bottom: 30px;
+}
+.main-page-block p {
+  margin-bottom: 30px;
+}
+
+#pricing {
+  background-color: #f6f6f6;
+  padding-top: 20px;
+}
+#pricing h3 {
+  font-weight: normal;
+}
+#pricing .boxes {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 40px;
+}
+#pricing .box.color1 {
+  background-color: #f1c427;
+}
+#pricing .box.color1 .head {
+  background-color: #f29d27;
+}
+#pricing .box.color2 {
+  background-color: #4bbd9d;
+}
+#pricing .box.color2 .head {
+  background-color: #40a186;
+}
+#pricing .box.color3 {
+  background-color: #3498dc;
+}
+#pricing .box.color3 .head {
+  background-color: #2b80b9;
+}
+#pricing .box .head {
+  color: #fff;
+  padding: 20px 10px;
+}
+#pricing .box .head h6 {
+  margin: 0;
+  padding: 0;
+}
+#pricing .box .head .left {
+  float: left;
+  margin-top: 10px;
+}
+#pricing .box .head .right {
+  float: right;
+}
+#pricing .box .head .right span {
+  font-size: 34px;
+}
+#pricing .box p {
+  margin: 20px 0;
+}
+#pricing .box ul {
+  padding: 0 5px 10px;
+  margin: 0 0 10px 25px;
+}
+#pricing .box ul li {
+  list-style-image: url('/static/assets/tick.png?d23370edbb2e');
+}
+#pricing .box-footer {
+  background-color: #9b59b6;
+  margin: 20px 0;
+  padding: 10px;
+  color: #fff;
+}
+
+@media (min-width: 1200px){
+  .span4 {
+    width: 350px;
+  }
+}
+
+.main-page-block.default {
+  background-color: #f1f1f1;
+}
+
+.scroll-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px;
+  background-color: #fff;
+  z-index: 3;
+}
+
+.scroll-menu ul {
+  padding-left: 300px;
+  margin: 0;
+  border-bottom: 8px solid #dbdbdb;
+  float: left;
+  width: 77%;
+}
+.scroll-menu ul li {
+  float: left;
+  list-style-type: none;
+  margin-left: 30px;
+}
+.scroll-menu ul li a {
+  line-height: 68px;
+  display: inline-block;
+  margin-bottom: -8px;
+  font-size: 14px;
+  color: #999999;
+  border-bottom: 8px solid transparent;
+  padding: 0;
+}
+
+.scroll-menu ul li a:hover {
+  color: #000;
+  background-color: transparent;
+}
+
+.scroll-menu ul .active a {
+  border-bottom: 8px solid red;
+  color: #000;
+}
+
+.scroll-menu .logo {
+  line-height: 76px;
+  margin: 0 30px;
+}
+.scroll-menu .login-link {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.scroll-menu > a {
+  margin-top: 20px;
+}
+
+
+
+/* landing page 2 */
+
+.wrapper {
+  min-height: 100%;
+  height: 100%;
+  background: url('../images/landing-2-bg.jpg');
+  background-size: cover;
+}
+
+.landing2 .login {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  z-index: 2;
+  font-weight: bold;
+  -webkit-border-radius: 0 0 7px 7px;
+  -moz-border-radius: 0 0 7px 7px;
+  border-radius: 0 0 7px 7px;
+}
+
+.landing2 .white-label {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 20px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.landing2 .logo {
+  text-align: center;
+}
+
+.landing2 .logo img {
+  margin: 80px 0 50px;
+}
+
+.landing2 .logo figcaption {
+  text-align: left;
+  font-size: 28px;
+  line-height: 45px;
+  color: #000;
+  font-weight: bold;
+}
+
+.landing2 .offer-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.landing2 .offer-list li {
+  list-style-type: none;
+}
+
+
+
+/* popup  */
+
+.row-push-left {
+  margin-left: -15px;
+}
+
+textarea.textarea-static-height {
+  height: 146px;
+}
