@@ -47,4 +47,14 @@
 
     $('.carousel').carousel({interval: 5000});
 
+    try{
+        $(document).ready(function() {
+            $('#tryFree').on('shown.bs.modal', function () {
+               $("#trykeenform input[name='name']").focus();
+            });
+        });
+    }catch(e){
+        console.log(e);
+    }
+
 })(jQuery);

@@ -62,11 +62,16 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
           <i class="fui-cross"></i>
         </button>
-        <h4 class="modal-title">Try Keen for free
+        <h4 class="modal-title">Try Keen for Free!</h4>
       </div>
       <div class="modal-body">
-        <form action='/api/login' id='signInForm' method="POST">
+          <form action='#' id='trykeenform' method="POST">
           {% csrf_token %}
+              <div class="row row-push-left">
+                  <div class="col-md-12 mbl sft" style="font-size:83%">
+                      Fill out this simple form to get started with Keen for Free. Find out how you can use Keen to acquire new customers and learn more about existing ones!
+                  </div>
+              </div>
           <div class="row row-push-left">
             <div class="col-md-6">
               <div class="form-group mbm">
@@ -78,31 +83,31 @@
               <div class="form-group mbm">
                 <input type="text" placeholder='Phone Number' name='phone' class='form-control'>
               </div>
-              <div class="form-group mbm">
-                <input type="text" placeholder='Street Address' name='email' class='form-control'>
-              </div>
-              <div class="row row-push-left">
-                <div class="col-xs-6 prs">
-                  <div class="form-group mbm">
-                    <input type="text" placeholder='City' name='city' class='form-control'>
-                  </div>
-                </div>
-                <div class="col-xs-3 pls prs">
-                  <div class="form-group mbm">
-                    <input type="text" placeholder='State' name='state' class='form-control'>
-                  </div>
-                </div>
-                <div class="col-xs-3 pls">
-                  <div class="form-group mbm">
-                    <input type="text" placeholder='Zip' name='Zip' class='form-control'>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
+              <!--<div class="form-group mbm">-->
+                <!--<input type="text" placeholder='Street Address' name='email' class='form-control'>-->
+              <!--</div>-->
+              <!--<div class="row row-push-left">-->
+                <!--<div class="col-xs-6 prs">-->
+                  <!--<div class="form-group mbm">-->
+                    <!--<input type="text" placeholder='City' name='city' class='form-control'>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3 pls prs">-->
+                  <!--<div class="form-group mbm">-->
+                    <!--<input type="text" placeholder='State' name='state' class='form-control'>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3 pls">-->
+                  <!--<div class="form-group mbm">-->
+                    <!--<input type="text" placeholder='Zip' name='Zip' class='form-control'>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
               <div class="form-group mbm">
                 <input type="email" placeholder='Your Email' class='form-control' name='email'>
               </div>
+            </div>
+            <div class="col-md-6">
               <div class="form-group mbm">
                 <input type="text" placeholder='How did you hear about Keen?' class='form-control' name='question'>
               </div>
