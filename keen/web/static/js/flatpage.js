@@ -52,6 +52,9 @@
             $('#tryFree').on('shown.bs.modal', function () {
                $("#trykeenform input[name='name']").focus();
             });
+            $('#loginModal').on('shown.bs.modal', function () {
+               $("#signInForm input[name='email']").focus();
+            });
         });
     }catch(e){
         console.log(e);
