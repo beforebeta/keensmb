@@ -306,3 +306,7 @@
 .non-resizing-gorizontal {
   resize: vertical;
 }
+
+.sft{
+    font-size:83%
+}

@@ -6,6 +6,8 @@
 {% block content %}
       <!-- Content -->
 
+  <input type="hidden" id="form_slug" name="form_slug" value="{{ form.slug }}">
+
       {% verbatim  %}
 
   <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>

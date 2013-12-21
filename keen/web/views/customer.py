@@ -2,6 +2,7 @@ import logging
 
 from django.db import DatabaseError
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 
 from keen.core.models import Client, Customer, CustomerSource
 from keen.web.models import SignupForm
@@ -46,6 +47,9 @@ def signup_view(request, client_slug, form_slug):
                 logger.exception('Failed to save new customer')
             else:
                 context['success'] = 'You have successfully signed up!'
+                redirect_url = signup_form.data.get('redirectUrl')
+                if redirect_url:
+                    return HttpResponseRedirect(redirect_url)
         else:
             logger.debug('Signup form validation error(s): %r' % form.errors)
     else:
