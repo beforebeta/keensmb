@@ -44,7 +44,7 @@
     <div class="su-subtitle su-editable form-group row mts mbn"
          ng-class='{editing: permalink.isEditing}'>
       <div class="col-md-10">
-        <span class='mtx dib'><b>Permalink:</b> http://keensmb.com/&lt;actual_client_slig&gt;/signup/</span>
+        <span class='mtx dib'><b>Permalink:</b> http://keensmb.com/&lt;actual_client_slug&gt;/</span>
         <div class="form-group dib">
           <input type="text"
                  class='form-control input-sm permalink js-editable-trigger'
@@ -64,12 +64,17 @@
     <div class="su-form-wrapper mbm">
 
     <!-- Banner Logo -->
+    <p>{{ bannerLogo | json }}</p>
       <div class="banner-logo js-image-container"
            ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'
            data-scope-object='bannerLogo'>
         <p class="placeholder">Banner Logo</p>
 
-        <img src='' ng-src="{{ bannerLogo.image.src }}" alt="" class='js-banner-preview fade in' id='banner-preview'>
+        <img src=''
+             ng-src="{{ bannerLogo.image.src }}"
+             alt=""
+             class='js-banner-preview fade in'
+             id='banner-preview'>
 
         <div class="instructions hover-vis">
           <i class="fui-list dib mid"></i>
