@@ -20,3 +20,29 @@
     0% {opacity: 0;}
     100% {opacity: 1;}
 }
+.shadow-onload {
+    -webkit-animation: shadow-onload 2s;
+    -moz-animation: shadow-onload 2s;
+    -o-animation: shadow-onload 2s;
+    animation: shadow-onload 2s;
+}
+@-webkit-keyframes shadow-onload {
+    0% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+    50% {box-shadow: rgba(0,0,0,0.1) 0 0 8px 2px}
+    100% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+}
+@-moz-keyframes shadow-onload {
+    0% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+    50% {box-shadow: rgba(0,0,0,0.1) 0 0 8px 2px}
+    100% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+}
+@-o-keyframes shadow-onload {
+    0% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+    50% {box-shadow: rgba(0,0,0,0.1) 0 0 8px 2px}
+    100% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+}
+@keyframes shadow-onload {
+    0% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+    50% {box-shadow: rgba(0,0,0,0.1) 0 0 8px 2px}
+    100% {box-shadow: rgba(0,0,0,0.1) 0 0 2px 1px}
+}

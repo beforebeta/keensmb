@@ -1,1 +1,1 @@
-angular.module('keen', []);
+angular.module('keen', ['ngSanitize']);

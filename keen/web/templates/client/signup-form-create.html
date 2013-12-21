@@ -6,12 +6,12 @@
 {% block content %}
       <!-- Content -->
 
-  <input type="hidden" id="form_slug" name="form_slug" value="{{ form.slug }}">
+  <input type="hidden" id="formSlug" name="form_slug" value="{{ form.slug }}">
 
-      {% verbatim  %}
+  {% verbatim  %}
 
-  <section class='clearfix' ng-app='keen' ng-controller='signUpCtrl' ng-cloak>
-    <div class="global-alert dialog dialog-danger text-left fade" ng-class='{"in": globalAlert}'>
+  <section class='clearfix fade-onload' ng-app='keen' ng-controller='signUpCtrl' ng-cloak ng-show='dataLoaded'>
+    <div class="global-alert dialog dialog-danger text-left" ng-show='globalAlert'>
       <div class="container">
         <a class="close mts"
            ng-click='globalAlert = false;'
@@ -19,7 +19,7 @@
            <i class="fui-cross"></i>
          </a>
         <p class='mn text-left bold'>
-          <b class='small mll'>{{ alertText }}</b>
+          <b class='small mll' ng-bind-html='alertText'></b>
         </p>
       </div>
     </div>
@@ -43,18 +43,21 @@
       </div>
     </div>
 
-    <div class="su-subtitle su-editable form-group row mts mbn"
+    <div class="su-subtitle su-editable form-group row mts mbl"
          ng-class='{editing: permalink.isEditing}'>
       <div class="col-md-10">
-        <span class='mtx dib'><b>Permalink:</b> http://keensmb.com/&lt;actual_client_slug&gt;/</span>
-        <div class="form-group dib">
+        <span class='mtx dib top'>
+          <b>Permalink:</b>
+          <span>http://keensmb.com/{{ clientSlug }}/</span><span ng-if='formSlug'>{{ formSlug }}</span>
+        </span>
+        <div ng-if='!formSlug' class="form-group dib top mbn">
           <input type="text"
                  class='form-control input-sm permalink js-editable-trigger'
                  ng-model='permalink.text'
                  ng-focus='startEditing(permalink)'>
         </div>
       </div>
-      <div class="col-md-2">
+      <div ng-if='!formSlug' class="col-md-2">
         <button class="btn btn-primary btn-sm pull-right"
                 ng-click='validateSlug(permalink)'>Save</button>
 
@@ -66,7 +69,6 @@
     <div class="su-form-wrapper mbm">
 
     <!-- Banner Logo -->
-    <p>{{ bannerLogo | json }}</p>
       <div class="banner-logo js-image-container"
            ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'
            data-scope-object='bannerLogo'>
@@ -75,7 +77,7 @@
         <img src=''
              ng-src="{{ bannerLogo.image.src }}"
              alt=""
-             class='js-banner-preview fade in'
+             class='js-banner-preview'
              id='banner-preview'>
 
         <div class="instructions hover-vis">
@@ -127,8 +129,7 @@
           <i class="fui-list dib mid"></i>
           <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
         </div>
-
-        <div class="su-form">
+        <div class="su-form" style='background-color:{{ form.backgroundColor }};'>
           <div class='hover-vis'>
             <button class="btn btn-wide btn-sm btn-primary btn-secondary photo-actions"
                     ng-click='toggleFormAppearance();'>
@@ -153,20 +154,24 @@
           <div class='su-editable js-resize-wrapper'
                ng-class='{"editing": formTitle.isEditing}'>
             <textarea class='su-form-header col-xs-12 form-control non-resizing-gorizontal js-resize-area'
+                      style='color:{{ form.textColor }};'
                       maxlength='75'
+                      spellcheck='false'
                       ng-keypress='blurOnEnter($event)'
                       ng-focus='startEditing(formTitle)'
-                      ng-blur='saveEditing(formTitle); checkSize($event, formTitle);'
+                      ng-blur='saveEditing(formTitle);'
                       ng-model='formTitle.text'></textarea>
           </div>
 
           <p class="text-simple su-editable js-resize-wrapper"
              ng-class='{"editing": formDescription.isEditing}'>
             <textarea class='su-form-text col-xs-12 form-control non-resizing-gorizontal js-resize-area'
-                      maxlength='75'
+                      style='color:{{ form.textColor }};'
+                      maxlength='125'
+                      spellcheck='false'
                       ng-keypress='blurOnEnter($event)'
                       ng-focus='startEditing(formDescription)'
-                      ng-blur='saveEditing(formDescription); checkSize($event, formDescription)'
+                      ng-blur='saveEditing(formDescription);'
                       ng-model='formDescription.text'></textarea>
           </p>
 
@@ -270,7 +275,8 @@
     <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
     <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm"
             ng-click='saveFormAsPreview()'>Generate Preview</button>
-    <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm">Discard</button>
+    <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm"
+            ng-click='discard()'>Discard</button>
 
     <!-- Form created modal -->
     <div id="formCreatedModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true" >
@@ -304,6 +310,6 @@
 <!-- /.container -->
 
 
-      {% endverbatim %}
+  {% endverbatim %}
 
 {% endblock %}
