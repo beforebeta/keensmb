@@ -26,6 +26,13 @@
             }, 300);
         });
 
+        $scope.$watch('permalink.text', function(newVal, oldVal) {
+            var regExp = /[^0-9a-zA-Z-_.]/g;
+            if (newVal.match(regExp)) {
+                $scope.permalink.text = newVal.replace(regExp, '-');
+            }
+        });
+
         $scope.initForm = function() {
             console.log('oppa');
         };
