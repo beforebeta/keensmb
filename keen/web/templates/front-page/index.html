@@ -5,15 +5,21 @@
 
 	
 		<nav class="scroll-menu">
-			<div class="logo pull-left"><img src="../../static/images/logo-small-blue.png" alt=""></div>
-			<ul class="nav">
-				<li><a class="js-animate-scroll" href="#what-is-keen">What is Keen?</a></li>
-				<li><a class="js-animate-scroll" href="#email-letter">Connect with your Customers</a></li>
-				<li><a class="js-animate-scroll" href="#online">See what Your business is doing</a></li>
-				<li><a class="js-animate-scroll" href="#pricing">Pricing</a></li>
-			</ul>
-			<a href="mailto:info@keensmb.com" class="btn btn-large btn-info login-link pull-left"><strong>Try Keen for Free!</strong></a>
-			<a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#loginModal">Log In</a>
+			<div class="row row-push-left">
+				<div class="logo col-xs-1"><img src="../../static/images/logo-small-blue.png" alt=""></div>
+				<div class="container">
+					<ul class="nav col-xs-12">
+						<li><a class="js-animate-scroll" href="#what-is-keen">What is Keen?</a></li>
+						<li><a class="js-animate-scroll" href="#email-letter">Connect with your Customers</a></li>
+						<li><a class="js-animate-scroll" href="#online">See what Your business is doing</a></li>
+						<li><a class="js-animate-scroll" href="#pricing">Pricing</a></li>
+					</ul>
+				</div>
+				<div class="logins-button">
+					<a href="#" class="btn btn-large btn-success mll" data-toggle="modal" data-target="#loginModal">Log In</a>
+					<a href="mailto:info@keensmb.com" class="btn btn-large btn-info login-link" data-toggle="modal" data-target="#tryFree"><strong>Try Keen for Free!</strong></a>
+				</div>
+			</div>
 		</nav>
 
 	
@@ -22,12 +28,12 @@
 
 		<section id="what-is-keen" class="main-page-block first default">
 			<div class="container">
-				<div class="offset2 span8 keen-title">
+				<div class="main-page-title keen-title">
 					<h2>What is Keen?</h2>
 					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, officia, blanditiis adipisci magnam illo illum enim veniam alias quidem porro.</p>
 				</div>
 				<div class="row">
-					<div class="span4">
+					<div class="col-xs-4">
 						<div class="media">
 							<a class="pull-left" href="#">
 								<img class="media-object" src="{% static "assets/pic4.png" %}" alt="">
@@ -38,7 +44,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span4">
+					<div class="col-xs-4">
 						<div class="media">
 							<a class="pull-left" href="#">
 								<img class="media-object" src="{% static "assets/pic6.png" %}" alt="">
@@ -49,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span4">
+					<div class="col-xs-4">
 						<div class="media">
 							<a class="pull-left" href="#">
 								<img class="media-object" src="{% static "assets/pic8.png" %}" alt="">
@@ -63,7 +69,7 @@
 				</div>
 
 				<div class="row">
-					<div class="span4">
+					<div class="col-xs-4">
 						<div class="media">
 							<a class="pull-left" href="#">
 								<img class="media-object" src="{% static "assets/pic5.png" %}" alt="">
@@ -74,7 +80,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span4">
+					<div class="col-xs-4">
 						<div class="media">
 							<a class="pull-left" href="#">
 								<img class="media-object" src="{% static "assets/pic7.png" %}" alt="">
@@ -85,7 +91,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span4">
+					<div class="col-xs-4">
 						<div class="media">
 							<a class="pull-left" href="#">
 								<img class="media-object" src="{% static "assets/pic9.png" %}" alt="">
@@ -103,10 +109,10 @@
 		<section id="email-letter" class="main-page-block">
 			<div class="container">
 				<div class="row">
-					<div class="span6">
-						<img src="../../static/images/email.png" width="518" height="487" alt="">
+					<div class="col-xs-6">
+						<img src="../../static/images/email.png" width="465" height="487" alt="">
 					</div>
-					<div class="span6 mln">
+					<div class="col-xs-6">
 						<h6>Connect width Your customers directly by sending them automated email promotions</h6>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, velit, voluptatum, sint quos unde consequuntur quidem quis impedit reiciendis accusamus nulla quae at! Vitae, aspernatur tempore labore aliquam at. Mollitia, explicabo, in, fugit eaque laudantium ad nisi maxime sed dicta vero neque minus fugiat odio consectetur repudiandae esse similique incidunt quo molestiae eligendi unde sit porro harum ea quidem distinctio.</p>
 						<small>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, nulla, odit, placeat iste repudiandae saepe tempore nesciunt esse amet eligendi eos id perspiciatis non laudantium.</small>
@@ -119,10 +125,10 @@
 		<section id="online" class="main-page-block default">
 			<div class="container">
 				<div class="row">
-					<div class="span6">
-						<img src="../../static/images/skitch.jpg" width="518" height="387" alt="">
+					<div class="col-xs-6">
+						<img src="../../static/images/skitch.jpg" width="465" height="387" alt="">
 					</div>
-					<div class="span6 mln">
+					<div class="col-xs-6">
 						<h6>Lets potential customers find you online easily increase the size of your customer database</h6>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, velit, voluptatum, sint quos unde consequuntur quidem quis impedit reiciendis accusamus nulla quae at! Vitae, aspernatur tempore labore aliquam at. Mollitia, explicabo, in, fugit eaque laudantium ad nisi maxime sed dicta vero neque minus fugiat odio consectetur repudiandae esse similique incidunt quo molestiae eligendi unde sit porro harum ea quidem distinctio.</p>
 					</div>
@@ -133,10 +139,10 @@
 		<section class="main-page-block">
 			<div class="container">
 				<div class="row">
-					<div class="span6">
-						<img src="{% static "assets/dashboard.png" %}"  width="518" height="350" alt="Dashboard example">
+					<div class="col-xs-6">
+						<img src="{% static "assets/dashboard.png" %}"  width="465" height="350" alt="Dashboard example">
 					</div>
-					<div class="span6 mln">
+					<div class="col-xs-6">
 						<h6>Easy Monitor the Performance of Your Promotion</h6>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia, fuga, dolore, dolorum, sed consectetur eius quas corporis pariatur doloribus omnis cum ratione alias rerum praesentium ab non deleniti illum eligendi facilis soluta tenetur commodi porro!.</p>
 					</div>
@@ -152,7 +158,7 @@
 
 				<div class="boxes">
 					<div class="row-fluid">
-						<div class="span4">
+						<div class="col-xs-4">
 							<div class="box color1">
 								<div class="head clearfix">
 									<h6>
@@ -176,7 +182,7 @@
 	              <b>+ $0.40</b> per Customer Profile Data Enhancement
 							</div>
 						</div>
-						<div class="span4">
+						<div class="col-xs-4">
 							<div class="box color2">
 								<div class="head clearfix">
 									<h6>
@@ -200,7 +206,7 @@
 	              <b>+ $0.35</b> per Customer Profile Data Enhancement
 							</div>
 						</div>
-						<div class="span4">
+						<div class="col-xs-4">
 							<div class="box color3">
 								<div class="head clearfix">
 									<h6>
@@ -250,15 +256,9 @@
 		<section id="footer">
 			<div class="container">
 				<div class="row">
-					<div class="span3 offset2">
-						<span>
-							Interested?
-							<a href="mailto:info@keensmb.com">Contact us</a>
-						</span>
-					</div>
-					<div class="span5 offset1">
+					<div class="col-xs-5 col-sm-offset-4">
 						<span>You can also</span> &nbsp;
-						<a href="mailto:info@keensmb.com" class="btn btn-large btn-primary"><strong>Try Keen for Free!</strong></a>
+						<a href="mailto:info@keensmb.com" class="btn btn-large btn-primary" data-toggle="modal" data-target="#tryFree"><strong>Try Keen for Free!</strong></a>
 					</div>
 				</div>
 			</div>
