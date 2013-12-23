@@ -350,20 +350,21 @@
               <span class="mtx">Drag Files Here</span>
               <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">
                 Browse...
-                <input type="file" id="popup-ulpoad-csvfile" value="Browse...">
               </div>
+              <input type="file" id="popup-ulpoad-csvfile" class="hidden" value="Browse...">
             </div>
-            <div  class="added-file mtl">
+            <div style="display: none;" class="added-file mtl">
               <div>
-                <span>filname.csv (125MB)</span>
+                <span></span>
+                (<strong></strong>)
                 <button type="button" class="close">
                   <i class="fui-cross"></i>
                 </button>
               </div>
               <button type="button" class="pts pbs btn btn-default btn-embossed pull-right">Upload</button>
             </div>
-            <div class="download-success text-primary">Sucess!</div>
-            <div style=""  class="download-progress mtl ptm text-muted small">
+            <div style="display: none;" class="download-success text-primary">Sucess!</div>
+            <div class="download-progress mtl ptm text-muted small">
               <div class="result pbs">
                 <span class="pull-left">
                   Reading file...
@@ -384,7 +385,7 @@
                 </span>
               </div>
             </div>
-            <table class="table">
+            <table style="display: none;" class="table">
               <tbody>
                 <tr>
                   <td>text1</td>
