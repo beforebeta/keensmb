@@ -8,15 +8,6 @@ img.center {
   margin-left: auto;
   margin-right: auto;
 }
-/*.flat-font {
-  font-family: "Flat-UI-Icons";
-  font-size: 23.996px;
-  font-style: normal;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
-  font-weight: 500;
-  text-shadow: none;
-}*/
 .w1 {
   width: 200px;
 }
@@ -41,8 +32,9 @@ img.center {
 }
 #topbar div.logo {
   margin: 0 auto;
-  width: 100px;
+  width: 990px;
   margin-top: 100px;
+  text-align: center;
 }
 #topbar img.logo {
   max-width: 100px;
@@ -52,21 +44,21 @@ img.center {
   color: #fff;
   text-align: center;
   font-size: 16px;
-  width: 40%;
+  width: 990px;
   margin: 0 auto;
   margin-top: 40px;
 }
 #topbar .signup {
-  max-width: 152px;
+  width: 990px;
   margin: 0 auto;
   margin-top: -185px;
   position: relative;
+  text-align: center;
 }
 #topbar .main-navigation {
   text-align: justify;
   float: none;
   margin: 0 auto;
-  margin-top: 111px;
   z-index: 1;
   position: relative;
 }
@@ -95,7 +87,7 @@ img.center {
 }
 #topbar .shadow-after {
   position: relative;
-  margin-top: -22px;
+  margin-top: 89px;
 }
 #topbar .shadow-after:after {
   content: '';
@@ -118,6 +110,11 @@ img.center {
 .main-page-block .media .media-body .media-heading {
   font-size: 120%;
   margin-bottom: 0;
+}
+
+.main-page-block .main-page-title {
+  width: 800px;
+  margin: 0 auto;
 }
 
 #legal {
@@ -168,9 +165,6 @@ img.center {
 .main-page-block .row .span4 {
   margin-left: 22px;
 }
-.main-page-block .row .span4:first-child {
-  margin-left: 50px;
-}
 
 .main-page-block.first {
   padding-top: 0;
@@ -195,8 +189,6 @@ img.center {
   font-weight: normal;
 }
 #pricing .boxes {
-  width: 80%;
-  margin: auto;
   margin-bottom: 40px;
 }
 #pricing .box.color1 {
@@ -268,17 +260,15 @@ img.center {
   top: 0;
   left: 0;
   width: 100%;
-  height: 76px;
+  min-height: 76px;
   background-color: #fff;
   z-index: 3;
+  border-bottom: 8px solid #dbdbdb;
 }
 
 .scroll-menu ul {
-  padding-left: 300px;
+  padding-left: 100px;
   margin: 0;
-  border-bottom: 8px solid #dbdbdb;
-  float: left;
-  width: 77%;
 }
 .scroll-menu ul li {
   float: left;
@@ -306,15 +296,36 @@ img.center {
 }
 
 .scroll-menu .logo {
-  line-height: 76px;
-  margin: 0 30px;
+  line-height: 65px;
+  text-align: center;
+}
+
+.scroll-menu .logins-button {
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 15px;
 }
 .scroll-menu .login-link {
   margin-left: 20px;
-  margin-right: 20px;
 }
-.scroll-menu > a {
-  margin-top: 20px;
+.scroll-menu .logins-button a {
+  float: right;
+}
+
+
+.container {
+  width: 990px;
+}
+@media (min-width: 992px) {
+  .container {
+    width: 990px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    width: 990px;
+  }
 }
 
 
