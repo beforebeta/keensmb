@@ -3,7 +3,7 @@
 'use strict';
 
 (function($) {
-    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', function($scope, $timeout, suService, $q){
+    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', '$sanitize', function($scope, $timeout, suService, $q, $sanitize){
 
         // suService.getClienImages().then(function(data) {
         //     console.log(data);
@@ -11,15 +11,25 @@
         // suService.getClientForms().then(function(data) {
         //     console.log(data);
         // });
+        $scope.dataLoaded = false;
 
-        // Initial data:
+        suService.getInitialData().then(function(data) {
+            var formData = suService.formSlug ? parseFormData(data) : data;
+            $scope = angular.extend($scope, formData);
+            $scope.clientSlug = suService.clientSlug;
+            $scope.formSlug = suService.formSlug;
 
-        $scope.title = {text: 'some title', isEditing: false};
-        $scope.permalink = {text: 'some-perma-link', isEditing: false};
-        $scope.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false, height: 70};
-        $scope.formDescription = {text: 'Description would have max 75 characters', isEditing: false, height: 70};
+            // angular.bootstrap(document);
+            $timeout(function() {
+                $scope.dataLoaded = true;
+                initDraggableImages();
+            }, 300);
+        });
 
-        $scope.globalAlert = false;
+        $scope.initForm = function() {
+            console.log('oppa');
+        };
+
         var notify = function(text) {
             $timeout(function() {
                 $scope.alertText = text;
@@ -54,9 +64,15 @@
         };
 
         $scope.validateSlug = function(slug) {
+            // if form is edit:
+            if (suService.formSlug) {
+                $scope.saveEditing(slug);
+                return true;
+            }
+
             suService.checkFormSlug(slug.text).then(function(res) {
-                // alert('Slug: "'+slug.text+'" already exists');
-                notify('Slug: "'+slug.text+'" already exists');
+                var link = suService.getFormLink(slug.text);
+                notify('Form with a slug <a href="'+link+'" target="_blank">'+slug.text+'</a> already exists.');
             }, function(err) {
                 $scope.saveEditing(slug);
             });
@@ -83,7 +99,7 @@
         $scope.cancelEditingBanner = function() {
             $scope.bannerLogo = angular.copy(lastBannerLogo);
             stopEditingBanner(lastBannerLogo);
-            $('#banner-preview').css({'left': $scope.bannerLogo.image.left, 'top': $scope.bannerLogo.image.top});
+            $bannerLogo.css({'left': $scope.bannerLogo.image.left, 'top': $scope.bannerLogo.image.top});
         };
 
         $scope.startRepositionBanner = function() {
@@ -131,7 +147,7 @@
         $scope.cancelEditingBgImage = function() {
             $scope.backgroundImage = angular.copy(lastBackgroundImage);
             stopEditingBgImage(lastBackgroundImage);
-            $('#banner-preview').css({'left': $scope.backgroundImage.image.left, 'top': $scope.backgroundImage.image.top});
+            $backgroundImage.css({'left': $scope.backgroundImage.image.left, 'top': $scope.backgroundImage.image.top});
         };
 
         $scope.startRepositionBgImage = function() {
@@ -205,12 +221,13 @@
             target: '.su-bg-color',
             update: updateFormBgColor
         });
+
         function updateFormBgColor() {
             // Show a preview in the background of the input element
             var color = $formBgColorPicker.chromoselector('getColor').getHexString();
-            $('.su-form').css('background-color', color);
-
-            $scope.form.backgroundColor = color;
+            $timeout(function() {
+                $scope.form.backgroundColor = color;
+            });
         }
 
         var $formTextColorPicker = $('#su-text-color');
@@ -227,10 +244,9 @@
         function updateFormTextColor() {
             // Show a preview in the background of the input element
             var color = $formTextColorPicker.chromoselector('getColor').getHexString();
-            $('.su-form').find('textarea').css('color', color);
-
-            $scope.form.textColor = color;
-
+            $timeout(function() {
+                $scope.form.textColor = color;
+            });
         }
 
         $scope.formAppearanceEditing = false;
@@ -248,26 +264,80 @@
         };
 
         $scope.saveForm = function() {
-
-            // validate slug
-            suService.checkFormSlug($scope.permalink.text).then(function(res) {
-                notify('Slug: "'+ $scope.permalink.text+ '" already exists');
-            }, function(err) {
-                saveFormData();
-            });
-        };
-
-        $scope.saveFormAsPreview = function() {
-
             // wait for all blur events
             $timeout(function() {
                 // validate slug
                 suService.checkFormSlug($scope.permalink.text).then(function(res) {
-                    ('Slug: "'+ $scope.permalink.text+ '" already exists');
+                    if (suService.formSlug) {
+                        // update data
+                        saveFormData(true);
+                        return false;
+                    }
+                    var link = suService.getFormLink($scope.permalink.text);
+                    notify('Form with a slug <a href="'+link+'" target="_blank">'+$scope.permalink.text+'</a> already exists.');
+                }, function(err) {
+                    saveFormData();
+                });
+            }, 100);
+        };
+
+        $scope.saveFormAsPreview = function() {
+            // wait for all blur events
+            $timeout(function() {
+                // validate slug
+                var previewSlug = 'preview-'+$scope.permalink.text;
+                suService.checkFormSlug(previewSlug).then(function(res) {
+                    if (suService.formSlug) {
+                        saveFormAsPreviewData(true);
+                        return true;
+                    }
+                    var link = suService.getFormLink($scope.permalink.text);
+                    notify('Form with a slug <a href="'+link+'" target="_blank">'+$scope.permalink.text+'</a> already exists.');
                 }, function(err) {
                     saveFormAsPreviewData();
                 });
             }, 100);
+        };
+
+        $scope.discard = function() {
+            window.location.reload();
+        };
+
+        var parseFormData = function(formData) {
+            var prepared = {};
+            prepared.title = {text: formData.pageTitle, isEditing: false};
+            prepared.permalink = {text: formData.permalink, isEditing: false};
+            prepared.bannerLogo = {
+                image: {
+                    src: formData.bannerLogo.imageSrc,
+                    top: formData.bannerLogo.position.top,
+                    left: formData.bannerLogo.position.left
+                },
+                uploaded: !!formData.bannerLogo.imageSrc
+            };
+            prepared.backgroundImage = {
+                image: {
+                    src: formData.backgroundImage.imageSrc,
+                    top: formData.backgroundImage.position.top,
+                    left: formData.backgroundImage.position.left
+                },
+                uploaded: !!formData.backgroundImage.imageSrc,
+                backgroundColor: formData.backgroundImage.backgroundColor
+            };
+            prepared.form = {
+                backgroundColor: formData.form.backgroundColor,
+                textColor: formData.form.textColor
+            };
+            prepared.formTitle = {
+                text: formData.form.title,
+                height: formData.form.titleHeight
+            };
+            prepared.formDescription = {
+                text: formData.form.description,
+                height: formData.form.descriptionHeight
+            };
+
+            return prepared;
         };
 
         var prepareFormData = function() {
@@ -303,26 +373,33 @@
                     descriptionHeight: $scope.formDescription.height
                 }
             };
-            console.log(formData.form);
 
+            // save images to server
             var imagesData = [];
-
             if ($scope.bannerLogo.image.src !== defaultImageSrc) {
-                var bannerLogoImgData = suService.uploadClientImage(
-                        cleanBase64($scope.bannerLogo.image.src), // img base64 data
-                        $scope.bannerLogo.image.type,             // img type
-                        'banner'                                  // img target
-                    );
-                imagesData.push(bannerLogoImgData);
+                if (!$scope.bannerLogo.image.type) {
+                    formData.bannerLogo.imageSrc = $scope.bannerLogo.image.src;
+                } else {
+                    var bannerLogoImgData = suService.uploadClientImage(
+                            cleanBase64($scope.bannerLogo.image.src), // img base64 data
+                            $scope.bannerLogo.image.type,             // img type
+                            'banner'                                  // img target
+                        );
+                    imagesData.push(bannerLogoImgData);
+                }
             }
 
             if ($scope.backgroundImage.image.src !== defaultImageSrc) {
-                var backgroundImageData = suService.uploadClientImage(
-                        cleanBase64($scope.backgroundImage.image.src), // img base64 data
-                        $scope.backgroundImage.image.type,             // img type
-                        'background'                                   // img target
-                    );
-                imagesData.push(backgroundImageData);
+                if (!$scope.backgroundImage.image.type) {
+                    formData.backgroundImage.imageSrc = $scope.backgroundImage.image.src;
+                } else {
+                    var backgroundImageData = suService.uploadClientImage(
+                            cleanBase64($scope.backgroundImage.image.src), // img base64 data
+                            $scope.backgroundImage.image.type,             // img type
+                            'background'                                   // img target
+                        );
+                    imagesData.push(backgroundImageData);
+                }
             }
 
             $q.all(imagesData).then(function(images) {
@@ -343,32 +420,92 @@
             return defer.promise;
         };
 
-        var saveFormData = function() {
+        var saveFormData = function(update) {
             prepareFormData()
                 .then(function(formData) {
-                    suService.uploadFormData(formData, $scope.permalink.text)
+                    var method = update ? 'updateFormData' : 'createFormData';
+                    suService[method](formData, $scope.permalink.text)
                         .then(function(res) {
-                            alert('FORM Created');
-                            console.log('res: ', res);
-                        }, function(err) {console.error(err);});
+                            $scope.createdIsPreview = false;
+                            $scope.formCreatedLink = suService.getFormLink($scope.permalink.text);
+                            $('#formCreatedModal').modal('show');
+                        }, function(err) {
+                            console.warn(err);
+                            notify('Some error occured while saving your form.');
+                        });
                 });
 
         };
-        var saveFormAsPreviewData = function() {
+        var saveFormAsPreviewData = function(update) {
             var previewSlug = 'preview-' + $scope.permalink.text;
             prepareFormData()
                 .then(function(formData) {
-                    suService.uploadFormData(formData, previewSlug)
+                    var method = update ? 'updateFormData' : 'createFormData';
+                    suService[method](formData, previewSlug)
                         .then(function(res) {
-                            alert('FORM preview Created');
-                            suService.goToFormView(previewSlug);
-                            // window.open('www.yourdomain.com','_blank');
-                            console.log('res: ', res);
-                        }, function(err) {console.error(err);});
+                            $scope.createdIsPreview = true;
+                            $scope.formCreatedLink = suService.getFormLink(previewSlug);
+                            $('#formCreatedModal').modal('show');
+                        }, function(err) {
+                            console.warn(err);
+                            notify('Some error occured while saving your form.');
+                        });
                 });
 
         };
 
+        var initDraggableImages = function() {
+            $('.js-resize-area').autosize().trigger('autosize.resize');
+
+            if (suService.formSlug) {
+
+                $('#banner-preview, #background-image').each(function(i, item) {
+                    var $imgEl = $(item),
+                        $container = $imgEl.closest('.js-image-container'),
+                        contWidth = $container.width(),
+                        contHeight = $container.height(),
+                        scopeObject = $container.data('scope-object');
+
+                    var y1 = contHeight,
+                        x1 = contWidth,
+                        y2 = $imgEl.height(),
+                        x2 = $imgEl.width();
+
+                    $imgEl.draggable({
+                        scroll: false,
+                        drag: function(event, ui) {
+                            if(ui.position.top >= 0) {
+                                ui.position.top = 0;
+                            } else if( ui.position.top <= y1 - y2) {
+                                ui.position.top = y1 - y2;
+                            }
+
+                            if( ui.position.left >= 0) {
+                                ui.position.left = 0;
+                            } else if ( ui.position.left <= x1 - x2) {
+                                ui.position.left = x1 - x2;
+                            }
+                        },
+                        stop: function(event, ui) {
+                            $timeout(function() {
+                                if (scopeObject === 'bannerLogo') {
+                                    $scope.bannerLogo.image.top = ui.position.top;
+                                    $scope.bannerLogo.image.left = ui.position.left;
+                                } else if (scopeObject === 'backgroundImage') {
+                                    $scope.backgroundImage.image.top = ui.position.top;
+                                    $scope.backgroundImage.image.left = ui.position.left;
+                                }
+                            });
+                        }
+                    });
+
+                    $scope.saveEditingBgImage();
+                    $scope.cancelEditingBgImage();
+                    $scope.saveEditingBanner();
+                    $scope.cancelEditingBanner();
+                });
+            }
+        };
 
         $('.js-upload-banner').on('change', function(evt) {
 
@@ -405,12 +542,9 @@
 
                             if( evt.type === 'load' ){
                                 // Success
-                                // var dataURL = evt.result;
                                 var url = img.toDataURL(file.type);
 
-                                // $imgEl.attr('src', url).addClass('in');
                                 $imgEl.css({top: 0, left: 0});
-                                $container.addClass('image-loaded');
 
                                 // Update angular scope
 
@@ -461,7 +595,7 @@
                                         });
                                     }
                                 });
-                            } else if( evt.type =='progress' ){
+                            } else if (evt.type =='progress'){
                                 var pr = evt.loaded/evt.total * 100;
                             } else {
                                 console.log('error');
@@ -474,11 +608,38 @@
                 }
             });
         });
-    }]).factory('signUpFormService', ['$http', function($http) {
+    }]).factory('signUpFormService', ['$http', '$q', '$location', function($http, $q, $location) {
         var clientSlug = $('#clientSlug').text(),
+            formSlug = $('#formSlug').val(),
             apiClientUrl = '/api/client/'+clientSlug;
 
+        // Initial data:
+
+        var defaultData = {};
+        defaultData.title = {text: 'some title', isEditing: false};
+        defaultData.permalink = {text: 'some-perma-link', isEditing: false};
+        defaultData.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false, height: 70};
+        defaultData.formDescription = {text: 'Description would have max 125 characters', isEditing: false, height: 70};
+
         return {
+            formSlug: formSlug,
+            clientSlug: clientSlug,
+            getInitialData: function() {
+                var defer = $q.defer();
+
+                if (formSlug) {
+                    $http({
+                        url: apiClientUrl+'/signup_forms/'+formSlug,
+                        method: 'GET'
+                    }).then(function(res) {
+                        defer.resolve(res.data.data);
+                    });
+                } else {
+                    defer.resolve(defaultData);
+                }
+
+                return defer.promise;
+            },
             getClienImages: function() {
                 return $http({
                     url: apiClientUrl+'/images',
@@ -499,7 +660,8 @@
             checkFormSlug: function(slug) {
                 return $http({
                     url: apiClientUrl+'/signup_forms/'+slug,
-                    method: 'HEAD'
+                    method: 'HEAD',
+                    cache: true
                 });
             },
             getClientForms: function() {
@@ -508,7 +670,7 @@
                     method: 'GET'
                 });
             },
-            uploadFormData: function(data, slug) {
+            createFormData: function(data, slug) {
                 return $http({
                     url: apiClientUrl+'/signup_forms',
                     method: 'POST',
@@ -518,9 +680,18 @@
                     }
                 });
             },
-            goToFormView: function(formSlug) {
-                var formUrl = '/'+clientSlug+'/'+formSlug;
-                window.open('/');
+            updateFormData: function(data, slug) {
+                return $http({
+                    url: apiClientUrl+'/signup_forms/'+slug,
+                    method: 'PUT',
+                    data: {
+                        data: data,
+                        slug: slug
+                    }
+                });
+            },
+            getFormLink: function(slug) {
+                return '/'+clientSlug+'/'+slug;
             }
         };
     }]);
