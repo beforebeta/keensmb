@@ -6,6 +6,13 @@
     angular.module('keen')
         .controller('customersCtrl', ['$scope', '$timeout', 'customerService', function($scope, $timeout, customerService){
 
+            var notify = function(text) {
+                $timeout(function() {
+                    $scope.alertText = text;
+                    $scope.globalAlert = true;
+                });
+            };
+
             customerService.getClientData().then(function(data) {
                 var customerFields = data.data.customer_fields,
                     slug = data.data.slug;
@@ -15,9 +22,33 @@
                     fieldsMap[item.name] = item.title;
                 });
 
+                var optionalFieldsMap = {},
+                    optionalFields = _.where(customerFields, {required: false});
+
+                _.each(optionalFields, function(item) {
+                    optionalFieldsMap[item.name] = item.title;
+                });
+
+                var requiredFieldsMap = {},
+                    requiredFieldsList = [],
+                    requiredFields = _.where(customerFields, {required: true});
+
+                _.each(requiredFields, function(item) {
+                    requiredFieldsMap[item.name] = item.title;
+                    requiredFieldsList.push(item.name);
+                });
+
+                requiredFieldsList = _.without(requiredFieldsList, 'last_name');
+
                 $scope.fieldsMap = fieldsMap;
+                $scope.requiredFieldsList = requiredFieldsList;
+                $scope.requiredFieldsMap = requiredFieldsMap;
+
+                $scope.optionalFieldsMap = optionalFieldsMap;
 
                 customerService.clientSlug = slug;
+
+                initCustomersFields();
             });
 
             $scope.submitSearch = function() {
@@ -26,22 +57,31 @@
 
             var clearCustomers = false;
             function resetList() {
-                console.log('reset')
                 clearCustomers = true;
                 customerService.resetCounter();
                 $scope.loadMoreCustomers();
             }
 
             var tempFields = [];
-            customerService.getCustomersFields().then(function(data) {
-                var availableFields = data.data.available_customer_fields;
+            var initCustomersFields = function() {
+                customerService.getCustomersFields().then(function(data) {
+                    var availableFields = data.data.available_customer_fields;
 
-                $scope.availableFields = availableFields;
-                $scope.customerFields = data.data.display_customer_fields;
-                tempFields = angular.copy(data.data.display_customer_fields);
+                    var customerFields = data.data.display_customer_fields;
+                    $scope.customerFields = customerFields;
 
-                $scope.loadMoreCustomers();
-            });
+                    updateOtionalFieldsList();
+
+                    tempFields = angular.copy(customerFields);
+
+                    $scope.loadMoreCustomers();
+                });
+            };
+
+            var updateOtionalFieldsList = function() {
+                var optionalFieldsList = _.difference($scope.customerFields, $scope.requiredFieldsList);
+                $scope.optionalFieldsList = optionalFieldsList;
+            };
 
             $scope.loadingDisabled = false;
 
@@ -68,7 +108,7 @@
             $scope.loadMoreCustomers = function() {
                 if (!$scope.customerFields) {return false;}
                 customerService.getClientCustomers($scope.customerFields, $scope.searchParam, $scope.sortParam).then(function(data) {
-                    console.log('more: ', data.data);
+                    // console.log('more: ', data.data);
                     var customers = data.data.customers;
 
                     // TODO hardcoded limit
@@ -91,6 +131,7 @@
             var updateFields = function() {
                 customerService.putCustomersFields($scope.customerFields).then(function(data) {
                     $scope.customerFields = data.data.display_customer_fields;
+                    updateOtionalFieldsList();
                     resetList();
                 });
             };
@@ -98,25 +139,19 @@
             $scope.addField = function(name) {
                 if (!$scope.checkField(name)) {
                     tempFields.push(name);
-                    // $scope.customerFields.push(name);
-                    // updateFields();
                 }
             };
             $scope.removeField = function(name) {
                 if ($scope.checkField(name)) {
                     tempFields = _.without(tempFields, name);
-                    // $scope.customerFields = _.without($scope.customerFields, name);
-                    // updateFields();
                 }
             };
 
             $scope.doneAddingFields = function() {
-                // console.log(tempFields);
                 $scope.customerFields = angular.copy(tempFields);
                 updateFields();
             };
             $scope.cancelAddingFields = function() {
-                // console.log(tempFields);
                 tempFields = angular.copy($scope.customerFields);
             };
 
@@ -138,11 +173,10 @@
 
                 customersToDelete = [];
                 $checked.each(function(i, item) {
-                    customersToDelete.push($(item).closest('tr').attr('id'));
+                    customersToDelete.push($(item).closest('tr').data('id'));
                 });
 
                 $('.js-item-selected')[checkedAny ? 'slideDown' : 'slideUp'](200);
-                // $('.customers-list .customers-table')[checkedAny ? 'addClass' : 'removeClass']('space-top');
             };
 
             var deleteCustomer = function() {
@@ -150,10 +184,13 @@
                 _.each(customersToDelete, function(id) {
                     customerService.deleteCustomer(id).then(function(data) {
                         if (data.status === 200) {
-                            $('#'+id).fadeOut('fast', function() {
-                                $(this).remove();
+                            var $targetBlock = $('[data-id='+id+']');
+                            $targetBlock.fadeOut('fast', function() {
+                                $targetBlock.remove();
                             });
                             checkItemActions();
+
+                            notify('Customers removed');
                         }
                     });
                 });
@@ -193,11 +230,20 @@
                 checkItemActions();
             };
 
+            var $scrollFlex = $('.js-list-flexible'),
+                $scrollFixed = $('.js-list-fixed');
+
+            var scrollCustomersList = function() {
+                var scrollTop = $scrollFlex.scrollTop();
+                $scrollFixed.scrollTop(scrollTop);
+            };
+
             // Table: Add class row selected
             $(document).on('click', '.table .toggle-all-customers', toggleAllListCheckboxes);
             $(document).on('toggle', '.customers-table :checkbox', checkItemActions);
             $(document).on('click', '.js-delete-customer', deleteCustomer);
             $(document).on('click', '.global-alert .close', closeGlobalAlert);
+            $scrollFlex.on('scroll', scrollCustomersList);
             $customersList.on('scroll', lazyScrollList);
 
         }]).factory('customerService', ['$http', function($http) {
