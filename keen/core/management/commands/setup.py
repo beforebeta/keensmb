@@ -43,21 +43,22 @@ def _setup_field(group, group_ranking, name, title, field_type, required=False, 
                                                       },
                                                       )
 
-    cast = {
-        # 'date': '::date',
-        'int': '::integer',
-        'float': '::float',
-        #'bool': '::bool',
-    }.get(field_type, '')
+    if created:
+        cast = {
+            # 'date': '::date',
+            'int': '::integer',
+            'float': '::float',
+            #'bool': '::bool',
+        }.get(field_type, '')
 
-    c = db.connection.cursor()
-    try:
-        index_name = 'core_customer_data_' + name.replace('#', '_')
-        c.execute('''drop index if exists %(index_name)s''' % locals())
-        c.execute('''create index %(index_name)s
-                  on core_customer(((data->'%(name)s')%(cast)s))''' % locals())
-    finally:
-        c.close()
+        c = db.connection.cursor()
+        try:
+            index_name = 'core_customer_data_' + name.replace('#', '_')
+            c.execute('''drop index if exists %(index_name)s''' % locals())
+            c.execute('''create index %(index_name)s
+                    on core_customer(((data->'%(name)s')%(cast)s))''' % locals())
+        finally:
+            c.close()
 
 
 def _setup_core():
@@ -130,8 +131,6 @@ def _setup_core():
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__twitter], _string)
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
-    _setup_field(_basic, 98, 'first_name', 'First Name', _string)
-    _setup_field(_basic, 99, 'last_name', 'Last Name', _string)
     _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name], _string, required=True)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
@@ -359,21 +358,29 @@ def _setup_sample_data():
     location = Location.objects.get_or_create(name='default_location',
                                               client=client, address=address)
 
-    customers_appended = open("./data/setup/customers_appended.csv", "r").readlines()
-    csv_schema_fields = [f.strip() for f in customers_appended[0].split(",")]
-    all_customer_fields = dict([(c.title,c) for c in CustomerField.objects.all()])
-    clients_customer_fields = map(lambda x:
-                                  all_customer_fields[process.extractOne(x, all_customer_fields.keys())[0]],
-                                  csv_schema_fields)
+    customers_appended = open("./data/setup/customers_appended.csv", "r")
 
-    #setup default field list
-    if client.customer_fields.all().count() == 0:
-        map(lambda x: client.customer_fields.add(x), clients_customer_fields)
-        assert len(csv_schema_fields) == len(clients_customer_fields) #should map all fields
+    # first line with field names
+    csv_schema_fields = [f.strip() for f in next(customers_appended).split(",")]
+
+    # customer fields from db
+    all_customer_fields = dict([(c.title,c) for c in CustomerField.objects.all()])
+
+    # We need those fields to import so we add them to dict but do not save
+    # into db
+    all_customer_fields['First Name'] = CustomerField(name='first_name')
+    all_customer_fields['Last Name'] = CustomerField(name='last_name')
+
+    all_field_titles = all_customer_fields.keys()
+    clients_customer_fields = [all_customer_fields[process.extractOne(x, all_field_titles)[0]]
+                               for x in csv_schema_fields]
+
+    client.customer_fields = [f for f in clients_customer_fields if f.name not in ('first_name', 'last_name')]
+    client.save()
 
     client.customers.all().delete()
 
-    for customer_text in customers_appended[1:]:
+    for customer_text in customers_appended:
         customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
         customer_text = customer_text.replace("\n","")
         customer_values = customer_text.split(",")
@@ -390,12 +397,15 @@ def _setup_sample_data():
                 c.data[CUSTOMER_FIELD_NAMES.marital_status]:
                 c.enrichment_status = Customer.ENRICHMENT_STATUS.en
                 c.enrichment_date = datetime.datetime.now()
+            # make full name using first and last name
             c.data['full_name'] = ' '.join((c.data[field] for field in
                                            ('first_name', 'last_name')
                                            if field in c.data))
-            c.save()
+            # then remove first and last names
+            for redundant_field in 'first_name', 'last_name':
+                c.data.pop(redundant_field, None)
 
-    client.customer_fields.filter(name__in=('first_name', 'last_name')).delete()
+            c.save()
 
     user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
     user.set_password('default')
