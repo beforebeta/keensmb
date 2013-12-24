@@ -3,45 +3,53 @@
 <!-- Header -->
 <header class="navbar navbar-default navbar-fixed-top kn-nav" role="banner">
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-collapse-01"></button>
-        <a href="#fakelink" class="navbar-brand">
-          <img src="{% static "images/logo-small.png" %}" alt="Keen">
-        </a>
-      </div>
-      <div class="navbar-collapse collapse navbar-collapse-01">
-        <ul class="nav navbar-nav">
-          <li><a href="{% url "client_dashboard" %}">Dashboard</a></li>
-          <li><a href="{% url "client_promotions" %}">Promotions</a></li>
-          <li><a href="{% url "client_customers" %}">Customers</a></li>
-          <li><a href="{% url "business_profile" %}">Business Profile</a></li>
-        </ul> <!-- /nav -->
+      <div class="row">
+        <div class="col-xs-12">
 
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-          <a href="#fakelink">{{ client.name }}/{{ user.username }}</a>
-          <span id='clientSlug' class="hidden">{{ client.slug }}</span>
-          </li>
-          <li class='dropdown'>
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="fui-gear"></span>
+        <div class="navbar-header">
+          <a href="#fakelink" class="navbar-brand">
+            <img src="{% static "images/logo-small.png" %}" alt="Keen">
           </a>
-          <span class="dropdown-arrow dropdown-arrow-inverse mrm"></span>
-          <ul class="dropdown-menu pull-right">
-            <li><a href="#fakelink">My settings</a></li>
+        </div>
+        <nav>
+          <ul class="customer-top-menu">
+            <li><a href="{% url "client_dashboard" %}">Dashboard</a></li>
+            <li><a href="{% url "client_promotions" %}">Promotions</a></li>
+            <li><a href="{% url "client_customers" %}">Customers</a>
+                <ul>
+                  <!-- <li><a href="#fakelink">Mailing list</a></li> -->
+                  <li><a href="{% url "client_customers" %}">Customer Profiles</a></li>
+                  <li><a href="#">Singup Forms</a></li>
+                </ul>
+            </li>
+            <li><a href="{% url "business_profile" %}">Business Profile</a></li>
+          </ul> <!-- /nav -->
+
+          <ul class="customer-info-menu">
             <li>
-                <form action="/api/logout">
-                  {% csrf_token %}
-                  <a href='#' class='highlighted js-submit-form' type='submit'>
-                    <span>Log Out</span>
-                    <i class="fui-power pull-right"></i>
-                  </a>
-                </form>
+            <a href="#fakelink">{{ client.name }}/{{ user.username }}</a>
+            <span id='clientSlug' class="hidden">{{ client.slug }}</span>
+            </li>
+            <li class='dropdown'>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="fui-gear"></span>
+            </a>
+            <ul class="pull-right">
+              <li><a href="#fakelink">My settings</a></li>
+              <li>
+                  <form action="/api/logout">
+                    {% csrf_token %}
+                    <a href='#' class='highlighted js-submit-form' type='submit'>
+                      <span>Log Out</span>
+                      <i class="fui-power pull-right"></i>
+                    </a>
+                  </form>
+              </li>
+            </ul>
             </li>
           </ul>
-          </li>
-        </ul>
-      </div><!--/.navbar-collapse -->
-
+        </nav><!--/.navbar-collapse -->
+        </div>
+      </div>
     </div>
 </header>
