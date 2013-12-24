@@ -3,30 +3,82 @@
 
 {% block main %}
 
-<div class="wrapper">
-	<div class="container landing2">
+
+<script src="../../static/js/html5shiv.js"></script>
+<div class="wrapper landing2">
+  <header class="kn-nav">
+    <a href="#" class="logo">
+      <img src="../../static/images/logo-small-landing2.png" alt="">
+    </a>
+    <a href="#" class="btn btn-xs btn-primary btn-embossed login" data-toggle="modal" data-target="#loginModal">Sing in</a>
+  </header>
+	<div class="container">
 		<div class="row">
 			<section>
-				<a href="#" class="login btn btn-large btn-primary">Sing in</a>
-				<div class="span6 white-label">
-					<figure class="logo">
+        <div class="col-xs-6 left-block-image">
+          <img src="../../static/images/landing2/example-big.jpg" alt="">
+        </div>
+				<div class="col-xs-6 white-label">
+					<figure class="logo-in-text">
 						<a href="#">
-							<img src="static/assets/keen_logo.png" width="" height="" alt="">
+							<img src="../../static/images/logo-big-blue.png" width="" height="" alt="">
 						</a>
-						<figcaption>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa ea optio maiores adipisci maxime magni ipsa dolor impedit voluptas quaerat.</figcaption>
+						<figcaption>Keen helps your local business acquire new customers and learn more about existing ones. All for just $199/month!</figcaption>
 					</figure>
 					<ul class="offer-list">
-						<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae sed sint dolores nam harum unde.</li>
-						<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente, in doloremque aliquam. Doloremque, voluptatibus, tenetur?</li>
-						<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde quaerat expedita ratione suscipit ad nihil.</li>
-						<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, commodi architecto id magni mollitia dolores!</li>
+						<li><img src="../../static/images/icons/Dude_2x.png" width="35" height="35" alt="">
+              <span>Build a rich customer database with names, email, contact and demographic information.</span>
+            </li>
+						<li><img src="../../static/images/icons/Goal_2x.png" width="35" height="35" alt="">
+              <span>Automatically create and send targeted promotions to customers via email and mobile.</span>
+            </li>
+						<li><img src="../../static/images/icons/Compas_2x.png" width="35" height="35" alt="">
+              <span>Lets potential customers find you online and increase the size of your customer database</span>
+            </li>
+						<li><img src="../../static/images/icons/Graph_2x.png" width="35" height="35" alt="">
+              <span>Easily identify your top customers and monitor the performance of your business</span>
+            </li>
 					</ul>
-					<a href="#" class="btn btn-large btn-primary">Try Keen for free!</a>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempore.</p>
+          <div class="example-page-img">
+            <img width="120" src="../../static/images/landing2/example.jpg" alt="">
+            <img width="120" src="../../static/images/landing2/example.jpg" alt="">
+            <img width="120" src="../../static/images/landing2/example.jpg" alt="">
+          </div>
+					<a href="#" class="btn btn-hg btn-block btn-primary" data-toggle="modal" data-target="#tryFree">Try Keen for free!</a>
+					<strong class="risk">Risk-free 30-day trial. Cancel Anytime.</strong>
 				</div>
 			</section>
 		</div>
 	</div>
+  <div class="push-footer"></div>
 </div>
- 
+<footer class="bottom-menu kn-footer">
+  <div class="col-md-3 navbar-brand">
+    <a href="#" class="logo-footer">
+      <img src="{% static "images/logo-small-retina.png" %}" alt="Keen">
+    </a>
+  </div>
+  <div class="container">
+    <div class="row">
+
+      <div class="col-xs-9 col-sm-offset-1">
+        <ul class="list-justify">
+          <li>
+          <a href="#">Terms of use</a>
+          </li>
+          <li>
+          <a href="#">Privacy Policy</a>
+          </li>
+          <li>
+          <a href="#">Contact Us</a>
+          </li>
+        </ul>
+        <div class='text-center'>
+          <small>Copyright Digital First Ventures. All Rights Reserved.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+{% include "front-page/login.html" %}
 {% endblock %}
