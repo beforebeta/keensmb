@@ -3,6 +3,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django import db
+from django.db import transaction
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
@@ -64,9 +65,10 @@ def _setup_field(group, group_ranking, name, title, field_type, required=False, 
 def _setup_core():
     section("Creating Customer Field Catalog")
 
-    _basic,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.basic)
-    _household,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.household)
-    _custom,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.custom)
+    with transaction.atomic():
+        _basic,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.basic)
+        _household,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.household)
+        _custom,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.custom)
 
     _string = CustomerField.FIELD_TYPES.string
     _bool = CustomerField.FIELD_TYPES.bool
@@ -222,6 +224,7 @@ def _setup_core():
     _setup_field(_custom, 1700, CUSTOMER_FIELD_NAMES.purchase__travel,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.purchase__travel], _bool)
 
+
 def _setup_sample_data_promotions(client):
     section("Creating Sample Promotions")
 
@@ -345,6 +348,7 @@ def _setup_sample_data_promotions(client):
 
     dashboard.refresh()
 
+
 def _setup_sample_data():
     section("Creating Customer Database")
 
@@ -375,37 +379,38 @@ def _setup_sample_data():
     clients_customer_fields = [all_customer_fields[process.extractOne(x, all_field_titles)[0]]
                                for x in csv_schema_fields]
 
-    client.customer_fields = [f for f in clients_customer_fields if f.name not in ('first_name', 'last_name')]
+    client.customer_fields = [f for f in all_customer_fields.values() if f.name not in ('first_name', 'last_name')]
     client.save()
 
-    client.customers.all().delete()
+    with transaction.atomic():
+        client.customers.all().delete()
 
-    for customer_text in customers_appended:
-        customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
-        customer_text = customer_text.replace("\n","")
-        customer_values = customer_text.split(",")
-        if len(customer_values) == len(clients_customer_fields):
-            c = Customer(client=client, source=customer_source)
-            c.set_val(CUSTOMER_FIELD_NAMES.profile_image, '/static/images/icons/dude.svg')
-            for i in range(0, len(customer_values)):
-                c.data[clients_customer_fields[i].name] = str(customer_values[i])
-            if c.data[CUSTOMER_FIELD_NAMES.age] or \
-                c.data[CUSTOMER_FIELD_NAMES.gender] or \
-                c.data[CUSTOMER_FIELD_NAMES.has_children] or \
-                c.data[CUSTOMER_FIELD_NAMES.income] or \
-                c.data[CUSTOMER_FIELD_NAMES.length_of_residence] or \
-                c.data[CUSTOMER_FIELD_NAMES.marital_status]:
-                c.enrichment_status = Customer.ENRICHMENT_STATUS.en
-                c.enrichment_date = datetime.datetime.now()
-            # make full name using first and last name
-            c.data['full_name'] = ' '.join((c.data[field] for field in
-                                           ('first_name', 'last_name')
-                                           if field in c.data))
-            # then remove first and last names
-            for redundant_field in 'first_name', 'last_name':
-                c.data.pop(redundant_field, None)
+        for customer_text in customers_appended:
+            customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
+            customer_text = customer_text.replace("\n","")
+            customer_values = customer_text.split(",")
+            if len(customer_values) == len(clients_customer_fields):
+                c = Customer(client=client, source=customer_source)
+                c.set_val(CUSTOMER_FIELD_NAMES.profile_image, '/static/images/icons/dude.svg')
+                for i in range(0, len(customer_values)):
+                    c.data[clients_customer_fields[i].name] = str(customer_values[i])
+                if c.data[CUSTOMER_FIELD_NAMES.age] or \
+                    c.data[CUSTOMER_FIELD_NAMES.gender] or \
+                    c.data[CUSTOMER_FIELD_NAMES.has_children] or \
+                    c.data[CUSTOMER_FIELD_NAMES.income] or \
+                    c.data[CUSTOMER_FIELD_NAMES.length_of_residence] or \
+                    c.data[CUSTOMER_FIELD_NAMES.marital_status]:
+                    c.enrichment_status = Customer.ENRICHMENT_STATUS.en
+                    c.enrichment_date = datetime.datetime.now()
+                # make full name using first and last name
+                c.data['full_name'] = ' '.join((c.data[field] for field in
+                                            ('first_name', 'last_name')
+                                            if field in c.data))
+                # then remove first and last names
+                for redundant_field in 'first_name', 'last_name':
+                    c.data.pop(redundant_field, None)
 
-            c.save()
+                c.save()
 
     user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
     user.set_password('default')
