@@ -19,7 +19,9 @@
 
                 var fieldsMap = {};
                 _.each(customerFields, function(item) {
-                    fieldsMap[item.name] = item.title;
+                    fieldsMap[item.name] = {};
+                    fieldsMap[item.name].title = item.title;
+                    fieldsMap[item.name].width = item.width;
                 });
 
                 var optionalFieldsMap = {},
@@ -37,8 +39,6 @@
                     requiredFieldsMap[item.name] = item.title;
                     requiredFieldsList.push(item.name);
                 });
-
-                requiredFieldsList = _.without(requiredFieldsList, 'last_name');
 
                 $scope.fieldsMap = fieldsMap;
                 $scope.requiredFieldsList = requiredFieldsList;
@@ -88,14 +88,21 @@
             $scope.customers = [];
             $scope.searchParam = '';
 
-            $scope.sortBy = function(name) {
-                $scope.activeSort = name;
+            $scope.sortByAs = function(name) {
+                if ($scope.sortParam === name) {return false;}
 
-                if ($scope.sortParam === name) {
-                    $scope.sortParam = '-' + name;
-                } else {
-                    $scope.sortParam = name;
-                }
+                $scope.activeSort = name;
+                $scope.sortParam = name;
+
+                resetList();
+            };
+
+            $scope.sortByDes = function(name) {
+                if ($scope.sortParam === '-' + name) {return false;}
+
+                $scope.activeSort = name;
+                $scope.sortParam = '-' + name;
+
                 resetList();
             };
 
@@ -129,10 +136,12 @@
             };
 
             var updateFields = function() {
-                customerService.putCustomersFields($scope.customerFields).then(function(data) {
+                var fields = _.union($scope.customerFields, $scope.requiredFieldsList);
+                customerService.putCustomersFields(fields).then(function(data) {
                     $scope.customerFields = data.data.display_customer_fields;
                     updateOtionalFieldsList();
                     resetList();
+                    checkItemActions();
                 });
             };
 
@@ -146,7 +155,10 @@
                     tempFields = _.without(tempFields, name);
                 }
             };
-
+            $scope.removeColumn = function(name) {
+                $scope.removeField(name);
+                $scope.doneAddingFields();
+            };
             $scope.doneAddingFields = function() {
                 $scope.customerFields = angular.copy(tempFields);
                 updateFields();
@@ -166,6 +178,7 @@
 
             var customersToDelete = [];
             var checkItemActions = function() {
+                console.log('check');
                 var $customersTable = $customersList,
                     $checkboxes = $customersTable.find(':checkbox'),
                     $checked = $checkboxes.filter(':checked'),

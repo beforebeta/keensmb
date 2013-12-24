@@ -72,7 +72,8 @@
       <div class="banner-logo js-image-container"
            ng-class='{"image-loaded" : bannerLogo.reposition, "editing": bannerLogo.editing}'
            data-scope-object='bannerLogo'>
-        <p class="placeholder">Banner Logo</p>
+
+        <p ng-if='!bannerLogo.uploaded' class="placeholder">Banner Logo</p>
 
         <img src=''
              ng-src="{{ bannerLogo.image.src }}"
@@ -121,7 +122,7 @@
            data-scope-object='backgroundImage'>
 
 
-        <p class="placeholder">Background Image</p>
+        <p ng-if='!backgroundImage.uploaded' class="placeholder">Background Image</p>
 
         <img src="" ng-src='{{ backgroundImage.image.src }}' alt="" class='js-banner-preview fade in' id='background-image'>
 
@@ -167,7 +168,7 @@
              ng-class='{"editing": formDescription.isEditing}'>
             <textarea class='su-form-text col-xs-12 form-control non-resizing-gorizontal js-resize-area'
                       style='color:{{ form.textColor }};'
-                      maxlength='125'
+                      maxlength='250'
                       spellcheck='false'
                       ng-keypress='blurOnEnter($event)'
                       ng-focus='startEditing(formDescription)'

@@ -159,8 +159,8 @@
           </button>
         </li>
         <li>
-          <button class="btn btn-sm btn-embossed btn-danger js-delete-customer mts mrl">
-            <span class='mrl'>Delete</span>
+          <button class="btn btn-sm btn-embossed btn-danger mts mrl">
+            <span class='mrl' data-toggle="modal" data-target="#ModalDeleteCustomers">Delete</span>
             <i class="fui-cross mll"></i>
           </button>
         </li>
@@ -182,10 +182,29 @@
               </th>
 
               <th ng-repeat='field in requiredFieldsList'
-                  ng-click='sortBy(field);'
+
                   ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
 
-                  <span class='sorting-header'>{{ fieldsMap[field] }}</span>
+                <span class='sorting-header'
+                        style='width: {{ fieldsMap[field].width }}px'>{{ fieldsMap[field].title }}
+                </span>
+                <div class="dropdown">
+                  <a href="#" class="dropdown-toggle icon-dropdown" data-toggle="dropdown">
+                    <span class="fui-list"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="#fakelink"
+                         ng-click='sortByAs(field);'
+                         ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Up</a>
+                    </li>
+                    <li>
+                      <a href="#fakelink"
+                         ng-click='sortByDes(field);'
+                         ng-class='{active: checkActiveSort(field)}'>Sort Down</a>
+                    </li>
+                  </ul>
+                </div>
               </th>
 
             </tr>
@@ -208,12 +227,10 @@
               </td>
 
               <td ng-repeat='field in requiredFieldsList'>
-                  <span>
-                    <a class='fui-eye detail-link'
-                       target='_blank'
-                       ng-if='field == "first_name"'
-                       ng-href='/customer_profile/{{ customer.id }}'></a>
-                    {{ customer.data[field] }}
+                  <span class='sorting-header'
+                        style='width: {{ fieldsMap[field].width }}px'>
+                    <a target='_blank'
+                       ng-href='/customer_profile/{{ customer.id }}'>{{ customer.data[field] }}</a>
                   </span>
               </td>
             </tr>
@@ -229,10 +246,30 @@
           <thead>
             <tr>
               <th ng-repeat='field in optionalFieldsList'
-                  ng-click='sortBy(field);'
                   ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
 
-                  <span class='sorting-header'>{{ fieldsMap[field] }}</span>
+                  <span class='sorting-header'
+                        style='width: {{ fieldsMap[field].width }}px'>{{ fieldsMap[field].title }}</span>
+                  <div class="dropdown">
+                    <a href="#" class="dropdown-toggle icon-dropdown" data-toggle="dropdown">
+                      <span class="fui-list"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="#fakelink"
+                           ng-click='sortByAs(field);'
+                           ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Up</a>
+                      </li>
+                      <li>
+                        <a href="#fakelink"
+                           ng-click='sortByDes(field);'
+                           ng-class='{active: checkActiveSort(field)}'>Sort Down</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a href="#fakelink"
+                             ng-click='removeColumn(field)'>Remove Column</a></li>
+                    </ul>
+                  </div>
               </th>
 
               <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
@@ -250,13 +287,7 @@
 
             <tr ng-repeat='customer in customers' class='fade-onload customer-row' data-id='{{ customer.id }}'>
               <td ng-repeat='field in optionalFieldsList'>
-                  <span>
-                    <a class='fui-eye detail-link'
-                       target='_blank'
-                       ng-if='field == "first_name"'
-                       ng-href='/customer_profile/{{ customer.id }}'></a>
-                    {{ customer.data[field] }}
-                  </span>
+                  <span style='width: {{ fieldsMap[field].width }}px'>{{ customer.data[field] }}</span>
               </td>
 
               <td><span></span></td>
@@ -268,6 +299,7 @@
 
     </div>
   </div>
+
 <!-- new field modal -->
   <div id="newFieldModal" class="modal fade new-field-modal" tabindex="-1" role="dialog" aria-hidden="true" >
     <div class="modal-dialog">
@@ -281,8 +313,8 @@
         </div>
 
         <div class="modal-body">
-          <div class="row modal-body-section" ng-repeat='(name, title) in fieldsMap'>
-            <div class="col-xs-4"><span>{{ title }}</span></div>
+          <div class="row modal-body-section" ng-repeat='(name, item) in optionalFieldsMap'>
+            <div class="col-xs-4"><span>{{ item }}</span></div>
             <div class="col-xs-5 text-simple">
               <span>Description</span>
             </div>
@@ -322,6 +354,33 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
+
+<!-- Delete Cuostmer Modal -->
+  <div id="ModalDeleteCustomers" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header header-primary">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h4 class="modal-title">Do you really want to delete selected customers?</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button"
+                  class="btn btn-primary btn-wide btn-embossed btn-secondary pull-left mll js-delete-customer"
+                  data-dismiss="modal">Yes</button>
+
+          <button type="button"
+                  class="btn btn-default btn-wide btn-embossed"
+                  data-dismiss="modal">No</button>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<!-- import .CSV modal -->
   <div id="ModalCsvImport" class="ModalCsvImport modal fade in" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

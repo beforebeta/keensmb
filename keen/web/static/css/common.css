@@ -310,3 +310,6 @@
 .sft{
     font-size:83%
 }
+.ui-state-disabled {
+  opacity: 1;
+}
