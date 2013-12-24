@@ -15,12 +15,12 @@
           <ul class="customer-top-menu">
             <li><a href="{% url "client_dashboard" %}">Dashboard</a></li>
             <li><a href="{% url "client_promotions" %}">Promotions</a></li>
-            <li><a href="{% url "client_customers" %}">Customers</a>
-                <ul>
-                  <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-                  <li><a href="{% url "client_customers" %}">Customer Profiles</a></li>
-                  <li><a href="#">Singup Forms</a></li>
-                </ul>
+            <li>
+              <a href="{% url "client_customers" %}">Customers</a>
+              <ul>
+                <li><a href="{% url "client_customers" %}">Customer Profiles</a></li>
+                <li><a href="{% url "client_signup_form_list" %}">Signup Forms</a></li>
+              </ul>
             </li>
             <li><a href="{% url "business_profile" %}">Business Profile</a></li>
           </ul> <!-- /nav -->

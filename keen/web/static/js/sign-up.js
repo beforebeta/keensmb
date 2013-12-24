@@ -626,7 +626,7 @@
         defaultData.title = {text: 'some title', isEditing: false};
         defaultData.permalink = {text: 'some-perma-link', isEditing: false};
         defaultData.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false, height: 70};
-        defaultData.formDescription = {text: 'Description would have max 125 characters', isEditing: false, height: 70};
+        defaultData.formDescription = {text: 'Description would have max 250 characters', isEditing: false, height: 70};
 
         return {
             formSlug: formSlug,

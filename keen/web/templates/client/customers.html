@@ -206,6 +206,8 @@
                          ng-click='sortByDes(field);'
                          ng-class='{active: checkActiveSort(field)}'>Sort Down</a>
                     </li>
+                    <li class="divider"></li>
+                    <li><a href="#fakelink" data-toggle="modal" data-target="#newFieldModal">Add Field</a></li>
                   </ul>
                 </div>
               </th>
@@ -270,7 +272,8 @@
                       </li>
                       <li class="divider"></li>
                       <li><a href="#fakelink"
-                             ng-click='removeColumn(field)'>Remove Column</a></li>
+                             ng-click='removeColumn(field)'>Remove Field</a></li>
+                      <li><a href="#fakelink" data-toggle="modal" data-target="#newFieldModal">Add Field</a></li>
                     </ul>
                   </div>
               </th>
