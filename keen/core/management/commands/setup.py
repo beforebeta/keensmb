@@ -31,35 +31,33 @@ def section(message):
 ################################################################################################################
 # Setup Core
 ################################################################################################################
-def _setup_field(group, group_ranking, name, title, field_type, required=False, length=15):
+def _setup_field(group, group_ranking, name, title, field_type, required=False, width=120):
     print "Setup field %s-%s" % (group, name)
-    obj,created = CustomerField.objects.get_or_create(group=group,
-                                                      group_ranking=group_ranking,
-                                                      name=name,
-                                                      title=title,
-                                                      type=field_type,
-                                                      defaults={
-                                                          'width': length,
-                                                          'required': required,
-                                                      },
-                                                      )
+    obj, created = CustomerField.objects.get_or_create(group=group, name=name)
 
-    if created:
-        cast = {
-            # 'date': '::date',
-            'int': '::integer',
-            'float': '::float',
-            #'bool': '::bool',
-        }.get(field_type, '')
+    # unconditionally update these properties
+    obj.title = title
+    obj.type = field_type
+    obj.group_ranking = group_ranking
+    obj.required = required
+    obj.width = width
+    obj.save()
 
-        c = db.connection.cursor()
-        try:
-            index_name = 'core_customer_data_' + name.replace('#', '_')
-            c.execute('''drop index if exists %(index_name)s''' % locals())
-            c.execute('''create index %(index_name)s
+    cast = {
+        # 'date': '::date',
+        'int': '::integer',
+        'float': '::float',
+        #'bool': '::bool',
+    }.get(field_type, '')
+
+    c = db.connection.cursor()
+    try:
+        index_name = 'core_customer_data_' + name.replace('#', '_')
+        c.execute('''drop index if exists %(index_name)s''' % locals())
+        c.execute('''create index %(index_name)s
                     on core_customer(((data->'%(name)s')%(cast)s))''' % locals())
-        finally:
-            c.close()
+    finally:
+        c.close()
 
 
 def _setup_core():
@@ -134,7 +132,8 @@ def _setup_core():
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
     _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name], _string, required=True)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name],
+                 _string, required=True, width=175)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.dob], _date)
     _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age,
@@ -142,7 +141,8 @@ def _setup_core():
     _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.gender], _string)
     _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.email,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email], _string, required=True)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email],
+                 _string, required=True, width=220)
     _setup_field(_basic, 600, CUSTOMER_FIELD_NAMES.address__line1,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__line1], _string)
     _setup_field(_basic, 601, CUSTOMER_FIELD_NAMES.address__line2,
