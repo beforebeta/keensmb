@@ -248,6 +248,7 @@ class SignupFormList(APIView):
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, client_slug):
         forms = SignupForm.objects.filter(client__slug=client_slug)\
+                .exclude(slug__startswith='preview-')\
                 .order_by('-status', 'slug')
 
         return Response(SignupFormSerializer(forms, many=True).data)
