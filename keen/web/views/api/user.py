@@ -10,8 +10,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from keen.core.models import ClientUser
+from keen.web.models import TrialRequest
+from keen.web.forms import TrialRequestForm
 from keen.web.serializers import ClientSerializer
 
+from tracking.models import Visitor
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +44,8 @@ def login_view(request):
             request.session.save()
         else:
             request.session.save()
-            return HttpResponseRedirect(reverse('client_customers'))
+            redirect_url = request.GET.get('next', reverse('client_dashboard'))
+            return HttpResponseRedirect(redirect_url)
     else:
         messages.error(request, 'Authentication failed')
         response = Response({'error': 'Authentication failed'})
@@ -56,3 +60,34 @@ def logout_view(request):
     logout(request)
 
     return HttpResponseRedirect(reverse('home'))
+
+
+@ensure_csrf_cookie
+@api_view(['POST'])
+def request_free_trial(request):
+    form = TrialRequestForm(request.DATA)
+    if form.is_valid():
+        trial_request = TrialRequest(**form.cleaned_data)
+        if 'visitor' in request.session:
+            try:
+                trial_request.visitor = Visitor.objects.get(
+                    uuid=request.session['visitor'])
+            except Visitor.DoesNotExist:
+                logger.error('Visitor with UUID=%s does not exist' % visitor_uuid)
+
+        try:
+            trial_request.save()
+        except DatabaseError:
+            logger.exception('Failed to save free trial request')
+            # FIXME: should we return an error?
+            # for now lets pretend all went well
+
+        result = {
+            'success': 'We will be in touch shortly',
+        }
+    else:
+        result = {
+            'errors': form.errors,
+        }
+
+    return Response(result)

@@ -1,4 +1,7 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+from localflavor.us.forms import USPhoneNumberField
 
 from keen.core.models import CustomerField
 
@@ -60,3 +63,28 @@ class CustomerForm(forms.Form):
                            for field in CustomerField.objects.filter(
                                client=client,
                                name__in=self.DEFAULT_FIELDS).order_by('group'))
+
+
+class TrialRequestForm(forms.Form):
+
+    name = forms.CharField(max_length=255, required=False)
+    business = forms.CharField(max_length=255, required=False)
+    phone = USPhoneNumberField(required=False)
+    email = forms.EmailField(required=False)
+
+    def clean(self):
+        data = super(TrialRequestForm, self).clean()
+
+        name = data.get('name')
+        business = data.get('business')
+        if not (name or business):
+            raise forms.ValidationError(
+                _('Please give us your name and/or business name'))
+
+        phone = data.get('phone')
+        email = data.get('email')
+        if not (phone or email):
+            raise forms.ValidationError(
+                _('Please give us some contact information'))
+
+        return data
