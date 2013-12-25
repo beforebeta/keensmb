@@ -477,6 +477,7 @@ textarea.textarea-static-height {
   margin-top: -85px;
   height: 85px;
   background: #446cb2;
+  position: relative;
 }
 
 
@@ -500,8 +501,9 @@ textarea.textarea-static-height {
 }
 
 .logo-footer {
-  display: block;
-  margin: 5px 0 0 50px;
+  position: absolute;
+  left: 50px;
+  top: 15px;
   width: 80px;
   height: 41px;
 }
