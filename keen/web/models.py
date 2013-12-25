@@ -6,9 +6,15 @@ from model_utils import Choices
 from jsonfield import JSONField
 
 from keen import util
-from keen.core.models import Timestamps, Client, CustomerField, Customer, Promotion
+from keen.core.models import (
+    Timestamps,
+    Client,
+    CustomerField,
+    Customer,
+    Promotion,
+    CustomerSource,
+)
 from keen.events import Event
-from keen.core.models import Timestamps, Client, CustomerField
 
 from tracking.models import Visitor
 
@@ -41,6 +47,11 @@ class SignupForm(Timestamps):
 
     class Meta:
         unique_together = ('client', 'slug')
+
+    def save(self, *args, **kw):
+        super(SignupForm, self).save(*args, **kw)
+        CustomerSource.objects.get_or_create(
+            client=self.client, slug=self.slug, ref_source='signup', ref_id=self.id)
 
 
 class Dashboard(Timestamps):
