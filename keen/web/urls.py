@@ -32,6 +32,7 @@ api_urls = patterns(
     url(r'^login$', 'user.login_view', name='login'),
     url(r'^logout$', 'user.logout_view', name='logout'),
     url(r'^client/', include(client_api_urls)),
+    url(r'^request-free-trial$', 'user.request_free_trial', name='request-free-trial'),
 )
 
 

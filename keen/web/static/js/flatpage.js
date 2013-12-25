@@ -60,4 +60,44 @@
         console.log(e);
     }
 
+    $('#trykeenform').on('submit', function(event) {
+        event.preventDefault();
+
+        var $form = $(this),
+            $errors = $form.find('.alert-error'),
+            data = $form.serialize(),
+            $input = $form.find(':input'),
+            enable_form = function(state) {
+                $form.find(':input').prop('disabled', ! state);
+            },
+            clear_errors = function() {
+                $errors.empty().hide();
+            },
+            add_error = function(error) {
+                $errors.show().append($('<div/>').html(error));
+            };
+        
+        enable_form(false);
+
+        $.post($form.attr('action'), data)
+            .always(function() {
+                enable_form(true);
+                clear_errors();
+            })
+            .fail(function() {
+                add_error('Failed to contact server. Please try again');
+                console.log(arguments);
+            })
+            .done(function(response) {
+                if (response.success) {
+                    $('#tryFree').modal('hide');
+                    $('#tryFreeSuccess').modal('show');
+                } else {
+                    if (response.errors) {
+                        $.map(response.errors, add_error);
+                    }
+                }
+            });
+    })
+    .find('.alert-error').hide();
 })(jQuery);
