@@ -45,7 +45,7 @@
         $item.css('background-image', 'url(' + imgSrc + ')');
     });
 
-    $('.carousel').carousel({interval: 5000});
+//    $('.carousel').carousel({interval: 5000});
 
     try{
         $(document).ready(function() {

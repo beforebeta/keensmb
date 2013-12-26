@@ -16,6 +16,8 @@ img.center {
   position: absolute;
   right: 10px;
   top: 10px;
+    margin-right: 20px;
+    margin-top: 20px;
 }
 #topbar {
   position: relative;
@@ -33,27 +35,30 @@ img.center {
 #topbar div.logo {
   margin: 0 auto;
   width: 990px;
-  margin-top: 100px;
+  margin-top: 140px;
   text-align: center;
 }
 #topbar img.logo {
   max-width: 100px;
 }
 #topbar .tagline {
-  line-height: 20px;
+  line-height: 30px;
   color: #fff;
   text-align: center;
-  font-size: 16px;
+  font-size: 24px;
+    font-weight: normal;
   width: 990px;
   margin: 0 auto;
   margin-top: 40px;
+    padding: 0px 20px 0px 20px;
 }
 #topbar .signup {
   width: 990px;
   margin: 0 auto;
-  margin-top: -185px;
+  margin-top: -130px;
   position: relative;
   text-align: center;
+  font-weight: normal;
 }
 #topbar .main-navigation {
   text-align: justify;
@@ -102,18 +107,26 @@ img.center {
 }
 
 .main-page-block .media {
-  margin-top: 40px;
+  margin-top: 20px;
 }
+
 .main-page-block .media .media-object {
-  width: 80px;
+  width: 60px;
 }
+.main-page-block .media .media-body div {
+    font-size:14px;
+    line-height: 1.231;
+    margin-top: 10px;
+}
+
 .main-page-block .media .media-body .media-heading {
-  font-size: 120%;
+  font-size: 16px;
+  font-weight: bold;
   margin-bottom: 0;
 }
 
 .main-page-block .main-page-title {
-  width: 800px;
+  /*width: 800px;*/
   margin: 0 auto;
 }
 
@@ -152,14 +165,16 @@ img.center {
 
 .main-page-block .keen-title h2 {
   color: #3c4145;
-  margin-top: 30px;
-  margin-bottom: 50px;
+  /*margin-top: 30px;*/
+  /*margin-bottom: 50px;*/
 }
 
-.main-page-block .keen-title p {
-  font-size: 22px;
-  line-height: 36px;
+.main-page-block .keen-title h6 {
+  /*font-size: 20px;*/
+  /*line-height: 36px;*/
   color: #3c4145;
+  margin-top: 40px;
+  margin-bottom: 20px;
 }
 
 .main-page-block .row .span4 {
@@ -171,14 +186,22 @@ img.center {
 }
 
 .main-page-block {
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
+
+.main-page-block div.small{
+    font-size: 13px;
+    line-height: 17px;
+    margin-top: 30px;
+}
+
 .main-page-block h6 {
   margin-bottom: 30px;
+    font-weight: bold
 }
 .main-page-block p {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 #pricing {
@@ -305,7 +328,9 @@ img.center {
   position: absolute;
   right: 0;
   top: 15px;
+  margin-right: 20px;
 }
+
 .scroll-menu .login-link {
   margin-left: 20px;
 }
