@@ -17,11 +17,7 @@
 }
 
 .singup-overview .item-block {
-  border-bottom: 2px solid #ecf0f1;
-}
-
-.singup-overview .singup-title {
-  border-bottom: 2px solid #ecf0f1;
+  border-top: 2px solid #ecf0f1;
 }
 
 .singup-overview .singup-block-right .singup-shadow {

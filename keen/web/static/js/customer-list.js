@@ -184,7 +184,6 @@
 
             var customersToDelete = [];
             var checkItemActions = function() {
-                console.log('check');
                 var $customersTable = $customersList,
                     $checkboxes = $customersTable.find(':checkbox'),
                     $checked = $checkboxes.filter(':checked'),
@@ -194,6 +193,7 @@
                 $checked.each(function(i, item) {
                     customersToDelete.push($(item).closest('tr').data('id'));
                 });
+                console.log('check', checkedAny);
 
                 $('.js-item-selected')[checkedAny ? 'slideDown' : 'slideUp'](200);
             };
@@ -230,6 +230,7 @@
                         var $checkbox = $(this);
                         $checkbox.checkbox();
                     });
+                    checkItemActions()
                 }, 100);
             };
 
@@ -278,9 +279,6 @@
             $(document).on('click', '.global-alert .close', closeGlobalAlert);
             $scrollFlex.on('scroll', scrollFlexList);
             // $scrollFixed.on('scroll', scrollFixedList);
-            $('.tables-wrapper').on('scroll', function() {
-                console.log('scroll');
-            });
 
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 

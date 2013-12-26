@@ -299,6 +299,9 @@
 .navbar .nav ul li:only-child {
   border-radius: 6px;
 }
+.navbar .nav ul li a {
+  font-size: 12px;
+}
 
 .non-resizing {
   resize: none;
