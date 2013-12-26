@@ -96,6 +96,8 @@
   background-color: #f2f2f2;
   border: 1px solid #bdc3c7;
   border-radius: 7px;
+  position: relative;
+  z-index: 1;
 }
 
 .enrichment-checkbox-container figure {
@@ -207,7 +209,7 @@
   z-index: 3;
 }
 
-.enrichment-checkbox-container .checkbox:hover .enrichment-check-tooltip {
+.enrichment-checkbox-container label.checkbox:hover .enrichment-check-tooltip {
   left: 100%;
   visibility: visible;
   opacity: 1;

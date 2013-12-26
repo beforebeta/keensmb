@@ -1,0 +1,62 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+{% load web_tags %}
+
+
+{% block content %}
+  <!-- Content -->
+  <section class="clearfix enrichment">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="steps">
+          <div class="step-one">1
+            <span>Confirm Customer</span>
+          </div>
+          <div class="step-two">2
+            <span>Choose Fields to Append</span>
+          </div>
+          <div class="step-three progres">3
+            <span>Confirm Purchase</span>
+          </div>
+        </div>
+        <div class="enrichment-hello-text">
+          <strong>You have selected the customers below to be enriched.</strong>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. <strong>The customer's email address is required in order to enrich the customer's data.</strong></p>
+        </div>
+      </div>
+      <div class="col-xs-6">
+
+      </div>
+      <div class="col-xs-5 pull-right mbl">
+        <div class="kn-section enrichment-estimated-price">
+            <div class="kn-section-header">
+              <h6>Fields for Enrichment</h6>
+              <span><em>8</em> Fields Selected</span>
+            </div>
+            <div class="kn-section-content">
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Age</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Gender</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Household Income</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Zip Code</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Marital Status</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Pets</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Business</span></button>
+              <button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">Discount Shopper</span></button>
+            </div>
+            <div class="kn-section-footer">
+              <span>700 Customers Selected</span>
+              <em>Total:</em>
+              <i>$3.20</i>
+            </div>
+        </div>
+      </div>
+      <div class="col-xs-12 pull-left mtl">
+        <a href="#" class="btn btn-lg btn-primary big-button">Place Order</a>
+        <a href="enrichment-choose-fiels" class="btn btn-lg btn-default big-button">Go Back</a>
+        <a href="#" class="btn btn-lg btn-default big-button">Cancel</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}
