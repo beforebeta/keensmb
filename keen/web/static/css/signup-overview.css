@@ -32,13 +32,13 @@
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background: url('../images/sing-up.jpg') left top no-repeat;
+  background: url('../images/sign-up.jpg') left top no-repeat;
   position: relative;
 }
 
 .singup-overview .singup-shadow:before {
   content: '';
-  display: none;
+  display: block;
   position: absolute;
   left: 0;
   top: 0;
@@ -46,10 +46,11 @@
   height: 100%;
   z-index: 0;
   background-color: #243342;
+  opacity: 0;
+  transition: opacity .3s;
 }
 
 .singup-overview .singup-shadow:hover:before {
-  display: block;
   opacity: 0.8;
 }
 

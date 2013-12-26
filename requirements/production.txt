@@ -10,6 +10,7 @@ django-hstore
 djangorestframework
 
 django-jsonfield
+django-localflavor
 
 # Templates
 django_compressor

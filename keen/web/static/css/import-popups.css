@@ -125,10 +125,14 @@
 .ModalCsvImport .added-file div {
   width: 78%;
   border-bottom: 1px solid #ecf0f1;
+  font-size: 14px;
 }
 
 .ModalCsvImport .added-file div span {
   font-size: 14px;
+}
+.ModalCsvImport .added-file div strong {
+  font-weight: normal;
 }
 
 .ModalCsvImport .added-file div .close {
@@ -220,7 +224,7 @@
   margin-bottom: -14px;
 }
 
-.ModalCsv .input-group input {
+.ModalCsvImport .input-group input {
   border-right: none;
   width: 108px;
   line-height: normal;

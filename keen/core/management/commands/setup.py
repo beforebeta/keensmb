@@ -3,6 +3,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django import db
+from django.db import transaction
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
@@ -30,43 +31,42 @@ def section(message):
 ################################################################################################################
 # Setup Core
 ################################################################################################################
-def _setup_field(group, group_ranking, name, title, field_type, required=False, length=15):
+def _setup_field(group, group_ranking, name, title, field_type, required=False, width=120):
     print "Setup field %s-%s" % (group, name)
-    obj,created = CustomerField.objects.get_or_create(group=group,
-                                                      group_ranking=group_ranking,
-                                                      name=name,
-                                                      title=title,
-                                                      type=field_type,
-                                                      defaults={
-                                                          'width': length,
-                                                          'required': required,
-                                                      },
-                                                      )
+    obj, created = CustomerField.objects.get_or_create(group=group, name=name)
 
-    if created:
-        cast = {
-            # 'date': '::date',
-            'int': '::integer',
-            'float': '::float',
-            #'bool': '::bool',
-        }.get(field_type, '')
+    # unconditionally update these properties
+    obj.title = title
+    obj.type = field_type
+    obj.group_ranking = group_ranking
+    obj.required = required
+    obj.width = width
+    obj.save()
 
-        c = db.connection.cursor()
-        try:
-            index_name = 'core_customer_data_' + name.replace('#', '_')
-            c.execute('''drop index if exists %(index_name)s''' % locals())
-            c.execute('''create index %(index_name)s
+    cast = {
+        # 'date': '::date',
+        'int': '::integer',
+        'float': '::float',
+        #'bool': '::bool',
+    }.get(field_type, '')
+
+    c = db.connection.cursor()
+    try:
+        index_name = 'core_customer_data_' + name.replace('#', '_')
+        c.execute('''drop index if exists %(index_name)s''' % locals())
+        c.execute('''create index %(index_name)s
                     on core_customer(((data->'%(name)s')%(cast)s))''' % locals())
-        finally:
-            c.close()
+    finally:
+        c.close()
 
 
 def _setup_core():
     section("Creating Customer Field Catalog")
 
-    _basic,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.basic)
-    _household,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.household)
-    _custom,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.custom)
+    with transaction.atomic():
+        _basic,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.basic)
+        _household,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.household)
+        _custom,created = CustomerFieldGroup.objects.get_or_create(name=CustomerFieldGroup.FIELD_GROUPS.custom)
 
     _string = CustomerField.FIELD_TYPES.string
     _bool = CustomerField.FIELD_TYPES.bool
@@ -132,7 +132,8 @@ def _setup_core():
     _setup_field(_basic, 3, CUSTOMER_FIELD_NAMES.social__googleplus,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.social__googleplus], _string)
     _setup_field(_basic, 100, CUSTOMER_FIELD_NAMES.full_name,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name], _string, required=True)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.full_name],
+                 _string, required=True, width=175)
     _setup_field(_basic, 300, CUSTOMER_FIELD_NAMES.dob,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.dob], _date)
     _setup_field(_basic, 301, CUSTOMER_FIELD_NAMES.age,
@@ -140,7 +141,8 @@ def _setup_core():
     _setup_field(_basic, 400, CUSTOMER_FIELD_NAMES.gender,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.gender], _string)
     _setup_field(_basic, 500, CUSTOMER_FIELD_NAMES.email,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email], _string, required=True)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.email],
+                 _string, required=True, width=220)
     _setup_field(_basic, 600, CUSTOMER_FIELD_NAMES.address__line1,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__line1], _string)
     _setup_field(_basic, 601, CUSTOMER_FIELD_NAMES.address__line2,
@@ -148,7 +150,7 @@ def _setup_core():
     _setup_field(_basic, 700, CUSTOMER_FIELD_NAMES.address__city,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__city], _string)
     _setup_field(_basic, 800, CUSTOMER_FIELD_NAMES.address__zipcode,
-                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string, required=True)
+                 CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__zipcode], _string)
     _setup_field(_basic, 900, CUSTOMER_FIELD_NAMES.address__state,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.address__state], _string)
     _setup_field(_basic, 1000, CUSTOMER_FIELD_NAMES.address__country,
@@ -221,6 +223,7 @@ def _setup_core():
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.purchase__technology], _bool)
     _setup_field(_custom, 1700, CUSTOMER_FIELD_NAMES.purchase__travel,
                  CUSTOMER_FIELD_NAMES_DICT[CUSTOMER_FIELD_NAMES.purchase__travel], _bool)
+
 
 def _setup_sample_data_promotions(client):
     section("Creating Sample Promotions")
@@ -345,6 +348,7 @@ def _setup_sample_data_promotions(client):
 
     dashboard.refresh()
 
+
 def _setup_sample_data():
     section("Creating Customer Database")
 
@@ -375,37 +379,38 @@ def _setup_sample_data():
     clients_customer_fields = [all_customer_fields[process.extractOne(x, all_field_titles)[0]]
                                for x in csv_schema_fields]
 
-    client.customer_fields = [f for f in clients_customer_fields if f.name not in ('first_name', 'last_name')]
+    client.customer_fields = [f for f in all_customer_fields.values() if f.name not in ('first_name', 'last_name')]
     client.save()
 
-    client.customers.all().delete()
+    with transaction.atomic():
+        client.customers.all().delete()
 
-    for customer_text in customers_appended:
-        customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
-        customer_text = customer_text.replace("\n","")
-        customer_values = customer_text.split(",")
-        if len(customer_values) == len(clients_customer_fields):
-            c = Customer(client=client, source=customer_source)
-            c.set_val(CUSTOMER_FIELD_NAMES.profile_image, '/static/images/icons/dude.svg')
-            for i in range(0, len(customer_values)):
-                c.data[clients_customer_fields[i].name] = str(customer_values[i])
-            if c.data[CUSTOMER_FIELD_NAMES.age] or \
-                c.data[CUSTOMER_FIELD_NAMES.gender] or \
-                c.data[CUSTOMER_FIELD_NAMES.has_children] or \
-                c.data[CUSTOMER_FIELD_NAMES.income] or \
-                c.data[CUSTOMER_FIELD_NAMES.length_of_residence] or \
-                c.data[CUSTOMER_FIELD_NAMES.marital_status]:
-                c.enrichment_status = Customer.ENRICHMENT_STATUS.en
-                c.enrichment_date = datetime.datetime.now()
-            # make full name using first and last name
-            c.data['full_name'] = ' '.join((c.data[field] for field in
-                                           ('first_name', 'last_name')
-                                           if field in c.data))
-            # then remove first and last names
-            for redundant_field in 'first_name', 'last_name':
-                c.data.pop(redundant_field, None)
+        for customer_text in customers_appended:
+            customer_text = customer_text.replace("\r","").decode('latin-1').encode("utf-8")
+            customer_text = customer_text.replace("\n","")
+            customer_values = customer_text.split(",")
+            if len(customer_values) == len(clients_customer_fields):
+                c = Customer(client=client, source=customer_source)
+                c.set_val(CUSTOMER_FIELD_NAMES.profile_image, '/static/images/icons/dude.svg')
+                for i in range(0, len(customer_values)):
+                    c.data[clients_customer_fields[i].name] = str(customer_values[i])
+                if c.data[CUSTOMER_FIELD_NAMES.age] or \
+                    c.data[CUSTOMER_FIELD_NAMES.gender] or \
+                    c.data[CUSTOMER_FIELD_NAMES.has_children] or \
+                    c.data[CUSTOMER_FIELD_NAMES.income] or \
+                    c.data[CUSTOMER_FIELD_NAMES.length_of_residence] or \
+                    c.data[CUSTOMER_FIELD_NAMES.marital_status]:
+                    c.enrichment_status = Customer.ENRICHMENT_STATUS.en
+                    c.enrichment_date = datetime.datetime.now()
+                # make full name using first and last name
+                c.data['full_name'] = ' '.join((c.data[field] for field in
+                                            ('first_name', 'last_name')
+                                            if field in c.data))
+                # then remove first and last names
+                for redundant_field in 'first_name', 'last_name':
+                    c.data.pop(redundant_field, None)
 
-            c.save()
+                c.save()
 
     user, created = User.objects.get_or_create(username='default@default.com', email='default@default.com')
     user.set_password('default')

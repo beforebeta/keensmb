@@ -1,12 +1,23 @@
 from django.db import models
+from django.db.models import Q
 
 from model_utils import Choices
-from keen import util
-from keen.core.models import Timestamps, Client, CustomerField, Customer, Promotion
-from django.db.models import Q
-from keen.events import Event
+
 from jsonfield import JSONField
-from keen.core.models import Timestamps, Client, CustomerField
+
+from keen import util
+from keen.core.models import (
+    Timestamps,
+    Client,
+    CustomerField,
+    Customer,
+    Promotion,
+    CustomerSource,
+)
+from keen.events import Event
+
+from tracking.models import Visitor
+
 
 class PageCustomerField(Timestamps):
 
@@ -36,6 +47,12 @@ class SignupForm(Timestamps):
 
     class Meta:
         unique_together = ('client', 'slug')
+
+    def save(self, *args, **kw):
+        super(SignupForm, self).save(*args, **kw)
+        CustomerSource.objects.get_or_create(
+            client=self.client, slug=self.slug, ref_source='signup', ref_id=self.id)
+
 
 class Dashboard(Timestamps):
     client = models.ForeignKey(Client)
@@ -71,3 +88,12 @@ class Dashboard(Timestamps):
     def get_active_promotions_count(self):
         return self.client.get_active_promotions_count()
 
+
+class TrialRequest(Timestamps):
+    """Represents free trial request
+    """
+    name = models.CharField(max_length=255, null=True, blank=True)
+    business = models.CharField(max_length=255, null=True, blank=True)
+    phone = models.CharField(max_length=32, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    visitor = models.ForeignKey(Visitor, null=True)

@@ -19,7 +19,9 @@
 
                 var fieldsMap = {};
                 _.each(customerFields, function(item) {
-                    fieldsMap[item.name] = item.title;
+                    fieldsMap[item.name] = {};
+                    fieldsMap[item.name].title = item.title;
+                    fieldsMap[item.name].width = item.width;
                 });
 
                 var optionalFieldsMap = {},
@@ -37,8 +39,6 @@
                     requiredFieldsMap[item.name] = item.title;
                     requiredFieldsList.push(item.name);
                 });
-
-                requiredFieldsList = _.without(requiredFieldsList, 'last_name');
 
                 $scope.fieldsMap = fieldsMap;
                 $scope.requiredFieldsList = requiredFieldsList;
@@ -88,14 +88,21 @@
             $scope.customers = [];
             $scope.searchParam = '';
 
-            $scope.sortBy = function(name) {
-                $scope.activeSort = name;
+            $scope.sortByAs = function(name) {
+                if ($scope.sortParam === name) {return false;}
 
-                if ($scope.sortParam === name) {
-                    $scope.sortParam = '-' + name;
-                } else {
-                    $scope.sortParam = name;
-                }
+                $scope.activeSort = name;
+                $scope.sortParam = name;
+
+                resetList();
+            };
+
+            $scope.sortByDes = function(name) {
+                if ($scope.sortParam === '-' + name) {return false;}
+
+                $scope.activeSort = name;
+                $scope.sortParam = '-' + name;
+
                 resetList();
             };
 
@@ -107,12 +114,16 @@
 
             $scope.loadMoreCustomers = function() {
                 if (!$scope.customerFields) {return false;}
+
+                if ($scope.loadingDisabled) {return false;}
+
+                $scope.loadingDisabled = true;
+
                 customerService.getClientCustomers($scope.customerFields, $scope.searchParam, $scope.sortParam).then(function(data) {
-                    // console.log('more: ', data.data);
                     var customers = data.data.customers;
 
                     // TODO hardcoded limit
-                    if (customers.length < 50) {
+                    if (customers.length < customerService.limitData) {
                         $scope.loadingDisabled = true;
                     }
 
@@ -124,15 +135,19 @@
                         clearCustomers = false;
                     }
 
+                    $scope.loadingDisabled = false;
+
                     initCheckbox();
                 });
             };
 
             var updateFields = function() {
-                customerService.putCustomersFields($scope.customerFields).then(function(data) {
+                var fields = _.union($scope.customerFields, $scope.requiredFieldsList);
+                customerService.putCustomersFields(fields).then(function(data) {
                     $scope.customerFields = data.data.display_customer_fields;
                     updateOtionalFieldsList();
                     resetList();
+                    checkItemActions();
                 });
             };
 
@@ -146,7 +161,10 @@
                     tempFields = _.without(tempFields, name);
                 }
             };
-
+            $scope.removeColumn = function(name) {
+                $scope.removeField(name);
+                $scope.doneAddingFields();
+            };
             $scope.doneAddingFields = function() {
                 $scope.customerFields = angular.copy(tempFields);
                 updateFields();
@@ -166,6 +184,7 @@
 
             var customersToDelete = [];
             var checkItemActions = function() {
+                console.log('check');
                 var $customersTable = $customersList,
                     $checkboxes = $customersTable.find(':checkbox'),
                     $checked = $checkboxes.filter(':checked'),
@@ -214,15 +233,6 @@
                 }, 100);
             };
 
-            var scrollList = function() {
-                var raw = $(this)[0];
-
-                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight - 500) {
-                    $scope.loadMoreCustomers();
-                }
-            };
-            var lazyScrollList = _.throttle(scrollList, 200);
-
             // Table: Toggle all checkboxes
             var toggleAllListCheckboxes = function() {
                 var ch = $(this).find(':checkbox').prop('checked');
@@ -233,9 +243,32 @@
             var $scrollFlex = $('.js-list-flexible'),
                 $scrollFixed = $('.js-list-fixed');
 
-            var scrollCustomersList = function() {
+            var scrollList = function() {
+                var raw = $scrollFlex[0];
+
+                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight - 500) {
+                    $timeout(function() {
+                        $scope.loadMoreCustomers();
+                    });
+                }
+            };
+            var lazyScrollList = _.throttle(scrollList, 200);
+
+            var $fixedTop = $scrollFlex.children('.customers-table');
+            var scrollFixedList = function() {
+                var scrollTop = $scrollFixed.scrollTop();
+                // $scrollFlex.scrollTop(scrollTop);
+                // $fixedTop.css('margin-top', -scrollTop);
+
+                // lazyScrollList();
+            };
+            var $flexTop = $scrollFixed.children('.customers-table');
+            var scrollFlexList = function() {
                 var scrollTop = $scrollFlex.scrollTop();
                 $scrollFixed.scrollTop(scrollTop);
+                // $flexTop.css('margin-top', -scrollTop);
+
+                lazyScrollList();
             };
 
             // Table: Add class row selected
@@ -243,20 +276,23 @@
             $(document).on('toggle', '.customers-table :checkbox', checkItemActions);
             $(document).on('click', '.js-delete-customer', deleteCustomer);
             $(document).on('click', '.global-alert .close', closeGlobalAlert);
-            $scrollFlex.on('scroll', scrollCustomersList);
-            $customersList.on('scroll', lazyScrollList);
+            $scrollFlex.on('scroll', scrollFlexList);
+            // $scrollFixed.on('scroll', scrollFixedList);
+            $('.tables-wrapper').on('scroll', function() {
+                console.log('scroll');
+            });
 
-        }]).factory('customerService', ['$http', function($http) {
+        }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 
             window.$http = $http;
 
             var clientSlug = $('#clientSlug').text(),
-                // TODO: fix
-                currentOffset = -50,
-                limit = 50;
+                itemsNumber = 50,
+                currentOffset = -itemsNumber;
 
             return {
                 clientSlug: '',
+                limitData: itemsNumber,
                 getClientData: function() {
                     return $http({
                         url: '/api/client/current',
@@ -285,21 +321,16 @@
                     });
                 },
                 getClientCustomers: function(fields, search, sort) {
-                    currentOffset += limit;
+                    currentOffset += this.limitData;
 
                     var params = {
                         fields: fields.join(','),
-                        limit: limit,
+                        limit: this.limitData,
                         offset: currentOffset
                     };
 
-                    if (search) {
-                        params.search = search;
-                    }
-
-                    if (sort) {
-                        params.order = sort;
-                    }
+                    if (search) {params.search = search;}
+                    if (sort) {params.order = sort;}
 
                     return $http({
                         url: '/api/client/'+clientSlug+'/customers',
@@ -309,7 +340,7 @@
                     });
                 },
                 resetCounter: function() {
-                    currentOffset = -50;
+                    currentOffset = -this.limitData;
                 }
             };
         }]);

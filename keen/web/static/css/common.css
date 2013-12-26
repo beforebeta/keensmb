@@ -310,3 +310,14 @@
 .sft{
     font-size:83%
 }
+.ui-state-disabled {
+  opacity: 1;
+}
+.loader:after {
+  content: '';
+  display: inline-block;
+  width: 100px;
+  height: 15px;
+  background: url('../images/loader.gif');
+  background-size:  100%;
+}

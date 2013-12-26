@@ -1,0 +1,35 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+{% load web_tags %}
+
+
+{% block content %}
+  <!-- Content -->
+  <section class="clearfix enrichment">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="steps">
+          <div class="step-one progres">1
+            <span>Confirm Customer</span>
+          </div>
+          <div class="step-two">2
+            <span>Choose Fields to Append</span>
+          </div>
+          <div class="step-three">3
+            <span>Confirm Purchase</span>
+          </div>
+        </div>
+        <div class="enrichment-hello-text">
+          <strong>You have selected the customers below to be enriched.</strong>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. <strong>The customer's email address is required in order to enrich the customer's data.</strong></p>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <a href="enrichment-choose-fiels" class="btn btn-lg btn-primary big-button">Continue</a>
+        <a href="#" class="btn btn-lg btn-default big-button">Cancel</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

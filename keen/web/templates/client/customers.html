@@ -18,6 +18,8 @@
 </div>
 {% endif %}
 
+
+
 {% if breadcrumbs %}
 <!-- Breadcrumbs -->
 <ul class="breadcrumb kn-breadcrumb">
@@ -81,63 +83,66 @@
       </p>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="navbar navbar-inverse mtl mbn profile-toolbar">
+        <div class="navbar-collapse navbar-collapse-03 in">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="#fakelink">
+                Import from
+                <b class="caret"></b>
+              </a>
+              <ul class='pull-right'>
+                <!-- <li><a href="#fakelink">Mailing list</a></li> -->
+                <li><a data-toggle='modal' data-target="#ModalCsvImport" href="#fakelink">.CSV file</a></li>
+              </ul>
+            </li>
+            <li>
+            <a href="#fakelink">
+              Export list to
+              <b class="caret"></b>
+            </a>
+            <ul>
+              <!-- <li><a href="#fakelink">Mailing list</a></li> -->
+              <li><a href="#fakelink">.CSV download</a></li>
+            </ul> <!-- /Sub menu -->
+            </li>
+          </ul> <!-- /nav -->
 
-  <div class="navbar navbar-inverse mtl mbn profile-toolbar">
-    <div class="navbar-collapse navbar-collapse-03 in">
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="#fakelink">
-            Import from
-            <b class="caret"></b>
-          </a>
-          <ul class='pull-right'>
-            <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-            <li><a data-toggle='modal' data-target="#ModalCsvImport" href="#fakelink">.CSV file</a></li>
-          </ul>
-        </li>
-        <li>
-        <a href="#fakelink">
-          Export list to
-          <b class="caret"></b>
-        </a>
-        <ul>
-          <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-          <li><a href="#fakelink">.CSV download</a></li>
-        </ul> <!-- /Sub menu -->
-        </li>
-      </ul> <!-- /nav -->
+          <ul class="nav navbar-nav">
+            <!-- <li class="divider"></li> -->
+            <li class='mrl search-form-item'>
+              <form ng-submit='submitSearch()' class="navbar-form navbar-left">
+                <div class="form-group">
+                  <div class="input-group input-group-sm">
+                    <input class="form-control"
+                           type="search"
+                           placeholder="Search in list..."
+                           ng-model='searchParam'>
 
-      <ul class="nav navbar-nav navbar-right">
-        <!-- <li class="divider"></li> -->
-        <li class='mrl search-form-item'>
-          <form ng-submit='submitSearch()' class="navbar-form navbar-left">
-            <div class="form-group">
-              <div class="input-group input-group-sm">
-                <input class="form-control"
-                       type="search"
-                       placeholder="Search in list..."
-                       ng-model='searchParam'>
-
-                <span class="input-group-btn">
-                  <button type="submit" class="btn"><span class="fui-search"></span></button>
-                </span>
-              </div>
-            </div>
-          </form>
-        </li>
-        <li>
-        <button class="btn btn-sm btn-embossed btn-primary mts mrl">
-          <span class='mrl'>New Customer</span>
-          <i class="fui-user mll"></i></button>
-        </li>
-        <li>
-        <!-- Hidden temporary -->
-        <button class="hidden btn btn-sm btn-embossed btn-primary mts mrl">
-          <span class='mrl'>Create Campaign</span>
-          <i class="fui-mail mll"></i></button>
-        </li>
-      </ul> <!-- /nav -->
-    </div><!--/.navbar-collapse -->
+                    <span class="input-group-btn">
+                      <button type="submit" class="btn"><span class="fui-search"></span></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </li>
+            <li>
+            <button class="btn btn-sm btn-embossed btn-primary mts mrl">
+              <span class='mrl'>New Customer</span>
+              <i class="fui-user mll"></i></button>
+            </li>
+            <li>
+            <!-- Hidden temporary -->
+            <button class="hidden btn btn-sm btn-embossed btn-primary mts mrl">
+              <span class='mrl'>Create Campaign</span>
+              <i class="fui-mail mll"></i></button>
+            </li>
+          </ul> <!-- /nav -->
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
   </div>
 
   <div style='display: none' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
@@ -159,8 +164,8 @@
           </button>
         </li>
         <li>
-          <button class="btn btn-sm btn-embossed btn-danger js-delete-customer mts mrl">
-            <span class='mrl'>Delete</span>
+          <button class="btn btn-sm btn-embossed btn-danger mts mrl">
+            <span class='mrl' data-toggle="modal" data-target="#ModalDeleteCustomers">Delete</span>
             <i class="fui-cross mll"></i>
           </button>
         </li>
@@ -182,10 +187,31 @@
               </th>
 
               <th ng-repeat='field in requiredFieldsList'
-                  ng-click='sortBy(field);'
+
                   ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
 
-                  <span class='sorting-header'>{{ fieldsMap[field] }}</span>
+                <span class='sorting-header'
+                        style='width: {{ fieldsMap[field].width }}px'>{{ fieldsMap[field].title }}
+                </span>
+                <div class="dropdown">
+                  <a href="#" class="dropdown-toggle icon-dropdown" data-toggle="dropdown">
+                    <span class="fui-list"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="#fakelink"
+                         ng-click='sortByAs(field);'
+                         ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Ascending</a>
+                    </li>
+                    <li>
+                      <a href="#fakelink"
+                         ng-click='sortByDes(field);'
+                         ng-class='{active: checkActiveSort(field)}'>Sort Descending</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="#fakelink" data-toggle="modal" data-target="#newFieldModal">Add Field</a></li>
+                  </ul>
+                </div>
               </th>
 
             </tr>
@@ -208,12 +234,10 @@
               </td>
 
               <td ng-repeat='field in requiredFieldsList'>
-                  <span>
-                    <a class='fui-eye detail-link'
-                       target='_blank'
-                       ng-if='field == "first_name"'
-                       ng-href='/customer_profile/{{ customer.id }}'></a>
-                    {{ customer.data[field] }}
+                  <span class='sorting-header'
+                        style='width: {{ fieldsMap[field].width }}px'>
+                    <a target='_blank'
+                       ng-href='/customer_profile/{{ customer.id }}'>{{ customer.data[field] }}</a>
                   </span>
               </td>
             </tr>
@@ -229,10 +253,31 @@
           <thead>
             <tr>
               <th ng-repeat='field in optionalFieldsList'
-                  ng-click='sortBy(field);'
                   ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
 
-                  <span class='sorting-header'>{{ fieldsMap[field] }}</span>
+                  <span class='sorting-header'
+                        style='width: {{ fieldsMap[field].width }}px'>{{ fieldsMap[field].title }}</span>
+                  <div class="dropdown">
+                    <a href="#" class="dropdown-toggle icon-dropdown" data-toggle="dropdown">
+                      <span class="fui-list"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="#fakelink"
+                           ng-click='sortByAs(field);'
+                           ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Ascending</a>
+                      </li>
+                      <li>
+                        <a href="#fakelink"
+                           ng-click='sortByDes(field);'
+                           ng-class='{active: checkActiveSort(field)}'>Sort Descending</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a href="#fakelink"
+                             ng-click='removeColumn(field)'>Remove Field</a></li>
+                      <li><a href="#fakelink" data-toggle="modal" data-target="#newFieldModal">Add Field</a></li>
+                    </ul>
+                  </div>
               </th>
 
               <th class='new-field-cell' data-toggle="modal" data-target="#newFieldModal">
@@ -250,13 +295,7 @@
 
             <tr ng-repeat='customer in customers' class='fade-onload customer-row' data-id='{{ customer.id }}'>
               <td ng-repeat='field in optionalFieldsList'>
-                  <span>
-                    <a class='fui-eye detail-link'
-                       target='_blank'
-                       ng-if='field == "first_name"'
-                       ng-href='/customer_profile/{{ customer.id }}'></a>
-                    {{ customer.data[field] }}
-                  </span>
+                  <span style='width: {{ fieldsMap[field].width }}px'>{{ customer.data[field] }}</span>
               </td>
 
               <td><span></span></td>
@@ -268,6 +307,10 @@
 
     </div>
   </div>
+  <div class='text-center'>
+    <div class="loader fade" ng-class='{in: loadingDisabled}'></div>
+  </div>
+
 <!-- new field modal -->
   <div id="newFieldModal" class="modal fade new-field-modal" tabindex="-1" role="dialog" aria-hidden="true" >
     <div class="modal-dialog">
@@ -281,8 +324,8 @@
         </div>
 
         <div class="modal-body">
-          <div class="row modal-body-section" ng-repeat='(name, title) in fieldsMap'>
-            <div class="col-xs-4"><span>{{ title }}</span></div>
+          <div class="row modal-body-section" ng-repeat='(name, item) in optionalFieldsMap'>
+            <div class="col-xs-4"><span>{{ item }}</span></div>
             <div class="col-xs-5 text-simple">
               <span>Description</span>
             </div>
@@ -322,6 +365,33 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
+
+<!-- Delete Cuostmer Modal -->
+  <div id="ModalDeleteCustomers" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header header-primary">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h4 class="modal-title">Do you really want to delete selected customers?</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button"
+                  class="btn btn-primary btn-wide btn-embossed btn-secondary pull-left mll js-delete-customer"
+                  data-dismiss="modal">Yes</button>
+
+          <button type="button"
+                  class="btn btn-default btn-wide btn-embossed"
+                  data-dismiss="modal">No</button>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<!-- import .CSV modal -->
   <div id="ModalCsvImport" class="ModalCsvImport modal fade in" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -350,20 +420,21 @@
               <span class="mtx">Drag Files Here</span>
               <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">
                 Browse...
-                <input type="file" id="popup-ulpoad-csvfile" value="Browse...">
               </div>
+              <input type="file" id="popup-ulpoad-csvfile" class="hidden" value="Browse...">
             </div>
-            <div  class="added-file mtl">
+            <div style="display: none;" class="added-file mtl">
               <div>
-                <span>filname.csv (125MB)</span>
+                <span></span>
+                (<strong></strong>)
                 <button type="button" class="close">
                   <i class="fui-cross"></i>
                 </button>
               </div>
               <button type="button" class="pts pbs btn btn-default btn-embossed pull-right">Upload</button>
             </div>
-            <div class="download-success text-primary">Sucess!</div>
-            <div style=""  class="download-progress mtl ptm text-muted small">
+            <div style="display: none;" class="download-success text-primary">Sucess!</div>
+            <div style="display: none;" class="download-progress mtl ptm text-muted small">
               <div class="result pbs">
                 <span class="pull-left">
                   Reading file...
@@ -384,7 +455,7 @@
                 </span>
               </div>
             </div>
-            <table class="table">
+            <table style="display: none;" class="table">
               <tbody>
                 <tr>
                   <td>text1</td>

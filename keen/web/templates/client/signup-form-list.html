@@ -18,8 +18,9 @@
     {% for form in forms %}
     <div class="row mrs mls pbm item-block">
       <div class="col-xs-4 ptl pln singup-block-left">
-        <strong class="dib prl mtm"><a href="{{ form.url }}">{{ form.data.pageTitle }}</a></strong>
-        <time class="text-muted small" datatime="2013-11-20">Created on {{ form.created }}</time>
+        <strong class="dib prl mtm"><a href="{{ form.edit_url }}">{{ form.data.pageTitle }}</a></strong>
+        <div><time class="text-muted small" datatime="2013-11-20">Created on {{ form.created }}</time></div>
+        <div>{{ form.status }}</div>
       </div>
       <div class="col-xs-5 ptl pll mtl singup-block-middle">
         <span class="text-muted small pull-left mlm mrm">{{ form.total_signups }} Total Subscribers</span>

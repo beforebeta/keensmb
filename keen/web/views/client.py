@@ -76,7 +76,9 @@ def profile(request, customer_id=None):
 @login_required(login_url='/#signin')
 def signup_form_list(request):
     client = get_object_or_404(Client, slug=request.session['client_slug'])
-    forms = SignupForm.objects.filter(client=client).order_by('-status', 'slug')
+    forms = SignupForm.objects.filter(client=client)\
+            .exclude(slug__startswith='preview-')\
+            .order_by('-status', 'slug')
     context = {
         'client': client,
         'forms': SignupFormSerializer(forms, many=True).data,

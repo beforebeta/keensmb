@@ -1,0 +1,141 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+{% load web_tags %}
+
+
+{% block content %}
+  <!-- Content -->
+  <section class="clearfix enrichment">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="steps">
+          <div class="step-one">1
+            <span>Confirm Customer</span>
+          </div>
+          <div class="step-two progres">2
+            <span>Choose Fields to Append</span>
+          </div>
+          <div class="step-three">3
+            <span>Confirm Purchase</span>
+          </div>
+        </div>
+        <div class="enrichment-hello-text">
+          <strong>You have selected the customers below to be enriched.</strong>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. <strong>The customer's email address is required in order to enrich the customer's data.</strong></p>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="enrichment-checkbox-container">
+          <figure>
+            <img src="../../../static/images/icons/Goal_2x.png" alt="">
+            <figcaption>Demographic Data</figcaption>
+          </figure>
+          <div>
+            <label class="checkbox small" for="email"><input disabled="disabled" checked type="checkbox" value="" id="email" data-toggle="checkbox">Email</label>
+            <label class="checkbox small" for="age"><input type="checkbox" value="" id="age" data-toggle="checkbox">Age
+              <div class="kn-section enrichment-check-tooltip">
+                <div class="kn-section-header">
+                  <h6><strong>Age</strong> ranges from 18 to 65+</h6>
+                </div>
+                <div class="kn-section-content">
+                  <span>values returned</span>
+                  <div>18-20</div>
+                  <div>21-24</div>
+                  <div>25-34</div>
+                  <div>35-44</div>
+                  <div>45-54</div>
+                  <div>55-64</div>
+                  <div>65+</div>
+                </div>
+              </div>
+            </label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+          </div>          
+        </div>
+        <div class="enrichment-checkbox-container">
+          <figure>
+            <img src="../../../static/images/icons/Goal_2x.png" alt="">
+            <figcaption>Demographic Data</figcaption>
+          </figure>
+          <div>
+            <label class="checkbox small" for="household-income"><input type="checkbox" value="" id="household-income" data-toggle="checkbox">Household Income</label>
+            <label class="checkbox small" for="martial-status"><input type="checkbox" value="" id="martial-status" data-toggle="checkbox">Martial Status</label>
+            <label class="checkbox small" for="presence-of-children"><input type="checkbox" value="" id="presence-of-children" data-toggle="checkbox">Presence of Children</label>
+            <label class="checkbox small" for="home-owner-status"><input type="checkbox" value="" id="home-owner-status" data-toggle="checkbox">Home Owner Status</label>
+            <label class="checkbox small" for="home-market-value"><input type="checkbox" value="" id="home-market-value" data-toggle="checkbox">Home Market Value</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+          </div>          
+        </div>
+        <div class="enrichment-checkbox-container">
+          <figure>
+            <img src="../../../static/images/icons/Wine_2x.png" alt="">
+            <figcaption>Demographic Data</figcaption>
+          </figure>
+          <div>
+            <label class="checkbox small" for="household-income"><input type="checkbox" value="" id="household-income" data-toggle="checkbox">Household Income</label>
+            <label class="checkbox small" for="martial-status"><input type="checkbox" value="" id="martial-status" data-toggle="checkbox">Martial Status</label>
+            <label class="checkbox small" for="presence-of-children"><input type="checkbox" value="" id="presence-of-children" data-toggle="checkbox">Presence of Children</label>
+            <label class="checkbox small" for="home-owner-status"><input type="checkbox" value="" id="home-owner-status" data-toggle="checkbox">Home Owner Status</label>
+            <label class="checkbox small" for="home-market-value"><input type="checkbox" value="" id="home-market-value" data-toggle="checkbox">Home Market Value</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+          </div>          
+        </div>
+        <div class="enrichment-checkbox-container">
+          <figure>
+            <img src="../../../static/images/icons/Shield_2x.png" alt="">
+            <figcaption>Demographic Data</figcaption>
+          </figure>
+          <div>
+            <label class="checkbox small" for="household-income"><input type="checkbox" value="" id="household-income" data-toggle="checkbox">Household Income</label>
+            <label class="checkbox small" for="martial-status"><input type="checkbox" value="" id="martial-status" data-toggle="checkbox">Martial Status</label>
+            <label class="checkbox small" for="presence-of-children"><input type="checkbox" value="" id="presence-of-children" data-toggle="checkbox">Presence of Children</label>
+            <label class="checkbox small" for="home-owner-status"><input type="checkbox" value="" id="home-owner-status" data-toggle="checkbox">Home Owner Status</label>
+            <label class="checkbox small" for="home-market-value"><input type="checkbox" value="" id="home-market-value" data-toggle="checkbox">Home Market Value</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+            <label class="checkbox small" for="gender"><input type="checkbox" value="" id="gender" data-toggle="checkbox">Gender</label>
+            <label class="checkbox small" for="zip-code"><input type="checkbox" value="" id="zip-code" data-toggle="checkbox">Zip code</label>
+            <label class="checkbox small" for="household-income"><input type="checkbox" value="" id="household-income" data-toggle="checkbox">Household Income</label>
+            <label class="checkbox small" for="martial-status"><input type="checkbox" value="" id="martial-status" data-toggle="checkbox">Martial Status</label>
+            <label class="checkbox small" for="presence-of-children"><input type="checkbox" value="" id="presence-of-children" data-toggle="checkbox">Presence of Children</label>
+            <label class="checkbox small" for="home-owner-status"><input type="checkbox" value="" id="home-owner-status" data-toggle="checkbox">Home Owner Status</label>
+            <label class="checkbox small" for="home-market-value"><input type="checkbox" value="" id="home-market-value" data-toggle="checkbox">Home Market Value</label>
+          </div>          
+        </div>
+      </div>
+      <div class="col-xs-5 pull-right mbl">
+        <div class="kn-section enrichment-estimated-price">
+            <div class="kn-section-header">
+              <h6>Estimated Price</h6>
+              <span><em>0</em> Fields Selected</span>
+            </div>
+            <div class="kn-section-content">
+              <div class="unselect">You have not selected any fields yet.</div>
+              <button class="btn btn-sm btn-default"><i class="fui-cross"></i><span class="plm">Age</span></button>
+            </div>
+            <div class="kn-section-footer">
+              <span>700 Customers Selected</span>
+              <em>Total:</em>
+              <i>$0.20</i>
+            </div>
+        </div>
+        <a href="enrichment-confirm-purchase" class="btn btn-primary btn-lg btn-block">Continue</a>
+      </div>
+      <div class="col-xs-12 pull-left mtl">
+        <a href="enrichment-confirm-purchase" class="btn btn-lg btn-primary big-button">Continue</a>
+        <a href="enrichment-confirm-customer" class="btn btn-lg btn-default big-button">Go Back</a>
+        <a href="#" class="btn btn-lg btn-default big-button">Cancel</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}
