@@ -331,30 +331,31 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .table.table-bordered tr > td,
 .table.table-bordered tr > th {
-  position: relative;
   padding: 7px 5px 7px 8px;
   border: 1px solid #ebeff0 !important;
 }
 
-.table.table-bordered tr > th > span {
-  padding-right: 10px;
-}
-
-.table.table-bordered tr > td > span,
-.table.table-bordered tr > th > span {
+.tables-wrapper .cell-content {
   position: relative;
   display: inline-block;
   width: 120px;
   height: 18px;
-  overflow: hidden;
+}
+.tables-wrapper .cell-content > span {
+  display: inline-block;
+  max-width: 100%;
+  height: 18px;
   line-height: 18px;
+  overflow: hidden;
   word-wrap: break-word;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 .tables-wrapper th:hover .icon-dropdown {
   opacity: 1;
 }
+
 .tables-wrapper th .icon-dropdown {
   opacity: 0;
   padding: 7px 5px 5px 5px;
@@ -369,8 +370,8 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .tables-wrapper th .dropdown {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 2px;
+  right: 2px;
   z-index: 9;
 }
 .tables-wrapper th .dropdown-menu {
@@ -419,15 +420,17 @@ header.navbar .navbar-nav > li:hover > a {
   overflow-y: hidden;
   background-color: #fff;
 }
-.customers-list-flex tr > td:last-child,
+.customers-list-flex .customers-list {
+  margin-right: 21px;
+}
+/*.customers-list-flex tr > td:last-child,
 .customers-list-flex tr > th:last-child {
   border: 1px dashed #ebeff0 !important;
   padding-right: 0;
-}
-.customers-list-flex .customers-table tr > td:last-child span,
-.customers-list-flex .customers-table tr > th:last-child span {
-  width: 75px;
-  padding-right: 0;
+}*/
+.customers-list-flex .customers-table tr > th:last-child .dropdown-menu {
+  right: 0;
+  left: auto;
 }
 .table.customers-table thead tr th:hover,
 .table.customers-table thead tr th.active {
@@ -480,29 +483,55 @@ header.navbar .navbar-nav > li:hover > a {
 .table.table-bordered thead .second-icon {
   background: none;
 }
-.customers-table .new-field-cell {
+.tables-wrapper .new-field {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 9px 4px;
+  border:1px dashed #ebeff0;
   background: #fff;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -ms-transition: all .2s;
+  -o-transition: all .2s;
+  transition: all .2s;
+  z-index: 2;
 }
-.customers-table .new-field-cell:hover {
-  background: #34495e;
-  border:1px dashed #ccc !important;
-  color: #000;
+.tables-wrapper .new-field:hover {
+  /*border:1px dashed #34495e;*/
+  background-color: #f8f8f8;
   cursor: pointer;
-  -webkit-transition: background .2s;
-  -moz-transition: background .2s;
-  -ms-transition: background .2s;
-  -o-transition: background .2s;
-  transition: background .2s;
-  box-shadow: inset 1px 0 0 0 #ddd;
+  z-index: 999;
+  box-shadow: -1px 0 0 rgba(0,0,0,.2);
 }
-.customers-table .new-field-cell:hover > i,
-.customers-table .new-field-cell:hover > span {
+.tables-wrapper .new-field > span {
+  display: block;
+  font-size: 16px;
+  line-height: 18px;
+  height: 18px;
   color: #526476;
-  -webkit-transition: color .2s;
-  -moz-transition: color .2s;
-  -ms-transition: color .2s;
-  -o-transition: color .2s;
-  transition: color .2s;
+  white-space: nowrap;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -ms-transition: all .2s;
+  -o-transition: all .2s;
+  transition: all .2s;
+}
+.tables-wrapper .new-field > span i {
+  vertical-align: top;
+}
+.tables-wrapper .new-field:hover .new-field-text {
+  width: 70px;
+}
+.tables-wrapper .new-field .new-field-text {
+  display: inline-block;
+  overflow: hidden;
+  width: 0;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -ms-transition: all .2s;
+  -o-transition: all .2s;
+  transition: all .2s;
 }
 .customers-table tr .detail-link {
   opacity: 0;
@@ -515,14 +544,13 @@ header.navbar .navbar-nav > li:hover > a {
 .customers-table tr:hover .detail-link {
   opacity: 1;
 }
-.fixed-customers-top {
-}
 .fixed-customers-top > .container > section {
     padding-top: 1px;
 }
 .tables-wrapper {
   position: relative;
-  height: 450px;
+  height: 455px;
+  padding-bottom: 5px;
   margin-bottom: 5px;
 }
 .customers-list {
@@ -530,6 +558,9 @@ header.navbar .navbar-nav > li:hover > a {
   display: inline-block;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.customers-list-head {
+  background-color: #f2f2f2;
 }
 .customers-list-fixed  .customers-list::-webkit-scrollbar {
     -webkit-appearance: none;
