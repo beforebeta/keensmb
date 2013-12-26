@@ -399,6 +399,7 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .customers-list-fixed  .customers-list {
   overflow: hidden;
+  /*padding-right: 15px;*/
 }
 .customers-list-flex {
   position: absolute;
@@ -408,6 +409,7 @@ header.navbar .navbar-nav > li:hover > a {
   height: 454px;
   overflow-x: auto;
   overflow-y: hidden;
+  background-color: #fff;
 }
 .customers-list-flex .customers-table tr > td:last-child,
 .customers-list-flex .customers-table tr > th:last-child {
@@ -513,13 +515,22 @@ header.navbar .navbar-nav > li:hover > a {
 .tables-wrapper {
   position: relative;
   height: 450px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 .customers-list {
   height: 408px;
   display: inline-block;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.customers-list-fixed  .customers-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+.customers-list-fixed  .customers-list::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 .customers-list::-webkit-scrollbar {
     -webkit-appearance: none;

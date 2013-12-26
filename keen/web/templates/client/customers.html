@@ -18,6 +18,8 @@
 </div>
 {% endif %}
 
+
+
 {% if breadcrumbs %}
 <!-- Breadcrumbs -->
 <ul class="breadcrumb kn-breadcrumb">
@@ -199,12 +201,12 @@
                     <li>
                       <a href="#fakelink"
                          ng-click='sortByAs(field);'
-                         ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Up</a>
+                         ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Ascending</a>
                     </li>
                     <li>
                       <a href="#fakelink"
                          ng-click='sortByDes(field);'
-                         ng-class='{active: checkActiveSort(field)}'>Sort Down</a>
+                         ng-class='{active: checkActiveSort(field)}'>Sort Descending</a>
                     </li>
                     <li class="divider"></li>
                     <li><a href="#fakelink" data-toggle="modal" data-target="#newFieldModal">Add Field</a></li>
@@ -263,12 +265,12 @@
                       <li>
                         <a href="#fakelink"
                            ng-click='sortByAs(field);'
-                           ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Up</a>
+                           ng-class='{active: (activeSort == field) && !checkActiveSort(field)}'>Sort Ascending</a>
                       </li>
                       <li>
                         <a href="#fakelink"
                            ng-click='sortByDes(field);'
-                           ng-class='{active: checkActiveSort(field)}'>Sort Down</a>
+                           ng-class='{active: checkActiveSort(field)}'>Sort Descending</a>
                       </li>
                       <li class="divider"></li>
                       <li><a href="#fakelink"
@@ -304,6 +306,9 @@
       </div>
 
     </div>
+  </div>
+  <div class='text-center'>
+    <div class="loader fade" ng-class='{in: loadingDisabled}'></div>
   </div>
 
 <!-- new field modal -->

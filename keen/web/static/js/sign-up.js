@@ -19,16 +19,16 @@
             $scope.clientSlug = suService.clientSlug;
             $scope.formSlug = suService.formSlug;
 
-            // angular.bootstrap(document);
-            $timeout(function() {
-                $scope.dataLoaded = true;
+            if ($scope.formSlug) {
                 initDraggableImages();
-            }, 300);
+            }
+
+            $scope.dataLoaded = true;
         });
 
         $scope.$watch('permalink.text', function(newVal, oldVal) {
             var regExp = /[^0-9a-zA-Z-_.]/g;
-            if (newVal.match(regExp)) {
+            if (newVal && newVal.match(regExp)) {
                 $scope.permalink.text = newVal.replace(regExp, '-');
             }
         });
@@ -462,56 +462,64 @@
         };
 
         var initDraggableImages = function() {
-            $('.js-resize-area').autosize().trigger('autosize.resize');
+            var images = [$scope.backgroundImage.image.src, $scope.bannerLogo.image.src];
 
-            if (suService.formSlug) {
+            suService.preLoadImages(images).then(function(status) {
 
-                $('#banner-preview, #background-image').each(function(i, item) {
-                    var $imgEl = $(item),
-                        $container = $imgEl.closest('.js-image-container'),
-                        contWidth = $container.width(),
-                        contHeight = $container.height(),
-                        scopeObject = $container.data('scope-object');
+                $scope.dataLoaded = status; // true
 
-                    var y1 = contHeight,
-                        x1 = contWidth,
-                        y2 = $imgEl.height(),
-                        x2 = $imgEl.width();
+                $('.js-resize-area').autosize().trigger('autosize.resize');
 
-                    $imgEl.draggable({
-                        scroll: false,
-                        drag: function(event, ui) {
-                            if(ui.position.top >= 0) {
-                                ui.position.top = 0;
-                            } else if( ui.position.top <= y1 - y2) {
-                                ui.position.top = y1 - y2;
-                            }
+                if (suService.formSlug) {
 
-                            if( ui.position.left >= 0) {
-                                ui.position.left = 0;
-                            } else if ( ui.position.left <= x1 - x2) {
-                                ui.position.left = x1 - x2;
-                            }
-                        },
-                        stop: function(event, ui) {
-                            $timeout(function() {
-                                if (scopeObject === 'bannerLogo') {
-                                    $scope.bannerLogo.image.top = ui.position.top;
-                                    $scope.bannerLogo.image.left = ui.position.left;
-                                } else if (scopeObject === 'backgroundImage') {
-                                    $scope.backgroundImage.image.top = ui.position.top;
-                                    $scope.backgroundImage.image.left = ui.position.left;
+                    $('#banner-preview, #background-image').each(function(i, item) {
+                        if (item.src === defaultImageSrc) {return true;}
+                        var $imgEl = $(item),
+                            $container = $imgEl.closest('.js-image-container'),
+                            contWidth = $container.width(),
+                            contHeight = $container.height(),
+                            scopeObject = $container.data('scope-object');
+
+                        var y1 = contHeight,
+                            x1 = contWidth,
+                            y2 = $imgEl.height(),
+                            x2 = $imgEl.width();
+
+                        $imgEl.draggable({
+                            scroll: false,
+                            drag: function(event, ui) {
+                                if(ui.position.top >= 0) {
+                                    ui.position.top = 0;
+                                } else if( ui.position.top <= y1 - y2) {
+                                    ui.position.top = y1 - y2;
                                 }
-                            });
-                        }
-                    });
 
-                    $scope.saveEditingBgImage();
-                    $scope.cancelEditingBgImage();
-                    $scope.saveEditingBanner();
-                    $scope.cancelEditingBanner();
-                });
-            }
+                                if( ui.position.left >= 0) {
+                                    ui.position.left = 0;
+                                } else if ( ui.position.left <= x1 - x2) {
+                                    ui.position.left = x1 - x2;
+                                }
+                            },
+                            stop: function(event, ui) {
+                                $timeout(function() {
+                                    if (scopeObject === 'bannerLogo') {
+                                        $scope.bannerLogo.image.top = ui.position.top;
+                                        $scope.bannerLogo.image.left = ui.position.left;
+                                    } else if (scopeObject === 'backgroundImage') {
+                                        $scope.backgroundImage.image.top = ui.position.top;
+                                        $scope.backgroundImage.image.left = ui.position.left;
+                                    }
+                                });
+                            }
+                        });
+
+                        $scope.saveEditingBgImage();
+                        $scope.cancelEditingBgImage();
+                        $scope.saveEditingBanner();
+                        $scope.cancelEditingBanner();
+                    });
+                }
+            });
         };
 
         $('.js-upload-banner').on('change', function(evt) {
@@ -699,6 +707,26 @@
             },
             getFormLink: function(slug) {
                 return '/'+clientSlug+'/'+slug;
+            },
+            preLoadImages: function(images) {
+                var defer = $q.defer();
+
+                var imgList = _.compact(images),
+                    imgLength = imgList.length;
+
+                _.each(imgList, function(imgSrc, i) {
+                    var img = new Image();
+
+                    img.onload = function() {
+                        imgLength += -1;
+
+                        if (imgLength === 0) {defer.resolve(true);}
+                    };
+
+                    img.src = imgSrc;
+                });
+
+                return defer.promise;
             }
         };
     }]);
