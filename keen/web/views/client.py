@@ -61,6 +61,9 @@ def customers(request):
 
     return render(request, 'client/customers.html', context)
 
+def email_template(request):
+    context={}
+    return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
