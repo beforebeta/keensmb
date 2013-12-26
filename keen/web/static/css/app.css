@@ -34,6 +34,9 @@ html, body {
   }
 }
 
+.page-title {font-weight: normal;}
+h6 {font-size: 22px;}
+
 /* NAVIGATION */
 
 .navbar {border-radius: 0;}
@@ -235,6 +238,10 @@ section {
 .profile-toolbar .navbar-collapse{
   padding-left: 0;
 }
+.profile-toolbar .navbar-collapse .item-actions {
+  font-size: 16px;
+  font-weight: normal;
+}
 .profile-toolbar .navbar-nav:not(.navbar-right) li:first-child a {
   border-left: none !important;
 }
@@ -269,6 +276,7 @@ header.navbar .navbar-nav > li:hover > a {
 .profile-toolbar.navbar-inverse .navbar-form .form-control {
   background: #169e83;
   color: #fff;
+  font-size: 14px;
 }
 .profile-toolbar.navbar-inverse .navbar-form .form-control {
   background: #169e83;
@@ -411,8 +419,8 @@ header.navbar .navbar-nav > li:hover > a {
   overflow-y: hidden;
   background-color: #fff;
 }
-.customers-list-flex .customers-table tr > td:last-child,
-.customers-list-flex .customers-table tr > th:last-child {
+.customers-list-flex tr > td:last-child,
+.customers-list-flex tr > th:last-child {
   border: 1px dashed #ebeff0 !important;
   padding-right: 0;
 }
@@ -476,7 +484,7 @@ header.navbar .navbar-nav > li:hover > a {
   background: #fff;
 }
 .customers-table .new-field-cell:hover {
-  background: #f2f2f2;
+  background: #34495e;
   border:1px dashed #ccc !important;
   color: #000;
   cursor: pointer;
@@ -982,6 +990,8 @@ header nav .customer-info-menu li ul {
   }
   .profile-toolbar .btn-sm {
     margin-top: 8px;
+    font-size: 14px;
+    padding-bottom: 7px;
   }
   .navbar .nav > li {
     display: inline-block;
@@ -991,7 +1001,7 @@ header nav .customer-info-menu li ul {
     margin: 0;
   }
   .navbar-inverse .nav > li > a {
-    font-size: 16px;
+    font-size: 14px;
     color: #ffffff;
     padding: 16px 20px 15px;
     line-height: 20px;

@@ -6,12 +6,11 @@
     var hash = window.location.hash;
     if (hash === '#signin') {
         $('#loginModal').modal('show');
-    }   
+    }
 
 
     $('.js-animate-scroll').on('click',function (e) {
         e.preventDefault();
-        console.log(this.hash);
         var target = this.hash,
             $target = $(target);
 
@@ -25,7 +24,7 @@
             window.location.hash = target;
         });
     });
-    
+
     var topbarHeight = $('#topbar').outerHeight();
     var $scrollMenu = $('.scroll-menu');
 
@@ -41,24 +40,18 @@
     $('.js-preload-image').each(function(index, item){
         var $item = $(item),
             imgSrc = $item.data('image-bg');
-            
+
         $item.css('background-image', 'url(' + imgSrc + ')');
     });
 
     $('.carousel').carousel({interval: 5000});
 
-    try{
-        $(document).ready(function() {
-            $('#tryFree').on('shown.bs.modal', function () {
-               $("#trykeenform input[name='name']").focus();
-            });
-            $('#loginModal').on('shown.bs.modal', function () {
-               $("#signInForm input[name='email']").focus();
-            });
-        });
-    }catch(e){
-        console.log(e);
-    }
+    $('#tryFree').on('shown.bs.modal', function () {
+        $("#trykeenform input[name='name']").focus();
+    });
+    $('#loginModal').on('shown.bs.modal', function () {
+        $("#signInForm input[name='email']").focus();
+    });
 
     $('#trykeenform').on('submit', function(event) {
         event.preventDefault();
@@ -68,7 +61,7 @@
             data = $form.serialize(),
             $input = $form.find(':input'),
             enable_form = function(state) {
-                $form.find(':input').prop('disabled', ! state);
+                $form.find(':input').prop('disabled', !state);
             },
             clear_errors = function() {
                 $errors.empty().hide();
@@ -76,7 +69,7 @@
             add_error = function(error) {
                 $errors.show().append($('<div/>').html(error));
             };
-        
+
         enable_form(false);
 
         $.post($form.attr('action'), data)
