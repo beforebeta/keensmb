@@ -9,6 +9,7 @@
 
 @import 'enrichment.css';
 
+
 html, body {
   height: 100%;
   background: #f2f2f2;
@@ -1071,7 +1072,7 @@ header nav .customer-info-menu li ul {
   }
 }
 
-.bottom-menu .navbar-brand > a {
+.bottom-menu .footer-logo > a {
   display: block;
   background: url('../images/logo-small.png') left center no-repeat;
   background-size: cover;
@@ -1083,7 +1084,7 @@ header nav .customer-info-menu li ul {
 @media
 (-webkit-min-device-pixel-ratio: 2),
 (min-resolution: 192dpi) {
-    .bottom-menu .navbar-brand > a {
+    .bottom-menu .footer-logo > a {
       background: url('../images/logo-small-retina.png') left center no-repeat;
       background-size: 100%;
     }

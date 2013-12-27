@@ -1,0 +1,271 @@
+.landing3 header .logo {
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	width: 130px;
+	height: 70px;
+}
+
+.landing3 header .logo img {
+	max-width: 100%;
+}
+
+.landing3 header .login {
+	position: absolute;
+	right: 0;
+	top: 15px;
+}
+
+.landing3 h1 {
+	color: #0698D8;
+	font-size: 42px;
+	font-weight: 400;
+	text-align: center;
+}
+
+.landing3 h1 + .text-center {
+	padding-left: 230px;
+	padding-right: 230px;
+}
+
+.landing3 .list-of-services {
+	padding: 0;
+	margin: 0;
+}
+
+.landing3 .list-of-services li {
+	padding-left: 50px;
+	padding-bottom: 30px;
+	background: url('../images/landing3/check.png') left 0px no-repeat;
+	font-size: 14px;
+	line-height: 15px;
+	list-style-type: none;
+}
+
+.landing3 section .form-title {
+	color: #1ABC9C;
+	font-size: 24px;
+	line-height: 20px;
+	font-weight: bold;
+}
+
+.landing3 .textarea-static-height {
+	height: 123px;
+}
+
+.landing3 .grey-label {
+	padding-bottom: 30px;
+	background-color: #f2f2f2;
+}
+
+.landing3 section .row > h2 {
+	margin-bottom: 0;
+	margin-bottom: 30px;
+	text-align: center;
+	font-size: 22px;
+	line-height: 24px;
+}
+
+.landing3 .feauters-list figure {
+	float: left;
+	width: 80px;
+	height: 71px;
+}
+
+.landing3 .feauters-list figure img {
+	max-width: 100%;
+}
+
+.landing3 .feauters-list {
+	margin-bottom: 30px;
+}
+
+.landing3 .feauters-list div div {
+	float: left;
+	margin-left: 10px;
+	width: 219px;
+}
+
+.landing3 .feauters-list div h5 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.landing3 .feauters-list div p {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.landing3 .pricing-window > div {
+	border-radius: 10px;
+	 border: 2px solid;
+}
+
+.landing3 .pricing-window div > span {
+  display: block;
+  border-radius: 7px 7px 0 0;
+  color: #ffffff;
+  line-height: 36px;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.landing3 .pricing-window > div > div {
+  padding: 12px;
+  border-radius: 0 0 8px 8px;
+}
+
+.landing3 .label-danger {
+    background-color: #e96151;
+}
+
+.landing3 div.danger {
+  border-color: #e96151;
+}
+
+.landing3 .label-primary {
+    background-color: #16a085;
+}
+
+.landing3 div.primary {
+  border-color: #16a085;
+}
+
+.landing3 .label-info {
+    background-color: #446cb3;
+}
+
+.landing3 div.info {
+  border-color: #446cb3;
+}
+
+.landing3 .pricing-window div p {
+	text-align: center;
+}
+
+.landing3 .pricing-window div p strong {
+	font-size: 36px;
+	font-weight: normal;
+}
+
+.landing3 .pricing-window div small {
+	display: block;
+	margin-bottom: 15px;
+	font-style: normal;
+	text-align: center;
+	font-size: 13px;
+}
+
+.landing3 .pricing-window div ul {
+	padding-left: 15px;
+
+}
+
+.landing3 .pricing-window div ul li {
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.landing3 .pricing-window div .btn {
+	display: block;
+	margin: 0 auto;
+	width: 156px;
+}
+
+.landing3 .pricing-window > .small {
+	display: block;
+	padding-top: 10px;
+	font-size: 10px;
+	line-height: 12px;
+}
+
+.landing3 .pricing-window {
+	margin-top: 15px;
+	margin-bottom: 50px;
+}
+
+.landing3 .pricing-window.active {
+	margin-top: 0;
+	position: relative;
+}
+
+.landing3 .pricing-window.active .most-popular {
+	padding: 0;
+	position: relative;
+}
+
+.landing3 .pricing-window.active .most-popular img {
+	position: absolute;
+	top: -2px;
+	left: 10px;
+	max-width: 72px;
+}
+
+.landing3 .pricing-window.active .most-popular i {
+	display: none;
+	position: absolute;
+	top: -25px;
+	font-style: normal;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.landing3 .pricing-window.active .most-popular img:hover + i {
+	display: block;
+}
+
+.landing3 .pricing-window.active > div,
+.landing3 .pricing-window.active > .small  {
+	max-width: 248px;
+	margin: 0 auto;
+}
+ 
+.landing3 .pricing-window.active div small,
+.landing3 .pricing-window.active ul li {
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.landing3 .pricing-window.active div > span {
+	line-height: 50px;
+	text-indent: 35px;
+}
+
+.landing3 .pricing-window.active > div > div {
+	padding-bottom: 20px;
+} 
+
+
+/*  FOOTER  */
+
+footer.landing3-footer {
+	background-color: #34495d;
+}
+
+.landing3-footer .landing3-logo-footer a {
+	width: 82px;
+}
+
+.landing3-footer .landing3-logo-footer a img {
+	max-width: 100%;
+}
+
+.landing3-footer .btn {
+	font-weight: normal;
+	text-transform: none;
+}
+
+.landing3-footer .btn:hover {
+	color: #fff;
+}
+
+.landing3-footer ul {
+	padding: 0;
+}
+
+.landing3-footer ul li a {
+	font-size: 14px;
+}
