@@ -14,7 +14,7 @@
 .promotions .promotions-list li a {
     display: block;
     line-height: 64px;
-    width: 240px;
+    width: 100%;
     font-size: 17px;
     position: relative;
     color: #000;
@@ -227,18 +227,105 @@
 }
 
 .prom-new-img span {
-    line-height: 270px;
+  padding-top: 80px;
+  padding-bottom: 30px;
+  display: block;
 }
 
 .prom-new-img-text {
-    border-bottom: 2px solid #95a5a6;
+  border-bottom: 2px solid #95a5a6;
 }
 
 .prom-new-img-text button i {
-    line-height: normal;
+  line-height: normal;
 }
 
 .prom-new-checkbox label {
-    white-space: nowrap;
-    font-size: 12px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+
+.promotion-new-tooltip {
+  background-color: #bdc3c7;
+  color: #ffffff;
+  text-align: center;
+  line-height: 32px;
+  font-size: 20px;
+  -wekit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+}
+
+.promotion-new-nowrap {
+  white-space: nowrap;
+}
+
+.promotions-new-icon {
+  font-size: 40px;
+  line-height: 20px;
+  color: #446cd3;
+}
+
+.promotion-scroll-menu {
+  -wekit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  border: 1px solid #ebeff0;
+  max-height: 408px;
+  padding: 0;
+  margin-left: 40px;
+  overflow-y: scroll;
+}
+
+.promotion-scroll-menu li {
+  list-style-type: none;
+  line-height: 38px;
+  color: #bdc3c7;
+  padding-left: 20px;
+  border-top: 1px solid #ebeff0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.promotion-scroll-menu li:first-child {
+  border-top: 0;
+}
+
+.promotion-scroll-menu li:hover {
+  background-color: #7b96c9;
+  color: #ffffff;
+}
+
+.promotion-scroll-menu .active {
+  background-color: #446cb3;
+  color: #ffffff;
+}
+
+.promotion-narrow-field {
+  width: 100%;
+  float: left;
+  min-height: 408px;
+  background-color: #dfe2e4;
+  -wekit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  border: 2px dashed #ebeff0;
+}
+
+.promotion-narrow-field em {
+  padding-top: 150px;
+  display: block;
+  padding-left: 30px;
+  padding-right: 30px;
+  text-align: center;
+}
+
+.promotion-icon-close-height {
+  line-height: normal;
+  margin-top: 5px;
+  font-size: 17px;
 }

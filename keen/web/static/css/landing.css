@@ -1,6 +1,21 @@
 @import 'landing3.css';
 
 
+.container {
+  width: 1170px;
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+@media (max-width: 1199px) {
+  .container {
+    width: 990px;
+  }
+}
+
+
 html, body {
   min-height: 100%;
   height: 100%;
@@ -342,21 +357,6 @@ img.center {
 }
 
 
-.container {
-  width: 990px;
-}
-@media (min-width: 992px) {
-  .container {
-    width: 990px;
-  }
-}
-@media (min-width: 768px) {
-  .container {
-    width: 990px;
-  }
-}
-
-
 
 /* popup  */
 
@@ -440,10 +440,10 @@ textarea.textarea-static-height {
 }
 
 .landing2 .offer-list {
-  padding: 0;
+  padding-left: 0;
   margin: 0;
   list-style-type: none;
-  max-width: 405px;
+  padding-right: 30px;
 }
 
 .landing2 .offer-list li {
@@ -463,7 +463,7 @@ textarea.textarea-static-height {
   font-size: 18px;
   line-height: 24px;
   float: left;
-  max-width: 350px;
+  width: 85%;
 }
 
 .landing2 .example-page-img  {

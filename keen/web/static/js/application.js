@@ -210,4 +210,8 @@ String.prototype.repeat = function(num) {
     // make code pretty
     window.prettyPrint && prettyPrint();
   });
+
+    $(".select2").select2();
+
+
 })(jQuery);

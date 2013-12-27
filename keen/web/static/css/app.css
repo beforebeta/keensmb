@@ -19,17 +19,17 @@ html, body {
   height: auto !important;
   height: 100%;
   box-sizing: border-box;
-  padding-top: 80px; /* spacing for fixed header */
+  padding-top: 78px; /* spacing for fixed header */
 }
 .container {
-  width: 990px;
+  width: 1170px;
 }
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
   .container {
-    width: 990px;
+    width: 1170px;
   }
 }
-@media (min-width: 768px) {
+@media (max-width: 1199px) {
   .container {
     width: 990px;
   }
@@ -96,12 +96,12 @@ h6 {font-size: 22px;}
   border-bottom: 1px solid #446cb2;
 }
 
-.kn-nav .navbar-brand {
+.kn-nav.navbar > .container .navbar-brand {
   padding: 0;
   margin-top: 18px;
   margin-bottom: 18px;
-  padding-left: 10px;
-  width: 90px;
+  margin-left: 0;
+  width: 80px;
   height: 41px;
   display: block;
 }
@@ -1015,11 +1015,12 @@ header nav .customer-info-menu li ul {
 
 @media (min-width: 10px) {
   .navbar .navbar-collapse-03 .nav {
-    float: left !important;
+    float: right !important;
     min-width: 539px;
   }
   .navbar .navbar-collapse-03 .nav:first-child {
     min-width: 350px;
+    float: left !important;
   }
   .profile-toolbar .btn-sm {
     margin-top: 8px;
