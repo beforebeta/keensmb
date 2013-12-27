@@ -71,6 +71,8 @@ class TrialRequestForm(forms.Form):
     business = forms.CharField(max_length=255, required=False)
     phone = USPhoneNumberField(required=False)
     email = forms.EmailField(required=False)
+    question = forms.CharField(max_length=255, required=False)
+    comments = forms.CharField(max_length=255, required=False)
 
     def clean(self):
         data = super(TrialRequestForm, self).clean()

@@ -96,4 +96,6 @@ class TrialRequest(Timestamps):
     business = models.CharField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=32, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    question = models.TextField(null=True, blank=True)
+    comments = models.TextField(null=True, blank=True)
     visitor = models.ForeignKey(Visitor, null=True)
