@@ -10,7 +10,7 @@
   <section class='clearfix promotions'>
 
    <div class="row">
-    <div class="col-xs-3 pln pbl">
+    <div class="col-xs-3 pln pbl prn">
       <ul class="promotions-list">
         <li class="prom-active {% if tab == 'active' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'active' %}">Active Promotions</a></li>
         <li class="prom-upcoming {% if tab == 'upcoming' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'upcoming' %}">Upcoming Promotions</a></li>
@@ -34,10 +34,10 @@
 {##}
         </div>
         <div class="col-xs-4 pull-right mtm">
-          <button class="btn btn btn-sm btn-default pull-right">
+          <a href="{% url 'client_create_promotion' %}" class="btn btn btn-sm btn-default pull-right">
             <span class="mrl">Create New Promotion</span>
             <i class="fui-plus mll"></i>
-          </button>
+          </a>
         </div>
       </div>
 

@@ -1,15 +1,13 @@
-.container {
-  width: 990px;
-}
-
 .dashboard {
   padding-bottom: 20px;
+  margin-top: -2px;
 }
 
 .dash-wrapper {
   margin: 0 -20px;
   padding: 1px 20px;
   background: url('../images/dashboard.jpg') left top no-repeat #ffffff;
+  background-size: cover;
 }
 
 .dashboard h1 {
@@ -153,10 +151,21 @@
   -webkit-border-radius:  0 20px 20px 0;
   text-align: right;
   vertical-align: middle;
+  color: transparent;
+}
+
+.dashboard .progress:hover {
+  color: #798590;
+}
+.dashboard .progress:hover .progress-bar {
+  color: #fff;
 }
 
 .dashboard .progress strong {
+  display: inline-block;
+  margin-top: -3px;
   font-size: 22px;
+  vertical-align: middle;
 }
 
 .dashboard .progress > strong {
@@ -164,10 +173,19 @@
 }
 
 .dashboard .progress .progress-bar {
+  padding-left: 10px;
+  line-height: 32px;
+  color: transparent;
   text-align: left;
   font-size: 14px;
-  line-height: 32px;
-  padding-left: 10px;
+}
+
+.dashboard .progress .progress-bar {
+  color: inherit;
+}
+
+.dashboard .progress .progress-bar strong {
+  color: #fff;
 }
 
 .dashboard .kn-section-content .row > a {
@@ -228,6 +246,7 @@
 
 .dashboard-list {
   padding-left: 0;
+  float: left;
 }
 
 .dashboard-list li {
@@ -236,6 +255,8 @@
   padding-left: 3px;
   z-index: 2;
   list-style-type: none;
+  float: left;
+  width: 100%;
 }
 
 .dashboard-list li:before {
@@ -274,13 +295,13 @@
   border-radius: 0 0 10px 10px;
 }
 
-.dashboard-list li > * {
-  display: inline-block;
-  vertical-align: top;
+.dashboard-list li figure,
+.dashboard-list li div {
+  float: left;
 }
 
 .dashboard-list li div {
-  width: 275px;
+  width: 85%;
   margin-left: 8px;
 }
 
