@@ -74,7 +74,7 @@ def checkout(branch):
 
 def migrate():
     with virtualenv():
-        run('./manage.py migrate --merge')
+        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py migrate --merge' % env)
 
 
 @task
@@ -99,7 +99,7 @@ def create_db():
         sudo('psql -c "create extension hstore;" keen', user='postgres')
 
     with virtualenv():
-        run('./manage.py syncdb --noinput')
+        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py syncdb --noinput' % env)
 
 
 @task
@@ -107,13 +107,13 @@ def sample_data():
     """Populate database with sample data
     """
     with virtualenv():
-        run('./manage.py setup --all')
+        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py setup --all' % env)
 
 
 @task
 def run_tests():
     """ Runs the Django test suite as is.  """
-    local("./manage.py test")
+    local("env DJANGO_SETTINGS_MODULE=keen.settings.test ./manage.py test")
 
 
 @task
@@ -193,7 +193,7 @@ def deploy(profile, branch):
 
     migrate()
     with virtualenv():
-        run('./manage.py collectstatic --noinput')
+        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py collectstatic --noinput' % env)
     with warn_only():
         uwsgi_stop()
     # giv it some time to release port
