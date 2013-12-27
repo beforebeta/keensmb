@@ -16,6 +16,12 @@
 }
 
 
+.landing-anchor {
+  position: absolute;
+  top: -50px;
+}
+
+
 html, body {
   min-height: 100%;
   height: 100%;
@@ -222,63 +228,63 @@ img.center {
   margin-bottom: 10px;
 }
 
-#pricing {
+.pricing {
   background-color: #f6f6f6;
   padding-top: 20px;
 }
-#pricing h3 {
+.pricing h3 {
   font-weight: normal;
 }
-#pricing .boxes {
+.pricing .boxes {
   margin-bottom: 40px;
 }
-#pricing .box.color1 {
+.pricing .box.color1 {
   background-color: #f1c427;
 }
-#pricing .box.color1 .head {
+.pricing .box.color1 .head {
   background-color: #f29d27;
 }
-#pricing .box.color2 {
+.pricing .box.color2 {
   background-color: #4bbd9d;
 }
-#pricing .box.color2 .head {
+.pricing .box.color2 .head {
   background-color: #40a186;
 }
-#pricing .box.color3 {
+.pricing .box.color3 {
   background-color: #3498dc;
 }
-#pricing .box.color3 .head {
+.pricing .box.color3 .head {
   background-color: #2b80b9;
 }
-#pricing .box .head {
+.pricing .box .head {
   color: #fff;
   padding: 20px 10px;
 }
-#pricing .box .head h6 {
+.pricing .box .head h6 {
   margin: 0;
   padding: 0;
 }
-#pricing .box .head .left {
+.pricing .box .head .left {
   float: left;
   margin-top: 10px;
 }
-#pricing .box .head .right {
+.pricing .box .head .right {
   float: right;
 }
-#pricing .box .head .right span {
+.pricing .box .head .right span {
   font-size: 34px;
 }
-#pricing .box p {
+.pricing .box p {
   margin: 20px 0;
 }
-#pricing .box ul {
+.pricing .box ul {
   padding: 0 5px 10px;
   margin: 0 0 10px 25px;
 }
-#pricing .box ul li {
+.pricing .box ul li {
   list-style-image: url('/static/assets/tick.png?d23370edbb2e');
 }
-#pricing .box-footer {
+.pricing .box-footer {
   background-color: #9b59b6;
   margin: 20px 0;
   padding: 10px;
@@ -289,6 +295,10 @@ img.center {
   .span4 {
     width: 350px;
   }
+}
+
+.main-page-block {
+  position: relative;
 }
 
 .main-page-block.default {

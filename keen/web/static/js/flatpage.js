@@ -25,7 +25,7 @@
         });
     });
 
-    var topbarHeight = $('#topbar').outerHeight();
+    var topbarHeight = $('#topbar').outerHeight() - 50;
     var $scrollMenu = $('.scroll-menu');
 
     $(document).on('scroll', function() {
