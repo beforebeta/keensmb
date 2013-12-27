@@ -19,7 +19,7 @@ html, body {
   height: auto !important;
   height: 100%;
   box-sizing: border-box;
-  padding-top: 78px; /* spacing for fixed header */
+  padding-top: 72px; /* spacing for fixed header */
 }
 .container {
   width: 1170px;
@@ -98,8 +98,8 @@ h6 {font-size: 22px;}
 
 .kn-nav.navbar > .container .navbar-brand {
   padding: 0;
-  margin-top: 18px;
-  margin-bottom: 18px;
+  margin-top: 14px;
+  margin-bottom: 14px;
   margin-left: 0;
   width: 80px;
   height: 41px;
@@ -911,7 +911,7 @@ header .customer-info-menu > li  {
   float: left;
   list-style-type: none;
   position: relative;
-  padding: 25px 20px 22px;
+  padding: 21px 20px 18px;
 }
 
 header .customer-top-menu li a,
