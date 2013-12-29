@@ -30,7 +30,7 @@
 {% endif %}
 
 <!-- Content -->
-<section class='clearfix' ng-controller='customersCtrl'>
+<section class='clearfix customers-page-content' ng-controller='customersCtrl'>
 
   <h1 class='page-title mbn'>Customer Profiles</h1>
 
@@ -70,10 +70,9 @@
   </div>
 
   {% verbatim  %}
-
-  <div class="global-alert dialog dialog-danger text-left" style='display: none;' ng-show='globalAlert'>
+  <div class="global-alert dialog dialog-danger text-left" ng-show='globalAlert' ng-cloak>
     <div class="container">
-      <a class="close mts"
+      <a class="close-alert mts"
          ng-click='globalAlert = false;'
          href="#fakelink">
          <i class="fui-cross"></i>
@@ -83,6 +82,7 @@
       </p>
     </div>
   </div>
+
   <div class="row">
     <div class="col-xs-12">
       <div class="navbar navbar-inverse mtl mbn profile-toolbar">
@@ -148,7 +148,7 @@
   <div style='display: none' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
     <div class="navbar-collapse">
       <p class='item-actions white pull-left mtm mll mbn'>Item Actions:</p>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right pull-right">
         <!-- temporary removed -->
         <li class='mrl hidden'>
           <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
@@ -164,8 +164,8 @@
           </button>
         </li>
         <li>
-          <button class="btn btn-sm btn-embossed btn-danger mts mrl">
-            <span class='mrl' data-toggle="modal" data-target="#ModalDeleteCustomers">Delete</span>
+          <button class="btn btn-sm btn-embossed btn-danger mts mrl" data-toggle="modal" data-target="#ModalDeleteCustomers">
+            <span class='mrl'>Delete</span>
             <i class="fui-cross mll"></i>
           </button>
         </li>
@@ -391,12 +391,12 @@
         </div>
         <div class="modal-footer">
           <button type="button"
-                  class="btn btn-primary btn-wide btn-embossed btn-secondary pull-left mll js-delete-customer"
-                  data-dismiss="modal">Yes</button>
+                  class="btn btn-default btn-wide btn-embossed pull-left"
+                  data-dismiss="modal">No</button>
 
           <button type="button"
-                  class="btn btn-default btn-wide btn-embossed"
-                  data-dismiss="modal">No</button>
+                  class="btn btn-primary btn-wide btn-embossed btn-secondary mll js-delete-customer"
+                  data-dismiss="modal">Yes</button>
         </div>
 
       </div><!-- /.modal-content -->
