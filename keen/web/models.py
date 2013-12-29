@@ -99,3 +99,8 @@ class TrialRequest(Timestamps):
     question = models.TextField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
     visitor = models.ForeignKey(Visitor, null=True)
+
+class HelpText(Timestamps):
+    group = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    text = models.TextField()

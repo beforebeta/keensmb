@@ -8,12 +8,16 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from keen.core.models import Client, Customer, Location, Promotion
 from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
-from keen.web.forms import CustomerForm
+from keen.web.forms import CustomerForm, PromotionForm
 from keen.web.serializers import SignupFormSerializer
 
 
 logger = logging.getLogger(__name__)
 
+
+####################################################################################################################
+# Dashboard
+####################################################################################################################
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -25,6 +29,9 @@ def dashboard(request):
     }
     return render(request, 'client/dashboard.html', context)
 
+####################################################################################################################
+# Promotions
+####################################################################################################################
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -37,9 +44,21 @@ def promotions(request, tab='active'):
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
     #return render(request, 'client/promotions.html')
 
+@ensure_csrf_cookie
+@login_required(login_url='/#signin')
 def create_promotion(request):
-    context={}
+    context = {}
+    form = PromotionForm()
+    context['form'] = form
     return render_to_response('client/promotions-create.html', context, context_instance=RequestContext(request))
+
+def email_template(request):
+    context={}
+    return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))
+
+####################################################################################################################
+# Customers
+####################################################################################################################
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -61,10 +80,6 @@ def customers(request):
 
     return render(request, 'client/customers.html', context)
 
-def email_template(request):
-    context={}
-    return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))
-
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def profile(request, customer_id=None):
@@ -74,6 +89,9 @@ def profile(request, customer_id=None):
     context["client"] = customer.client
     return render_to_response('client/customers/customer_profile_view.html', context, context_instance=RequestContext(request))
 
+####################################################################################################################
+# Signup Forms
+####################################################################################################################
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')

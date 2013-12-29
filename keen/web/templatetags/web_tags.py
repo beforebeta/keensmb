@@ -1,6 +1,7 @@
 from django import template
 from django.utils.safestring import mark_safe
 from keen.core.models import *
+from keen.web.models import HelpText
 
 register = template.Library()
 
@@ -11,6 +12,9 @@ def nonempty(value):
     else:
         return mark_safe(value)
 
+@register.filter
+def filter_none(val):
+    return val if val else ""
 
 @register.filter(name='cf_display_name')
 def cf_display_name(value):
@@ -19,6 +23,13 @@ def cf_display_name(value):
     except:
         return value
 
+
+@register.filter
+def promotion_help_text(name):
+    try:
+        return Promotion._meta.get_field_by_name(name)[0].help_text
+    except:
+        return ""
 
 # From http://djangosnippets.org/snippets/1259/
 @register.filter

@@ -2,11 +2,13 @@
 
 {% load static %}
 {% load compress %}
-
+{% load web_tags %}
 {% block content %}
 
   <!-- Content -->
  <section class='clearfix promotions'>
+        <form class="" action="" method="post">
+        {% csrf_token %}
         <h1 class='page-title mtl'>Create New Promotion</h1>
         <div class="kn-section mtl mbl">
             <div class="kn-section-header">
@@ -19,10 +21,10 @@
                     <span class="pll mll">Promotion Name:</span>
                   </div>
                   <div class="col-xs-8">
-                    <input type="text" value="" placeholder="Some text" class="form-control input-sm">
+                    <input type="text" value="{{ form.name.value|filter_none }}" placeholder="Name of the promotion" class="form-control">
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.name.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
@@ -33,7 +35,7 @@
                     <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.description.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
@@ -311,7 +313,7 @@
             <button class="btn btn-block btn-primary">Send</button>
           </div>
         </div>
-
+        </form>
       </section>
   <!-- /.container -->
 

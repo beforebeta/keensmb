@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from localflavor.us.forms import USPhoneNumberField
 
-from keen.core.models import CustomerField
+from keen.core.models import CustomerField, Promotion
 
 
 def form_field_builder(field_type, widget_type):
@@ -90,3 +90,9 @@ class TrialRequestForm(forms.Form):
                 _('Please give us some contact information'))
 
         return data
+
+class PromotionForm(forms.ModelForm):
+    class Meta:
+        model = Promotion
+        fields = ('name', 'description', 'short_code', 'valid_from', 'valid_to', 'restrictions',
+                  'additional_information', 'redemption_instructions', 'cta_text')
