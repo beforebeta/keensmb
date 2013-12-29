@@ -22,6 +22,9 @@
             if ($scope.formSlug) {
                 initDraggableImages();
             }
+            $timeout(function() {
+                initTextAreasAutosize();
+            });
 
             $scope.dataLoaded = true;
         });
@@ -54,8 +57,9 @@
 
             }
         };
-        $scope.checkSize = function(e, item) {
-            item.height = $(e.target).outerHeight();
+
+        $scope.saveOnEnter = function(e, item) {
+
         };
 
         $scope.startEditing = function(item) {
@@ -271,6 +275,8 @@
         };
 
         $scope.saveForm = function() {
+
+
             // wait for all blur events
             $timeout(function() {
                 // validate slug
@@ -283,6 +289,7 @@
                     var link = suService.getFormLink($scope.permalink.text);
                     notify('Form with a slug <a href="'+link+'" target="_blank">'+$scope.permalink.text+'</a> already exists.');
                 }, function(err) {
+                    suService.formSlug = $scope.permalink.text;
                     saveFormData();
                 });
             }, 100);
@@ -294,7 +301,8 @@
                 // validate slug
                 var previewSlug = 'preview-'+$scope.permalink.text;
                 suService.checkFormSlug(previewSlug).then(function(res) {
-                    if (suService.formSlug) {
+                    // if (suService.formSlug) {
+                    if (true) {
                         saveFormAsPreviewData(true);
                         return true;
                     }
@@ -336,12 +344,10 @@
                 textColor: formData.form.textColor
             };
             prepared.formTitle = {
-                text: formData.form.title,
-                height: formData.form.titleHeight
+                text: formData.form.title
             };
             prepared.formDescription = {
-                text: formData.form.description,
-                height: formData.form.descriptionHeight
+                text: formData.form.description
             };
 
             return prepared;
@@ -375,9 +381,7 @@
                     backgroundColor: $scope.form.backgroundColor,
                     textColor: $scope.form.textColor,
                     title: $scope.formTitle.text,
-                    titleHeight: $scope.formTitle.height,
-                    description: $scope.formDescription.text,
-                    descriptionHeight: $scope.formDescription.height
+                    description: $scope.formDescription.text
                 }
             };
 
@@ -461,14 +465,16 @@
 
         };
 
+        var initTextAreasAutosize = function() {
+            $('.js-resize-area').autosize().trigger('autosize.resize');
+        };
+
         var initDraggableImages = function() {
             var images = [$scope.backgroundImage.image.src, $scope.bannerLogo.image.src];
 
             suService.preLoadImages(images).then(function(status) {
 
                 $scope.dataLoaded = status; // true
-
-                $('.js-resize-area').autosize().trigger('autosize.resize');
 
                 if (suService.formSlug) {
 
@@ -633,8 +639,8 @@
         var defaultData = {};
         defaultData.title = {text: 'some title', isEditing: false};
         defaultData.permalink = {text: 'some-perma-link', isEditing: false};
-        defaultData.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false, height: 70};
-        defaultData.formDescription = {text: 'Description would have max 250 characters', isEditing: false, height: 70};
+        defaultData.formTitle = {text: 'Header 4 would have max 75 characters', isEditing: false};
+        defaultData.formDescription = {text: 'Description would have max 250 characters', isEditing: false};
 
         return {
             formSlug: formSlug,
@@ -729,7 +735,24 @@
                 return defer.promise;
             }
         };
-    }]);
+    }]).directive('onEnter',function() {
+
+        var linkFn = function(scope,element,attrs) {
+            element.bind('keypress', function(e) {
+                if(e.which === 13) {
+                    scope.$apply(function() {
+                        scope.$eval(attrs.onEnter);
+                    });
+                    element.blur();
+                    e.preventDefault();
+                }
+            });
+        };
+
+        return {
+            link:linkFn
+        };
+    });
 
     $('.instructions-wrap').on('selectstart, dragstart', function(e) {
         e.preventdefault();

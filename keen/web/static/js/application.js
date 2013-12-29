@@ -49,46 +49,6 @@ String.prototype.repeat = function(num) {
       }).addSliderSegments($slider.slider("option").max);
     }
 
-    var $slider2 = $("#slider2");
-    if ($slider2.length > 0) {
-      $slider2.slider({
-        min: 1,
-        max: 5,
-        values: [3, 4],
-        orientation: "horizontal",
-        range: true
-      }).addSliderSegments($slider2.slider("option").max);
-    }
-
-    var $slider3 = $("#slider3")
-      , slider3ValueMultiplier = 100
-      , slider3Options;
-
-    if ($slider3.length > 0) {
-      $slider3.slider({
-        min: 1,
-        max: 5,
-        values: [3, 4],
-        orientation: "horizontal",
-        range: true,
-        slide: function(event, ui) {
-          $slider3.find(".ui-slider-value:first")
-            .text("$" + ui.values[0] * slider3ValueMultiplier)
-            .end()
-            .find(".ui-slider-value:last")
-            .text("$" + ui.values[1] * slider3ValueMultiplier);
-        }
-      });
-
-      slider3Options = $slider3.slider("option");
-      $slider3.addSliderSegments(slider3Options.max)
-        .find(".ui-slider-value:first")
-        .text("$" + slider3Options.values[0] * slider3ValueMultiplier)
-        .end()
-        .find(".ui-slider-value:last")
-        .text("$" + slider3Options.values[1] * slider3ValueMultiplier);
-    }
-
     // Add style class name to a tooltips
     $(".tooltip").addClass(function() {
       if ($(this).prev().attr("data-tooltip-style")) {
@@ -126,16 +86,6 @@ String.prototype.repeat = function(num) {
         "</a>";
       }
     });
-
-    $('#spinner-01').customspinner({
-      min: -99,
-      max: 99
-    }).on('focus', function () {
-      $(this).closest('.ui-spinner').addClass('focus');
-    }).on('blur', function () {
-      $(this).closest('.ui-spinner').removeClass('focus');
-    });
-
 
     // Focus state for append/prepend inputs
     $('.input-group').on('focus', '.form-control', function () {

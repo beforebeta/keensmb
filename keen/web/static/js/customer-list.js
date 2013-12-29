@@ -6,6 +6,7 @@
     angular.module('keen')
         .controller('customersCtrl', ['$scope', '$timeout', 'customerService', function($scope, $timeout, customerService){
 
+            $scope.globalAlert = false;
             var notify = function(text) {
                 $timeout(function() {
                     $scope.alertText = text;
@@ -49,6 +50,7 @@
                 customerService.clientSlug = slug;
 
                 initCustomersFields();
+                checkTableSize();
             });
 
             $scope.submitSearch = function() {
@@ -182,7 +184,10 @@
                 $customersList.scrollTop(0);
             };
 
-            var customersToDelete = [];
+            var customersToDelete = [],
+                $toggleAllCheckbox = $('.tables-wrapper .toggle-all-customers :checkbox'),
+                $itemActionsBlock = $('.js-item-selected');
+
             var checkItemActions = function() {
                 var $customersTable = $customersList,
                     $checkboxes = $customersTable.find(':checkbox'),
@@ -190,32 +195,32 @@
                     checkedAny = ($checked.length !== 0);
 
                 customersToDelete = [];
+                $tablesWrapper.find('.selected-row').removeClass('selected-row');
                 $checked.each(function(i, item) {
-                    customersToDelete.push($(item).closest('tr').data('id'));
+                    var customerId = $(item).closest('tr').data('id');
+                    customersToDelete.push(customerId);
+                    $tablesWrapper.find('tr[data-id='+customerId+']').addClass('selected-row');
                 });
-                console.log('check', checkedAny);
 
-                $('.js-item-selected')[checkedAny ? 'slideDown' : 'slideUp'](200);
+                $itemActionsBlock[checkedAny ? 'slideDown' : 'slideUp'](200);
+                $toggleAllCheckbox.checkbox(checkedAny ? 'check' : 'uncheck');
             };
 
             var deleteCustomer = function() {
 
-                _.each(customersToDelete, function(id) {
+                _.each(customersToDelete, function(id, i) {
                     customerService.deleteCustomer(id).then(function(data) {
                         if (data.status === 200) {
                             var $targetBlock = $('[data-id='+id+']');
-                            $targetBlock.fadeOut('fast', function() {
-                                $targetBlock.remove();
-                            });
-                            checkItemActions();
+                            $targetBlock.remove();
 
-                            notify('Customers removed');
+                            if (i === customersToDelete.length-1) {
+                                checkItemActions();
+                                notify('Customers removed');
+                            }
                         }
                     });
                 });
-
-                // $('.js-customer-deleted-name').text('John Smith');
-                // $('.customer-deleted-alert').show().addClass('in');
             };
 
             var closeGlobalAlert = function(e) {
@@ -230,7 +235,7 @@
                         var $checkbox = $(this);
                         $checkbox.checkbox();
                     });
-                    checkItemActions()
+                    checkItemActions();
                 }, 100);
             };
 
@@ -241,7 +246,8 @@
                 checkItemActions();
             };
 
-            var $scrollFlex = $('.js-list-flexible'),
+            var $tablesWrapper = $('.tables-wrapper'),
+                $scrollFlex = $('.js-list-flexible'),
                 $scrollFixed = $('.js-list-fixed');
 
             var scrollList = function() {
@@ -272,17 +278,41 @@
                 lazyScrollList();
             };
 
+            var $doc = $(document),
+                $win = $(window);
+
+            var $customersPageContent = $('.customers-page-content'),
+                noContentHeight = $('.kn-nav').outerHeight() + $('.kn-footer').outerHeight(),
+                defaultListHeight = $scrollFlex.height(),
+                $scrollBlocks = $scrollFlex.add($scrollFixed);
+
+            var checkTableSize = function() {
+                var contentHeight = $customersPageContent.outerHeight(),
+                    contentWrapperHeight = $win.outerHeight() - noContentHeight,
+                    curentHeight = $scrollFlex.height(),
+                    diff = contentWrapperHeight - contentHeight;
+
+
+                console.log(diff);
+                console.log(curentHeight);
+                var height = curentHeight + diff;
+                if (height >= defaultListHeight) {
+                    $scrollBlocks.height(height);
+                }
+            };
+
+            var lazyCheckTableSize = _.debounce(checkTableSize, 200);
+
             // Table: Add class row selected
-            $(document).on('click', '.table .toggle-all-customers', toggleAllListCheckboxes);
-            $(document).on('toggle', '.customers-table :checkbox', checkItemActions);
-            $(document).on('click', '.js-delete-customer', deleteCustomer);
-            $(document).on('click', '.global-alert .close', closeGlobalAlert);
+            $doc.on('click', '.tables-wrapper .toggle-all-customers', toggleAllListCheckboxes);
+            $doc.on('toggle', '.customers-list :checkbox', checkItemActions);
+            $doc.on('click', '.js-delete-customer', deleteCustomer);
+            $doc.on('click', '.global-alert .close', closeGlobalAlert);
             $scrollFlex.on('scroll', scrollFlexList);
+            $win.on('resize', lazyCheckTableSize);
             // $scrollFixed.on('scroll', scrollFixedList);
 
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
-
-            window.$http = $http;
 
             var clientSlug = $('#clientSlug').text(),
                 itemsNumber = 50,
