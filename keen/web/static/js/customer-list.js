@@ -292,9 +292,6 @@
                     curentHeight = $scrollFlex.height(),
                     diff = contentWrapperHeight - contentHeight;
 
-
-                console.log(diff);
-                console.log(curentHeight);
                 var height = curentHeight + diff;
                 if (height >= defaultListHeight) {
                     $scrollBlocks.height(height);

@@ -36,10 +36,6 @@
             }
         });
 
-        $scope.initForm = function() {
-            console.log('oppa');
-        };
-
         var notify = function(text) {
             $timeout(function() {
                 $scope.alertText = text;
