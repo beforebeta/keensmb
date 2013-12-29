@@ -54,10 +54,6 @@
             }
         };
 
-        $scope.saveOnEnter = function(e, item) {
-
-        };
-
         $scope.startEditing = function(item) {
             item.tempData = angular.copy(item.text);
             item.isEditing = true;
@@ -298,7 +294,7 @@
                 var previewSlug = 'preview-'+$scope.permalink.text;
                 suService.checkFormSlug(previewSlug).then(function(res) {
                     // if (suService.formSlug) {
-                    if (true) {
+                    if (true) { // temporary solution
                         saveFormAsPreviewData(true);
                         return true;
                     }
