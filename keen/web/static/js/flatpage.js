@@ -93,4 +93,6 @@
             });
     })
     .find('.alert-error').hide();
+
+    $(".fancybox").fancybox();
 })(jQuery);
