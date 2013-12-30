@@ -1,0 +1,225 @@
+{% extends "front-page/base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+
+<div class="wrapper landing3">
+  <header class="kn-nav">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <a href="#" class="logo">
+            <img src="{% static "images/logo-small-retina.png" %}" alt="">
+          </a>
+          <div class="login">
+            <a href="#" class="btn btn-primary">Try Keen for Free!</a>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Sing in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <section class="landing-4-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <h1>Delivering Customers to Your Doorstep</h1>
+          <p class="text-center">Keen helps your local business acquire new customers and learn more about existing ones.</p>
+        </div>
+        <div class="col-xs-5">
+          <ul class="list-of-services">
+            <li>Build a rich customer database with names, email, contact and demographic information</li>
+            <li>Automatically create and send targeted promotions to customers via email and mobile.</li>
+            <li>Lets potential customers find you online and increase the size of your customer database</li>
+            <li>Easily identify your top customers and monitor the performance of your business</li>
+          </ul>
+        </div>
+        <div class="col-xs-7">
+          <span class="form-title">Try Keen Premium Free for 30 Days!</span>
+          <form action="">
+            <div class="col-xs-6 pln">
+              <div class="form-group mtm">
+                <input type="text" value="" placeholder="Your Name" class="form-control input-sm mbm">
+                <input type="text" value="" placeholder="Business Name" class="form-control input-sm mbm">
+                <input type="text" value="" placeholder="Phone Number" class="form-control input-sm mbm">
+                <input type="text" value="" placeholder="Email" class="form-control input-sm mbm">
+              </div>
+            </div>
+            <div class="col-xs-6 pln">
+              <div class="form-group mtm mbm">
+                <textarea class="form-control textarea-static-height" rows="5" placeholder="Have any question ot comments?"></textarea>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary btn-block">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="grey-label">
+    <div class="container">
+      <div class="row">
+        <h2>Features and Possbilities</h2>
+        <div class="row feauters-list">
+          <div class="col-xs-4">
+            <figure>
+              <img src="{% static "images/icons/Retina-Ready_2x.png" %}" alt="">
+            </figure>
+            <div>
+              <h5>Enhanced Customer Profiles</h5>
+              <p>Automatically analyze online and offline communication and append customer profiles with third-party data, increasing the size and quality of your customer database.</p>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <figure>
+              <img src="{% static "images/icons/Goal_2x.png" %}" alt="">
+            </figure>
+            <div>
+              <h5>Tailored Offers and Promotions</h5>
+              <p>Our proprietary technology creates personalized offers and promotions tailored to your customers’ buying preferences.</p>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <figure>
+              <img src="{% static "images/icons/Mail_2x.png" %}" alt="">
+            </figure>
+            <div>
+              <h5>Email Campaigns</h5>
+              <p>Engage with your customers over email and drive them back with targeted promotional offers.</p>
+            </div>
+          </div>
+        </div>
+        <div class="row feauters-list">
+          <div class="col-xs-4">
+            <figure>
+              <img src="{% static "images/landing3/android.png" %}" alt="">
+            </figure>
+            <div>
+              <h5>Mobile/SMS Campaigns</h5>
+              <p>Motivate your customer base to visit your store by sending alerts and offers over SMS.</p>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <figure>
+              <img src="{% static "images/icons/Chat_2x.png" %}" alt="">
+            </figure>
+            <div>
+              <h5>Social Engagement</h5>
+              <p>Improve your social presence by engaging with facebook fans, yelp reviewers and twitter followers.</p>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <figure>
+              <img src="{% static "images/icons/Graph_2x.png" %}" alt="">
+            </figure>
+            <div>
+              <h5>Performance Analysis</h5>
+              <p>Identify your best customers and evaluate the performance of your promotional campaigns.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="row">
+        <h2>Plans and Pricing</h2>
+        <div class="col-xs-3 col-sm-offset-1 pricing-window">
+          <div class="danger">
+            <span class="label-danger">Basic</span>
+            <div>
+              <p>$ <strong>99</strong>/mo</p>
+              <small><strong>0-1000</strong> Customers*</small>
+              <ul>
+                <li>Up to <strong>100 SMS Alerts</strong></li>
+                <li>Unlimited Email Campaigns</li>
+                <li>Automated Promotion Creation &amp; Targeting</li>
+                <li>Social Sharing Enabled</li>
+                <li>Performance Analytics</li>
+                <li>Cloud-based CRM Database</li>
+              </ul>
+              <a href="#" class="btn btn-primary btn-sm">Select</a>
+            </div>
+          </div>
+          <small class="small">+ $0.40 per Customer Profile Data Enhancement (this includes email, phone, and demographic &amp; household data append)*</small>
+        </div>
+        <div class="col-xs-4 pricing-window active">
+          <div class="primary">
+            <div class="most-popular">
+              <img src="{% static "images/icons/Medal_2x.png" %}" alt="">
+              <i>Most Popular!</i>
+            </div>
+            <span class="label-primary">Premium</span>
+            <div>
+              <p>$ <strong>149</strong>/mo</p>
+              <small><strong>1000-5000</strong> Customers*</small>
+              <ul>
+                <li>Up to <strong>1000 SMS Alerts</strong></li>
+                <li>Unlimited Email Campaigns</li>
+                <li>Automated Promotion Creation &amp; Targeting</li>
+                <li>Social Sharing Enabled</li>
+                <li>Performance Analytics</li>
+                <li>Cloud-based CRM Database</li>
+              </ul>
+              <a href="#" class="btn btn-primary btn-sm">Select</a>
+            </div>
+          </div>
+          <small class="small">+ $0.35 per Customer Profile Data Enhancement (this includes email, phone, and demographic &amp; household data append)*</small>
+        </div>
+        <div class="col-xs-3 pricing-window">
+          <div class="info">
+            <span class="label-info">Basic</span>
+            <div>
+              <p>$ <strong>199</strong>/mo</p>
+              <small><strong>5000 or more</strong> Customers*</small>
+              <ul>
+                <li>Up to <strong>3000 SMS Alerts</strong></li>
+                <li>Unlimited Email Campaigns</li>
+                <li>Automated Promotion Creation &amp; Targeting</li>
+                <li>Social Sharing Enabled</li>
+                <li>Performance Analytics</li>
+                <li>Cloud-based CRM Database</li>
+              </ul>
+              <a href="#" class="btn btn-primary btn-sm">Select</a>
+            </div>
+          </div>
+          <small class="small">+ $0.30 per Customer Profile Data Enhancement (this includes email, phone, and demographic &amp; household data append)*</small>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="push-footer"></div>
+</div>
+<footer class="bottom-menu landing3-footer kn-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-1 landing3-logo-footer">
+        <a href="#">
+          <img src="{% static "images/logo-small-retina.png" %}" alt="Keen">
+        </a>
+      </div>
+      <div class="col-xs-5 col-sm-offset-2">
+        <ul class="list-justify">
+          <li>
+          <a href="#">Terms of use</a>
+          </li>
+          <li>
+          <a href="#">Privacy Policy</a>
+          </li>
+          <li>
+          <a href="#">Contact Us</a>
+          </li>
+        </ul>
+        <div class='text-center small text-muted'>
+          <small>Copyright Digital First Ventures. All Rights Reserved.</small>
+        </div>
+      </div>
+      <div class="col-xs-3 col-sm-offset-1">
+        <a href="#" class="btn btn-primary pull-right">Try Keen for Free!</a>
+      </div>
+    </div>
+  </div>
+</footer>
+{% include "front-page/login.html" %}
+{% endblock %}
