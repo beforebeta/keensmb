@@ -71,9 +71,9 @@ def request_free_trial(request):
         if 'visitor' in request.session:
             try:
                 trial_request.visitor = Visitor.objects.get(
-                    uuid=request.session['visitor'])
+                    request.session['visitor'])
             except Visitor.DoesNotExist:
-                logger.error('Visitor with UUID=%s does not exist' % visitor_uuid)
+                logger.error('Visitor does not exist')
 
         try:
             trial_request.save()

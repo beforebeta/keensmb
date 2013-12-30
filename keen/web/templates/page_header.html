@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-xs-12">
 
-        <div class="navbar-header">
+        <div class="navbar-header mrl">
           <a href="#fakelink" class="navbar-brand">
             <img src="{% static "images/logo-small-retina.png" %}" alt="Keen">
           </a>
@@ -20,6 +20,7 @@
               <ul>
                 <li><a href="{% url "client_customers" %}">Customer Profiles</a></li>
                 <li><a href="{% url "client_signup_form_list" %}">Signup Forms</a></li>
+                <li><a href="{% url "signup_form_create" %}">Create New Form</a></li>
               </ul>
             </li>
             <li><a href="{% url "business_profile" %}">Business Profile</a></li>

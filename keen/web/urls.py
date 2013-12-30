@@ -56,7 +56,7 @@ urlpatterns = patterns(
     url(r'^(?P<client_slug>[\w-]+)/(?P<form_slug>[\w-]+)$', 'customer.signup_view', name='customer_signup'),
 
     url(r'^enrichment-confirm-customer$', TemplateView.as_view(template_name='client/enrichment/enrichment-confirm-customer.html'), name='enrichment-confirm-customer'),
-    url(r'^enrichment-choose-fiels$', TemplateView.as_view(template_name='client/enrichment/enrichment-choose-fiels.html'), name='enrichment-choose-fiels'),
+    url(r'^enrichment-choose-fields$', TemplateView.as_view(template_name='client/enrichment/enrichment-choose-fields.html'), name='enrichment-choose-fiels'),
     url(r'^enrichment-confirm-purchase$', TemplateView.as_view(template_name='client/enrichment/enrichment-confirm-purchase.html'), name='enrichment-confirm-purchase'),
 
     url(r'^landing3$', TemplateView.as_view(template_name='front-page/landing3.html'), name='landing3.html'),

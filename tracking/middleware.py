@@ -1,6 +1,5 @@
 import re
 import logging
-from uuid import uuid4
 from datetime import datetime
 
 from django.db import DatabaseError
@@ -12,59 +11,30 @@ from tracking.models import Visitor
 logger = logging.getLogger(__name__)
 
 SESSION_VAR_NAME = 'visitor'
-COOKIE_NAME = 'keensmbvisitor'
 
 
 class VisitorMiddleware(object):
     def process_request(self, request):
         if SESSION_VAR_NAME not in request.session:
-            # We use separate cookie to store visitor UUID
-            if COOKIE_NAME in request.COOKIES:
-                visitor_uuid = request.COOKIES[COOKIE_NAME]
-            else:
-                visitor_uuid = str(uuid4())
-
-            visitor = get_visitor(visitor_uuid, request)
-
-            request.session[SESSION_VAR_NAME] = visitor.uuid
+            visitor = get_visitor(request)
+            request.session[SESSION_VAR_NAME] = visitor.id
             request.session.modified = True
 
-    def process_response(self, request, response):
-        """Session life time is too short so we use separate cookie with
-        much longer max_age to store visitor UUID
-        """
-        visitor = request.session.get(SESSION_VAR_NAME)
-        if visitor:
-            response.set_cookie(COOKIE_NAME, visitor, max_age=63072000)
-        return response
 
-
-def get_visitor(visitor_uuid, request):
+def get_visitor(request):
     """Extract visitor tracking information from Google Analytics cookie and
     use that to create Visitor object.
     """
     current_time = now()
 
-    visitor, created = Visitor.objects.get_or_create(
-        uuid=visitor_uuid,
-        defaults={
-            'ip_address': request.META.get('REMOTE_ADDR', ''),
-            'user_agent': request.META.get('HTTP_USER_AGENT', ''),
-            'referrer': request.META.get('HTTP_REFERER', ''),
-            'first_visit': current_time,
-            'last_visit': current_time,
-            'visits': 1,
-        },
+    visitor = Visitor(
+        ip_address=request.META.get('REMOTE_ADDR', ''),
+        user_agent=request.META.get('HTTP_USER_AGENT', ''),
+        referrer=request.META.get('HTTP_REFERER', ''),
+        first_visit=current_time,
+        last_visit=current_time,
+        visits=1,
     )
-
-    # When present, GA cookies will override this
-    if created:
-        visitor.visits = 1
-        visitor.first_visit = current_time
-    else:
-        visitor.visits += 1
-
-    visitor.last_visit = current_time
 
     # extract visits information from GA cookies
     cookie = request.COOKIES.get('__utma')

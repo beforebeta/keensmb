@@ -9,7 +9,7 @@
   <section class='clearfix singup-overview'>
     <div class="mtl pbm singup-title">
        <h1 class='page-title mtn pull-left'>Signup Forms</h1>
-      <a href="/signup-form/create" class="btn btn btn-sm btn-embossed btn-primary pull-right">
+      <a href="{% url 'signup_form_create' %}" class="btn btn btn-sm btn-embossed btn-primary pull-right">
         <span class="mrl">Create New Form</span>
         <i class="fui-plus mll"></i>
       </a>
@@ -24,8 +24,8 @@
       </div>
       <div class="col-xs-5 ptl pll mtl singup-block-middle">
         <span class="text-muted small pull-left mlm mrm">{{ form.total_signups }} Total Subscribers</span>
-        <span class="text-muted small pull-left mll">{{ form.total_visits }} Total Visits</span>
-        <span class="text-muted small pull-left mll">{{ form.total_signups }} Total Unique Visits</span>
+        <span class="text-muted small pull-left mll">{{ form.visits }} Total Visits</span>
+        <span class="text-muted small pull-left mll">{{ form.unique_visits }} Total Unique Visits</span>
       </div>
       <div class="col-xs-3 ptm prn pbm singup-block-right">
         <div class="singup-shadow pull-right">

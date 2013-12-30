@@ -1,11 +1,8 @@
-from uuid import uuid4
-
 from django.db import models
 
 
 class Visitor(models.Model):
 
-    uuid = models.CharField(max_length=36, unique=True, db_index=True)
     ip_address = models.IPAddressField()
     referrer = models.CharField(max_length=255, null=True)
     user_agent = models.CharField(max_length=255)

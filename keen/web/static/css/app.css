@@ -19,7 +19,7 @@ html, body {
   height: auto !important;
   height: 100%;
   box-sizing: border-box;
-  padding-top: 72px; /* spacing for fixed header */
+  padding-top: 70px; /* spacing for fixed header */
 }
 .container {
   width: 1170px;
@@ -89,11 +89,11 @@ h6 {font-size: 22px;}
 }
 
 .kn-nav {
+  height: 70px;
   margin-bottom: 0;
   background: #446cb2;
   border-radius: 0;
-  /*border-bottom: 1px solid #6b8bc2;*/
-  border-bottom: 1px solid #446cb2;
+  /*border-bottom: 1px solid #446cb2;*/
 }
 
 .kn-nav.navbar > .container .navbar-brand {
@@ -204,9 +204,9 @@ section {
   margin: 0;
   padding: 0;
 }
-.bottom-menu a {
-  font-weight: bold;
-}
+/*.bottom-menu a {*/
+  /*font-weight: bold;*/
+/*}*/
 
 
 .summary-block {
@@ -317,12 +317,12 @@ header.navbar .navbar-nav > li:hover > a {
 
 .global-alert {
   position: fixed;
-  top: 80px;
+  top: 70px;
   left: 0;
   right: 0;
   padding: 0;
   border: none;
-  z-index: 9999;
+  z-index: 9;
 }
 .global-alert.dialog-danger {
   border-bottom: 1px solid #fadbd8;
@@ -337,9 +337,12 @@ header.navbar .navbar-nav > li:hover > a {
   border: 1px solid #ebeff0 !important;
 }
 
+.tables-wrapper .checkbox.no-label {
+  margin-top: -2px;
+}
 .tables-wrapper .cell-content {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 120px;
   height: 18px;
 }
@@ -372,7 +375,7 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .tables-wrapper th .dropdown {
   position: absolute;
-  top: 2px;
+  top: 0;
   right: 2px;
   z-index: 9;
 }
@@ -386,6 +389,7 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .tables-wrapper th .dropdown-menu a {
   color: #fff;
+  border-radius: 0;
 }
 .tables-wrapper th .dropdown-menu a:hover {
   background-color: #1abc9c;
@@ -404,20 +408,21 @@ header.navbar .navbar-nav > li:hover > a {
     width: auto;
 }
 .customers-list-fixed {
-  position: absolute;
+  /*position: absolute;
   left: 0;
-  top: 0;
+  top: 0;*/
+  float: left;
+  margin-left: -1px;
 }
 .customers-list-fixed  .customers-list {
   overflow: hidden;
   /*padding-right: 15px;*/
 }
 .customers-list-flex {
-  position: absolute;
+  /*position: absolute;
   left: 484px;
   top: 0;
-  width: 436px;
-  height: 454px;
+  width: 436px;*/
   overflow-x: auto;
   overflow-y: hidden;
   background-color: #fff;
@@ -433,6 +438,10 @@ header.navbar .navbar-nav > li:hover > a {
 .customers-list-flex .customers-table tr > th:last-child .dropdown-menu {
   right: 0;
   left: auto;
+}
+.customers-list-flex .customers-table tr > th:first-child .dropdown-menu {
+  left: 0;
+  right: auto;
 }
 .table.customers-table thead tr th:hover,
 .table.customers-table thead tr th.active {
@@ -489,7 +498,7 @@ header.navbar .navbar-nav > li:hover > a {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 9px 4px;
+  padding: 7px 4px;
   border:1px dashed #ebeff0;
   background: #fff;
   -webkit-transition: all .2s;
@@ -501,7 +510,7 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .tables-wrapper .new-field:hover {
   /*border:1px dashed #34495e;*/
-  background-color: #f8f8f8;
+  /*background-color: #f8f8f8;*/
   cursor: pointer;
   z-index: 999;
   box-shadow: -1px 0 0 rgba(0,0,0,.2);
@@ -551,13 +560,14 @@ header.navbar .navbar-nav > li:hover > a {
 }
 .tables-wrapper {
   position: relative;
-  height: 455px;
-  padding-bottom: 5px;
   margin-bottom: 5px;
+  border: 1px solid #ebeff0;
+  border-top: none;
 }
 .customers-list {
-  height: 408px;
   display: inline-block;
+  height: 396px;
+  margin-bottom: -10px;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -805,14 +815,14 @@ header.navbar .navbar-nav > li:hover > a {
 .su-form-header,
 .su-form-text {
   height: auto;
+  word-wrap: break-word;
 }
-.editing .su-form-header,
-.editing .su-form-text {
+.editing > .su-form-header,
+.editing > .su-form-text {
   background-color: #fff;
   background-color: rgba(255,255,255,.8);
   text-shadow: 1px 1px rgba(0,0,0,0.5);
 }
-
 
 .su-form-wrapper .photo-actions {
   position: absolute;
@@ -885,17 +895,6 @@ header.navbar .navbar-nav > li:hover > a {
 .search-form-item .navbar-form {
   width: 100%;
   max-width: 350px;
-}
-
-
-header .navbar-header {
-  float: left;
-  width: 11%;
-}
-
-header nav {
-  float: left;
-  min-width: 89%;
 }
 
 header .customer-top-menu,

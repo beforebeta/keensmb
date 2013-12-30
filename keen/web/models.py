@@ -44,6 +44,8 @@ class SignupForm(Timestamps):
     status = models.CharField(max_length=32, choices=STATUS_NAMES,
                               default=STATUS_NAMES.draft)
     data = JSONField()
+    visits = models.IntegerField(default=0)
+    visitors = models.ManyToManyField(Visitor, related_name='signup_forms')
 
     class Meta:
         unique_together = ('client', 'slug')
