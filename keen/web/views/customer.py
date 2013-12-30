@@ -1,6 +1,7 @@
 import logging
 
 from django.db import DatabaseError
+from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 
@@ -17,6 +18,18 @@ logger = logging.getLogger(__name__)
 def signup_view(request, client_slug, form_slug):
     client = get_object_or_404(Client, slug=client_slug)
     signup_form = get_object_or_404(SignupForm, client=client, slug=form_slug)
+    try:
+        visitor = Visitor.objects.get(pk=request.session.get('visitor'))
+    except Visitor.DoesNotExist:
+        logger.warn('Visitor does not exist')
+    else:
+        try:
+            signup_form.visits = F('visits') + 1
+            signup_form.visitors.add(visitor)
+            signup_form.save()
+        except DatabaseError:
+            logger.exception('Failed to update SignupForm visitor')
+
     context = {
         'client': client,
         'form_data': signup_form.data,
@@ -30,10 +43,9 @@ def signup_view(request, client_slug, form_slug):
             if 'visitor' in request.session:
                 try:
                     customer.visitor = Visitor.objects.get(
-                        uuid=request.session['visitor'])
+                        request.session['visitor'])
                 except Visitor.DoesNotExist:
-                    logger.warn('Failed to locate Visitor wirh UUID=%s' %
-                                request.session['visitor'])
+                    logger.warn('Failed to locate Visitor')
 
             customer.source = CustomerSource.objects.filter(
                 ref_source='signup', ref_id=signup_form.id).first()

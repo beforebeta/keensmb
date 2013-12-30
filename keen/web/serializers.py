@@ -105,12 +105,13 @@ class SignupFormSerializer(DynamicSerializer):
     url = SerializerMethodField('get_url')
     edit_url = SerializerMethodField('get_edit_url')
     total_signups = SerializerMethodField('get_total_signups')
-    total_visits = SerializerMethodField('get_total_visits')
+#    total_visits = SerializerMethodField('get_total_visits')
+    unique_visits = SerializerMethodField('get_unique_visits')
 
     class Meta:
         model = SignupForm
         fields = ('slug', 'status', 'data', 'created', 'modified',
-                  'url', 'edit_url', 'total_signups', 'total_visits')
+                  'url', 'edit_url', 'total_signups', 'visits', 'unique_visits')
 
     def get_url(self, form):
         return reverse('customer_signup', kwargs=dict(
@@ -126,4 +127,7 @@ class SignupFormSerializer(DynamicSerializer):
     def get_total_visits(self, form):
         return Customer.objects.filter(
             source__ref_source='signup', source__ref_id=form.id).aggregate(
-                Sum('visitor__visits'))['visitor__visits__sum']
+                Sum('visitor__visits'))['visitor__visits__sum'] or 0
+
+    def get_unique_visits(self, form):
+        return form.visitors.count()
