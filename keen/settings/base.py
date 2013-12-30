@@ -75,7 +75,7 @@ PASSWORD_HASHERS = (
 
 # Sessions
 #
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 86400 * 365
 
 # By default, be at least somewhat secure with our session cookies.
 SESSION_COOKIE_HTTPONLY = True
