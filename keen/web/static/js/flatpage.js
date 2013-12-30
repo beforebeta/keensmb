@@ -53,7 +53,7 @@
         $("#signInForm input[name='email']").focus();
     });
 
-    $('#trykeenform').on('submit', function(event) {
+    $('.trykeenform').on('submit', function(event) {
         event.preventDefault();
 
         var $form = $(this),

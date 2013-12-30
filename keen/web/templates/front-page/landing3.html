@@ -34,25 +34,28 @@
             <li>Easily identify your top customers and monitor the performance of your business</li>
           </ul>
         </div>
-        <div class="col-xs-7">
-          <span class="form-title">Try Keen Premium Free for 30 Days!</span>
-          <form action="">
+        <form action="{% url "request-free-trial" %}" method="post" class="trykeenform">
+          <div class="col-xs-7">
+            <span class="form-title">Try Keen Premium Free for 30 Days!</span>
             <div class="col-xs-6 pln">
               <div class="form-group mtm">
-                <input type="text" value="" placeholder="Your Name" class="form-control input-sm mbm">
-                <input type="text" value="" placeholder="Business Name" class="form-control input-sm mbm">
-                <input type="text" value="" placeholder="Phone Number" class="form-control input-sm mbm">
-                <input type="text" value="" placeholder="Email" class="form-control input-sm mbm">
+                <input type="text" name="name" value="" placeholder="Your Name" class="form-control input-sm mbm">
+                <input type="text" name="business" value="" placeholder="Business Name" class="form-control input-sm mbm">
+                <input type="text" name="phone" value="" placeholder="Phone Number" class="form-control input-sm mbm">
+                <input type="text" name="email" value="" placeholder="Email" class="form-control input-sm mbm">
               </div>
             </div>
             <div class="col-xs-6 pln">
               <div class="form-group mtm mbm">
-                <textarea class="form-control textarea-static-height" rows="5" placeholder="Have any question ot comments?"></textarea>
+                <textarea name="comments" class="form-control textarea-static-height" rows="5" placeholder="Have any question ot comments?"></textarea>
               </div>
-              <button type="button" class="btn btn-sm btn-primary btn-block">Submit</button>
+              <button type="submit" class="btn btn-sm btn-primary btn-block">Submit</button>
             </div>
-          </form>
-        </div>
+          </div>
+          <div class="col-xs-7">
+            <div class="alert alert-error"></div>
+          </div>
+        </form>
       </div>
     </div>
   </section>
