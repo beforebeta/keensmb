@@ -71,7 +71,7 @@ def request_free_trial(request):
         if 'visitor' in request.session:
             try:
                 trial_request.visitor = Visitor.objects.get(
-                    request.session['visitor'])
+                    pk=request.session['visitor'])
             except Visitor.DoesNotExist:
                 logger.error('Visitor does not exist')
 
