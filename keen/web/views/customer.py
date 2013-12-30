@@ -43,7 +43,7 @@ def signup_view(request, client_slug, form_slug):
             if 'visitor' in request.session:
                 try:
                     customer.visitor = Visitor.objects.get(
-                        request.session['visitor'])
+                        pk=request.session['visitor'])
                 except Visitor.DoesNotExist:
                     logger.warn('Failed to locate Visitor')
 
