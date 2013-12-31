@@ -1,8 +1,12 @@
+import logging
 from itertools import cycle
 
 from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
+
+
+logger = logging.getLogger(__name__)
 
 
 rotate_templates = cycle((
@@ -21,6 +25,7 @@ def landing_view(request):
     template = request.session.get('landing_page')
     if template is None:
         template = rotate_templates.next()
+        logger.debug('New landing page selected {0}'.format(template))
         request.session['landing_page'] = template
 
     return render(request, template)
