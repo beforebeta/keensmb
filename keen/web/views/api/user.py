@@ -68,6 +68,7 @@ def request_free_trial(request):
     form = TrialRequestForm(request.DATA)
     if form.is_valid():
         trial_request = TrialRequest(**form.cleaned_data)
+        trial_request.source = request.session.get('landing_page')
         if 'visitor' in request.session:
             try:
                 trial_request.visitor = Visitor.objects.get(
