@@ -165,6 +165,10 @@ h6 {font-size: 22px;}
   color: #446cb2;
 }
 
+.navbar-header {
+  float: left;
+}
+
 
 /* Content */
 
@@ -1092,4 +1096,15 @@ header nav .customer-info-menu li ul {
 
 footer .footer-button-hover .btn:hover {
   color: #fff;
+}
+
+
+/*  for singup_form_list.html */
+
+.btn-new-profile {
+  color: #1abc9c;
+}
+
+.btn-new-profile:hover {
+  color: #48c9b0;
 }

@@ -1,3 +1,5 @@
+/* landing3 start */
+
 .landing3 header .logo {
 	display: block;
 	margin-top: 15px;
@@ -222,7 +224,7 @@
 	max-width: 248px;
 	margin: 0 auto;
 }
- 
+
 .landing3 .pricing-window.active div small,
 .landing3 .pricing-window.active ul li {
 	font-size: 14px;
@@ -236,7 +238,7 @@
 
 .landing3 .pricing-window.active > div > div {
 	padding-bottom: 20px;
-} 
+}
 
 
 /*  FOOTER  */
@@ -268,4 +270,23 @@ footer.landing3-footer {
 
 .landing3-footer ul li a {
 	font-size: 14px;
+}
+
+/* landing3 end */
+
+
+/* landing4 start */
+
+.landing-4-section {
+  background: url('../images/exaple-image-new0.jpg') left top no-repeat;
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+.landing-4-section h1 + .text-center {
+  color: #fff;
+}
+
+.landing-4-section .list-of-services li {
+  color: #fff;
 }
