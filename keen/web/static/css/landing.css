@@ -382,10 +382,17 @@ textarea.textarea-static-height {
 
 /* landing page 2 */
 
-.wrapper {
+.wrapper,
+.wrapper > .container,
+.wrapper > .container > .row,
+.wrapper > .container > .row > section {
   min-height: 100%;
-  height: auto !important;
+  /*height: auto !important;*/
   height: 100%;
+}
+
+.wrapper > .container {
+  margin-top: -85px;
 }
 
 .kn-nav {
@@ -423,9 +430,13 @@ textarea.textarea-static-height {
 }
 
 .landing2 .white-label {
+  position: absolute;
+  right: 0;
+  top: 85px;
+  bottom: 0;
+  padding: 0 20px;
   background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 0 20px;
 }
 
 .landing2 .container {
@@ -499,17 +510,16 @@ textarea.textarea-static-height {
 }
 
 .landing2 .left-block-image img {
+  position: absolute;
+  bottom: 115px;
   border: 1px solid #2b3d4f;
   border-radius: 10px;
   box-shadow: -6px 6px 0 2px rgba(0,0,0,.35);
-  position: absolute;
-  bottom: 30px;
-  left: -20px;
 }
 
 /* Footer */
 .push-footer {
-  height: 85px;
+  height: 13px;
 }
 
 .kn-footer {
@@ -550,5 +560,18 @@ textarea.textarea-static-height {
 }
 
 .logo-footer img {
-  max-width: 100%;
+  max-width: 80px;
+}
+
+
+/* for forgot-password-link */
+
+.forgot-password-link {
+  font-size: 85%;
+  padding-right: 37px;
+  color: #1abc9c ;
+}
+
+.forgot-password-link:hover {
+  color: #48c9b0;
 }

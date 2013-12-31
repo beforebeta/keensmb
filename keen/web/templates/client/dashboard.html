@@ -75,7 +75,7 @@
                           {% endif %}
                     </time>
                     <div class="progress">
-                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div> <div class="total-text">Total Sent <strong>{{ promotion.analytics.total_sent }}</strong></div>
+                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Redeems</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
                   </article>
                     {% endfor %}
@@ -93,8 +93,8 @@
                 {% for promotion in dashboard.get_top_promotions %}
                   <article class="col-sx-12">
                     <strong>{{ promotion.name }}</strong>
-                    <div class="progress mbn">
-                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div> <div class="total-text">Total Sent <strong>{{ promotion.analytics.total_sent }}</strong></div>
+                    <div class="progress mbm">
+                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Redeems</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
                   </article>
                 {% endfor %}

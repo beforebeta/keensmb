@@ -110,7 +110,7 @@
 }
 
 .dashboard .kn-section-header h6{
-  font-size:20px;
+  font-size: 18px;
 }
 
 .dashboard .kn-section-content {
@@ -126,7 +126,7 @@
 }
 
 .dashboard article h6 {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: bold;
   float: left;
 }
@@ -134,29 +134,39 @@
 .dashboard article h6 + time {
   float: right;
   line-height: normal;
+  font-size: 70%;
+  line-height: 2.4;
 }
 
 .dashboard article p {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 17px;
 }
 
 .dashboard .progress {
   position: relative;
   height: 32px;
-  padding-right: 10px;
+  padding-right: 15px;
   line-height: 32px;
-  font-size: 14px;
-  border-radius: 0 20px 20px 0;
-  -moz-border-radius:  0 20px 20px 0;
-  -webkit-border-radius:  0 20px 20px 0;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
   text-align: right;
+}
+
+.dashboard .progress span {
+  visibility: hidden;
+  font-size: 12px;
+}
+
+.dashboard .progress:hover span {
+  visibility: visible;
 }
 
 .dashboard .progress strong {
   display: inline-block;
   margin-top: -3px;
-  font-size: 22px;
+  font-size: 20px;
   vertical-align: middle;
 }
 
@@ -165,7 +175,7 @@
 }
 
 .dashboard .progress .progress-bar {
-  padding-left: 10px;
+  padding-left: 15px;
   line-height: 32px;
   text-align: left;
   font-size: 14px;
@@ -178,7 +188,7 @@
 
 .dashboard .progress .total-text {
   position: absolute;
-  right: 10px;
+  right: 15px;
   top: 0;
 }
 

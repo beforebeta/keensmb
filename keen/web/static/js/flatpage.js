@@ -95,4 +95,11 @@
     .find('.alert-error').hide();
 
     $(".fancybox").fancybox();
+
+    $('input[name="email"').on('blur', function() {
+        if($(this).value === undefined) {
+            $(this).parent().addClass('has-error');
+        }
+    });
+
 })(jQuery);
