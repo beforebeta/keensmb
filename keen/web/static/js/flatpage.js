@@ -83,6 +83,7 @@
             })
             .done(function(response) {
                 if (response.success) {
+                    window.mixpanel && window.mixpanel.track("trykeensubmit");
                     $('#tryFree').modal('hide');
                     $('#tryFreeSuccess').modal('show');
                 } else {

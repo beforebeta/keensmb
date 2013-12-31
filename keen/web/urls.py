@@ -40,7 +40,6 @@ urlpatterns = patterns(
     'keen.web.views',
     url(r'^$', 'landing.landing_view', name='home'),
     url(r'^legal$', TemplateView.as_view(template_name='front-page/legal.html'), name='legal'),
-    url(r'^landing$', TemplateView.as_view(template_name='front-page/landing2.html'), name='home'),
     url(r'^dashboard$', 'client.dashboard', name='client_dashboard'),
     url(r'^promotions$', 'client.promotions', name='client_promotions'),
     url(r'^promotions/create$', 'client.create_promotion', name='client_create_promotion'),
