@@ -101,3 +101,4 @@ class TrialRequest(Timestamps):
     question = models.TextField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
     visitor = models.ForeignKey(Visitor, null=True)
+    source = models.CharField(max_length=255, null=True, blank=True)
