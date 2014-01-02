@@ -44,6 +44,8 @@ class SignupForm(Timestamps):
     status = models.CharField(max_length=32, choices=STATUS_NAMES,
                               default=STATUS_NAMES.draft)
     data = JSONField()
+    visits = models.IntegerField(default=0)
+    visitors = models.ManyToManyField(Visitor, related_name='signup_forms')
 
     class Meta:
         unique_together = ('client', 'slug')
@@ -99,6 +101,7 @@ class TrialRequest(Timestamps):
     question = models.TextField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
     visitor = models.ForeignKey(Visitor, null=True)
+    source = models.CharField(max_length=255, null=True, blank=True)
 
 class HelpText(Timestamps):
     group = models.CharField(max_length=255, null=True, blank=True)

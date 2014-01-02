@@ -12,6 +12,8 @@ djangorestframework
 django-jsonfield
 django-localflavor
 
+newrelic
+
 # Templates
 django_compressor
 

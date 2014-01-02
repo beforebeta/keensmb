@@ -53,7 +53,7 @@
         $("#signInForm input[name='email']").focus();
     });
 
-    $('#trykeenform').on('submit', function(event) {
+    $('.trykeenform').on('submit', function(event) {
         event.preventDefault();
 
         var $form = $(this),
@@ -83,6 +83,7 @@
             })
             .done(function(response) {
                 if (response.success) {
+                    window.mixpanel && window.mixpanel.track("trykeensubmit");
                     $('#tryFree').modal('hide');
                     $('#tryFreeSuccess').modal('show');
                 } else {
@@ -93,4 +94,13 @@
             });
     })
     .find('.alert-error').hide();
+
+    $(".fancybox").fancybox();
+
+    $('input[name="email"').on('blur', function() {
+        if($(this).value === undefined) {
+            $(this).parent().addClass('has-error');
+        }
+    });
+
 })(jQuery);

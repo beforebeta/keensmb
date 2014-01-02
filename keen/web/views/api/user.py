@@ -68,12 +68,13 @@ def request_free_trial(request):
     form = TrialRequestForm(request.DATA)
     if form.is_valid():
         trial_request = TrialRequest(**form.cleaned_data)
+        trial_request.source = request.session.get('landing_page')
         if 'visitor' in request.session:
             try:
                 trial_request.visitor = Visitor.objects.get(
-                    uuid=request.session['visitor'])
+                    pk=request.session['visitor'])
             except Visitor.DoesNotExist:
-                logger.error('Visitor with UUID=%s does not exist' % visitor_uuid)
+                logger.error('Visitor does not exist')
 
         try:
             trial_request.save()

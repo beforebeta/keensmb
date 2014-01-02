@@ -265,7 +265,13 @@ class SignupFormList(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         form, created = SignupForm.objects.get_or_create(client=client, slug=slug)
-        if not created:
+        if created:
+            CustomerSource.objects.get_or_create(
+                client=client, slug=slug, defaults={
+                    'ref_source': 'submit',
+                    'ref_id': form.id,
+                })
+        else:
             logger.error('Form with slug %s already exists' % slug)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

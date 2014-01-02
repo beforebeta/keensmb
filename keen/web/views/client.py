@@ -78,7 +78,7 @@ def customers(request):
         'new_signups': 0,
     }
 
-    return render(request, 'client/customers.html', context)
+    return render(request, 'client/customers/customer_profile_list.html', context)
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -105,7 +105,7 @@ def signup_form_list(request):
         'forms': SignupFormSerializer(forms, many=True).data,
     }
 
-    return render(request, 'client/signup-form-list.html', context)
+    return render(request, 'client/signup_form/signup_form_list.html', context)
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
@@ -116,7 +116,7 @@ def signup_form_create(request):
     context = {
         'client': client,
     }
-    return render(request, 'client/signup-form-create.html', context)
+    return render(request, 'client/signup_form/signup_form_create.html', context)
 
 
 @ensure_csrf_cookie
@@ -130,7 +130,7 @@ def signup_form_edit(request, slug):
         'client': client,
         'form': form,
     }
-    return render(request, 'client/signup-form-create.html', context)
+    return render(request, 'client/signup_form/signup_form_create.html', context)
 
 
 @ensure_csrf_cookie
