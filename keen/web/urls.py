@@ -38,7 +38,7 @@ api_urls = patterns(
 
 urlpatterns = patterns(
     'keen.web.views',
-    url(r'^$', TemplateView.as_view(template_name='front-page/index.html'), name='home'),
+    url(r'^$', 'landing.landing_view', name='home'),
     url(r'^legal$', TemplateView.as_view(template_name='front-page/legal.html'), name='legal'),
     url(r'^landing$', TemplateView.as_view(template_name='front-page/landing2.html'), name='home'),
     url(r'^dashboard$', 'client.dashboard', name='client_dashboard'),
@@ -58,10 +58,8 @@ urlpatterns = patterns(
     url(r'^enrichment-confirm-customer$', TemplateView.as_view(template_name='client/enrichment/enrichment-confirm-customer.html'), name='enrichment-confirm-customer'),
     url(r'^enrichment-choose-fields$', TemplateView.as_view(template_name='client/enrichment/enrichment-choose-fields.html'), name='enrichment-choose-fiels'),
     url(r'^enrichment-confirm-purchase$', TemplateView.as_view(template_name='client/enrichment/enrichment-confirm-purchase.html'), name='enrichment-confirm-purchase'),
-
     url(r'^landing3$', TemplateView.as_view(template_name='front-page/landing3.html'), name='landing3.html'),
 
     url(r'^landing4$', TemplateView.as_view(template_name='front-page/landing4.html'), name='landing4.html'),
-
     url(r'^email_template$', 'client.email_template')
 )
