@@ -126,7 +126,7 @@ def version():
 @task
 def uwsgi_start():
     with virtualenv():
-        run('uwsgi --ini conf/uwsgi/%(profile)s.ini --pidfile %(pidfile)s' % env)
+        run('NEW_RELIC_CONFIG_FILE=%(project_dir)s/newrelic.ini newrelic-admin run-program uwsgi --ini conf/uwsgi/%(profile)s.ini --pidfile %(pidfile)s' % env)
 
 
 @task
