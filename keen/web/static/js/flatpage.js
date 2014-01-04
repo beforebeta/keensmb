@@ -96,9 +96,12 @@
 
     $(".fancybox").fancybox();
 
-    $('input[name="email"').on('blur', function() {
-        if($(this).value === undefined) {
+    $('input[name="email"]').on('blur', function() {
+        if(!$(this).val()) {
             $(this).parent().addClass('has-error');
+        }
+        else {
+            $(this).parent().removeClass('has-error');
         }
     });
 
