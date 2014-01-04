@@ -1,4 +1,5 @@
 import logging
+from datetime import date, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, render_to_response
@@ -56,7 +57,7 @@ def customers(request):
     context['summary'] = {
         'total_customers': q.count(),
         'redeemers': 0,
-        'new_signups': 0,
+        'new_signups': q.filter(created__gt=date.today() - timedelta(days=30)).count(),
     }
 
     return render(request, 'client/customers/customer_profile_list.html', context)
