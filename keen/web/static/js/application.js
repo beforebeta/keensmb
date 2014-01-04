@@ -161,7 +161,26 @@ String.prototype.repeat = function(num) {
     window.prettyPrint && prettyPrint();
   });
 
-    $(".select2").select2();
+  $(".select2").select2();
 
+    $('.enrichment-checkbox-container label').on('click', function(e){
+        var $innerText = e.currentTarget.innerText;
+
+        if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
+            $(this).addClass('checked disabled');
+            $('.enrichment-estimated-price .kn-section-content .unselect').hide();
+            $('.enrichment-estimated-price .kn-section-content').append('<button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">' + $innerText + '</span></button>');
+
+            $('.enrichment-estimated-price .kn-section-content button i').on('click', function(){
+                $(this).parent('button').remove();
+                $('.enrichment-checkbox-container label').is($innerText, function() {
+                    $(this).removeClass('checked disabled');
+                });
+            });
+        }
+        else {
+            $(this).on('click', function() { return false; });
+        }
+    });
 
 })(jQuery);
