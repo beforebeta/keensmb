@@ -3,7 +3,6 @@
 
 {% block main %}
 
-
 		<nav class="scroll-menu">
 			<div class="row row-push-left">
 				<div class="logo col-xs-1"><img src="../../static/images/logo-small-blue.png" alt=""></div>
@@ -16,7 +15,7 @@
 					</ul>
 				</div>
 				<div class="logins-button">
-					<a href="#" class="btn btn-large btn-success mll" data-toggle="modal" data-target="#loginModal">Log In</a>
+					<a href="#" class="btn btn-large btn-success mll" data-toggle="modal" data-target="#loginModal">Sign In</a>
 					<a href="mailto:info@keensmb.com" class="btn btn-large btn-info login-link" data-toggle="modal" data-target="#tryFree"><strong>Try Keen for Free!</strong></a>
 				</div>
 			</div>
@@ -272,5 +271,7 @@
 			</div>
 		</section>
         {% endcomment %}
+
+    <script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!== typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]); b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]); mixpanel.init("e8f6cf6e8bbeeec4ea1877f99a19f27e"); mixpanel.track('landing1');</script>
 
 {% endblock %}
