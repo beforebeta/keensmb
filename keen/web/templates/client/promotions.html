@@ -14,7 +14,7 @@
       <ul class="promotions-list">
         <li class="prom-active {% if tab == 'active' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'active' %}">Active Promotions</a></li>
         <li class="prom-upcoming {% if tab == 'upcoming' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'upcoming' %}">Upcoming Promotions</a></li>
-        <li class="prom-awaiting {% if tab == 'awaiting' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'awaiting' %}">Awaiting Approval</a></li>
+        <li class="prom-awaiting {% if tab == 'awaiting' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'awaiting' %}">Draft/Awaiting Approval</a></li>
         <li class="prom-expired {% if tab == 'expired' %}active{% endif %}"><a href="{% url 'client_promotions_tab' 'expired' %}">Expired Promotions</a></li>
       </ul>
     </div>
@@ -74,7 +74,7 @@
                     <div class="progress">
                         <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div> Total Sent <strong>{{ promotion.analytics.total_sent }}</strong>
                     </div>
-                  {% endif %}
+                    {% endif %}
                   </article>
                 </div>
               </div>

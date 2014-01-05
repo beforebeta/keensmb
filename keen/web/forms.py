@@ -95,4 +95,4 @@ class PromotionForm(forms.ModelForm):
     class Meta:
         model = Promotion
         fields = ('name', 'description', 'short_code', 'valid_from', 'valid_to', 'restrictions',
-                  'additional_information', 'redemption_instructions', 'cta_text')
+                  'additional_information', 'redemption_instructions', 'cta_text', 'image_url', 'banner_url', 'mediums', 'send_schedule')

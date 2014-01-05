@@ -7,7 +7,7 @@ from django.db import transaction
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
-from keen.web.models import PageCustomerField, SignupForm, Dashboard, HelpText
+from keen.web.models import PageCustomerField, SignupForm, Dashboard
 from dateutil.relativedelta import *
 
 class Command(BaseCommand):
@@ -433,12 +433,6 @@ def _setup_sample_data():
     form.save()
     _setup_sample_data_promotions(client)
 
-def _setup_web():
-    #HelpText
-    HelpText.objects.get_or_create(group='promotion', name='name',
-        text='This is the name that will appear on your Promotion Manager and on the Promotion itself.')
-
 def setup_all():
-    #_setup_core()
-    #_setup_sample_data()
-    _setup_web()
+    _setup_core()
+    _setup_sample_data()

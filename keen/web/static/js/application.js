@@ -103,7 +103,8 @@ String.prototype.repeat = function(num) {
     // Popovers
     $('.js-popover-hover').popover({
         'trigger': 'hover',
-        'container': 'body'
+        'container': 'body',
+        html : true
     });
 
     // Trigger click elements
@@ -156,6 +157,8 @@ String.prototype.repeat = function(num) {
         e.preventDefault();
         $(this).closest('form').submit();
     });
+
+    $(".primaryfocus").focus();
 
     // make code pretty
     window.prettyPrint && prettyPrint();

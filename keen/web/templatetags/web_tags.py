@@ -1,7 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
 from keen.core.models import *
-from keen.web.models import HelpText
 
 register = template.Library()
 
@@ -23,6 +22,9 @@ def cf_display_name(value):
     except:
         return value
 
+@register.filter
+def check_required(name):
+    return "*" if name.field.required else ""
 
 @register.filter
 def promotion_help_text(name):

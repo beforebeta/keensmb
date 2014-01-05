@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -10,6 +11,7 @@ from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm, PromotionForm
 from keen.web.serializers import SignupFormSerializer
+from django.core.urlresolvers import reverse
 
 
 logger = logging.getLogger(__name__)
@@ -39,16 +41,41 @@ def promotions(request, tab='active'):
     context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'},
                                {"link": "/promotions/%s" % tab, "text": '%s Promotions' % tab.title()}],
                'tab': tab}
-    promotions = Promotion.objects.get_promotions_for_status(tab)
+    promotions = list(Promotion.objects.get_promotions_for_status(tab))
+    if tab.lower() == 'awaiting':
+        #include promotions in draft status along with promotions awaiting approval
+        promotions.extend(list(Promotion.objects.get_promotions_for_status(Promotion.PROMOTION_STATUS.draft)))
     context["promotions"] = promotions
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
     #return render(request, 'client/promotions.html')
 
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
-def create_promotion(request):
-    context = {}
-    form = PromotionForm()
+def create_edit_promotion(request, promotion_id=None):
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
+    context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'}]}
+    promotion_instance = None
+    if promotion_id:
+        promotion_instance = get_object_or_404(Promotion, id=promotion_id)
+        context['breadcrumbs'].append({"link": "/promotions/%s/edit" % promotion_id, "text": 'Edit Promotion: %s' % promotion_instance.name})
+    else:
+        context['breadcrumbs'].append({"link": "/promotions/create", "text": 'Create New Promotion'})
+    form = None
+    if request.method == 'POST': # If the form has been submitted...
+        form = PromotionForm(request.POST)
+        if form.is_valid():
+            if "save_draft" in request.POST:
+                promotion_instance = form.save(commit=False)
+                promotion_instance.client = client
+                promotion_instance.save()
+                return HttpResponseRedirect(reverse('client_edit_promotion', args=[promotion_instance.id]))
+        else:
+            print form.errors
+    else:
+        if promotion_id:
+            form = PromotionForm(instance=promotion_instance)
+        else:
+            form = PromotionForm()
     context['form'] = form
     return render_to_response('client/promotions-create.html', context, context_instance=RequestContext(request))
 

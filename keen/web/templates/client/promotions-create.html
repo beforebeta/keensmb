@@ -7,7 +7,7 @@
 
   <!-- Content -->
  <section class='clearfix promotions'>
-        <form class="" action="" method="post">
+        <form class="" action="create" method="post">
         {% csrf_token %}
         <h1 class='page-title mtl'>Create New Promotion</h1>
         <div class="kn-section mtl mbl">
@@ -18,95 +18,99 @@
               <div class="row">
                 <div class="row mbl">
                   <div class="col-xs-3 small pll">
-                    <span class="pll mll">Promotion Name:</span>
+                    <span class="pll mll">Promotion Name{{ form.name|check_required }}:</span>
                   </div>
                   <div class="col-xs-8">
-                    <input type="text" value="{{ form.name.value|filter_none }}" placeholder="Name of the promotion" class="form-control">
+                    <input type="text" name="{{ form.name.name }}" value="{{ form.name.value|filter_none }}" placeholder="Name of the promotion" class="form-control {% if form.name.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.name.errors.as_text }}'{% else %}"{% endif %}>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='{{ form.name.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
+                      <div data-toggle='popover' data-content='{{ form.name.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
                   <div class="col-xs-3 small">
-                    <span class="pll mll">Promotion Description:</span>
+                    <span class="pll mll">Promotion Description{{ form.description|check_required }}:</span>
                   </div>
                   <div class="col-xs-8">
-                    <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+                    <textarea rows="7" name="{{ form.description.name }}" placeholder="Add comment..." class="form-control {% if form.description.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.description.errors.as_text }}'{% else %}"{% endif %}>{{ form.description.value|filter_none }}</textarea>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='{{ form.description.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
+                      <div data-toggle='popover' data-content='{{ form.description.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
                   <div class="col-xs-3 small">
-                    <span class="pll mll">Short Description:</span>
+                    <span class="pll mll">Short Description{{ form.short_code|check_required }}:</span>
                   </div>
                   <div class="col-xs-3">
-                    <input type="text" value="" placeholder="Some text" class="form-control input-sm">
+                    <input type="text" name="{{ form.short_code.name }}" value="{{ form.short_code.value|filter_none }}" placeholder="'40% Off'?" class="form-control input-sm  {% if form.short_code.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.short_code.errors.as_text }}'{% else %}"{% endif %}>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.short_code.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
                   <div class="col-xs-3 small">
-                    <span class="pll mll">Valid Through:</span>
+                    <span class="pll mll">Valid From{{ form.valid_from|check_required }}:</span>
                   </div>
                   <div class="col-xs-3">
-                    <div class="input-group">
+                    <div class="form-group">
+                        <div class="input-group">
+                              <span class="input-group-btn">
+                                <button class="btn" type="button"><span class="fui-calendar"></span></button>
+                              </span>
+                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datapicker" value="{{ form.valid_from.value|filter_none }}" id="datepicker-01">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-1 ">
+                   <span class="pll mll">To{{ form.valid_to|check_required }}:</span>
+                  </div>
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                        <div class="input-group">
                           <span class="input-group-btn">
                             <button class="btn" type="button"><span class="fui-calendar"></span></button>
                           </span>
-                          <input type="text" class="form-control" value="14 March, 2013" id="datepicker-01">
+                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datapicker" value="{{ form.valid_to.value|filter_none }}" id="datepicker-02">
                         </div>
-                  </div>
-                  <div class="col-xs-1 ">
-                   <span class="pll mll">To:</span>
-                  </div>
-                  <div class="col-xs-3">
-                    <div class="input-group">
-                      <span class="input-group-btn">
-                        <button class="btn" type="button"><span class="fui-calendar"></span></button>
-                      </span>
-                      <input type="text" class="form-control datepicker" value="14 March, 2013" id="datepicker-02">
                     </div>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.valid_to.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
                   <div class="col-xs-3 small">
-                    <span class="pll mll">Restrictions:</span>
+                    <span class="pll mll">Restrictions{{ form.restrictions|check_required }}:</span>
                   </div>
                   <div class="col-xs-8">
-                    <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+                    <textarea rows="7" name="{{ form.restrictions.name }}" placeholder="Add comment..." class="form-control {% if form.restrictions.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.restrictions.errors.as_text }}'{% else %}"{% endif %}>{{ form.restrictions.value|filter_none }}</textarea>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.restrictions.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
                   <div class="col-xs-3 small">
-                    <span class="pll mll">Additional Information:</span>
+                    <span class="pll mll">Additional Information{{ form.additional_information|check_required }}:</span>
                   </div>
                   <div class="col-xs-8">
-                    <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+                    <textarea rows="7" name="{{ form.additional_information.name }}" placeholder="Add comment..." class="form-control {% if form.additional_information.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.additional_information.errors.as_text }}'{% else %}"{% endif %}>{{ form.additional_information.value|filter_none }}</textarea>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.additional_information.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
                 <div class="row mbl">
                   <div class="col-xs-3 small">
-                    <span class="pll mll promotion-new-nowrap">Redemption Instructions*:</span>
+                    <span class="pll mll promotion-new-nowrap">Redemption Instructions{{ form.redemption_instructions|check_required }}:</span>
                   </div>
                   <div class="col-xs-8">
-                    <textarea rows="7" placeholder="Add comment..." class="form-control"></textarea>
+                    <textarea rows="7" name="{{ form.redemption_instructions.name }}" placeholder="Add comment..." class="form-control {% if form.redemption_instructions.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.redemption_instructions.errors.as_text }}'{% else %}"{% endif %}>{{ form.redemption_instructions.value|filter_none }}</textarea>
                   </div>
                   <div class="col-xs-1 pln">
-                    <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div data-toggle='popover' data-content='{{ form.redemption_instructions.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                   </div>
                 </div>
               </div>
@@ -120,38 +124,41 @@
             <div class="row">
               <div class="row mbl">
                 <div class="col-xs-3 small">
-                  <span class="pll mll">Call to Action Text:</span>
+                  <span class="pll mll">Call to Action Text{{ form.cta_text|check_required }}:</span>
                 </div>
                 <div class="col-xs-3">
-                  <input type="text" value="" placeholder="Get this Deal!" class="form-control input-sm">
+                  <input type="text" name="{{ form.cta_text.name }}" value="{{ form.cta_text.value|filter_none }}" placeholder="Get this Deal!" class="form-control input-sm {% if form.cta_text.errors %}js-popover-hover has-error" data-toggle='popover' data-content='{{ form.cta_text.errors.as_text }}'{% else %}"{% endif %}>
                 </div>
                 <div class="col-xs-1 pln">
-                  <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                  <div data-toggle='popover' data-content='{{ form.cta_text.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                 </div>
               </div>
               <div class="row mbl">
                 <div class="col-xs-3 small">
-                  <span class="pll mll">Promotion Image:</span>
+                  <span class="pll mll">Promotion Image{{ form.image_url|check_required }}:</span>
                 </div>
                   <div class="col-xs-8">
                 <div class="row prm">
-                    <div class="col-xs-11">
+                    <div class="col-xs-10">
                       <div class="prom-new-img pull-left">
+                          {% comment %}
                         <span>Drag Files Here</span>
                         <button type="button" class="btn btn-lg btn-embossed btn-default">Browse...</button>
+                          {% endcomment %}
                         <p class="small">Picture must be 300 px by 290 px</p>
                       </div>
-                      <button class="btn btn-default btn-embossed mll">Choose from Previous Photos</button>
+                      {# <button class="btn btn-default btn-embossed mll">Choose from Previous Photos</button> #}
+                        <button type="button" class="btn btn-lg btn-embossed btn-default pull-right">Change Image</button>
                     </div>
-                    <div class="col-xs-1 pln">
-                      <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                    <div class="col-xs-2 pln">
+                      <div data-toggle='popover' data-content='{{ form.image_url.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row mbl">
                 <div class="col-xs-3 small">
-                  <span class="pll mll">Logo Banner Image:</span>
+                  <span class="pll mll">Logo Banner Image{{ form.banner_url|check_required }}:</span>
                 </div>
                 <div class="col-xs-8">
                   <div class="col-xs-9 pln">
@@ -159,8 +166,11 @@
                       <span>Logo Banner Image Here</span>
                     </div>
                   </div>
-                  <button class="btn btn-default btn-embossed pull-right">Change Image</button>
+                    <button class="btn btn-default btn-embossed pull-right">Change Image</button>
                 </div>
+                    <div class="col-xs-1 pln">
+                      <div data-toggle='popover' data-content='{{ form.banner_url.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
+                    </div>
               </div>
             </div>
           </div>
@@ -173,7 +183,7 @@
             <div class="row">
               <div class="row mbl">
                 <div class="col-xs-3 small">
-                  <span class="pll mll">Create Promotion For*:</span>
+                  <span class="pll mll">Create Promotion For{{ form.mediums|check_required }}:</span>
                 </div>
                 <div class="col-xs-2">
                   <label class="checkbox small mts" for="checkbox2">
@@ -200,12 +210,12 @@
                   </label>
                 </div>
                 <div class="col-xs-1 mll">
-                  <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                  <div data-toggle='popover' data-content='{{ form.mediums.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                 </div>
               </div>
               <div class="row mbl pbl">
                 <div class="col-xs-3 small">
-                  <span class="pll mll">Send Promotion*:</span>
+                  <span class="pll mll">Send Promotion{{ form.send_schedule|check_required }}:</span>
                 </div>
                 <div class="col-xs-2">
                   <label class="radio">
@@ -220,12 +230,13 @@
                   </label>
                 </div>
                 <div class="col-xs-1 mll">
-                  <div data-toggle='popover' data-content='This is the name that will appear on your Promotion Manager and on the Promotion itself.' class="js-popover-hover promotion-new-tooltip">?</div>
+                  <div data-toggle='popover' data-content='{{ form.send_schedule.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {% comment %}
         <div class="kn-section mbl">
           <div class="kn-section-header">
             <h6 class="mbn mtn">Target Your Audience</h6>
@@ -296,6 +307,7 @@
             </div>
           </div>
         </div>
+        {% endcomment %}
         <div class="col-xs-12 small">
           *indicates required field
         </div>
@@ -304,7 +316,7 @@
             <button class="btn btn-block btn-default">Cancel</button>
           </div>
           <div class="col-xs-3">
-            <button class="btn btn-block btn-default">Save Draft</button>
+            <input name="save_draft" class="btn btn-block btn-default" type="submit" value="Save Draft">
           </div>
           <div class="col-xs-3">
             <button class="btn btn-block btn-default">Preview Promotion</button>
