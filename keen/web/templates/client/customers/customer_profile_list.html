@@ -189,10 +189,10 @@
                 </label>
               </th>
 
-              <th ng-repeat='field in requiredFieldsList'
+              <th bindonce ng-repeat='field in requiredFieldsList'
                   ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
                 <div class='cell-content'
-                     ng-style='{width: fieldsMap[field].width+"px"}'>
+                     bo-style='{width: fieldsMap[field].width+"px"}'>
                   <span class='sorting-header'>{{ fieldsMap[field].title }}</span>
                   <div class="dropdown">
                     <a href="#" class="dropdown-toggle icon-dropdown" data-toggle="dropdown">
@@ -227,7 +227,7 @@
 
           <tbody class="infinite-container">
 
-            <tr ng-repeat='customer in customers' class='fade-onload customer-row' data-id='{{ customer.id }}'>
+            <tr bindonce ng-repeat='customer in customers' class='fade-onload customer-row' bo-id='{{ customer.id }}'>
               <td width='60' class='checkbox-cell'>
                 <label class="checkbox no-label" for="checkbox-table-{{$index}}">
                   <input type="checkbox"
@@ -236,12 +236,13 @@
                 </label>
               </td>
 
-              <td ng-repeat='field in requiredFieldsList'>
+              <td bindonce ng-repeat='field in requiredFieldsList'>
                 <div class="cell-content"
-                     ng-style='{width: fieldsMap[field].width+"px"}'>
+                     bo-style='{width: fieldsMap[field].width+"px"}'>
                   <span class='sorting-header'>
                     <a target='_blank'
-                       ng-href='/customer_profile/{{ customer.id }}'>{{ customer.data[field] }}</a>
+                       bo-href-i='/customer_profile/{{ customer.id }}'
+                       bo-text="customer.data[field]"></a>
                   </span>
                 </div>
               </td>
@@ -257,11 +258,12 @@
         <table class="table table-bordered customers-table mbn">
           <thead>
             <tr>
-              <th ng-repeat='field in optionalFieldsList'
+              <th bindonce ng-repeat='field in optionalFieldsList'
                   ng-class='{active: activeSort == field, des: checkActiveSort(field)}'>
                 <div class="cell-content"
-                     ng-style='{width: fieldsMap[field].width+"px"}'>
-                  <span class='sorting-header'>{{ fieldsMap[field].title }}</span>
+                     bo-style='{width: fieldsMap[field].width+"px"}'>
+                  <span class='sorting-header'
+                        bo-text='fieldsMap[field].title'></span>
                   <div class="dropdown">
                     <a href="#" class="dropdown-toggle icon-dropdown" data-toggle="dropdown">
                       <span class="fui-list"></span>
@@ -299,11 +301,13 @@
 
           <tbody class="infinite-container">
 
-            <tr ng-repeat='customer in customers' class='fade-onload customer-row' data-id='{{ customer.id }}'>
+            <tr bindonce ng-repeat='customer in customers'
+                class='fade-onload customer-row'
+                bo-id='{{ customer.id }}'>
               <td ng-repeat='field in optionalFieldsList'>
                 <div class="cell-content"
-                     ng-style='{width: fieldsMap[field].width+"px"}'>
-                  <span>{{ customer.data[field] }}</span>
+                     bo-style='{width: fieldsMap[field].width+"px"}'>
+                  <span bo-text='customer.data[field]'></span>
                 </div>
               </td>
 
