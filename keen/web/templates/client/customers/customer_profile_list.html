@@ -334,10 +334,7 @@
 
         <div class="modal-body">
           <div class="row modal-body-section" ng-repeat='(name, item) in optionalFieldsMap'>
-            <div class="col-xs-4"><span>{{ item }}</span></div>
-            <div class="col-xs-5 text-simple">
-              <span>Description</span>
-            </div>
+            <div class="col-xs-9"><span>{{ item }}</span></div>
 
             <div class="col-xs-3">
               <button ng-if='!checkField(name)'
