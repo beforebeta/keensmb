@@ -1,5 +1,4 @@
 import logging
-from datetime import date, timedelta
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
@@ -7,6 +6,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from keen.util import get_first_day_of_month_as_dt
 from keen.core.models import Client, Customer, Location, Promotion
 from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
@@ -68,7 +68,7 @@ def customers(request, client):
     context['summary'] = {
         'total_customers': q.count(),
         'redeemers': 0,
-        'new_signups': q.filter(created__gt=date.today() - timedelta(days=30)).count(),
+        'new_signups': q.filter(created__gte=get_first_day_of_month_as_dt()).count(),
     }
 
     return render(request, 'client/customers/customer_profile_list.html', context)
