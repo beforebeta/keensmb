@@ -163,23 +163,31 @@ String.prototype.repeat = function(num) {
 
   $(".select2").select2();
 
-    $('.enrichment-checkbox-container label').on('click', function(e){
-        var $innerText = e.currentTarget.innerText;
+    $('.enrichment-checkbox-container label').on('click', function(){
+
+        var $innerText = $(this).children('strong').html(),
+            $buttonBox = $('.enrichment-estimated-price .kn-section-content');
+
+            console.log($innerText);
 
         if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
-            $(this).addClass('checked disabled');
-            $('.enrichment-estimated-price .kn-section-content .unselect').hide();
-            $('.enrichment-estimated-price .kn-section-content').append('<button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">' + $innerText + '</span></button>');
 
-            $('.enrichment-estimated-price .kn-section-content button i').on('click', function(){
+            $(this).addClass('checked disabled');
+
+            $buttonBox.find('.unselect').hide();
+            $buttonBox.append('<button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">' + $innerText + '</span></button>');
+
+            $buttonBox.find('button i').on('click', function(){
                 $(this).parent('button').remove();
-                $('.enrichment-checkbox-container label').is($innerText, function() {
-                    $(this).removeClass('checked disabled');
-                });
+                // if($(this).parent('button').text() == $innerText) {
+                //     console.log($innerText);
+                //     $('.enrichment-checkbox-container label').has($innerText).hide();
+                // }
+                $('.enrichment-checkbox-container label').removeClass('checked disabled');
             });
         }
         else {
-            $(this).on('click', function() { return false; });
+            return false;
         }
     });
 
