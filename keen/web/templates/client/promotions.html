@@ -49,8 +49,8 @@
                   <h6 class="mbn mtn pull-left white">{{ promotion.name }}</h6>
                   <time class="small pull-right white italic">
                       {% if promotion.valid_to %}
-                        <em>Expiring</em>
-                        {{ promotion.valid_to.date }}
+                        <em>{% if promotion.status == 'expired' %}Expired{% else %}Expiring{% endif %}</em>
+                        {{ promotion.valid_to }}
                       {% else %}
                         <em>Does not expire</em>
                       {% endif %}
@@ -65,7 +65,7 @@
                     <time class="dib mbl mtl">
                       <em>{{ tab|text_launched }}</em>
                       {% if promotion.valid_from %}
-                        {{ promotion.valid_from.date }}
+                        {{ promotion.valid_from }}
                       {% else %}
                         {{ promotion.created.date }}
                       {% endif %}
@@ -81,18 +81,18 @@
             </div>
 
             <div class="col-xs-1 promotions-button mtl">
-              <button href="#" class="btn btn-lg btn-primary pbs">
+              <a href="{% url 'client_edit_promotion' promotion.id %}" class="btn btn-lg btn-primary pbs">
                 <i class="fui-new dib"></i>
                 <span class="dib small">Edit</span>
-              </button>
-              <button href="#" class="btn btn-lg btn-default pbs mts">
+              </a>
+              <a href="#" class="btn btn-lg btn-default pbs mts">
                 <i class="fui-eye dib"></i>
                 <span class="dib small">Preview</span>
-              </button>
-              <button href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts">
+              </a>
+              <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts">
                 <i class="fui-cross dib"></i>
                 <span class="dib small">Delete</span>
-              </button>
+              </a>
             </div>
           </div>
         {% endfor %}

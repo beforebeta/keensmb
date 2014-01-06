@@ -3,11 +3,17 @@
 {% load static %}
 {% load compress %}
 {% load web_tags %}
+{% load cropping %}
+
+{% block sub_head %}
+    <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
+{% endblock %}
+
 {% block content %}
 
   <!-- Content -->
  <section class='clearfix promotions'>
-        <form class="" action="create" method="post">
+        <form class="" action="{{ mode }}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <h1 class='page-title mtl'>Create New Promotion</h1>
         <div class="kn-section mtl mbl">
@@ -144,11 +150,17 @@
                           {% comment %}
                         <span>Drag Files Here</span>
                         <button type="button" class="btn btn-lg btn-embossed btn-default">Browse...</button>
+                          {% if form.instance.id and form.main_image.value %}
+                            <img src="{% cropped_thumbnail form.instance 'main_image_cropping'  %}">
+                          {% else %}
+                            <p class="small">Picture must be 300 px by 290 px</p>
+                          {% endif %}
                           {% endcomment %}
-                        <p class="small">Picture must be 300 px by 290 px</p>
                       </div>
+                        <button class="btn btn-default btn-embossed pull-right filePickerUpload">Change Image</button>
                       {# <button class="btn btn-default btn-embossed mll">Choose from Previous Photos</button> #}
-                        <button type="button" class="btn btn-lg btn-embossed btn-default pull-right">Change Image</button>
+                        <!--<input name="main_image" type="file" class="btn btn-lg btn-embossed btn-default pull-right hidden" id="main_image">-->
+                        <!--<label for="main_image" class="btn btn-embossed btn-default pull-right">Change Image</label>-->
                     </div>
                     <div class="col-xs-2 pln">
                       <div data-toggle='popover' data-content='{{ form.image_url.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
@@ -313,7 +325,7 @@
         </div>
         <div class="row mtl mbl">
           <div class="col-xs-3">
-            <button class="btn btn-block btn-default">Cancel</button>
+            <a class="btn btn-block btn-default" href="{% url 'client_promotions' %}">Cancel</a>
           </div>
           <div class="col-xs-3">
             <input name="save_draft" class="btn btn-block btn-default" type="submit" value="Save Draft">

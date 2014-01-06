@@ -48,6 +48,8 @@ INSTALLED_APPS = (
     'djcelery',
     'compressor',
     'rest_framework',
+    'easy_thumbnails',
+    'image_cropping',
 
     # Database migrations
     'south',
@@ -72,6 +74,11 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher',
 )
+
+from easy_thumbnails.conf import Settings as thumbnail_settings
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 # Sessions
 #

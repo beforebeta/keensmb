@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from image_cropping import ImageCroppingMixin
 
 from keen.core.models import (
     Client,
@@ -62,7 +63,7 @@ class CustomerFieldAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomerField, CustomerFieldAdmin)
 
-class PromotionAdmin(admin.ModelAdmin):
+class PromotionAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('client', 'name', 'status','short_code','valid_from','valid_to')
 
 admin.site.register(Promotion, PromotionAdmin)

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django_hstore import hstore
+from image_cropping import ImageRatioField
 
 from model_utils import Choices
 
@@ -396,6 +397,14 @@ class PromotionsManager(models.Manager):
         alias_mapping['upcoming'] = 'scheduled'
         _status = alias_mapping[status]
         return self.filter(status=_status)
+
+import uuid
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    #print os.path.join('../keen/web/static/uploads/images', filename)
+    #return os.path.join('../keen/web/static/uploads/images', filename)
+    return os.path.join('uploads/images', filename)
 
 class Promotion(Timestamps):
     PROMOTION_STATUS = Choices(

@@ -44,3 +44,6 @@ South
 django-waffle
 django-model-utils==1.5.0
 python-dateutil==2.2
+
+easy-thumbnails
+django-image-cropping

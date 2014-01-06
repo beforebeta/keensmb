@@ -18,12 +18,11 @@
 
         <!-- Custom styles -->
         <link href="{% static "css/app.css" %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "css/select2.css" %}">
+        <link rel="stylesheet" href="{% static "css/select2-overwrite.css" %}">
         {% endcompress %}
 
         <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
-
-        <link rel="stylesheet" href="{% static "css/select2.css" %}">
-        <link rel="stylesheet" href="{% static "css/select2-overwrite.css" %}">
 
         {% compress js %}
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
@@ -31,6 +30,8 @@
         <script src="{% static "js/html5shiv.js" %}"></script>
         <![endif]-->
         {% endcompress %}
+        {% block sub_head %}
+        {% endblock %}
     </head>
 
   <body>
@@ -87,6 +88,7 @@
     <script src="{% static "js/vendor/select2.min.js" %}"></script>
 
     <script src="{% static "js/application.js" %}"></script>
+    <script src="{% static "js/promotions.js" %}"></script>
 
     <script src="{% static "js/module.js" %}"></script>
 

@@ -201,6 +201,21 @@
     padding-left: 10px;
 }
 
+.promotions .promotions-button a {
+    width: 57px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.promotions .promotions-button a span,
+.promotions .promotions-button a i {
+    display: block;
+}
+
+.promotions .promotions-button a span {
+    font-size: 11px;
+}
+
 .promotions .promotions-button button {
     width: 57px;
     padding-left: 0;
@@ -216,13 +231,19 @@
     font-size: 11px;
 }
 
-
-
 .prom-new-logo,
 .prom-new-img {
     background-color: #ebedee;
     border: 1px dashed #d7d8d9;
     text-align: center;
+}
+
+.prom-new-logo {
+    min-height: 53px;
+}
+
+.prom-new-logo img {
+    width:100%;
 }
 
 .prom-new-img {
@@ -348,4 +369,9 @@ input.datapicker  {
     border-color: #e74c3c;
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+input[type=file]{
+    width:120px;
+    color:transparent;
 }
