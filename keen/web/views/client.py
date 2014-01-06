@@ -1,5 +1,6 @@
 import logging
 from datetime import date, timedelta
+from functools import wraps
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, render_to_response
@@ -16,10 +17,22 @@ from keen.web.serializers import SignupFormSerializer
 logger = logging.getLogger(__name__)
 
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def dashboard(request):
-    client = get_object_or_404(Client, slug=request.session['client_slug'])
+def client_view(func):
+    """Prevent unauthorized access to and provide client argument to a view
+    """
+    @wraps(func)
+    @ensure_csrf_cookie
+    def wrapper(request, *args, **kw):
+        if request.user.is_authenticated() and 'client_slug' in request.session:
+            client = get_object_or_404(
+                Client, slug=request.session['client_slug'])
+            return func(request, client, *args, **kw)
+        return render(request, 'login.html')
+    return wrapper
+
+
+@client_view
+def dashboard(request, client):
     context = {
         'client': client,
         'dashboard': client.get_dashboard()
@@ -27,9 +40,8 @@ def dashboard(request):
     return render(request, 'client/dashboard.html', context)
 
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def promotions(request, tab='active'):
+@client_view
+def promotions(request, client, tab='active'):
     context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'},
                                {"link": "/promotions/%s" % tab, "text": '%s Promotions' % tab.title()}],
                'tab': tab}
@@ -38,16 +50,15 @@ def promotions(request, tab='active'):
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
     #return render(request, 'client/promotions.html')
 
-def create_promotion(request):
+
+@client_view
+def create_promotion(request, client):
     context={}
     return render_to_response('client/promotions-create.html', context, context_instance=RequestContext(request))
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def customers(request):
-    client = get_object_or_404(
-        Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client_slug'])
+
+@client_view
+def customers(request, client):
     q = Customer.objects.filter(client=client)
 
     context = {}
@@ -62,24 +73,24 @@ def customers(request):
 
     return render(request, 'client/customers/customer_profile_list.html', context)
 
-def email_template(request):
+
+@client_view
+def email_template(request, client):
     context={}
     return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def profile(request, customer_id=None):
+
+@client_view
+def profile(request, client, customer_id=None):
     context = {'breadcrumbs': [{"link": "/customers","text": 'Customers'}, {"link": "/customer","text": 'Customer'}]}
-    customer = Customer.objects.get(id=customer_id)
+    customer = get_object_or_404(Customer, client=client, id=customer_id)
     context["customer"] = customer
     context["client"] = customer.client
     return render_to_response('client/customers/customer_profile_view.html', context, context_instance=RequestContext(request))
 
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def signup_form_list(request):
-    client = get_object_or_404(Client, slug=request.session['client_slug'])
+@client_view
+def signup_form_list(request, client):
     forms = SignupForm.objects.filter(client=client)\
             .exclude(slug__startswith='preview-')\
             .order_by('-status', 'slug')
@@ -90,24 +101,17 @@ def signup_form_list(request):
 
     return render(request, 'client/signup_form/signup_form_list.html', context)
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def signup_form_create(request):
-    client = get_object_or_404(
-        Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client_slug'])
+
+@client_view
+def signup_form_create(request, client):
     context = {
         'client': client,
     }
     return render(request, 'client/signup_form/signup_form_create.html', context)
 
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def signup_form_edit(request, slug):
-    client = get_object_or_404(
-        Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client_slug'])
+@client_view
+def signup_form_edit(request, client, slug):
     form = get_object_or_404(SignupForm, client=client, slug=slug)
     context = {
         'client': client,
@@ -116,12 +120,8 @@ def signup_form_edit(request, slug):
     return render(request, 'client/signup_form/signup_form_create.html', context)
 
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def signup_form_preview(request, slug):
-    client = get_object_or_404(
-        Client.objects.prefetch_related('customer_fields'),
-        slug=request.session['client_slug'])
+@client_view
+def signup_form_preview(request, client, slug):
     signup_form = get_object_or_404(SignupForm, client=client, slug=slug)
     form = CustomerForm(client)
     context = {
@@ -132,7 +132,6 @@ def signup_form_preview(request, slug):
     return render(request, 'customer/signup.html', context)
 
 
-@ensure_csrf_cookie
-@login_required(login_url='/#signin')
-def business_profile(request):
+@client_view
+def business_profile(request, client):
     return None
