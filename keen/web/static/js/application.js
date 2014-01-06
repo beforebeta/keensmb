@@ -161,7 +161,34 @@ String.prototype.repeat = function(num) {
     window.prettyPrint && prettyPrint();
   });
 
-    $(".select2").select2();
+  $(".select2").select2();
 
+    $('.enrichment-checkbox-container label').on('click', function(){
+
+        var $innerText = $(this).children('strong').html(),
+            $buttonBox = $('.enrichment-estimated-price .kn-section-content');
+
+            console.log($innerText);
+
+        if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
+
+            $(this).addClass('checked disabled');
+
+            $buttonBox.find('.unselect').hide();
+            $buttonBox.append('<button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">' + $innerText + '</span></button>');
+
+            $buttonBox.find('button i').on('click', function(){
+                $(this).parent('button').remove();
+                // if($(this).parent('button').text() == $innerText) {
+                //     console.log($innerText);
+                //     $('.enrichment-checkbox-container label').has($innerText).hide();
+                // }
+                $('.enrichment-checkbox-container label').removeClass('checked disabled');
+            });
+        }
+        else {
+            return false;
+        }
+    });
 
 })(jQuery);

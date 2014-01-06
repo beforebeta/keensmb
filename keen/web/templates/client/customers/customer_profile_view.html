@@ -60,10 +60,10 @@
               </button>
                 {% if customer.is_enriched %}
                   <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;'>
-                  <span class='dib mid mtn mbn'>Profile was enriched on {{ customer.enrichment_date }}</span>
+                  <span class='dib mid mtn mbn is-enriched-info'>Profile was enriched on {{ customer.enrichment_date }}</span>
                 {% else %}
                   <img src="{% static "images/icons/retina.svg" %}" alt="" class='dib mid mrl' style='width: 40px;opacity:0.1;'>
-                  <span class='dib mid mtn mbn text-muted'>Profile has not been enriched</span>
+                  <span class='dib mid mtn mbn text-muted'>Profile has not been <span class="not-enriched-info">enriched <div>You can enrich this customer profile from the <a href="#">Customer Profile</a> page.</div></span></span>
                 {% endif %}
             </div>
 
