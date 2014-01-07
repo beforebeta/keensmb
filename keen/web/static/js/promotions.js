@@ -6,6 +6,18 @@
         } catch (e) {
         }
 
+        $('.previewPromotionBtn').click(function(){
+            var $this = $(this);
+            var location = $this.attr('data-location');
+            var $modal = $($this.attr('data-target'));
+            var $iframe = $($this.attr('data-target') + " iframe");
+            var $modal_title = $($this.attr('data-target') + " h4.modal-title");
+            $modal_title.text($this.attr("data-title"));
+            console.log($modal_title);
+            $iframe.attr("src",location);
+            $modal.modal({show:true});
+        });
+
         $(document).on('click', '.filePickerUpload', function(){
             var $this = $(this);
             var $preview_image = $('#'+$this.attr('data-preview_image_id'));

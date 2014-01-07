@@ -375,3 +375,11 @@ input[type=file]{
     width:120px;
     color:transparent;
 }
+
+.modal-large .modal-dialog {
+    width: 750px;
+}
+
+.modal-large .modal-content {
+    width: 750px;
+}

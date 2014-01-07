@@ -82,6 +82,13 @@ def create_edit_promotion(request, promotion_id=None):
     context['form'] = form
     return render_to_response('client/promotions-create-edit.html', context, context_instance=RequestContext(request))
 
+@ensure_csrf_cookie
+@login_required(login_url='/#signin')
+def preview_promotion(request, promotion_id):
+    context = {}
+    context["promotion"] = get_object_or_404(Promotion, id=promotion_id)
+    return render_to_response('client/promotions/preview_promotion.html', context, context_instance=RequestContext(request))
+
 def email_template(request):
     context={}
     return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))

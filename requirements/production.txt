@@ -47,3 +47,4 @@ python-dateutil==2.2
 
 easy-thumbnails
 django-image-cropping
+geopy

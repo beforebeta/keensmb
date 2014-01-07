@@ -354,6 +354,8 @@ def _setup_sample_data():
 
     #setup default client
     client, created = Client.objects.get_or_create(slug="default_client", name="default_client")
+    client.web_url="http://www.manchesterdesigneroutlets.com/"
+    client.save()
     customer_source, created = CustomerSource.objects.get_or_create(client=client, slug="import")
 
     address, created = Address.objects.get_or_create(

@@ -6,12 +6,11 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django_hstore import hstore
-from image_cropping import ImageRatioField
-
 from model_utils import Choices
+from keen import print_stack_trace
 
 from tracking.models import Visitor
-
+import urllib
 
 class Timestamps(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -52,10 +51,31 @@ class Address(Timestamps):
     state_province = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
+    #look at https://developers.google.com/maps/documentation/staticmaps/
+    #to create these urls for now
+    map_image_url = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.refresh_map_image_url()
+        super(Address, self).save(*args, **kwargs)
+
+    def refresh_map_image_url(self):
+        address = str(self)
+        if address:
+            escaped_address = urllib.quote(address, safe='~()*!.\'')
+            self.map_image_url = "http://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=14&size=400x267&maptype=roadmap&sensor=false" % escaped_address
+            try:
+                from geopy import geocoders
+                g = geocoders.GoogleV3()
+                place, (lat, lng) = g.geocode(address)
+                if lat and lng:
+                    self.map_image_url += "&markers=%s,%s" % (str(lat),str(lng))
+            except:
+                print_stack_trace()
+
     def __unicode__(self):
         return u','.join((self.street, self.city, self.state_province,
                           self.country, self.postal_code))
-
 
 class Location(Timestamps):
 
@@ -121,9 +141,9 @@ class Client(Timestamps):
 
     slug = models.CharField(max_length=255, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
-    main_location = models.ForeignKey('Location', null=True, blank=True,
-                                      related_name='+')
+    main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
     customer_fields = models.ManyToManyField(CustomerField)
+    web_url = models.TextField(blank=True, null=True)
 
     def customer_page(self, offset=0, filter=None, page_size=100):
         q = self.customers.all()

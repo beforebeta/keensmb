@@ -85,7 +85,7 @@
                 <i class="fui-new dib"></i>
                 <span class="dib small">Edit</span>
               </a>
-              <a href="#" class="btn btn-lg btn-default pbs mts">
+              <a href="#" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' promotion.id %}" data-title="{{ promotion.name }}" class="btn btn-lg btn-default pbs mts previewPromotionBtn">
                 <i class="fui-eye dib"></i>
                 <span class="dib small">Preview</span>
               </a>
@@ -117,6 +117,27 @@
         </div>
         <div class="modal-footer ptm pbn">
           <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>
+          <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div id="promotionPreviewModal" class="modal fade modal-large" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content center-block">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h4 class="modal-title">Preview Promotion</h4>
+        </div>
+        <div class="modal-body">
+            <iframe src="" width="702" height="600" frameborder="0"></iframe>
+        </div>
+        <div class="modal-footer ptm pbn">
+          <!--<button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>-->
           <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
       </div><!-- /.modal-content -->
