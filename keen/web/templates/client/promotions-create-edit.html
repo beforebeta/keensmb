@@ -65,7 +65,8 @@
                               <span class="input-group-btn">
                                 <button class="btn" type="button"><span class="fui-calendar"></span></button>
                               </span>
-                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datepickerAlternate {% if form.valid_from.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_from.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_from.value|filter_none|date:"M j, Y" }}" id="datepicker-01">
+                                <!-- Valid From {{ form.valid_from.value }}-->
+                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datepickerAlternate {% if form.valid_from.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_from.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_from.value|date:"M j, Y" }}" id="datepicker-01">
                         </div>
                     </div>
                   </div>
@@ -78,7 +79,8 @@
                           <span class="input-group-btn">
                             <button class="btn" type="button"><span class="fui-calendar"></span></button>
                           </span>
-                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datepickerAlternate {% if form.valid_to.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_to.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_to.value|filter_none|date:"M j, Y" }}" id="datepicker-02">
+                                                            <!-- Valid To {{ form.valid_to.value }} -->
+                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datepickerAlternate {% if form.valid_to.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_to.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_to.value|date:"M j, Y" }}" id="datepicker-02">
                         </div>
                     </div>
                   </div>

@@ -1,5 +1,7 @@
+import datetime
 from django import forms
 from django.forms import DateField
+from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
 from localflavor.us.forms import USPhoneNumberField
@@ -103,3 +105,31 @@ class PromotionForm(forms.ModelForm):
 
     valid_from = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y'])
     valid_to = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y'])
+
+    #def clean_valid_from(self):
+    #    valid_from = self.cleaned_data.get('valid_from', None)
+    #    if valid_from:
+    #        if valid_from < datetime.date.today():
+    #            raise forms.ValidationError("This date cannot be in the past")
+    #    return valid_from
+
+    def clean(self):
+        cleaned_data = super(PromotionForm, self).clean()
+        valid_to = self.cleaned_data.get('valid_to', None)
+        valid_from = self.cleaned_data.get('valid_from', None)
+        if valid_to:
+            if valid_from:
+                if valid_to < valid_from:
+                    #self._errors["valid_to"] = ErrorList(["This date should be on or after the valid from date"])
+                    raise forms.ValidationError({"valid_to": "This date should be on or after the valid from date"})
+            else:
+                raise forms.ValidationError({"valid_from": "Please provide the date the promotion is valid from"})
+        return cleaned_data
+
+    #def clean_valid_to(self):
+    #    valid_to = self.cleaned_data.get('valid_to', None)
+    #    valid_from = self.cleaned_data.get('valid_from', None)
+    #    if valid_to:
+    #        if valid_to < valid_from:
+    #            raise forms.ValidationError("This date should be on or after the valid from date")
+    #    return valid_to

@@ -79,7 +79,6 @@ def create_edit_promotion(request, promotion_id=None):
                 promotion_instance.client = client
                 promotion_instance.save()
                 url = "%s%s" % (str(reverse('client_edit_promotion', args=[promotion_instance.id])), "#preview" if "preview_promotion" in request.POST else "")
-                print url
                 return HttpResponseRedirect(url)
     else:
         if promotion_id:
@@ -104,7 +103,10 @@ def delete_promotion(request):
     client = get_object_or_404(Client, slug=request.session['client_slug'])
     promotion = get_object_or_404(Promotion, id=promotion_id, client=client)
     try:
-        promotion.delete()
+        if promotion.status in [Promotion.PROMOTION_STATUS.active, Promotion.PROMOTION_STATUS.expired]:
+            return HttpResponse(json.dumps({"success" : "0", "msg" : "Cannot delete an active or expired promotion"}), content_type="application/json")
+        else:
+            promotion.delete()
         return HttpResponse(json.dumps({"success" : "1", "msg" : "Success"}), content_type="application/json")
     except:
         print_stack_trace()

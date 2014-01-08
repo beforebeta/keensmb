@@ -89,10 +89,12 @@
                 <i class="fui-eye dib"></i>
                 <span class="dib small">Preview</span>
               </a>
-              <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts deletePromotionButton" data-obj_id="{{ promotion.id }}">
-                <i class="fui-cross dib"></i>
-                <span class="dib small">Delete</span>
-              </a>
+                {% if promotion.status != 'active' and promotion.status != 'expired' %}
+                  <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts deletePromotionButton" data-obj_id="{{ promotion.id }}">
+                    <i class="fui-cross dib"></i>
+                    <span class="dib small">Delete</span>
+                  </a>
+                {% endif %}
             </div>
           </div>
         {% endfor %}
