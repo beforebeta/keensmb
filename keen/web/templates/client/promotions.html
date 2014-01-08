@@ -89,7 +89,7 @@
                 <i class="fui-eye dib"></i>
                 <span class="dib small">Preview</span>
               </a>
-              <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts">
+              <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts deletePromotionButton" data-obj_id="{{ promotion.id }}">
                 <i class="fui-cross dib"></i>
                 <span class="dib small">Delete</span>
               </a>
@@ -116,7 +116,7 @@
             <p class="mbn text-default">Are you sure you want to delete this promotion? This action is permanent and cannot be undone.</p>
         </div>
         <div class="modal-footer ptm pbn">
-          <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>
+          <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll" id="promotionDeleteButton" data-location="{% url 'client_delete_promotion' %}">Delete</button>
           <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
       </div><!-- /.modal-content -->

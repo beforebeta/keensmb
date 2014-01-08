@@ -6,16 +6,53 @@
         } catch (e) {
         }
 
-        $('.previewPromotionBtn').click(function(){
-            var $this = $(this);
+        var preview_promotion = function($button) {
+            var $this = $button;
             var location = $this.attr('data-location');
             var $modal = $($this.attr('data-target'));
             var $iframe = $($this.attr('data-target') + " iframe");
             var $modal_title = $($this.attr('data-target') + " h4.modal-title");
             $modal_title.text($this.attr("data-title"));
-            console.log($modal_title);
             $iframe.attr("src",location);
             $modal.modal({show:true});
+        };
+
+        var hash = window.location.hash;
+        if (hash === '#preview') {
+            preview_promotion($("#promotionPreviewTrigger"));
+        }
+
+        $('.previewPromotionBtn').click(function(){
+            preview_promotion($(this));
+        });
+
+        // delete promotion handling
+        $('.deletePromotionButton').click(function(){
+            var obj_id = $(this).attr('data-obj_id');
+            $('#promotionDeleteButton').attr('data-obj_id', obj_id);
+        });
+
+        $(document).on('click', '#promotionDeleteButton', function(){
+            var $this = $(this);
+            var obj_id = $this.attr('data-obj_id');
+            console.log(obj_id);
+            $.ajax({
+                type: "POST",
+                url: $this.attr('data-location'),
+                data: {"obj_id":obj_id},
+                success: function (msg) {
+                    try{
+                        if (msg["success"] == 0) {
+                            alert(msg["msg"]);
+                        };
+                    }catch(e){}
+                    window.location.reload();
+                },
+                error: function (msg) {
+                    alert("An error occurred!")
+                    window.location.reload();
+                }
+            });
         });
 
         $(document).on('click', '.filePickerUpload', function(){
@@ -38,8 +75,6 @@
                     $preview_image.attr('src', final_url);
                     $input_url.val(final_url);
                     $preview_image.show();
-                    //{"url":"https://www.filepicker.io/api/file/wrHrsBmdSzu1UsZ93GRo","filename":"13DIG001_LandingPage_Lunch%5b2%5d.jpg","mimetype":"image/jpeg","size":633510,"key":"6EycNbgRDy580JsRAB3y_13DIG001_LandingPage_Lunch%5b2%5d.jpg","container":"keensmb_uploads","isWriteable":true}
-                    //console.log(JSON.stringify(blob));
                 },
                 function (FPError) {
                     console.log(FPError);

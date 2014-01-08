@@ -1,10 +1,12 @@
+import json
 import logging
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
+from keen import print_stack_trace
 
 from keen.core.models import Client, Customer, Location, Promotion
 from keen.core.models import Client, Customer, Location
@@ -25,9 +27,11 @@ logger = logging.getLogger(__name__)
 @login_required(login_url='/#signin')
 def dashboard(request):
     client = get_object_or_404(Client, slug=request.session['client_slug'])
+    dashboard = client.get_dashboard()
     context = {
         'client': client,
-        'dashboard': client.get_dashboard()
+        'dashboard': dashboard,
+        'updates': dashboard.get_updates()
     }
     return render(request, 'client/dashboard.html', context)
 
@@ -38,13 +42,14 @@ def dashboard(request):
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def promotions(request, tab='active'):
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'},
                                {"link": "/promotions/%s" % tab, "text": '%s Promotions' % tab.title()}],
                'tab': tab}
-    promotions = list(Promotion.objects.get_promotions_for_status(tab))
+    promotions = list(Promotion.objects.get_promotions_for_status(tab, client))
     if tab.lower() == 'awaiting':
         #include promotions in draft status along with promotions awaiting approval
-        promotions.extend(list(Promotion.objects.get_promotions_for_status(Promotion.PROMOTION_STATUS.draft)))
+        promotions.extend(list(Promotion.objects.get_promotions_for_status(Promotion.PROMOTION_STATUS.draft, client)))
     context["promotions"] = promotions
     return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
     #return render(request, 'client/promotions.html')
@@ -56,7 +61,7 @@ def create_edit_promotion(request, promotion_id=None):
     context = {'breadcrumbs': [{"link": "/promotions", "text": 'Promotions'}]}
     promotion_instance = None
     if promotion_id:
-        promotion_instance = get_object_or_404(Promotion, id=promotion_id)
+        promotion_instance = get_object_or_404(Promotion, id=promotion_id, client=client)
         context['breadcrumbs'].append({"link": "/promotions/%s/edit" % promotion_id, "text": 'Edit Promotion: %s' % promotion_instance.name})
         context["mode"] = "edit"
     else:
@@ -69,11 +74,13 @@ def create_edit_promotion(request, promotion_id=None):
         else:
             form = PromotionForm(request.POST, request.FILES)
         if form.is_valid():
-            if "save_draft" in request.POST:
+            if "save_draft" in request.POST or "preview_promotion" in request.POST:
                 promotion_instance = form.save(commit=False)
                 promotion_instance.client = client
                 promotion_instance.save()
-                return HttpResponseRedirect(reverse('client_edit_promotion', args=[promotion_instance.id]))
+                url = "%s%s" % (str(reverse('client_edit_promotion', args=[promotion_instance.id])), "#preview" if "preview_promotion" in request.POST else "")
+                print url
+                return HttpResponseRedirect(url)
     else:
         if promotion_id:
             form = PromotionForm(instance=promotion_instance)
@@ -85,9 +92,24 @@ def create_edit_promotion(request, promotion_id=None):
 @ensure_csrf_cookie
 @login_required(login_url='/#signin')
 def preview_promotion(request, promotion_id):
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
     context = {}
-    context["promotion"] = get_object_or_404(Promotion, id=promotion_id)
+    context["promotion"] = get_object_or_404(Promotion, id=promotion_id, client=client)
     return render_to_response('client/promotions/preview_promotion.html', context, context_instance=RequestContext(request))
+
+@ensure_csrf_cookie
+@login_required(login_url='/#signin')
+def delete_promotion(request):
+    promotion_id = int(request.POST.get("obj_id"))
+    client = get_object_or_404(Client, slug=request.session['client_slug'])
+    promotion = get_object_or_404(Promotion, id=promotion_id, client=client)
+    try:
+        promotion.delete()
+        return HttpResponse(json.dumps({"success" : "1", "msg" : "Success"}), content_type="application/json")
+    except:
+        print_stack_trace()
+        return HttpResponse(json.dumps({"success" : "0", "msg" : "An error occurred while deleting the object."}),
+                                                                    content_type="application/json")
 
 def email_template(request):
     context={}

@@ -45,6 +45,7 @@ urlpatterns = patterns(
     url(r'^promotions/create$', 'client.create_edit_promotion', name='client_create_promotion'),
     url(r'^promotions/(?P<promotion_id>\d+)/edit$', 'client.create_edit_promotion', name='client_edit_promotion'),
     url(r'^promotions/(?P<promotion_id>\d+)/preview', 'client.preview_promotion', name='client_preview_promotion'),
+    url(r'^promotions/delete', 'client.delete_promotion', name='client_delete_promotion'),
     url(r'^promotions/(?P<tab>[\w-]+)$', 'client.promotions', name='client_promotions_tab'),
     url(r'^customers$', 'client.customers', name='client_customers'),
     url(r'^customer_profile/(?P<customer_id>[\d]+)', 'client.profile', name='customer_profile'),

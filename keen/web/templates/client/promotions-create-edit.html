@@ -60,12 +60,12 @@
                     <span class="pll mll">Valid From{{ form.valid_from|check_required }}:</span>
                   </div>
                   <div class="col-xs-3">
-                    <div class="form-group">
+                    <div class="form-group {% if form.valid_from.errors %}has-error{% endif %}">
                         <div class="input-group">
                               <span class="input-group-btn">
                                 <button class="btn" type="button"><span class="fui-calendar"></span></button>
                               </span>
-                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datapicker" value="{{ form.valid_from.value|filter_none }}" id="datepicker-01">
+                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datepickerAlternate {% if form.valid_from.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_from.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_from.value|filter_none|date:"M j, Y" }}" id="datepicker-01">
                         </div>
                     </div>
                   </div>
@@ -73,12 +73,12 @@
                    <span class="pll mll">To{{ form.valid_to|check_required }}:</span>
                   </div>
                   <div class="col-xs-3">
-                    <div class="form-group">
+                    <div class="form-group {% if form.valid_to.errors %}has-error{% endif %}">
                         <div class="input-group">
                           <span class="input-group-btn">
                             <button class="btn" type="button"><span class="fui-calendar"></span></button>
                           </span>
-                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datapicker" value="{{ form.valid_to.value|filter_none }}" id="datepicker-02">
+                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datepickerAlternate {% if form.valid_to.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_to.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_to.value|filter_none|date:"M j, Y" }}" id="datepicker-02">
                         </div>
                     </div>
                   </div>
@@ -323,7 +323,7 @@
             <input name="save_draft" class="btn btn-block btn-default" type="submit" value="Save Draft">
           </div>
           <div class="col-xs-3">
-            <button class="btn btn-block btn-default">Preview Promotion</button>
+              <input name="preview_promotion" class="btn btn-block btn-default" type="submit" value="Preview Promotion">
           </div>
           <div class="col-xs-3">
             <button class="btn btn-block btn-primary">Send</button>
@@ -332,5 +332,29 @@
         </form>
       </section>
   <!-- /.container -->
+
+      {% if form.instance.id %}
+      <span class="previewPromotionBtn" id="promotionPreviewTrigger" style="display:none;" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' form.instance.id %}" data-title="{{ form.name.value }}"></span>
+      <div id="promotionPreviewModal" class="modal fade modal-large" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content center-block">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fui-cross"></i>
+              </button>
+              <h4 class="modal-title">Preview Promotion</h4>
+            </div>
+            <div class="modal-body">
+                <iframe src="" width="702" height="600" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer ptm pbn">
+              <!--<button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>-->
+              <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+     {% endif %}
 
 {% endblock %}

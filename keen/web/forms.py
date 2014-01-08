@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import DateField
 from django.utils.translation import ugettext_lazy as _
 
 from localflavor.us.forms import USPhoneNumberField
@@ -96,3 +97,9 @@ class PromotionForm(forms.ModelForm):
         model = Promotion
         fields = ('name', 'description', 'short_code', 'valid_from', 'valid_to', 'restrictions',
                   'additional_information', 'redemption_instructions', 'cta_text', 'image_url', 'banner_url', 'mediums', 'send_schedule')
+        help_texts = {
+            'valid_to': 'Provide the start date and expiry date for this promotion. Otherwise, it will by default continue indefinitely.',
+        }
+
+    valid_from = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y'])
+    valid_to = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y'])

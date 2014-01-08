@@ -371,6 +371,13 @@ input.datapicker  {
     box-shadow: none;
 }
 
+.has-error button {
+    color: #e74c3c;
+    border-color: #e74c3c !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 input[type=file]{
     width:120px;
     color:transparent;

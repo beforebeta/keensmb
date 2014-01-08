@@ -6,6 +6,44 @@ String.prototype.repeat = function (num) {
 
 (function ($) {
 
+    //setup support for csrf
+    $(document).ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+
     // Add segments to a slider
     $.fn.addSliderSegments = function (amount) {
         return this.each(function () {
@@ -130,23 +168,26 @@ String.prototype.repeat = function (num) {
         });
 
         // jQuery UI Datepicker
-        var datepickerSelector = '.datapicker';
-        $(datepickerSelector).datepicker({
-            showOtherMonths: true,
-            selectOtherMonths: true,
-            dateFormat: "mm/dd/yy",
-            changeMonth: true,
-            changeYear: true
-        }).prev('.btn').on('click', function (e) {
-                e && e.preventDefault();
-                $(datepickerSelector).focus();
-            });
-        $.extend($.datepicker, {_checkOffset: function (inst, offset, isFixed) {
-            return offset
-        }});
+        var setup_date_picker = function(selector, dateFormat) {
+            $(selector).datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: dateFormat,
+                changeMonth: true,
+                changeYear: true
+            }).prev('.btn').on('click', function (e) {
+                    e && e.preventDefault();
+                    $(selector).focus();
+                });
+            $.extend($.datepicker, {_checkOffset: function (inst, offset, isFixed) {
+                return offset
+            }});
+            // Now let's align datepicker with the prepend button
+            $(selector).datepicker('widget').css({'margin-left': -$(selector).prev('.input-group-btn').find('.btn').outerWidth()});
+        };
+        setup_date_picker('.datapicker', "mm/dd/yy");
+        setup_date_picker('.datepickerAlternate', "M d, yy");
 
-        // Now let's align datepicker with the prepend button
-        $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSelector).prev('.input-group-btn').find('.btn').outerWidth()});
 
         // Switch
         $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();

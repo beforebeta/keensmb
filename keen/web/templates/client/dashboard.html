@@ -142,7 +142,7 @@
           <div class="kn-section-content">
             <div class="row small">
               <ul class="dashboard-list">
-                  {% for event in dashboard.get_updates %}
+                  {% for event in updates %}
                       {% include event|get_template_for_event %}
                   {% empty %}
                       No new activity.

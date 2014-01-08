@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 from model_utils import Choices
 
@@ -76,7 +77,7 @@ class Dashboard(Timestamps):
         self.save()
 
     def get_updates(self):
-        return Event.objects.all().order_by('-occurrence_datetime')[:14]
+        return Event.objects.filter(client=self.client).order_by('-occurrence_datetime')[:14]
 
     def get_top_customers(self):
         return self.client.get_top_customers()[:5]

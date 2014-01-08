@@ -411,12 +411,12 @@ class PromotionMedium(Timestamps):
 
 class PromotionsManager(models.Manager):
 
-    def get_promotions_for_status(self, status):
+    def get_promotions_for_status(self, status, client):
         alias_mapping = dict([(key[0],key[0]) for key in Promotion.PROMOTION_STATUS])
         alias_mapping['awaiting'] = 'inapproval'
         alias_mapping['upcoming'] = 'scheduled'
         _status = alias_mapping[status]
-        return self.filter(status=_status)
+        return self.filter(status=_status).filter(client=client)
 
 import uuid
 def get_file_path(instance, filename):
