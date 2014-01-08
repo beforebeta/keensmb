@@ -59,6 +59,7 @@
         </div>
 
     {% include "page_footer.html" %}
+
     {% compress js %}
     <!-- Load JS here for greater good =============================-->
     <script src="{% static "js/vendor/lodash.js" %}"></script>
@@ -96,6 +97,9 @@
 {#        <script src="{% static "js/profiles.js" %}"></script>#}
 
     {% endcompress %}
+
+    {% block javascripts %}
+    {% endblock %}
 
     {% include 'olark.html' %}
 

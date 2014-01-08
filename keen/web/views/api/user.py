@@ -23,17 +23,17 @@ logger = logging.getLogger(__name__)
 @api_view(['POST'])
 def login_view(request):
     try:
-        email = request.POST['email']
-        password = request.POST['password']
+        email = request.DATA['email']
+        password = request.DATA['password']
     except KeyError:
         messages.error(request, 'Please provide e-mail and password')
-        logger.warn('Request is missing email and/or password parameters: %r' % request.POST.copy())
+        logger.warn('Request is missing email and/or password parameters: %r' % request.DATA)
         return HttpResponseBadRequest('Missing authentication information')
 
     user = authenticate(username=email, password=password)
     logger.debug('Authenticate %r' % locals())
 
-    if user and user.is_active:
+    if user:
         login(request, user)
         try:
             request.session['client_slug'] = ClientUser.objects.get(
@@ -44,13 +44,10 @@ def login_view(request):
             request.session.save()
         else:
             request.session.save()
-            redirect_url = request.GET.get('next', reverse('client_dashboard'))
-            return HttpResponseRedirect(redirect_url)
-    else:
-        messages.error(request, 'Authentication failed')
-        response = Response({'error': 'Authentication failed'})
+            return Response({'success': 'Thank you for signing-in!'})
 
-    return HttpResponseRedirect('/#signin')
+    messages.error(request, 'Authentication failed')
+    return Response({'error': 'Invalid e-mail/pasword combination'})
 
 
 @ensure_csrf_cookie
