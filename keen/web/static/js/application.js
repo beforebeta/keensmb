@@ -163,32 +163,30 @@ String.prototype.repeat = function(num) {
 
   $(".select2").select2();
 
-    $('.enrichment-checkbox-container label').on('click', function(){
+  $('.enrichment-checkbox-container .js-estimated-label').on('click', function(){
 
-        var $innerText = $(this).children('strong').html(),
-            $buttonBox = $('.enrichment-estimated-price .kn-section-content');
+      var innerText = $(this).children('strong').html(),
+          data = $(this).data('label'),
+          $buttonWrap = $('.enrichment-estimated-price .kn-section-content'),
+          $buttonBox = $('<button class="btn btn-sm btn-default mrm mbm" data-name='+ data +'><i class="fui-cross"></i><span class="plm">'+ $innerText +'</span></button>');
 
-            console.log($innerText);
+          console.log(data);
+      if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
 
-        if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
+          $(this).addClass('checked disabled');
 
-            $(this).addClass('checked disabled');
+          $buttonWrap.find('.unselect').hide();
+          $buttonBox.clone().appendTo($buttonWrap);
 
-            $buttonBox.find('.unselect').hide();
-            $buttonBox.append('<button class="btn btn-sm btn-default mrm mbm"><i class="fui-cross"></i><span class="plm">' + $innerText + '</span></button>');
+      }
+      else {
+          return false;
+      }
+  });
+  $buttonWrap.on('click', 'i', function(){
+      $(this).parent('button').remove();
 
-            $buttonBox.find('button i').on('click', function(){
-                $(this).parent('button').remove();
-                // if($(this).parent('button').text() == $innerText) {
-                //     console.log($innerText);
-                //     $('.enrichment-checkbox-container label').has($innerText).hide();
-                // }
-                $('.enrichment-checkbox-container label').removeClass('checked disabled');
-            });
-        }
-        else {
-            return false;
-        }
-    });
+      $('.enrichment-checkbox-container label').removeClass('checked disabled');
+  });
 
 })(jQuery);
