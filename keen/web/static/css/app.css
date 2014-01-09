@@ -1,15 +1,3 @@
-@import 'common.css';
-@import 'animations.css';
-@import 'chromoselector.css';
-
-@import 'dashboard.css';
-@import 'promotions.css';
-@import 'import-popups.css';
-@import 'signup-overview.css';
-
-@import 'enrichment.css';
-
-
 html, body {
   height: 100%;
   background: #f2f2f2;
@@ -1102,9 +1090,79 @@ footer .footer-button-hover .btn:hover {
 /*  for singup_form_list.html */
 
 .btn-new-profile {
-  color: #1abc9c;
+  background-color: #1abc9c;
+  color: #ffffff;
 }
 
 .btn-new-profile:hover {
-  color: #48c9b0;
+  background-color: #48c9b0;
+  color: #ffffff;
 }
+
+
+/* for customer profile enriched info */
+
+.is-enriched-info {
+  font-size: 16px;
+}
+
+.not-enriched-info {
+  display: inline-block;
+  position: relative;
+}
+
+.not-enriched-info:hover {
+  font-weight: bold;
+  color: #446cb3;
+}
+
+.not-enriched-info div {
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 230px;
+  opacity: 0;
+  background-color: #edeff1;
+  padding: 12px 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: normal;
+  color: #34495e;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+  visibility: hidden;
+  -webkit-transform: translate3d(0,0,0);
+}
+
+.not-enriched-info:hover div {
+  visibility: visible;
+  bottom: 100%;
+  opacity: 1;
+}
+
+.not-enriched-info div a {
+  font-weight: bold;
+  color: #5e80bd;
+}
+
+.not-enriched-info div:after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 7px 7px 0 7px;
+  border-style: solid;
+  border-color: #edeff1 transparent transparent transparent;
+  z-index: 2;
+}
+
+ /*for new signup-form*/
+
+ .stable-width {
+  width: 960px;
+  margin: 0 auto;
+ }

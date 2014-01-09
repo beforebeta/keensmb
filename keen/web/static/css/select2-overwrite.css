@@ -8,15 +8,14 @@
 	background: none;
 }
 
-.promotion-select-multiple .select2-container,
-.promotion-select-multiple .select2-container .select2-choices .select2-search-choice {
+.promotion-select-multiple .select2-container {
 	width: 100%;
 }
 
 .promotion-select-multiple .select2-container .select2-choices .select2-search-choice {
-	max-width: 155px;
+	display: inline-block;
 	line-height: 25px;
-	padding: 0 0 0 25px;
+	padding: 0 5px 0 25px;
 	box-shadow: none;
 	background: #ebedee;
 	border: none;
@@ -31,6 +30,7 @@
 	background: url('../images/cross.png') left top no-repeat;
 	width: 13px;
 	top: 7px;
+  transition: 0;
 }
 
 .promotion-select-multiple .select2-container-multi.select2-container .select2-choices .select2-search-choice-close:hover {

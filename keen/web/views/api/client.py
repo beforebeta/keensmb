@@ -14,7 +14,12 @@ from django.core.files.storage import default_storage
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 
-from rest_framework import status
+from rest_framework.status import (
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_500_INTERNAL_SERVER_ERROR,
+)
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -30,6 +35,7 @@ from keen.web.serializers import (
     SignupFormSerializer,
 )
 from keen.web.forms import CustomerForm
+from keen.tasks import take_screenshot
 
 
 logger = logging.getLogger(__name__)
@@ -46,6 +52,22 @@ class IsClientUser(BasePermission):
             'client_slug' in request.session and
             request.session['client_slug'] == view.kwargs.get('client_slug')
         )
+
+
+def schedule_screenshot(request, form):
+    url = request.build_absolute_uri(
+        reverse('customer_signup', kwargs={
+            'client_slug': form.client.slug,
+            'form_slug': form.slug,
+        })
+    )
+    take_screenshot.delay(
+        url,
+        os.path.join(
+            settings.MEDIA_ROOT,
+            'client/%s/form-thumb/%s.png' % (form.client.slug, form.slug)),
+        (142, 116),
+    )
 
 
 class ClientProfile(APIView):
@@ -178,9 +200,9 @@ class CustomerList(APIView):
                 customer.save()
             except DatabaseError:
                 logger.exception('Failed to save new customer')
-                return Response(status=status.HTTTP_500_SERVER_ERROR)
+                return Response(status=HTTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response(CustomerSerializer(customer).data, status=status.HTTP_201_CREATED)
+        return Response(CustomerSerializer(customer).data, status=HTTP_201_CREATED)
 
 
 class CustomerProfile(APIView):
@@ -223,7 +245,7 @@ class CustomerProfile(APIView):
             except DatabaseError:
                 logger.exception('Failed to update customer')
                 return response('Failed to save customer profile',
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=HTTP_400_BAD_REQUEST)
 
         return Response(CustomerSerializer(customer).data)
 
@@ -262,7 +284,12 @@ class SignupFormList(APIView):
             data = request.DATA['data']
         except KeyError:
             logger.exception('Missing mandatory field %r' % request.DATA)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        status = request.DATA.get('status', 'draft')
+        if status not in ('draft', 'published'):
+            logger.error('Illegal signup form status %s' % status)
+            return Response(status=HTTP_400_BAD_REQUEST)
 
         form, created = SignupForm.objects.get_or_create(client=client, slug=slug)
         if created:
@@ -273,18 +300,20 @@ class SignupFormList(APIView):
                 })
         else:
             logger.error('Form with slug %s already exists' % slug)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=HTTP_400_BAD_REQUEST)
 
+        form.status = status
         form.data = data
         try:
             form.save()
             CustomerSource(client=client, slug='signup:%s' % slug, ref_source='signup',
                            ref_id=form.id).save()
+            schedule_screenshot(request, form)
         except DatabaseError:
             logger.exception('Failed to create signup form')
             raise
 
-        return Response('', status=status.HTTP_201_CREATED)
+        return Response('', status=HTTP_201_CREATED)
 
 
 class SignupFormView(APIView):
@@ -307,16 +336,25 @@ class SignupFormView(APIView):
         client = get_object_or_404(Client, slug=client_slug)
         form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
+        if 'status' in request.DATA:
+            status = request.DATA['status']
+            if status in ('draft', 'published'):
+                form.status = status
+            else:
+                logger.error('Illegal signup form status %s' % status)
+                return Response(status=HTTP_400_BAD_REQUEST)
+
         if 'data' in request.DATA:
             form.data = request.DATA['data']
 
         try:
             form.save()
+            schedule_screenshot(request, form)
         except DatabaseError:
             logger.exception('Failed to save signup form')
             raise
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=HTTP_204_NO_CONTENT)
 
     @method_decorator(ensure_csrf_cookie)
     def delete(self, request, client_slug, form_slg):
@@ -329,7 +367,7 @@ class SignupFormView(APIView):
             logger.exception('Failed to delete signup form')
             raise
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class ImageList(APIView):
@@ -356,13 +394,13 @@ class ImageList(APIView):
             target = request.DATA['target']
         except KeyError:
             logger.exception('Failed to get expected request data: %r' % request.DATA.keys())
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=HTTP_400_BAD_REQUEST)
 
         try:
             content = b64decode(content)
         except TypeError:
             logger.exception('Failed to decode image content using BASE64')
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=HTTP_400_BAD_REQUEST)
 
         name = '.'.join((sha256(content).hexdigest(),
                          content_type.split('/', 1)[1]))
@@ -381,7 +419,7 @@ class ImageList(APIView):
             logger.exception('Failed to save image')
             raise
 
-        return Response(ImageSerializer(image).data, status=status.HTTP_201_CREATED)
+        return Response(ImageSerializer(image).data, status=HTTP_201_CREATED)
 
     @method_decorator(ensure_csrf_cookie)
     def delete(self, client_slug, image_id):
@@ -392,11 +430,11 @@ class ImageList(APIView):
             Image.objects.get(client=client, id=int(image_id)).delete()
         except Image.DoesNotExist:
             logger.error('Attempt to delete non-existing image')
-            status = status.HTTP_404_NOT_FOUND
+            status = HTTP_404_NOT_FOUND
         except DatabaseError:
             logger.exception('Failed to delete image')
-            status = status.HTTP_500_INTERNAL_SERVICE_ERROR
+            status = HTTP_500_INTERNAL_SERVICE_ERROR
         else:
-            status = status.HTTP_204_NO_CONTENT
+            status = HTTP_204_NO_CONTENT
 
         return Response(status=status)

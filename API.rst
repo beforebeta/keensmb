@@ -171,6 +171,9 @@ Update form. Expects JSON-encoded object with the following fields:
 	``data``
 		Object with unspecified content
 
+	``status``
+		Status of the form. Possible values "draft" and "published"
+
 
 GET /api/client/:client_slug/images
 -----------------------------------

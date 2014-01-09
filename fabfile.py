@@ -35,7 +35,7 @@ def virtualenv():
 
 
 def install_os_packages():
-    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv')
+    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv rabbitimq-server')
 
 
 def install_dependencies():
@@ -126,7 +126,7 @@ def version():
 @task
 def uwsgi_start():
     with virtualenv():
-        run('uwsgi --ini conf/uwsgi/%(profile)s.ini --pidfile %(pidfile)s' % env)
+        run('NEW_RELIC_CONFIG_FILE=%(project_dir)s/newrelic.ini newrelic-admin run-program uwsgi --ini conf/uwsgi/%(profile)s.ini --pidfile %(pidfile)s' % env)
 
 
 @task

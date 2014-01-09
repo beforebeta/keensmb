@@ -341,3 +341,37 @@
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
+
+.custom-checkbox {
+  display: none;
+}
+.custom-checkbox + label {
+  position: relative;
+  display: block;
+  padding-left: 20px;
+  min-height: 18px;
+  margin: 0;
+  color: #BDC3C7;
+  cursor: pointer;
+  -webkit-transition: color .2s;
+  -moz-transition: color .2s;
+  -ms-transition: color .2s;
+  -o-transition: color .2s;
+  transition: color .2s;
+}
+.custom-checkbox + label:before {
+  content: "\e033";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: 'Flat-UI-Icons';
+  font-size: 20px;
+  line-height: 20px;
+}
+.custom-checkbox:checked + label {
+  color: #169e83;
+}
+.custom-checkbox:checked + label:before {
+  content:"\e034";
+}
+
