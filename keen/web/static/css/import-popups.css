@@ -39,18 +39,17 @@
 }
 
 .ModalCsvImport .steps div[class|='step'] {
-  width: 41px;
-  height: 41px;
+  width: 50px;
+  height: 50px;
   background-color: #c9ced1;
   border: 1px solid #9ca6a7;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
+  border-radius: 50%;
   text-align: center;
-  line-height: 40px;
+  line-height: 48px;
   color: #fff;
   text-indent: -1px;
   position: relative;
+  font-weight: bold;
 }
 
 .ModalCsvImport .steps div[class|='step'] span {
@@ -60,6 +59,7 @@
   bottom: -24px;
   left: -24px;
   white-space: nowrap;
+  font-weight: normal;
   line-height: normal;
 }
 
@@ -82,10 +82,10 @@
 }
 
 .ModalCsvImport .steps .progres-line {
-  width: 144px;
+  width: 132px;
   height: 1px;
   border-bottom: 1px solid #c9ced1;
-  margin-top: 20px;
+  margin-top: 26px;
   margin-left: -3px;
   margin-right: -3px;
 }
@@ -98,12 +98,14 @@
 
 .ModalCsvImport .upload span {
   display: block;
+  font-size: 16px;
+  line-height: 2.0;
+  color: #95a5a6
 }
 
 .ModalCsvImport .upload div {
   position: relative;
   overflow: hidden;
-  font-weight: bold;
 }
 
 .ModalCsvImport .upload div input {
@@ -123,7 +125,7 @@
 }
 
 .ModalCsvImport .added-file div {
-  width: 78%;
+  width: 99%;
   border-bottom: 1px solid #ecf0f1;
   font-size: 14px;
 }
@@ -247,4 +249,14 @@
 
 .input-group.chosen .btn:hover i {
   opacity: 1;
+}
+
+.ModalCsvImport .btn-step-csv {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  min-width: 100px;
+}
+
+.ModalCsvImport .btn {
+  font-size: 14px;
 }

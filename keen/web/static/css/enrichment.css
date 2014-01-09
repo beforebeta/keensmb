@@ -19,6 +19,7 @@
   line-height: 48px;
   color: #fff;
   text-indent: -1px;
+  font-weight: bold;
 }
 
 .enrichment .steps div:first-child {

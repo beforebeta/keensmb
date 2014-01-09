@@ -324,6 +324,11 @@
   text-align: center;
 }
 
+.section-segment-wrapper {
+  float: left;
+  width: 100%;
+}
+
 .promotion-icon-close-height {
   line-height: normal;
   margin-top: 5px;

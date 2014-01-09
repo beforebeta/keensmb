@@ -1,4 +1,11 @@
 /* landing3 start */
+.kn-nav {
+  margin-bottom: 0;
+  background: #446cb2;
+  border-radius: 0;
+  border-bottom: 1px solid #446cb2;
+  overflow: hidden;
+}
 
 .landing3 header .logo {
 	display: block;
