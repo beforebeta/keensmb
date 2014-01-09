@@ -233,20 +233,8 @@
               <div class="row mbl">
                 <div class="col-xs-4 small">
                   <span class="pll mll text-muted">Audience Segments*:</span>
+                  <li style="display: none;" class="js-trigger-item" data-item=""></li>
                   <ul class="promotion-scroll-menu">
-                    <li class="js-trigger-item" data-item="martial-status">Marital Status</li>
-                    <li class="js-trigger-item" data-item="age">Age</li>
-                    <li class="js-trigger-item" data-item="marital">Marital</li>
-                    <li class="js-trigger-item" data-item="redemption-location">Redemption Location</li>
-                    <li>Household Income</li>
-                    <li>Intitial Customer Source</li>
-                    <li>Professional Field</li>
-                    <li>Children</li>
-                    <li>Gender</li>
-                    <li>Age</li>
-                    <li>Marital Status</li>
-                    <li>Gender</li>
-                    <li>Children</li>
                   </ul>
                 </div>
                 <div class="col-xs-8 pln prl">
@@ -255,24 +243,72 @@
                   <div class="promotion-narrow-field">
                     <em class="small">You can make promotions more effective by targeting segments of your customers. Choose a segment on the left to narrow your target.</em>
                   </div>
-                  <div style="display: none;" class="col-xs-5 section-default" data-section-name="">
-                    <div class="kn-section mbl">
-                      <div class="kn-section-header">
-                        <span class="small">Marital Status</span>
-                        <button type="button" class="close mtn">
-                          <i class="promotion-icon-close-height fui-cross"></i>
-                        </button>
-                      </div>
-                      <div class="kn-section-content promotion-select-multiple">
-                        <select multiple>
-                           <option value="AL">Alabama</option>
-                           <option value="WY">Wyoming</option>
-                         </select>
+                  <form id="target-audience" class="row section-segment-wrapper">
+                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="martial-status">
+                      <div class="kn-section mbl">
+                        <div class="kn-section-header">
+                          <span class="small">Marital Status</span>
+                          <button type="button" class="close mtn">
+                            <i class="promotion-icon-close-height fui-cross"></i>
+                          </button>
+                        </div>
+                        <div class="kn-section-content promotion-select-multiple">
+                          <select name="martial-status" multiple>
+                             <option value="married">Married</option>
+                             <option value="not-married">Not married</option>
+                           </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row section-segment-wrapper">
-                  </div>
+                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="age">
+                      <div class="kn-section mbl">
+                        <div class="kn-section-header">
+                          <span class="small">Age</span>
+                          <button type="button" class="close mtn">
+                            <i class="promotion-icon-close-height fui-cross"></i>
+                          </button>
+                        </div>
+                        <div class="kn-section-content promotion-select-multiple">
+                          <select name="age" multiple>
+                             <option value="young">18 -</option>
+                             <option value="old">18 +</option>
+                           </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="gender">
+                      <div class="kn-section mbl">
+                        <div class="kn-section-header">
+                          <span class="small">Gender</span>
+                          <button type="button" class="close mtn">
+                            <i class="promotion-icon-close-height fui-cross"></i>
+                          </button>
+                        </div>
+                        <div class="kn-section-content promotion-select-multiple">
+                          <select name="gender" multiple>
+                             <option value="male">Male</option>
+                             <option value="female">Femal</option>
+                           </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="children">
+                      <div class="kn-section mbl">
+                        <div class="kn-section-header">
+                          <span class="small">Children</span>
+                          <button type="button" class="close mtn">
+                            <i class="promotion-icon-close-height fui-cross"></i>
+                          </button>
+                        </div>
+                        <div class="kn-section-content promotion-select-multiple">
+                          <select name="children" multiple>
+                             <option value="yes">Yes</option>
+                             <option value="no">No</option>
+                           </select>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
