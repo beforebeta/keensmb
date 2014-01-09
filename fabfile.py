@@ -7,7 +7,7 @@ defaults if you are happy with the default layout.
 
 import posixpath
 
-from fabric.api import run, local, env, settings, cd, task, put
+from fabric.api import run, sudo, local, env, settings, cd, task, put
 from fabric.contrib.files import exists
 from fabric.operations import _prefix_commands, _prefix_env_vars
 #from fabric.decorators import runs_once
@@ -18,20 +18,11 @@ path = lambda *args: posixpath.join(ROOT, *args)
 
 # CHANGEME
 env.use_ssh_config = True
-env.hosts = ['root@keen-test']
-env.code_dir = path('keen')
 env.project_dir = ROOT
-env.static_root = path('keen', 'static')
+env.code_dir = path('keen')
+env.static_root = path('keen/static')
 env.virtualenv = ROOT
-env.code_repo = 'git@github.com:momyc/keensmb.git'
 env.django_settings_module = 'keen.settings'
-
-
-def virtualenv(venv_dir):
-    """
-    Context manager that establishes a virtualenv to use.
-    """
-    return settings(venv=venv_dir)
 
 
 def run_venv(command, **kwargs):
@@ -39,42 +30,108 @@ def run_venv(command, **kwargs):
     Runs a command in a virtualenv (which has been specified using
     the virtualenv context manager
     """
-    run("source %s/bin/activate" % env.virtualenv + " && " + command, **kwargs)
+    run(". {0}/bin/activate && ".format(env.virtualenv) + command, **kwargs)
+
+
+def install_os_packages():
+    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv')
+
+
+def postgres_sudo(cmd):
+    return run('sudo -u postgres -i ' + cmd)
+
+def prepare_db():
+    sudo('service postgresql start')
+    postgres_sudo('createuser -S -D -R keen')
+    postgres_sudo('createdb -O keen -T template0 -E utf8 keen')
+    postgres_sudo('psql -c "create extension hstore;" keen')
+
+
+def drop_db():
+    sudo('service postgresql start')
+    with settings(sudo_user='postgres'):
+        sudo('dropdb keen')
+        sudo('dropuser keen')
 
 
 def install_dependencies():
-    run('sudo aptitude install nginx build-essential python-dev postgresql libpq-dev libffi-dev')
-    run('sudo service postgresql start')
-
     ensure_virtualenv()
-    with virtualenv(env.virtualenv):
-        with cd(env.code_dir):
-            run_venv("pip install -r requirements/development.txt")
+    run_venv("pip install -r %s" % (path('keen/requirements/development.txt')))
+
+
+def configure_nginx():
+    nginx_sites_enabled = '/etc/nginx/sites-enabled/'
+    if not exists(posixpath.join(nginx_sites_enabled, 'keensmb.com')):
+        sudo('ln -s %s %s' % (path('keen/conf/nginx/keensmb.com'), nginx_sites_enabled))
 
 
 def ensure_virtualenv():
-    if exists(env.virtualenv):
+    if exists(posixpath.join(env.virtualenv, 'bin/activate')):
         return
+    run("virtualenv --no-site-packages {0}".format(env.virtualenv))
 
+
+def clone(repo=None):
+    if repo is None:
+        repo = 'git@github.com:beforebeta/keensmb.git'
+    run('git clone %s %s' % (repo, env.code_dir))
+    local_py = 'keen/settings/local.py'
+    put(local_py, path('keen/keen/settings/'))
+
+
+def pull(branch=''):
     with cd(env.code_dir):
-        run("virtualenv --no-site-packages --python=%s %s" %
-            (PYTHON_BIN, env.virtualenv))
-        run("echo %s > %s/lib/%s/site-packages/projectsource.pth" %
-            (env.project_dir, env.virtualenv, PYTHON_BIN))
+        run('git pull ' + branch)
 
 
-def pull_code():
-    if not exists(env.code_dir):
-        run("mkdir -p %s" % env.code_dir)
+@task
+def uwsgi_start():
     with cd(env.code_dir):
-        if not exists(posixpath.join(env.code_dir, '.git')):
-            run('git clone %s .' % (env.code_repo))
-        else:
-            run('git pull')
+        run_venv('uwsgi --ini conf/uwsgi/{0}.ini'.format(env.profile))
 
-    local_py = posixpath.join('keen', 'settings', 'local.py')
-    if not exists(posixpath.join(env.code_dir, local_py)):
-        put(local_py, posixpath.join(env.code_dir, 'keen', 'settings'))
+
+@task
+def uwsgi_stop():
+    with cd(env.code_dir):
+        run_venv('uwsgi --stop {0}.pid'.format(env.profile))
+
+
+@task
+def uwsgi_reload():
+    with cd(env.code_dir):
+        run_venv('uwsgi --reload {0}.pid'.format(env.profile))
+
+
+@task
+def deploy(branch=''):
+    """Deploy current branch or branch specified as argument
+
+    Target host must be specified by using either "staging" or "production" command
+    """
+    pull(branch)
+    with cd(env.code_dir):
+        run_venv('./manage.py migrate')
+        run_venv('./manage.py collectstatic')
+    uwsgi_reload()
+
+
+
+@task
+def production(hosts):
+    """Set hosts and profile variables
+    """
+    env.profile = 'production'
+    env.django_settings_module = 'keen.settings{profile}'.format(env)
+    env.hosts = hosts.split(',')
+
+
+@task
+def staging(hosts):
+    """Set hosts and profile variables
+    """
+    env.profile = 'development'
+    env.django_settings_module = 'keen.settings{0}'.format(env.profile)
+    env.hosts = hosts.split(',')
 
 
 @task
@@ -91,17 +148,11 @@ def version():
 
 
 @task
-def uname():
-    """ Prints information about the host. """
-    run("uname -a")
-
-
-@task
 def nginx_stop():
     """
     Stop the webserver that is running the Django instance
     """
-    run("service nginx stop")
+    sudo("service nginx stop")
 
 
 @task
@@ -109,7 +160,7 @@ def nginx_start():
     """
     Starts the webserver that is running the Django instance
     """
-    run("service nginx start")
+    sudo("service nginx start")
 
 
 @task
@@ -117,13 +168,7 @@ def nginx_restart():
     """
     Restarts the webserver that is running the Django instance
     """
-    run("service nginx restart")
-
-
-def restart():
-    """ Restart the wsgi process """
-    with cd(env.code_dir):
-        run("touch %s/keen/wsgi.py" % env.code_dir)
+    sudo("service nginx restart")
 
 
 def build_static():
@@ -135,25 +180,16 @@ def build_static():
     run("chmod -R ugo+r %s" % env.static_root)
 
 
-@task
-def first_deployment_mode():
-    """
-    Use before first deployment to switch on fake south migrations.
-    """
-    env.initial_deploy = True
-
-
-@task
 def update_database(app=None):
     """
     Update the database (run the migrations)
     Usage: fab update_database:app_name
     """
+    run('sudo service postgresql start')
+
     with virtualenv(env.virtualenv):
         with cd(env.code_dir):
             if getattr(env, 'initial_deploy', False):
-                run('sudo -u postgres createuser -S -D -R keen')
-                run('sudo -u postgres createdb -O keen -T template0 -E utf8 keen')
                 run_venv("./manage.py syncdb --all")
                 run_venv("./manage.py migrate --fake --noinput")
             else:
@@ -187,11 +223,29 @@ def sshagent_run(cmd):
 
 
 @task
-def deploy():
+def install(repo=None):
+    """Initial installation
+
+    That includes the following steps
+
+        1. Install Ubuntu packages
+        2. Create virtualenv
+        3. Create database and database user
+        4. Clone git repository (accepts optional git repository URL,
+                    default is git@github.com:beforebeta/keensmb.git)
+        5. Install Python packages listed in requirements file
+        6. Add keensmb.com virtual host to Nginx configuration
+
+    Note:
+        Target host must be specified by using either "staging" or "production"
+        command as following:
+            fab staging:test install:git@github.com:momyc/keensmb.git
+            or
+            fab production:keensmb.com install
     """
-    Deploy the project.
-    """
-    pull_code()
+    install_os_packages()
+    ensure_virtualenv()
+    prepare_db()
+    clone(repo)
     install_dependencies()
-    update_database()
-    build_static()
+    configure_nginx()
