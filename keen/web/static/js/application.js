@@ -118,16 +118,16 @@ String.prototype.repeat = function(num) {
     }
 
     // Table: Add class row selected
-    $(document).on('check uncheck toggle', '.table tbody :checkbox', function (e) {
-      var $this = $(this)
-        , check = $this.prop('checked')
-        , toggle = e.type == 'toggle'
-        , checkboxes = $('.table tbody :checkbox')
-        , checkAll = checkboxes.length == checkboxes.filter(':checked').length
+    // $(document).on('check uncheck toggle', '.table tbody :checkbox', function (e) {
+    //   var $this = $(this)
+    //     , check = $this.prop('checked')
+    //     , toggle = e.type == 'toggle'
+    //     , checkboxes = $('.table tbody :checkbox')
+    //     , checkAll = checkboxes.length == checkboxes.filter(':checked').length
 
-      $this.closest('tr')[check ? 'addClass' : 'removeClass']('selected-row');
-      if (toggle) $this.closest('.table').find('.toggle-all :checkbox').checkbox(checkAll ? 'check' : 'uncheck');
-    });
+    //   $this.closest('tr')[check ? 'addClass' : 'removeClass']('selected-row');
+    //   if (toggle) $this.closest('.table').find('.toggle-all :checkbox').checkbox(checkAll ? 'check' : 'uncheck');
+    // });
 
     // jQuery UI Datepicker
     var datepickerSelector = '.datapicker';
@@ -135,9 +135,10 @@ String.prototype.repeat = function(num) {
       showOtherMonths: true,
       selectOtherMonths: true,
       dateFormat: "mm/dd/yy",
+      yearRange: "c-99:+0",
       changeMonth: true,
       changeYear: true
-    }).prev('.btn').on('click', function (e) {
+    }).siblings('.btn, .input-group-btn').on('click', function (e) {
       e && e.preventDefault();
       $(datepickerSelector).focus();
     });
@@ -161,7 +162,7 @@ String.prototype.repeat = function(num) {
     window.prettyPrint && prettyPrint();
   });
 
-    $(".select2").select2();
+  $(".select2").select2();
 
 
 })(jQuery);

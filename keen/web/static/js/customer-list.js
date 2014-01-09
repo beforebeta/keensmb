@@ -122,12 +122,18 @@
                 $scope.loadingDisabled = true;
 
                 customerService.getClientCustomers($scope.customerFields, $scope.searchParam, $scope.sortParam).then(function(data) {
-                    var customers = data.data.customers;
+                    // var customers = data.data.customers;
 
-                    // TODO hardcoded limit
-                    if (customers.length < customerService.limitData) {
-                        $scope.loadingDisabled = true;
-                    }
+                    // if (customers.length < customerService.limitData) {
+                    //     $scope.loadingDisabled = true;
+                    // }
+
+                    var customers = _.map(data.data.customers, function(val) {
+                        return {
+                            id: val.id,
+                            data: val.data
+                        };
+                    });
 
                     if (!clearCustomers) {
                         $scope.customers = $scope.customers.concat(customers);
@@ -139,7 +145,7 @@
 
                     $scope.loadingDisabled = false;
 
-                    initCheckbox();
+                    // initCheckbox();
                 });
             };
 
@@ -188,22 +194,48 @@
                 $toggleAllCheckbox = $('.tables-wrapper .toggle-all-customers :checkbox'),
                 $itemActionsBlock = $('.js-item-selected');
 
-            var checkItemActions = function() {
-                var $customersTable = $customersList,
-                    $checkboxes = $customersTable.find(':checkbox'),
-                    $checked = $checkboxes.filter(':checked'),
-                    checkedAny = ($checked.length !== 0);
+            $scope.allChecked = function() {
 
-                customersToDelete = [];
-                $tablesWrapper.find('.selected-row').removeClass('selected-row');
-                $checked.each(function(i, item) {
-                    var customerId = $(item).closest('tr').data('id');
-                    customersToDelete.push(customerId);
-                    $tablesWrapper.find('tr[data-id='+customerId+']').addClass('selected-row');
+                var customers = angular.copy($scope.customers);
+                if (customers.length && _.where(customers, {selected: true}).length === customers.length) {
+                    return true;
+                }
+                return false;
+            };
+            // $scope.anyCustomerSelected = function() {
+            //     var customers = angular.copy($scope.customers);
+            //     return _.findWhere(customers, {selected: true}) ? true : false;
+            // };
+
+            $scope.anyCustomerSelected = function() {
+                var customers = angular.copy($scope.customers);
+                return _.findWhere(customers, {selected: true}) ? true : false;
+            };
+
+            $scope.markAll = function(e) {
+                console.log(e.target);
+                window.op = e.target
+                _.each($scope.customers, function(customer) {
+                    customer.selected = false;
                 });
+            };
 
-                $itemActionsBlock[checkedAny ? 'slideDown' : 'slideUp'](200);
-                $toggleAllCheckbox.checkbox(checkedAny ? 'check' : 'uncheck');
+            var checkItemActions = function() {
+                // var $customersTable = $customersList,
+                //     $checkboxes = $customersTable.find(':checkbox'),
+                //     $checked = $checkboxes.filter(':checked'),
+                //     checkedAny = ($checked.length !== 0);
+
+                // customersToDelete = [];
+                // $tablesWrapper.find('.selected-row').removeClass('selected-row');
+                // $checked.each(function(i, item) {
+                //     var customerId = $(item).closest('tr').data('id');
+                //     customersToDelete.push(customerId);
+                //     $tablesWrapper.find('tr[data-id='+customerId+']').addClass('selected-row');
+                // });
+
+                // $itemActionsBlock[checkedAny ? 'slideDown' : 'slideUp'](200);
+                // $toggleAllCheckbox.checkbox(checkedAny ? 'check' : 'uncheck');
             };
 
             var deleteCustomer = function() {
@@ -312,7 +344,7 @@
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 
             var clientSlug = $('#clientSlug').text(),
-                itemsNumber = 50,
+                itemsNumber = 5,
                 currentOffset = -itemsNumber;
 
             return {
@@ -366,6 +398,15 @@
                 },
                 resetCounter: function() {
                     currentOffset = -this.limitData;
+                }
+            };
+        }]).directive('checkboxik', [function(){
+            // Runs during compile
+            return {
+                // priority: 0,
+                link: function(scope, elm, attrs) {
+                    var content = angular.element('<label for="'+attrs.id+'">'+attrs.checkboxik+'</label>');
+                    content.insertAfter(elm);
                 }
             };
         }]);

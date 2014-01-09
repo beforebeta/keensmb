@@ -70,7 +70,7 @@
       {% endif %}
     </div>
   </div>
-
+<div></div>
   {% verbatim  %}
   <div class="global-alert dialog dialog-danger text-left" ng-show='globalAlert' ng-cloak>
     <div class="container">
@@ -84,6 +84,12 @@
       </p>
     </div>
   </div>
+
+  <p>
+    <input checkboxik='label1' ng-model='test' type="checkbox" id='oppa' class='custom-checkbox'>
+    <input checkboxik='label2' ng-model='test' type="checkbox" id='oppa' class='custom-checkbox'>
+  </p>
+  <p>{{ testos }}</p>
 
   <div class="row">
     <div class="col-xs-12">
@@ -142,7 +148,9 @@
     </div>
   </div>
 
-  <div style='display: none' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
+  <p>OO: {{ anyCustomerSelected() }}</p>
+
+  <div ng-show='anyCustomerSelected()' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
     <div class="navbar-collapse">
       <p class='item-actions white pull-left mtm mll mbn'>Item Actions:</p>
       <ul class="nav navbar-nav navbar-right pull-right">
@@ -184,9 +192,16 @@
           <thead>
             <tr>
               <th width='60' class='text-center'>
-                <label class="checkbox no-label toggle-all-customers" for="checkbox-table-all">
+                <input checkboxik=''
+                       type="checkbox"
+                       ng-checked='allChecked()'
+                       ng-click='markAll($event)'
+                       id="checkbox-table-all"
+                       class='custom-checkbox'>
+
+                <!-- <label class="checkbox no-label toggle-all-customers" for="checkbox-table-all">
                   <input type="checkbox" value="" id="checkbox-table-all" data-toggle="checkbox">
-                </label>
+                </label> -->
               </th>
 
               <th bindonce ng-repeat='field in requiredFieldsList'
@@ -227,13 +242,15 @@
 
           <tbody class="infinite-container">
 
-            <tr bindonce ng-repeat='customer in customers' class='fade-onload customer-row' bo-id='{{ customer.id }}'>
+            <tr bindonce ng-repeat='customer in customers'
+                class='fade-onload customer-row'
+                ng-class='{"selected-row": customer.selected}'>
               <td width='60' class='checkbox-cell'>
-                <label class="checkbox no-label" for="checkbox-table-{{$index}}">
-                  <input type="checkbox"
-                         id="checkbox-table-{{$index}}"
-                         data-toggle="checkbox">
-                </label>
+                <input checkboxik=''
+                       type="checkbox"
+                       ng-model='customer.selected'
+                       id="checkbox-table-{{ $index }}"
+                       class='custom-checkbox'>
               </td>
 
               <td bindonce ng-repeat='field in requiredFieldsList'>
@@ -241,7 +258,7 @@
                      bo-style='{width: fieldsMap[field].width+"px"}'>
                   <span class='sorting-header'>
                     <a target='_blank'
-                       bo-href-i='/customer_profile/{{ customer.id }}'
+                       bo-href='"/customer_profile/" + customer.id'
                        bo-text="customer.data[field]"></a>
                   </span>
                 </div>
@@ -303,7 +320,7 @@
 
             <tr bindonce ng-repeat='customer in customers'
                 class='fade-onload customer-row'
-                bo-id='{{ customer.id }}'>
+                ng-class='{"selected-row": customer.selected}'>
               <td ng-repeat='field in optionalFieldsList'>
                 <div class="cell-content"
                      bo-style='{width: fieldsMap[field].width+"px"}'>
