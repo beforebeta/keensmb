@@ -65,8 +65,7 @@
                               <span class="input-group-btn">
                                 <button class="btn" type="button"><span class="fui-calendar"></span></button>
                               </span>
-                                <!-- Valid From {{ form.valid_from.value }}-->
-                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datepickerAlternate {% if form.valid_from.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_from.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_from.value|date:"M j, Y" }}" id="datepicker-01">
+                              <input type="text" name="{{ form.valid_from.name }}" class="form-control datepickerAlternate {% if form.valid_from.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_from.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_from.value|date_formatted:"M j, Y" }}" id="datepicker-01">
                         </div>
                     </div>
                   </div>
@@ -79,8 +78,7 @@
                           <span class="input-group-btn">
                             <button class="btn" type="button"><span class="fui-calendar"></span></button>
                           </span>
-                                                            <!-- Valid To {{ form.valid_to.value }} -->
-                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datepickerAlternate {% if form.valid_to.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_to.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_to.value|date:"M j, Y" }}" id="datepicker-02">
+                          <input type="text" name="{{ form.valid_to.name }}" class="form-control datepickerAlternate {% if form.valid_to.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.valid_to.errors.as_text }}'{% else %}"{% endif %} value="{{ form.valid_to.value|date_formatted:"M j, Y" }}" id="datepicker-02">
                         </div>
                     </div>
                   </div>
@@ -187,56 +185,74 @@
           </div>
           <div class="kn-section-content">
             <div class="row">
-              <div class="row mbl">
-                <div class="col-xs-3 small">
-                  <span class="pll mll">Create Promotion For{{ form.mediums|check_required }}:</span>
-                </div>
-                <div class="col-xs-2">
-                  <label class="checkbox small mts" for="checkbox2">
-                  <span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">
-                    <span class="fui-mail promotions-new-icon"></span>
-                  </label>
-                </div>
-                <div class="col-xs-2">
-                  <label class="checkbox small mts" for="checkbox2">
-                  <span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">
-                    <span class="fui-googleplus promotions-new-icon"></span>
-                  </label>
-                </div>
-                <div class="col-xs-2">
-                  <label class="checkbox small mts" for="checkbox2">
-                  <span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">
-                    <span class="fui-facebook promotions-new-icon"></span>
-                  </label>
-                </div>
-                <div class="col-xs-1">
-                  <label class="checkbox small mts" for="checkbox2">
-                  <span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">
-                    <span class="fui-twitter promotions-new-icon"></span>
-                  </label>
-                </div>
-                <div class="col-xs-1 mll">
-                  <div data-toggle='popover' data-content='{{ form.mediums.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
-                </div>
-              </div>
-              <div class="row mbl pbl">
+              <!--<div class="row mbl">-->
+                <!--<div class="col-xs-3 small">-->
+                  <!--<span class="pll mll">Create Promotion For{{ form.mediums|check_required }}:</span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-2">-->
+                  <!--<label class="checkbox small mts" for="checkbox2">-->
+                  <!--<span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">-->
+                    <!--<span class="fui-mail promotions-new-icon"></span>-->
+                  <!--</label>-->
+                <!--</div>-->
+                <!--<div class="col-xs-2">-->
+                  <!--<label class="checkbox small mts" for="checkbox2">-->
+                  <!--<span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">-->
+                    <!--<span class="fui-googleplus promotions-new-icon"></span>-->
+                  <!--</label>-->
+                <!--</div>-->
+                <!--<div class="col-xs-2">-->
+                  <!--<label class="checkbox small mts" for="checkbox2">-->
+                  <!--<span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">-->
+                    <!--<span class="fui-facebook promotions-new-icon"></span>-->
+                  <!--</label>-->
+                <!--</div>-->
+                <!--<div class="col-xs-1">-->
+                  <!--<label class="checkbox small mts" for="checkbox2">-->
+                  <!--<span class="icons"><span class="first-icon fui-checkbox-unchecked"></span><span class="second-icon fui-checkbox-checked"></span></span><input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">-->
+                    <!--<span class="fui-twitter promotions-new-icon"></span>-->
+                  <!--</label>-->
+                <!--</div>-->
+                <!--<div class="col-xs-1 mll">-->
+                  <!--<div data-toggle='popover' data-content='{{ form.mediums.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <div class="row">
                 <div class="col-xs-3 small">
                   <span class="pll mll">Send Promotion{{ form.send_schedule|check_required }}:</span>
                 </div>
                 <div class="col-xs-2">
                   <label class="radio">
-                    <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="group1" value="1" data-toggle="radio">
+                    <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="send_later" data-label="now" value="False" data-toggle="radio" {% if not form.send_later.value %}checked="checked"{% endif %}>
                     Now
                   </label>
                 </div>
                 <div class="col-xs-1">
                   <label class="radio">
-                    <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="group1" value="1" data-toggle="radio">
+                    <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="send_later" data-label="later" value="True" data-toggle="radio" {% if form.send_later.value %}checked="checked"{% endif %}>
                     Later
                   </label>
                 </div>
                 <div class="col-xs-1 mll">
                   <div data-toggle='popover' data-content='{{ form.send_schedule.name|promotion_help_text }}' class="js-popover-hover promotion-new-tooltip">?</div>
+                </div>
+              </div>
+              <div class="row " id="send_later_row" {% if not form.send_later.value %}style="display:none"{% endif %}>
+                <div class="col-xs-3 small">
+                  &nbsp;
+                </div>
+                <div class="col-xs-2">
+                  &nbsp;
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-group {% if form.send_schedule.errors %}has-error{% endif %}">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <button class="btn" type="button"><span class="fui-calendar"></span></button>
+                          </span>
+                          <input type="text" name="{{ form.send_schedule.name }}" class="form-control datepickerAlternate {% if form.send_schedule.errors %}js-popover-hover" data-toggle='popover' data-content='{{ form.send_schedule.errors.as_text }}'{% else %}"{% endif %} value="{{ form.send_schedule.value|date_formatted:"M j, Y" }}" id="datepicker-03">
+                        </div>
+                    </div>
                 </div>
               </div>
             </div>

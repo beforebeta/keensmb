@@ -81,6 +81,15 @@
                 }
             );
         });
+
+        $("input[data-label=later]").change(function () {
+            var $send_later = $("input[data-label=later]");
+            if($send_later.attr("checked") == "checked") {
+                $('#send_later_row').show();
+            } else {
+                $('#send_later_row').hide();
+            }
+        });
     });
 
 })(jQuery);

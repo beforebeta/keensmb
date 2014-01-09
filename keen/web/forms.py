@@ -98,38 +98,52 @@ class PromotionForm(forms.ModelForm):
     class Meta:
         model = Promotion
         fields = ('name', 'description', 'short_code', 'valid_from', 'valid_to', 'restrictions',
-                  'additional_information', 'redemption_instructions', 'cta_text', 'image_url', 'banner_url', 'mediums', 'send_schedule')
+                  'additional_information', 'redemption_instructions', 'cta_text', 'image_url', 'banner_url', 'mediums', 'send_later', 'send_schedule')
         help_texts = {
             'valid_to': 'Provide the start date and expiry date for this promotion. Otherwise, it will by default continue indefinitely.',
         }
+        widgets = {
+            'send_later': forms.RadioSelect
+        }
 
-    valid_from = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y'])
-    valid_to = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y'])
+    valid_from = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y', '%B. %d, %Y', '%B %d, %Y'])
+    valid_to = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y', '%B. %d, %Y', '%B %d, %Y'])
+    send_schedule = DateField(required=False, input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b. %d, %Y', '%b %d, %Y', '%B. %d, %Y', '%B %d, %Y'])
 
-    #def clean_valid_from(self):
-    #    valid_from = self.cleaned_data.get('valid_from', None)
-    #    if valid_from:
-    #        if valid_from < datetime.date.today():
-    #            raise forms.ValidationError("This date cannot be in the past")
-    #    return valid_from
-
-    def clean(self):
-        cleaned_data = super(PromotionForm, self).clean()
-        valid_to = self.cleaned_data.get('valid_to', None)
+    def clean_valid_from(self):
         valid_from = self.cleaned_data.get('valid_from', None)
-        if valid_to:
-            if valid_from:
-                if valid_to < valid_from:
-                    #self._errors["valid_to"] = ErrorList(["This date should be on or after the valid from date"])
-                    raise forms.ValidationError({"valid_to": "This date should be on or after the valid from date"})
-            else:
-                raise forms.ValidationError({"valid_from": "Please provide the date the promotion is valid from"})
-        return cleaned_data
+        if valid_from:
+            if valid_from < datetime.date.today():
+                raise forms.ValidationError("This date cannot be in the past")
+        return valid_from
 
-    #def clean_valid_to(self):
+    def clean_send_schedule(self):
+        valid_to = self.cleaned_data.get('valid_to', None)
+        send_schedule = self.cleaned_data.get('send_schedule', None)
+        if send_schedule:
+            if send_schedule < datetime.date.today():
+                raise forms.ValidationError("This date cannot be in the past")
+            if valid_to and send_schedule > valid_to:
+                raise forms.ValidationError("This date cannot be beyond the validity of the promotion")
+        return send_schedule
+
+    #def clean(self):
+    #    cleaned_data = super(PromotionForm, self).clean()
     #    valid_to = self.cleaned_data.get('valid_to', None)
     #    valid_from = self.cleaned_data.get('valid_from', None)
     #    if valid_to:
-    #        if valid_to < valid_from:
-    #            raise forms.ValidationError("This date should be on or after the valid from date")
-    #    return valid_to
+    #        if valid_from:
+    #            if valid_to < valid_from:
+    #                #self._errors["valid_to"] = ErrorList(["This date should be on or after the valid from date"])
+    #                raise forms.ValidationError({"valid_to": "This date should be on or after the valid from date"})
+    #        else:
+    #            raise forms.ValidationError({"valid_from": "Please provide the date the promotion is valid from"})
+    #    return cleaned_data
+
+    def clean_valid_to(self):
+        valid_to = self.cleaned_data.get('valid_to', None)
+        valid_from = self.cleaned_data.get('valid_from', None)
+        if valid_to:
+            if valid_to < valid_from:
+                raise forms.ValidationError("This date should be on or after the valid from date")
+        return valid_to

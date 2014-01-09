@@ -1,6 +1,8 @@
 from django import template
+from django.template.defaultfilters import date
 from django.utils.safestring import mark_safe
 from keen.core.models import *
+from datetime import datetime
 
 register = template.Library()
 
@@ -32,6 +34,18 @@ def promotion_help_text(name):
         return Promotion._meta.get_field_by_name(name)[0].help_text
     except:
         return ""
+
+@register.filter
+def date_formatted(val, format):
+    output = date(val, format)
+    if val and not output:
+        try:
+            output2 = date(datetime.strptime(val, '%b %d, %Y').date(), format)
+            if output2:
+                return output2
+        except:
+            pass
+    return output
 
 # From http://djangosnippets.org/snippets/1259/
 @register.filter

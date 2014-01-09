@@ -435,6 +435,11 @@ class Promotion(Timestamps):
         ('expired', 'Expired'),
     )
 
+    SEND_LATER_CHOICES = Choices(
+        (True, 'later'),
+        (False, 'now')
+    )
+
     client = models.ForeignKey(Client, related_name='promotions')
     name = models.CharField(max_length=255, verbose_name='Name of the promotion', help_text='This is the name that will appear on your Promotion Manager and on the Promotion itself.')
     status = models.CharField(max_length=15, choices=PROMOTION_STATUS, verbose_name='status', help_text='status', default=PROMOTION_STATUS.draft)
@@ -449,6 +454,7 @@ class Promotion(Timestamps):
     cta_text = models.CharField(max_length=50, default="Redeem", verbose_name='', help_text='You can customize the text to appear on the redemption button. By default the call to action will be "REDEEM." <br><br><i>e.g. "Get This Deal!"; "Reveal Code"</i>')
     banner_url = models.CharField(max_length=255, null=True, blank=True, verbose_name='', help_text='If you have already uploaded a banner logo, we completed this step for you. If you have not uploaded a logo, you can upload one here.')
     image_url = models.CharField(max_length=255, null=True, blank=True, verbose_name='', help_text='Every promotion has to have an image. The image must be 300 px wide and have a height of 290 px. You may also use photos that you have uploaded for previous promotions.')
+    send_later = models.BooleanField(default=False, choices=SEND_LATER_CHOICES)
     send_schedule = models.DateTimeField(null=True, blank=True, verbose_name='', help_text='You can send this promotion immediately after completing this form or you can schedule a specific start date and time. and we will automatically activate the promotion for you then.')
     target_customers = models.ManyToManyField(Customer, null=True, blank=True, verbose_name='', help_text='')
 
@@ -463,4 +469,6 @@ class Promotion(Timestamps):
                 "redemptions"   : str(random.randrange(100, 500)),
             }
             self.analytics["redemptions_percentage"] = str(int((float(self.analytics["redemptions"])/float(self.analytics["total_sent"]))*100))
+        if not self.send_later:
+            self.send_schedule = None
         super(Promotion, self).save(*args, **kwargs)
