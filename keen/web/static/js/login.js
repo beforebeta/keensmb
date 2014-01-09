@@ -1,8 +1,11 @@
 $(function() {
 	var
+		next = '/dashboard',
 		$form = $('#signInForm'),
 		$error = $form.find('.alert-error'),
 		$fields = $form.find(':input');
+
+	$error.hide();
 
 	$form.on('submit', function(event) {
 		event && event.preventDefault();
@@ -23,7 +26,7 @@ $(function() {
 			.done(function(response) {
 				if (response) {
 					if (response.success) {
-						window.location.reload(true);
+						window.location.href = next;
 					} else if (response.error) {
 						$error.html(response.error);
 						$error.show();
@@ -32,6 +35,11 @@ $(function() {
 			});
 	});
 
-	$error.hide();
-	$('#loginModal').modal('show');
+	if (window.location.hash) {
+		hash = window.location.hash.trim();
+		if (hash != '#') {
+			next = hash.substr(1);
+		}
+		$('#loginModal').modal('show');
+	}
 });

@@ -23,6 +23,7 @@
 		{% block main %}
 		{% endblock %}
 
+    {% include "front-page/login.html" %}
     {% include "front-page/try-keen.html" %}
 
     {% include 'front-page/snippets/ga_tracking.html' %}
@@ -32,6 +33,7 @@
     <script src="{% static "js/jquery.fancybox.pack.js" %}"></script>
     <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
     <script src="{% static "js/flatpage.js" %}"></script>
+    <script src="{% static "js/login.js" %}"></script>
 
     {% include 'olark.html' %}
 
