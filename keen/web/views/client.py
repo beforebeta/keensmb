@@ -47,6 +47,7 @@ def client_view(func):
 
 @client_view
 def dashboard(request, client):
+    dashboard = client.get_dashboard()
     context = {
         'client': client,
         'dashboard': dashboard,

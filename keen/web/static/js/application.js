@@ -168,12 +168,12 @@ String.prototype.repeat = function (num) {
 //        });
 
         // jQuery UI Datepicker
-        var setup_date_picker = function(selector, dateFormat) {
+        var setup_date_picker = function(selector, dateFormat, yearRange) {
             $(selector).datepicker({
                 showOtherMonths: true,
                 selectOtherMonths: true,
                 dateFormat: dateFormat,
-                yearRange: "c-99:+0",
+                yearRange: yearRange,
                 changeMonth: true,
                 changeYear: true
             }).siblings('.btn, .input-group-btn').on('click', function (e) {
@@ -186,8 +186,8 @@ String.prototype.repeat = function (num) {
             // Now let's align datepicker with the prepend button
             $(selector).datepicker('widget').css({'margin-left': -$(selector).prev('.input-group-btn').find('.btn').outerWidth()});
         };
-        setup_date_picker('.datapicker', "mm/dd/yy");
-        setup_date_picker('.datepickerAlternate', "M d, yy");
+        setup_date_picker('.datapicker', "mm/dd/yy", "c-99:+0");
+        setup_date_picker('.datepickerAlternate', "M d, yy", "c-10:+10");
 
 
         // Switch
