@@ -1,6 +1,7 @@
 import os
 import operator
 import random
+import datetime
 
 from django.conf import settings
 from django.db import models
@@ -471,4 +472,6 @@ class Promotion(Timestamps):
             self.analytics["redemptions_percentage"] = str(int((float(self.analytics["redemptions"])/float(self.analytics["total_sent"]))*100))
         if not self.send_later:
             self.send_schedule = None
+        if self.valid_to and not self.valid_from:
+            self.valid_from = datetime.date.today()
         super(Promotion, self).save(*args, **kwargs)
