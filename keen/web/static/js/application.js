@@ -238,10 +238,11 @@ String.prototype.repeat = function(num) {
 
       $('.section-default').each(function() {
 
-          var sectionData = $this.data('section-name');
+          var sectionData = $(this).data('section-name');
 
           if(itemData === sectionData) {
-              $this.show();
+
+              $(this).show();
           }
       });
     }
