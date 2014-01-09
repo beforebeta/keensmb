@@ -107,11 +107,14 @@ class SignupFormSerializer(DynamicSerializer):
     total_signups = SerializerMethodField('get_total_signups')
 #    total_visits = SerializerMethodField('get_total_visits')
     unique_visits = SerializerMethodField('get_unique_visits')
+    thumb_url = SerializerMethodField('get_thumb_url')
 
     class Meta:
         model = SignupForm
         fields = ('slug', 'status', 'data', 'created', 'modified',
-                  'url', 'edit_url', 'total_signups', 'visits', 'unique_visits')
+                  'url', 'edit_url', 'total_signups', 'visits',
+                  'unique_visits', 'thumb_url',
+                  )
 
     def get_url(self, form):
         return reverse('customer_signup', kwargs=dict(
@@ -131,3 +134,7 @@ class SignupFormSerializer(DynamicSerializer):
 
     def get_unique_visits(self, form):
         return form.visitors.count()
+
+    def get_thumb_url(self, form):
+        return '/media/client/%s/form-thumb/%s.png' % (
+            form.client.slug, form.slug)

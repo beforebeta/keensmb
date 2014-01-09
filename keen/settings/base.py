@@ -255,6 +255,11 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['console'],
         },
+        'django': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
     },
     'handlers': {
         'console': {
@@ -268,3 +273,7 @@ LOGGING = {
 #CEF_VENDOR = 'Your Company'
 #CEF_VERSION = '0'
 #CEF_DEVICE_VERSION = '0'
+
+BROKER_URL = 'amqp://guest@localhost/'
+CELERY_RESULT_BACKEND = BROKER_URL
+
