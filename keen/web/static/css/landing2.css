@@ -129,8 +129,14 @@
 
 .landing2 .left-block-image img {
   position: absolute;
+  left: 0;
   bottom: 115px;
+  max-width: 46%;
   border: 1px solid #2b3d4f;
   border-radius: 10px;
   box-shadow: -6px 6px 0 2px rgba(0,0,0,.35);
+}
+
+.landing2 .push-footer {
+  height: 13px;
 }

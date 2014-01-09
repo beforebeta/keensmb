@@ -1171,3 +1171,9 @@ footer .footer-button-hover .btn:hover {
   border-color: #edeff1 transparent transparent transparent;
   z-index: 2;
 }
+
+ /*for new signup-form*/
+
+ .stable-width {
+  width: 960px;
+ }

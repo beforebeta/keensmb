@@ -234,10 +234,10 @@
                 <div class="col-xs-4 small">
                   <span class="pll mll text-muted">Audience Segments*:</span>
                   <ul class="promotion-scroll-menu">
-                    <li class="active">Marital Status</li>
-                    <li>Age</li>
-                    <li>Marital Status</li>
-                    <li>Redemption Location</li>
+                    <li class="js-trigger-item" data-item="martial-status">Marital Status</li>
+                    <li class="js-trigger-item" data-item="age">Age</li>
+                    <li class="js-trigger-item" data-item="marital">Marital</li>
+                    <li class="js-trigger-item" data-item="redemption-location">Redemption Location</li>
                     <li>Household Income</li>
                     <li>Intitial Customer Source</li>
                     <li>Professional Field</li>
@@ -255,39 +255,23 @@
                   <div class="promotion-narrow-field">
                     <em class="small">You can make promotions more effective by targeting segments of your customers. Choose a segment on the left to narrow your target.</em>
                   </div>
-                  <div class="row">
-                    <div class="col-xs-5">
-                      <div class="kn-section mbl">
-                        <div class="kn-section-header">
-                          <span class="small">Marital Status</span>
-                          <button type="button" class="close mtn">
-                            <i class="promotion-icon-close-height fui-cross"></i>
-                          </button>
-                        </div>
-                        <div class="kn-section-content promotion-select-multiple">
-                          <select multiple class="select2">
-                             <option value="AL">Alabama</option>
-                             <option value="WY">Wyoming</option>
-                           </select>
-                        </div>
+                  <div style="display: none;" class="col-xs-5 section-default" data-section-name="">
+                    <div class="kn-section mbl">
+                      <div class="kn-section-header">
+                        <span class="small">Marital Status</span>
+                        <button type="button" class="close mtn">
+                          <i class="promotion-icon-close-height fui-cross"></i>
+                        </button>
+                      </div>
+                      <div class="kn-section-content promotion-select-multiple">
+                        <select multiple>
+                           <option value="AL">Alabama</option>
+                           <option value="WY">Wyoming</option>
+                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-5">
-                      <div class="kn-section mbl">
-                        <div class="kn-section-header">
-                          <span class="small">Marital Status</span>
-                          <button type="button" class="close mtn">
-                            <i class="promotion-icon-close-height fui-cross"></i>
-                          </button>
-                        </div>
-                        <div class="kn-section-content promotion-select-multiple">
-                          <select multiple class="select2">
-                             <option value="AL">Alabama</option>
-                             <option value="WY">Wyoming</option>
-                           </select>
-                        </div>
-                      </div>
-                    </div>
+                  </div>
+                  <div class="row section-segment-wrapper">
                   </div>
                 </div>
               </div>
