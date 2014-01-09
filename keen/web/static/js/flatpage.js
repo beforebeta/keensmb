@@ -3,12 +3,6 @@
 
 
 (function($) {
-    var hash = window.location.hash;
-    if (hash === '#signin') {
-        $('#loginModal').modal('show');
-    }
-
-
     $('.js-animate-scroll').on('click',function (e) {
         e.preventDefault();
         var target = this.hash,

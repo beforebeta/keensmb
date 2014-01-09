@@ -1,8 +1,8 @@
 import logging
 from functools import wraps
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -24,10 +24,15 @@ def client_view(func):
     @ensure_csrf_cookie
     def wrapper(request, *args, **kw):
         if request.user.is_authenticated() and 'client_slug' in request.session:
-            client = get_object_or_404(
-                Client, slug=request.session['client_slug'])
-            return func(request, client, *args, **kw)
-        return render(request, 'login.html')
+            try:
+                client = Client.objects.get(slug=request.session['client_slug'])
+            except Client.DoesNotExist:
+                logger.error('Failed to locate client with slug %s'
+                             % request.session['client_slug'])
+                del request.session['client_slug']
+            else:
+                return func(request, client, *args, **kw)
+        return redirect('/#' + request.path)
     return wrapper
 
 
