@@ -35,7 +35,7 @@ def virtualenv():
 
 
 def install_os_packages():
-    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv')
+    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv rabbitimq-server')
 
 
 def install_dependencies():

@@ -72,7 +72,7 @@
                     var customerFields = data.data.display_customer_fields;
                     $scope.customerFields = customerFields;
 
-                    updateOtionalFieldsList();
+                    updateOptionalFieldsList();
 
                     tempFields = angular.copy(customerFields);
 
@@ -80,7 +80,7 @@
                 });
             };
 
-            var updateOtionalFieldsList = function() {
+            var updateOptionalFieldsList = function() {
                 var optionalFieldsList = _.difference($scope.customerFields, $scope.requiredFieldsList);
                 $scope.optionalFieldsList = optionalFieldsList;
             };
@@ -153,9 +153,8 @@
                 var fields = _.union($scope.customerFields, $scope.requiredFieldsList);
                 customerService.putCustomersFields(fields).then(function(data) {
                     $scope.customerFields = data.data.display_customer_fields;
-                    updateOtionalFieldsList();
+                    updateOptionalFieldsList();
                     resetList();
-                    checkItemActions();
                 });
             };
 
@@ -202,80 +201,48 @@
                 }
                 return false;
             };
-            // $scope.anyCustomerSelected = function() {
-            //     var customers = angular.copy($scope.customers);
-            //     return _.findWhere(customers, {selected: true}) ? true : false;
-            // };
 
             $scope.anyCustomerSelected = function() {
                 var customers = angular.copy($scope.customers);
                 return _.findWhere(customers, {selected: true}) ? true : false;
             };
 
-            $scope.markAll = function(e) {
-                console.log(e.target);
-                window.op = e.target
+            $scope.markAll = function() {
+                var state = $scope.allChecked();
                 _.each($scope.customers, function(customer) {
-                    customer.selected = false;
+                    customer.selected = !state;
                 });
             };
 
-            var checkItemActions = function() {
-                // var $customersTable = $customersList,
-                //     $checkboxes = $customersTable.find(':checkbox'),
-                //     $checked = $checkboxes.filter(':checked'),
-                //     checkedAny = ($checked.length !== 0);
+            $scope.deleteCustomers = function() {
+                var selectedCustomers = _.where($scope.customers, {selected: true});
 
-                // customersToDelete = [];
-                // $tablesWrapper.find('.selected-row').removeClass('selected-row');
-                // $checked.each(function(i, item) {
-                //     var customerId = $(item).closest('tr').data('id');
-                //     customersToDelete.push(customerId);
-                //     $tablesWrapper.find('tr[data-id='+customerId+']').addClass('selected-row');
-                // });
-
-                // $itemActionsBlock[checkedAny ? 'slideDown' : 'slideUp'](200);
-                // $toggleAllCheckbox.checkbox(checkedAny ? 'check' : 'uncheck');
-            };
-
-            var deleteCustomer = function() {
-
-                _.each(customersToDelete, function(id, i) {
-                    customerService.deleteCustomer(id).then(function(data) {
+                _.each(selectedCustomers, function(customer, i) {
+                    customerService.deleteCustomer(customer.id).then(function(data) {
                         if (data.status === 200) {
-                            var $targetBlock = $('[data-id='+id+']');
-                            $targetBlock.remove();
-
-                            if (i === customersToDelete.length-1) {
-                                checkItemActions();
-                                notify('Customers removed');
+                            if (i === selectedCustomers.length-1) {
+                                customersDeletedSuccess();
                             }
+
+                        } else {
+                            notify('Some error occured while deleting customer '+customer.id);
                         }
                     });
                 });
+
+                var customersDeletedSuccess = function() {
+                    $scope.customers = _.difference($scope.customers, selectedCustomers);
+                    notify(selectedCustomers.length + ' selected Customers removed');
+                    if ($scope.customers.length < customerService.limitData) {
+                        scrollList();
+                    }
+                };
             };
 
             var closeGlobalAlert = function(e) {
                 e.preventDefault();
                 var $alertBlock = $(this).closest('.global-alert');
                 $alertBlock.removeClass('in').hide();
-            };
-
-            var initCheckbox =  function () {
-                setTimeout(function() {
-                    $('[data-toggle="checkbox"]').each(function () {
-                        var $checkbox = $(this);
-                        $checkbox.checkbox();
-                    });
-                    checkItemActions();
-                }, 100);
-            };
-
-            // Table: Toggle all checkboxes
-            var toggleAllListCheckboxes = function() {
-                var ch = $(this).find(':checkbox').prop('checked');
-                $customersList.find('tbody :checkbox').checkbox(ch ? 'check' : 'uncheck');
-                checkItemActions();
             };
 
             var $tablesWrapper = $('.tables-wrapper'),
@@ -332,10 +299,6 @@
 
             var lazyCheckTableSize = _.debounce(checkTableSize, 200);
 
-            // Table: Add class row selected
-            $doc.on('click', '.tables-wrapper .toggle-all-customers', toggleAllListCheckboxes);
-            $doc.on('toggle', '.customers-list :checkbox', checkItemActions);
-            $doc.on('click', '.js-delete-customer', deleteCustomer);
             $doc.on('click', '.global-alert .close', closeGlobalAlert);
             $scrollFlex.on('scroll', scrollFlexList);
             $win.on('resize', lazyCheckTableSize);
@@ -344,7 +307,7 @@
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 
             var clientSlug = $('#clientSlug').text(),
-                itemsNumber = 5,
+                itemsNumber = 50,
                 currentOffset = -itemsNumber;
 
             return {

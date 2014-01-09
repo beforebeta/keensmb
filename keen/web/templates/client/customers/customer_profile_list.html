@@ -85,12 +85,6 @@
     </div>
   </div>
 
-  <p>
-    <input checkboxik='label1' ng-model='test' type="checkbox" id='oppa' class='custom-checkbox'>
-    <input checkboxik='label2' ng-model='test' type="checkbox" id='oppa' class='custom-checkbox'>
-  </p>
-  <p>{{ testos }}</p>
-
   <div class="row">
     <div class="col-xs-12">
       <div class="navbar navbar-inverse mtl mbn profile-toolbar">
@@ -147,8 +141,6 @@
       </div>
     </div>
   </div>
-
-  <p>OO: {{ anyCustomerSelected() }}</p>
 
   <div ng-show='anyCustomerSelected()' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
     <div class="navbar-collapse">
@@ -355,10 +347,7 @@
 
         <div class="modal-body">
           <div class="row modal-body-section" ng-repeat='(name, item) in optionalFieldsMap'>
-            <div class="col-xs-4"><span>{{ item }}</span></div>
-            <div class="col-xs-5 text-simple">
-              <span>Description</span>
-            </div>
+            <div class="col-xs-9"><span>{{ item }}</span></div>
 
             <div class="col-xs-3">
               <button ng-if='!checkField(name)'
@@ -413,7 +402,8 @@
                   data-dismiss="modal">No</button>
 
           <button type="button"
-                  class="btn btn-primary btn-wide btn-embossed btn-secondary mll js-delete-customer"
+                  ng-click='deleteCustomers()'
+                  class="btn btn-primary btn-wide btn-embossed btn-secondary mll"
                   data-dismiss="modal">Yes</button>
         </div>
 
@@ -439,7 +429,7 @@
               </div>
               <div class="progres-line"></div>
               <div class="step-two">2
-                <span>Selecy Mapping</span>
+                <span>Select Mapping</span>
               </div>
               <div class="progres-line"></div>
               <div class="step-three">3
@@ -456,12 +446,11 @@
             <div style="display: none;" class="added-file mtl">
               <div>
                 <span></span>
-                (<strong></strong>)
+                <strong></strong>
                 <button type="button" class="close">
-                  <i class="fui-cross"></i>
+                  <i class="fui-cross js-close"></i>
                 </button>
               </div>
-              <button type="button" class="pts pbs btn btn-default btn-embossed pull-right">Upload</button>
             </div>
             <div style="display: none;" class="download-success text-primary">Sucess!</div>
             <div style="display: none;" class="download-progress mtl ptm text-muted small">
@@ -527,8 +516,8 @@
             </table>
         </div>
         <div class="modal-footer mtl ptn pbn">
-          <button type="button" class="mtl mbm btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll">Next</button>
-          <button type="button" class="mtl mbm btn btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+          <button type="button" class="mtl mbm btn btn-primary btn-step-csv btn-embossed btn-secondary pull-right mll">Next</button>
+          <button type="button" class="mtl mbm btn btn-default btn-step-csv btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
 
       </div><!-- /.modal-content -->

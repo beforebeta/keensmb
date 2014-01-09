@@ -10,7 +10,7 @@
             fileSize = file.size;
 
         $('.added-file span').text(fileName);
-        $('.added-file strong').text(fileSize);
+        $('.added-file strong').text('(' + fileSize + ')');
 
         if(999999 >= fileSize){
             $('.added-file strong').text(Math.round(fileSize / 1000) + 'KB');
@@ -19,11 +19,15 @@
             $('.added-file strong').text(Math.round(fileSize / 1000000) + 'MB');
         }
 
-        if($('.added-file span').text() != 0){
-            $('.added-file').show();
-        }
-        else {
+        $('.js-close').on('click', function() {
+            $('.added-file span').empty();
+            $('.added-file strong').empty();
+
             $('.added-file').hide();
+        });
+
+        if($('.added-file span').text() !== undefined){
+            $('.added-file').show();
         }
     });
 })(jQuery);
