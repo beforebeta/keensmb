@@ -26,7 +26,7 @@ server {
     	}
 
 	location /media/ { 
-        	alias /var/apps/keensmb.com/keen/static/;
+        	alias /var/apps/keensmb.com/keen/media/;
 		autoindex off;
         	expires max;
 		gzip on;
