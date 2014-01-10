@@ -1,6 +1,7 @@
 import json
 import logging
 from functools import wraps
+from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
@@ -11,7 +12,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 from keen import print_stack_trace
 
-from keen.util import get_first_day_of_month_as_dt
+from keen.util import get_first_day_of_month_as_dt, get_last_day_of_month_as_dt
 from keen.core.models import Client, Customer, Location, Promotion
 from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
@@ -134,6 +135,10 @@ def email_template(request, client):
 # Customers
 ####################################################################################################################
 
+def _get_formatted_name(dt):
+    print dt
+    return "%s %s" % (dt.strftime("%B"), dt.year)
+
 @client_view
 def customers(request, client):
     q = Customer.objects.filter(client=client)
@@ -148,6 +153,15 @@ def customers(request, client):
         'new_signups': q.filter(created__gte=get_first_day_of_month_as_dt()).count(),
     }
 
+    first_day_of_month = get_first_day_of_month_as_dt()
+    last_day_of_month = get_last_day_of_month_as_dt()
+    first_days = [first_day_of_month+relativedelta(months=i) for i in [-4,-3,-2,-1,0]]
+    last_days = [last_day_of_month+relativedelta(months=i) for i in [-4,-3,-2,-1,0]]
+    print "hi"
+    context["chartData"] = json.dumps([{
+            "month": _get_formatted_name(first_days[i]),
+            "visits": client.customers.filter(created__gte=first_days[i], created__lte=last_days[i]).count()} for i in range(5)]);
+    print context["chartData"]
     return render(request, 'client/customers/customer_profile_list.html', context)
 
 @client_view

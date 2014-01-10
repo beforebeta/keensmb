@@ -7,7 +7,7 @@ import json
 from keen import print_stack_trace
 
 
-class EventManager(models.Manager):
+class EventManager(hstore.HStoreManager):
 
     def record_event(self, client, event_type, is_aggregate=False, subject=None, subject_list=None, target=None,
                                                             target_list=None, source=None, occurrence_datetime=None):

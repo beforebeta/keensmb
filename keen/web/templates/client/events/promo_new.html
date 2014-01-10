@@ -1,4 +1,5 @@
 {% extends "client/events/event_base.html" %}
 {% load static %}
 {% block image_src %}{% static "images/icons/flag.svg" %}{% endblock %}
-{% block event_text %}A new promotion <strong>{{  event.subject.name }}</strong> was created.{% endblock %}
+
+{% block event_text %}A new promotion {% if event.subject.id %}<a href="{% url 'client_edit_promotion' event.subject.id %}"><strong>{{  event.subject.name }}</strong></a>{% endif %} was created.{% endblock %}
