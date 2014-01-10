@@ -163,6 +163,7 @@
 }
 
 .promotions .promotions-section .progress {
+    position: relative;
     height: 32px;
     padding-right: 10px;
     line-height: 32px;
@@ -394,4 +395,10 @@ input[type=file]{
 
 .modal-large .modal-content {
     width: 750px;
+}
+
+.promotions .progress .total-text {
+    position: absolute;
+    right: 15px;
+    top: 0;
 }
