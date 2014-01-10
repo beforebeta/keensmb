@@ -55,7 +55,7 @@
                 {% for promotion in dashboard.get_active_promotions %}
                   <article class="col-sx-12">
                     <div>
-                      <h6 class="mts mbs">{{ promotion.name }}</h6>
+                      <h6 class="mts mbs"><a href="{% url 'client_edit_promotion' promotion.id %}">{{ promotion.name }}</a></h6>
                       <time class="mtx">
                           {% if promotion.valid_to %}
                             <em>Expiring</em>
@@ -92,7 +92,7 @@
             <div class="row small">
                 {% for promotion in dashboard.get_top_promotions %}
                   <article class="col-sx-12">
-                    <strong>{{ promotion.name }}</strong>
+                    <a href="{% url 'client_edit_promotion' promotion.id %}"><strong>{{ promotion.name }}</strong></a>
                     <div class="progress mbm">
                       <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Redeems</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
