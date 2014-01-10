@@ -2,7 +2,6 @@ import logging
 
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -26,7 +25,6 @@ def login_view(request):
         email = request.DATA['email']
         password = request.DATA['password']
     except KeyError:
-        messages.error(request, 'Please provide e-mail and password')
         logger.warn('Request is missing email and/or password parameters: %r' % request.DATA)
         return HttpResponseBadRequest('Missing authentication information')
 
@@ -39,14 +37,12 @@ def login_view(request):
             request.session['client_slug'] = ClientUser.objects.get(
                 user=user).client.slug
         except ClientUser.DoesNotExist:
-            messages.error(request, 'Failed to associate your account with any client')
             request.session['client_slug'] = None
             request.session.save()
         else:
             request.session.save()
             return Response({'success': 'Thank you for signing-in!'})
 
-    messages.error(request, 'Authentication failed')
     return Response({'error': 'Invalid e-mail/pasword combination'})
 
 
