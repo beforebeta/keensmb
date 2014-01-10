@@ -2,6 +2,10 @@
     padding: 0 20px;
 }
 
+.promotions .row {
+    margin-left: -20px;
+}
+
 .promotions .promotions-list {
     /*padding: 80px 0 0 0;*/
     padding:0;
