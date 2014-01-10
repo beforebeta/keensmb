@@ -18,16 +18,16 @@
     {% for form in forms %}
     <div class="row mrs mls pbm item-block">
       <div class="col-xs-4 ptl pln singup-block-left">
-        <strong class="dib prl mtm"><a href="{{ form.edit_url }}">{{ form.data.pageTitle }}</a></strong>
-        <div><time class="text-muted small" datatime="2013-11-20">Created on {{ form.created }}</time></div>
-        <div>{{ form.status }}</div>
+        <strong class="dib prl mtm"><a href="{{ form.edit_url }}">{% firstof form.data.pageTitle 'Untitled' %}</a></strong>
+        <div class="text-muted small">{{ form.status }}</div>
+          <div><time class="text-muted small" datatime="2013-11-20">Created on {{ form.created }}</time></div>
       </div>
-      <div class="col-xs-5 ptl pll mtl singup-block-middle">
-        <span class="text-muted small pull-left mlm mrm">{{ form.total_signups }} Total Subscribers</span>
-        <span class="text-muted small pull-left mll">{{ form.visits }} Total Visits</span>
-        <span class="text-muted small pull-left mll">{{ form.unique_visits }} Total Unique Visits</span>
+      <div class="col-xs-6 ptl pll mtl singup-block-middle">
+        <span class="text-muted small pull-left mll"><span class="text-big">{{ form.visits }}</span><br>Total Visits</span>
+        <span class="text-muted small pull-left mll"><span class="text-big">{{ form.unique_visits }}</span><br>Unique Visits</span>
+        <span class="text-muted small pull-left mlm mrm"><span class="text-big">{{ form.total_signups }}</span><br>Total Subscribers</span>
       </div>
-      <div class="col-xs-3 ptm prn pbm singup-block-right">
+      <div class="col-xs-2 ptm prn pbm singup-block-right">
         <div class="singup-shadow pull-right" style="background: url('{{ form.thumb_url }}') no-repeat scroll left top transparent">
           <a href="{{ form.url }}" class="btn btn-sm btn-embossed btn-primary mtl mlm">
             <i class="fui-eye"></i>

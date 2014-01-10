@@ -242,6 +242,11 @@
   font-size: 13px;
   line-height: 1.3;
 }
+
+ .text-big {
+    font-size: 130%;
+ }
+
 .text-blue {
   color: #446cb3;
 }

@@ -8,8 +8,14 @@
 }
 
 .singup-overview .singup-block-middle span {
-  width: 90px;
+  width: 130px;
   line-height: 25px;
+    text-align: center;
+}
+
+.singup-overview .singup-block-middle {
+    padding-top: 40px;
+    vertical-align: bottom;
 }
 
 .singup-overview > div:first-child {
