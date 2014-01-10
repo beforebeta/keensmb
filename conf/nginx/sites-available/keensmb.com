@@ -3,16 +3,8 @@ upstream keen_app {
 }
 
 server {
-        listen 80;
-        server_name www.keen.com;
-        # $scheme will get the http protocol
-        # and 301 is best practice for tablet, phone, desktop and seo
-        return 301 $scheme://keen.com$request_uri;
-}
-
-server {
         listen 80 default_server; 
-	server_name keen.com;
+	server_name demo.keen.com;
 	
 	location / {
 		uwsgi_pass keen_app;
