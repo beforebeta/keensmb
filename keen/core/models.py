@@ -62,10 +62,12 @@ class Address(Timestamps):
 
     def refresh_map_image_url(self):
         address = str(self)
-        #old_address = None
-        #try:
-        #    if self.id:
-        #        old_address =
+        old_address = None
+        try:
+            if self.id:
+                old_address = str(Address.objects.get(id=self.id))
+        except:
+            print_stack_trace()
         if address and address != old_address:
             escaped_address = urllib.quote(address, safe='~()*!.\'')
             self.map_image_url = "http://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=14&size=400x267&maptype=roadmap&sensor=false" % escaped_address
