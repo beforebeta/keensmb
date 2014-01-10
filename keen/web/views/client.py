@@ -157,11 +157,9 @@ def customers(request, client):
     last_day_of_month = get_last_day_of_month_as_dt()
     first_days = [first_day_of_month+relativedelta(months=i) for i in [-4,-3,-2,-1,0]]
     last_days = [last_day_of_month+relativedelta(months=i) for i in [-4,-3,-2,-1,0]]
-    print "hi"
     context["chartData"] = json.dumps([{
             "month": _get_formatted_name(first_days[i]),
             "visits": client.customers.filter(created__gte=first_days[i], created__lte=last_days[i]).count()} for i in range(5)]);
-    print context["chartData"]
     return render(request, 'client/customers/customer_profile_list.html', context)
 
 @client_view
