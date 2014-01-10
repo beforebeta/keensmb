@@ -35,7 +35,7 @@ def virtualenv():
 
 
 def install_os_packages():
-    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv rabbitimq-server')
+    sudo('aptitude install git nginx build-essential python-dev postgresql libpq-dev libffi-dev python-virtualenv rabbitmq-server')
 
 
 def install_dependencies():
@@ -73,7 +73,9 @@ def checkout(branch):
 
 
 def migrate():
+
     with virtualenv():
+        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py syncdb --noinput' % env)
         run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py migrate --merge' % env)
 
 
@@ -97,9 +99,6 @@ def create_db():
         sudo('createuser -S -D -R keen', user='postgres')
         sudo('createdb -O keen -T template0 -E utf8 keen', user='postgres')
         sudo('psql -c "create extension hstore;" keen', user='postgres')
-
-    with virtualenv():
-        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py syncdb --noinput' % env)
 
 
 @task
@@ -231,7 +230,7 @@ def install(profile, repo):
     install_os_packages()
     run("virtualenv --no-site-packages %(virtualenv)s" % env)
     clone(repo)
-    install_dependencies()
+    # install_dependencies()
     create_db()
     configure_nginx()
     with cd(env.project_dir):
@@ -242,6 +241,6 @@ def install(profile, repo):
     Installation is complete. Please make following changes manually:
 
         * Edit PostgreSQL pg_hba.conf to allow user keen to connect to database
-        keen through UNIX-socket without password. This file is located at /etx/postgresql/
+        keen through UNIX-socket without password. This file is located at /etc/postgresql/
         or similar directory.
     """
