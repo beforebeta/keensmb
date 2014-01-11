@@ -20,6 +20,8 @@ class Command(BaseCommand):
         for filename in args:
             print 'Importing data from %s' % filename
             self._import(filename)
+        for dashboard in Dashboard.objects.all():
+            dashboard.refresh()
 
     def _import(self, filename):
         with file(filename) as fd:
@@ -52,7 +54,6 @@ class Command(BaseCommand):
                     client.customer_fields = list(CustomerField.objects.all())
                     client.save()
                     dashboard = Dashboard.objects.create(client=client)
-                    dashboard.refresh()
                 elif obj['model'] == 'main.customersource':
                     fields['client_id'] = fields.pop('client')
                     fields['slug'] = fields.pop('name')
