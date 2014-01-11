@@ -1,15 +1,21 @@
-from simplejson import load
+from json import load
 
 from django.db import DatabaseError
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
-from keen.core.models import Client, CustomerSource, Customer
+from keen.core.models import Client, CustomerField, CustomerSource, Customer, ClientUser
+from keen.web.models import Dashboard
 from tracking.models import Visitor
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        Client.objects.all().delete()
+        Customer.objects.all().delete()
+        Visitor.objects.all().delete()
+        ClientUser.objects.all().delete()
         self.phone_numbers = {}
         for filename in args:
             print 'Importing data from %s' % filename
@@ -30,14 +36,24 @@ class Command(BaseCommand):
                     ):
                         if fields.get(field) is None:
                             fields[field] = default
-                    Visitor.objects.get_or_create(pk=obj['pk'], defaults=fields)
+                    Visitor.objects.create(pk=obj['pk'], **fields)
                 elif obj['model'] == 'main.client':
                     fields['slug'] = fields.pop('unique_id')
-                    Client.objects.get_or_create(pk=obj['pk'], defaults=fields)
+                    client = Client.objects.create(pk=obj['pk'], **fields)
+                    email = '%s@keensmb.com' % client.slug
+                    user, created = User.objects.get_or_create(username=email, email=email)
+                    if created:
+                        user.set_password(client.slug)
+                        user.save()
+                    ClientUser.objects.create(user=user, client=client)
+                    client.customer_fields = list(CustomerField.objects.all())
+                    client.save()
+                    dashboard = Dashboard.objects.create(client=client)
+                    dashboard.refresh()
                 elif obj['model'] == 'main.customersource':
                     fields['client_id'] = fields.pop('client')
                     fields['slug'] = fields.pop('name')
-                    CustomerSource.objects.get_or_create(pk=obj['pk'], defaults=fields)
+                    CustomerSource.objects.create(pk=obj['pk'], **fields)
                 elif obj['model'] == 'main.phonenumber':
                     self.phone_numbers[obj['pk']] = obj['fields']['number']
                 elif obj['model'] == 'main.customer':
