@@ -26,7 +26,8 @@ class Command(BaseCommand):
             for obj in load(fd):
                 fields = obj['fields']
                 for name in fields.keys():
-                    fields[name] = fields[name].replace('"', '')
+                    if isinstance(fields[name], basestring):
+                        fields[name] = fields[name].replace('"', '')
                 fields['created'] = fields.pop('date_added', None)
                 fields['modified'] = fields.pop('last_modified', None)
 
