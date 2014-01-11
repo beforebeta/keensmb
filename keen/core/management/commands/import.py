@@ -25,6 +25,8 @@ class Command(BaseCommand):
         with file(filename) as fd:
             for obj in load(fd):
                 fields = obj['fields']
+                for name in fields.keys():
+                    fields[name] = fields[name].replace('"', '')
                 fields['created'] = fields.pop('date_added', None)
                 fields['modified'] = fields.pop('last_modified', None)
 
@@ -70,10 +72,10 @@ class Command(BaseCommand):
                                       ('first_name', 'middle_name', 'last_name')))))
                     if fields.get('zip'):
                         customer.data['address__zipcode'] = fields['zip']
-                    customer.data['dob'] = fields['dob']
+                    customer.data['dob'] = fields['dob'] or ''
                     if fields['phone'] and fields['phone'][0] in self.phone_numbers:
                         customer.data['phone'] = self.phone_numbers[fields['phone'][0]]
-                    customer.data['email'] = fields['email']
+                    customer.data['email'] = fields['email'] or ''
                     try:
                         customer.save()
                     except DatabaseError:
