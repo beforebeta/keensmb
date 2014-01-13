@@ -108,7 +108,7 @@
               </a>
               <ul class='pull-right'>
                 <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-                <li><a data-toggle='modal' data-target="#ModalCsvImport" href="#fakelink">.CSV file</a></li>
+                <li><a data-toggle='modal' data-target="#csvImportModal" href="#fakelink">.CSV file</a></li>
               </ul>
             </li>
             <li>
@@ -118,7 +118,7 @@
             </a>
             <ul>
               <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-              <li><a href="#fakelink">.CSV download</a></li>
+              <li><a href="#fakelink" data-toggle="modal" data-target="#csvExportModal">.CSV download</a></li>
             </ul> <!-- /Sub menu -->
             </li>
           </ul> <!-- /nav -->
@@ -421,6 +421,46 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+
+  <div id="csvImportModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h6 class="modal-title">Import .CSV File</h6>
+        </div>
+        <div class="modal-body">
+          Please <a href="mailto:admin@keensmb.com">send e-mail</a> with your request and your
+          support person will be happy to help you with this
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="csvExportModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h6 class="modal-title">Export .CSV File</h6>
+        </div>
+        <div class="modal-body">
+          Please <a href="mailto:admin@keensmb.com">send e-mail</a> with your request and your
+          support person will be happy to help you with this
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- import .CSV modal -->
   <div id="ModalCsvImport" class="ModalCsvImport modal fade in" tabindex="-1" role="dialog" aria-hidden="true">

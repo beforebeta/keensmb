@@ -1,21 +1,32 @@
 import os
 import operator
 import random
+import urllib
 import datetime
 
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 from django_hstore import hstore
 from model_utils import Choices
 from keen import print_stack_trace, InvalidOperationException
 
 from tracking.models import Visitor
-import urllib
+
 
 class Timestamps(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+
+    created = models.DateTimeField()
+    modified = models.DateTimeField()
+
+    def save(self, *args, **kw):
+        if not self.id:
+            if not self.created:
+                self.created = now()
+        if not self.modified:
+            self.modified = now()
+        super(Timestamps, self).save(*args, **kw)
 
     class Meta:
         abstract = True
