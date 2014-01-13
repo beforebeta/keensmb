@@ -127,6 +127,21 @@ def delete_promotion(request, client):
                                                                     content_type="application/json")
 
 @client_view
+def approve_promotion(request, client):
+    promotion_id = int(request.POST.get("obj_id"))
+    promotion = get_object_or_404(Promotion, id=promotion_id, client=client)
+    try:
+        if promotion.status not in [Promotion.PROMOTION_STATUS.draft, Promotion.PROMOTION_STATUS.inapproval]:
+            return HttpResponse(json.dumps({"success" : "0", "msg" : "You can only approve promotions that haven't been scheduled or activated yet."}), content_type="application/json")
+        else:
+            promotion.approve()
+        return HttpResponse(json.dumps({"success" : "1", "msg" : "Success"}), content_type="application/json")
+    except:
+        print_stack_trace()
+        return HttpResponse(json.dumps({"success" : "0", "msg" : "An error occurred while deleting the object."}),
+                                                                    content_type="application/json")
+
+@client_view
 def email_template(request, client):
     context={}
     return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))

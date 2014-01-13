@@ -8,7 +8,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_hstore import hstore
 from model_utils import Choices
-from keen import print_stack_trace
+from keen import print_stack_trace, InvalidOperationException
 
 from tracking.models import Visitor
 import urllib
@@ -468,6 +468,17 @@ class Promotion(Timestamps):
     analytics = hstore.DictionaryField(null=True, blank=True, verbose_name='', help_text='')
 
     objects = PromotionsManager()
+
+    def approve(self):
+        if self.status in [Promotion.PROMOTION_STATUS.draft, Promotion.PROMOTION_STATUS.inapproval]:
+            if self.valid_to and self.valid_to < datetime.datetime.today():
+                raise InvalidOperationException("You need to adjust the validity of the promotion before it's approved")
+            if not self.valid_from or self.valid_from > datetime.datetime.today():
+                self.status = Promotion.PROMOTION_STATUS.scheduled
+            else:
+                self.status = Promotion.PROMOTION_STATUS.active
+        else:
+            raise InvalidOperationException("You can only approve promotions that haven't been scheduled or activated yet.")
 
     def save(self, *args, **kwargs):
         if not self.analytics:

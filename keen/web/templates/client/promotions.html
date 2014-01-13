@@ -34,7 +34,7 @@
 {##}
         </div>
         <div class="col-xs-4 pull-right mtm">
-          <a href="{% url 'client_create_promotion' %}" class="btn btn btn-sm btn-default pull-right">
+          <a href="{% url 'client_create_promotion' %}" class="btn btn btn-sm btn-primary pull-right">
             <span class="mrl">Create New Promotion</span>
             <i class="fui-plus mll"></i>
           </a>
@@ -43,7 +43,7 @@
 
         {% for promotion in promotions %}
           <div class="row">
-            <div class="col-xs-10 mtl mll mbm pll">
+            <div class="col-xs-10 mtl mbm pll">
               <div class="kn-section promotions-section prom-{{ tab }}">
                 <div class="kn-section-header">
                   <h6 class="mbn mtn pull-left white">{{ promotion.name }}</h6>
@@ -81,17 +81,23 @@
               </div>
             </div>
 
-            <div class="col-xs-1 promotions-button mtl">
-              <a href="{% url 'client_edit_promotion' promotion.id %}" class="btn btn-lg btn-primary pbs">
+            <div class="col-xs-2 promotions-button mtl">
+              <a href="{% url 'client_edit_promotion' promotion.id %}" class="btn btn-lg btn-primary pbs mrm mbm">
                 <i class="fui-new dib"></i>
                 <span class="dib small">Edit</span>
               </a>
-              <a href="#" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' promotion.id %}" data-title="{{ promotion.name }}" class="btn btn-lg btn-default pbs mts previewPromotionBtn">
+              <a href="#" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' promotion.id %}" data-title="{{ promotion.name }}" class="btn btn-lg btn-default pbs previewPromotionBtn mbm">
                 <i class="fui-eye dib"></i>
                 <span class="dib small">Preview</span>
               </a>
+                {% if promotion.status == 'inapproval' or promotion.status == 'draft' %}
+                  <a href="#" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' promotion.id %}" data-title="{{ promotion.name }}" class="btn btn-lg btn-warning pbs previewPromotionBtn mrm mbm">
+                    <i class="fui-check dib"></i>
+                    <span class="dib small">Approve</span>
+                  </a>
+                {% endif %}
                 {% if promotion.status != 'active' and promotion.status != 'expired' %}
-                  <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs mts deletePromotionButton" data-obj_id="{{ promotion.id }}">
+                  <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs deletePromotionButton" data-obj_id="{{ promotion.id }}">
                     <i class="fui-cross dib"></i>
                     <span class="dib small">Delete</span>
                   </a>
@@ -120,6 +126,26 @@
         </div>
         <div class="modal-footer ptm pbn">
           <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll" id="promotionDeleteButton" data-location="{% url 'client_delete_promotion' %}">Delete</button>
+          <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div id="approvePromotionModal" class="modal fade modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content center-block">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h4 class="modal-title">Are you sure?</h4>
+        </div>
+        <div class="modal-body">
+            <p class="mbn text-default">Are you sure you want to approve this promotion? Once you approve this promotion it will automatically be scheduled to be sent out.</p>
+        </div>
+        <div class="modal-footer ptm pbn">
+          <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll" id="promotionApproveButton" data-location="{% url 'client_delete_promotion' %}">Delete</button>
           <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
       </div><!-- /.modal-content -->

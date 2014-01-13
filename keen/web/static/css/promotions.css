@@ -206,10 +206,14 @@
     padding-left: 10px;
 }
 
+.promotions .promotions-button {
+    padding-left: 0px;
+}
 .promotions .promotions-button a {
     width: 57px;
     padding-left: 0;
     padding-right: 0;
+    float: left;
 }
 
 .promotions .promotions-button a span,
@@ -219,6 +223,10 @@
 
 .promotions .promotions-button a span {
     font-size: 11px;
+}
+
+.promotions .btn-warning {
+    background-color: #e67e22;
 }
 
 .promotions .promotions-button button {
