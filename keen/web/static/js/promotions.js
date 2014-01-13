@@ -26,16 +26,16 @@
             preview_promotion($(this));
         });
 
-        // delete promotion handling
-        $('.deletePromotionButton').click(function(){
+        // delete and approve
+        $('.objIdTransferToModal').click(function(){
             var obj_id = $(this).attr('data-obj_id');
-            $('#promotionDeleteButton').attr('data-obj_id', obj_id);
+            var target_button_id = $(this).attr("data-targetBtn");
+            $(target_button_id).attr('data-obj_id', obj_id);
         });
 
         $(document).on('click', '#promotionDeleteButton', function(){
             var $this = $(this);
             var obj_id = $this.attr('data-obj_id');
-            console.log(obj_id);
             $.ajax({
                 type: "POST",
                 url: $this.attr('data-location'),
@@ -51,6 +51,29 @@
                 error: function (msg) {
                     alert("An error occurred!")
                     window.location.reload();
+                }
+            });
+        });
+
+        $(document).on("click", '#promotionApproveButton', function(){
+            var $this = $(this);
+            var obj_id = $this.attr('data-obj_id');
+            $.ajax({
+                type: "POST",
+                url: $this.attr('data-location'),
+                data: {"obj_id":obj_id},
+                success: function (msg) {
+                    $('#promotionApproveModal').modal('hide');
+                    try{
+                        if (msg["success"] == 0) {
+                            keen.showMessageModal("Promotion not approved!", msg["msg"]);
+                        } else {
+                            window.location = '/promotions/upcoming';
+                        };
+                    }catch(e){}
+                },
+                error: function (msg) {
+                    keen.showMessageModal("An Error Occurred", "An error occurred while processing ");
                 }
             });
         });
@@ -93,47 +116,3 @@
     });
 
 })(jQuery);
-
-try{
-    (function(){
-        AmCharts.ready(function () {
-            // SERIAL CHART
-            chart = new AmCharts.AmSerialChart();
-            chart.dataProvider = chartData;
-            chart.categoryField = "month";
-            chart.startDuration = 1;
-
-            // AXES
-            // category
-            var categoryAxis = chart.categoryAxis;
-            categoryAxis.gridPosition = "start";
-
-            // value
-            // in case you don't want to change default settings of value axis,
-            // you don't need to create it, as one value axis is created automatically.
-
-            // GRAPH
-            var graph = new AmCharts.AmGraph();
-            graph.valueField = "visits";
-            graph.balloonText = "[[category]]: <b>[[value]]</b>";
-            graph.type = "column";
-            graph.lineAlpha = 0;
-            graph.fillAlphas = 0.8;
-            graph.lineColor = '#1abc9c';
-            chart.addGraph(graph);
-
-            // CURSOR
-            var chartCursor = new AmCharts.ChartCursor();
-            chartCursor.cursorAlpha = 0;
-            chartCursor.zoomable = false;
-            chartCursor.categoryBalloonEnabled = false;
-            chart.addChartCursor(chartCursor);
-
-            chart.creditsPosition = "top-right";
-
-            chart.write("chartdiv");
-        });
-    })(AmCharts);
-} catch(e){
-    console.log(e);
-}

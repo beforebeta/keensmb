@@ -72,7 +72,7 @@
                     </time>
                     {% if promotion.status == 'active' or promotion.status == 'expired' %}
                     <div class="progress">
-                        <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div>
+                        <div class="progress-bar" style='width:{{ promotion.analytics.redemptions_percentage }}%;'><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div>
                         <div class="total-text">Total Sent <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
                     {% endif %}
@@ -91,13 +91,13 @@
                 <span class="dib small">Preview</span>
               </a>
                 {% if promotion.status == 'inapproval' or promotion.status == 'draft' %}
-                  <a href="#" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' promotion.id %}" data-title="{{ promotion.name }}" class="btn btn-lg btn-warning pbs previewPromotionBtn mrm mbm">
+                  <a href="#" data-toggle="modal" data-target="#promotionApproveModal" data-targetBtn="#promotionApproveButton" data-obj_id="{{ promotion.id }}" class="btn btn-lg btn-warning pbs mrm mbm objIdTransferToModal">
                     <i class="fui-check dib"></i>
                     <span class="dib small">Approve</span>
                   </a>
                 {% endif %}
                 {% if promotion.status != 'active' and promotion.status != 'expired' %}
-                  <a href="#" data-toggle="modal" data-target="#promotionsModal" class="btn btn-lg btn-danger pbs deletePromotionButton" data-obj_id="{{ promotion.id }}">
+                  <a href="#" data-toggle="modal" data-target="#promotionsModal" data-targetBtn="#promotionDeleteButton" class="btn btn-lg btn-danger pbs objIdTransferToModal" data-obj_id="{{ promotion.id }}">
                     <i class="fui-cross dib"></i>
                     <span class="dib small">Delete</span>
                   </a>
@@ -132,20 +132,20 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
-  <div id="approvePromotionModal" class="modal fade modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="promotionApproveModal" class="modal fade modal-small" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content center-block">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <i class="fui-cross"></i>
           </button>
-          <h4 class="modal-title">Are you sure?</h4>
+          <h4 class="modal-title">Approve Promotion?</h4>
         </div>
         <div class="modal-body">
             <p class="mbn text-default">Are you sure you want to approve this promotion? Once you approve this promotion it will automatically be scheduled to be sent out.</p>
         </div>
         <div class="modal-footer ptm pbn">
-          <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll" id="promotionApproveButton" data-location="{% url 'client_delete_promotion' %}">Delete</button>
+          <button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-warning pull-right mll" id="promotionApproveButton" data-location="{% url 'client_approve_promotion' %}">Approve</button>
           <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
       </div><!-- /.modal-content -->

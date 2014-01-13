@@ -471,12 +471,14 @@ class Promotion(Timestamps):
 
     def approve(self):
         if self.status in [Promotion.PROMOTION_STATUS.draft, Promotion.PROMOTION_STATUS.inapproval]:
-            if self.valid_to and self.valid_to < datetime.datetime.today():
-                raise InvalidOperationException("You need to adjust the validity of the promotion before it's approved")
-            if not self.valid_from or self.valid_from > datetime.datetime.today():
-                self.status = Promotion.PROMOTION_STATUS.scheduled
-            else:
-                self.status = Promotion.PROMOTION_STATUS.active
+            if self.valid_to and self.valid_to < datetime.date.today():
+                raise InvalidOperationException("You need to adjust the validity of the promotion before it is approved. The promotion's validity period is in the past.")
+            #if not self.valid_from or self.valid_from > datetime.datetime.today():
+            #    self.status = Promotion.PROMOTION_STATUS.scheduled
+            #else:
+            #    self.status = Promotion.PROMOTION_STATUS.active
+            self.status = Promotion.PROMOTION_STATUS.scheduled
+            self.save()
         else:
             raise InvalidOperationException("You can only approve promotions that haven't been scheduled or activated yet.")
 

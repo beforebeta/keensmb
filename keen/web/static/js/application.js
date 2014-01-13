@@ -4,6 +4,14 @@ String.prototype.repeat = function (num) {
     return new Array(num + 1).join(this);
 };
 
+var keen = {};
+keen.showMessageModal = function(title, message) {
+    var $modal = $('#messageModal');
+    $modal.find('h4.modal-title').html(title);
+    $modal.find('.modal-body .text-default').html(message);
+    $modal.modal({show:true});
+};
+
 (function ($) {
 
     //setup support for csrf
@@ -318,3 +326,45 @@ String.prototype.repeat = function (num) {
   });
 
 })(jQuery);
+
+try{
+    (function(){
+        AmCharts.ready(function () {
+            // SERIAL CHART
+            chart = new AmCharts.AmSerialChart();
+            chart.dataProvider = chartData;
+            chart.categoryField = "month";
+            chart.startDuration = 1;
+
+            // AXES
+            // category
+            var categoryAxis = chart.categoryAxis;
+            categoryAxis.gridPosition = "start";
+
+            // value
+            // in case you don't want to change default settings of value axis,
+            // you don't need to create it, as one value axis is created automatically.
+
+            // GRAPH
+            var graph = new AmCharts.AmGraph();
+            graph.valueField = "visits";
+            graph.balloonText = "[[category]]: <b>[[value]]</b>";
+            graph.type = "column";
+            graph.lineAlpha = 0;
+            graph.fillAlphas = 0.8;
+            graph.lineColor = '#1abc9c';
+            chart.addGraph(graph);
+
+            // CURSOR
+            var chartCursor = new AmCharts.ChartCursor();
+            chartCursor.cursorAlpha = 0;
+            chartCursor.zoomable = false;
+            chartCursor.categoryBalloonEnabled = false;
+            chart.addChartCursor(chartCursor);
+
+            chart.creditsPosition = "top-right";
+
+            chart.write("chartdiv");
+        });
+    })(AmCharts);
+} catch(e){}

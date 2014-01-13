@@ -10,7 +10,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response, redi
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
-from keen import print_stack_trace
+from keen import print_stack_trace, InvalidOperationException
 
 from keen.util import get_first_day_of_month_as_dt, get_last_day_of_month_as_dt
 from keen.core.models import Client, Customer, Location, Promotion
@@ -134,8 +134,11 @@ def approve_promotion(request, client):
         if promotion.status not in [Promotion.PROMOTION_STATUS.draft, Promotion.PROMOTION_STATUS.inapproval]:
             return HttpResponse(json.dumps({"success" : "0", "msg" : "You can only approve promotions that haven't been scheduled or activated yet."}), content_type="application/json")
         else:
-            promotion.approve()
-        return HttpResponse(json.dumps({"success" : "1", "msg" : "Success"}), content_type="application/json")
+            try:
+                promotion.approve()
+                return HttpResponse(json.dumps({"success" : "1", "msg" : "Success"}), content_type="application/json")
+            except InvalidOperationException, e:
+                return HttpResponse(json.dumps({"success" : "0", "msg" : str(e)}), content_type="application/json")
     except:
         print_stack_trace()
         return HttpResponse(json.dumps({"success" : "0", "msg" : "An error occurred while deleting the object."}),
