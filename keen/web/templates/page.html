@@ -112,9 +112,11 @@
     {% endblock %}
 
     {% include 'olark.html' %}
+    {% include 'front-page/snippets/ga_tracking.html' %}
 
-    {# for development only: #}
+    {% if settings.DEBUG %}
     <script src="http://localhost:35729/livereload.js?snipver=1" type="text/javascript"></script>
+    {% endif %}
 
     {% block bottom_js %}{% endblock %}
 
