@@ -484,6 +484,10 @@ class Promotion(Timestamps):
         if self.status in [Promotion.PROMOTION_STATUS.draft, Promotion.PROMOTION_STATUS.inapproval]:
             if self.valid_to and self.valid_to < datetime.date.today():
                 raise InvalidOperationException("You need to adjust the validity of the promotion before it is approved. The promotion's validity period is in the past.")
+            if not self.banner_url:
+                raise InvalidOperationException("Banner image is missing.")
+            if not self.image_url:
+                raise InvalidOperationException("Promotion image is missing.")
             #if not self.valid_from or self.valid_from > datetime.datetime.today():
             #    self.status = Promotion.PROMOTION_STATUS.scheduled
             #else:
@@ -492,6 +496,7 @@ class Promotion(Timestamps):
             self.save()
         else:
             raise InvalidOperationException("You can only approve promotions that haven't been scheduled or activated yet.")
+    approve.alters_data = True
 
     def save(self, *args, **kwargs):
         if not self.analytics:

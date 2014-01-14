@@ -100,7 +100,7 @@ class PromotionForm(forms.ModelForm):
         fields = ('name', 'description', 'short_code', 'valid_from', 'valid_to', 'restrictions',
                   'additional_information', 'redemption_instructions', 'cta_text', 'image_url', 'banner_url', 'mediums', 'send_later', 'send_schedule')
         help_texts = {
-            'valid_to': 'Provide the start date and expiry date for this promotion. Otherwise, it will by default continue indefinitely.',
+            'valid_to': 'Provide the start date and expiry date for this promotion. Otherwise, it will continue indefinitely.',
         }
         widgets = {
             'send_later': forms.RadioSelect
