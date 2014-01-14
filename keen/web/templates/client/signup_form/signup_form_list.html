@@ -18,7 +18,13 @@
     {% for form in forms %}
     <div class="row mrs mls pbm item-block">
       <div class="col-xs-4 ptl pln singup-block-left">
-        <strong class="dib prl mtm"><a href="{{ form.edit_url }}">{% firstof form.data.pageTitle 'Untitled' %}</a></strong>
+        <strong class="dib prl mtm">
+          {% if not form.data.template %}
+          <a href="{{ form.edit_url }}">{% firstof form.data.pageTitle 'Untitled' %}</a>
+          {% else %}
+          {% firstof form.data.pageTitle 'Untitled' %}
+          {% endif %}
+        </strong>
         <div class="text-muted small">{{ form.status }}</div>
           <div><time class="text-muted small" datatime="2013-11-20">Created on {{ form.created }}</time></div>
       </div>
