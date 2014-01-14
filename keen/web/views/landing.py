@@ -19,7 +19,7 @@ rotate_templates = cycle((
 @ensure_csrf_cookie
 def landing_view(request):
     user = request.user
-    if user and user.is_authenticated() and not user.is_superuser:
+    if user and user.is_authenticated() and 'client_slug' in request.session:
         return redirect(reverse('client_dashboard'))
 
     template = request.session.get('landing_page')
