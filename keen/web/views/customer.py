@@ -69,4 +69,6 @@ def signup_view(request, client_slug, form_slug):
 
     context['form'] = form
 
-    return render(request, 'customer/signup.html', context)
+    return render(request,
+                  signup_form.data.get('template', 'customer/signup.html'),
+                  context)

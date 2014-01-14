@@ -33,10 +33,12 @@
             <i class="fui-eye"></i>
             <span class="mlx">Live Preview</span>
           </a>
+          {% if not form.data.template %}
           <a href="{{ form.edit_url }}" class="btn btn-sm btn-embossed btn-primary mtm mlm">
             <i class="fui-new"></i>
             <span class="mlx">Edit Form</span>
           </a>
+          {% endif %}
         </div>
       </div>
     </div>

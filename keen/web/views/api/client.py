@@ -345,7 +345,7 @@ class SignupFormView(APIView):
                 return Response(status=HTTP_400_BAD_REQUEST)
 
         if 'data' in request.DATA:
-            form.data = request.DATA['data']
+            form.data.update(request.DATA['data'])
 
         try:
             form.save()
