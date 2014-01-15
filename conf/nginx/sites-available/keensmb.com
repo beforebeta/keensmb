@@ -4,7 +4,7 @@ upstream keen_app {
 
 server {
         listen 80 default_server; 
-	server_name demo.keen.com;
+	server_name .keensmb.com;
 	
 	location / {
 		uwsgi_pass keen_app;
