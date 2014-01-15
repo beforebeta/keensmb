@@ -1,3 +1,4 @@
+from optparse import make_option
 from json import load
 
 from django.db import DatabaseError
@@ -10,18 +11,30 @@ from tracking.models import Visitor
 
 
 class Command(BaseCommand):
+    """Iport Client, CustomerSource, Customer and Visitor from legacy
+    database."""
+    option_list = BaseCommand.option_list + (
+        make_option('--clear', dest='clear', default=False,
+                    action='store_true',
+                    help='Delete all clients, customer sources, customers and visitorspriors'),
+    )
+    help = 'Specify one or more file created by dumpdata command on legacy database'
 
     def handle(self, *args, **options):
-        Client.objects.all().delete()
-        Customer.objects.all().delete()
-        Visitor.objects.all().delete()
-        ClientUser.objects.all().delete()
-        self.phone_numbers = {}
-        for filename in args:
-            print 'Importing data from %s' % filename
-            self._import(filename)
-        for dashboard in Dashboard.objects.all():
-            dashboard.refresh()
+        if options['clear']:
+            Client.objects.all().delete()
+            Customer.objects.all().delete()
+            Visitor.objects.all().delete()
+            ClientUser.objects.all().delete()
+
+        if args:
+            self.phone_numbers = {}
+            for filename in args:
+                self._import(filename)
+            for dashboard in Dashboard.objects.all():
+                dashboard.refresh()
+
+        self._fix_sequences()
 
     def _import(self, filename):
         with file(filename) as fd:
@@ -81,5 +94,19 @@ class Command(BaseCommand):
                     try:
                         customer.save()
                     except DatabaseError:
-                        print customer
+                        print >> self.stderr, 'Failed to save customer model %r' % customer
                         raise
+
+    def _fix_sequences(self):
+        from django.db import connection
+        from django.db.models import Max
+
+        c = connection.cursor()
+        for model, name_prefix in (
+            (Client, 'core_client'),
+            (CustomerSource, 'core_customersource'),
+            (Customer, 'core_customer'),
+            (Visitor, 'tracking_visitor'),
+        ):
+            max_id = model.objects.aggregate(Max('id'))['id__max']
+            c.execute('alter sequence %s_id_seq restart with %d' % (name_prefix, max_id + 1))
