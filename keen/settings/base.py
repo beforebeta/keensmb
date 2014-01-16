@@ -166,6 +166,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'django.core.context_processors.csrf',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'keen.web.context_processors.add_client'
 ]
 
 TEMPLATE_DIRS = (

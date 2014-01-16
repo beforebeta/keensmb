@@ -175,6 +175,8 @@ class Client(Timestamps):
         return self.name
 
     def get_dashboard(self):
+        if self.dashboard_set.all().count() == 0:
+            self.dashboard_set.create(client=self)
         return self.dashboard_set.all()[0]
 
     def get_top_customers(self):
