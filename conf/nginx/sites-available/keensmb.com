@@ -5,6 +5,7 @@ upstream keen_app {
 server {
         listen 80 default_server; 
 	server_name .keensmb.com;
+	client_max_body_size 32M;
 	
 	location / {
 		uwsgi_pass keen_app;
