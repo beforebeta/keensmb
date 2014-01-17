@@ -126,7 +126,7 @@
 }
 
 .dashboard article h6 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   float: left;
 }
@@ -134,7 +134,7 @@
 .dashboard article h6 + time {
   float: right;
   line-height: normal;
-  font-size: 70%;
+  font-size: 90%;
   line-height: 2.4;
 }
 

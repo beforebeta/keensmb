@@ -59,7 +59,7 @@
                       <time class="mtx">
                           {% if promotion.valid_to %}
                             <em>Expiring</em>
-                            {{ promotion.valid_to.date }}
+                            {{ promotion.valid_to }}
                           {% else %}
                             <em>Does not expire</em>
                           {% endif %}
@@ -69,7 +69,7 @@
                     <time class="mbs dib">
                             <em>Launched</em>
                           {% if promotion.valid_from %}
-                            {{ promotion.valid_from.date }}
+                            {{ promotion.valid_from }}
                           {% else %}
                             {{ promotion.created.date }}
                           {% endif %}
