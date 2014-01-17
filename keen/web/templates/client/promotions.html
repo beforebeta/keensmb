@@ -72,7 +72,7 @@
                     </time>
                     {% if promotion.status == 'active' or promotion.status == 'expired' %}
                     <div class="progress">
-                        <div class="progress-bar" style='width:{{ promotion.analytics.redemptions_percentage }}%;'><strong>{{ promotion.analytics.redemptions }}</strong> Redeems</div>
+                        <div class="progress-bar" style='width:{{ promotion.analytics.redemptions_percentage }}%;'><strong>{{ promotion.analytics.redemptions }}</strong> Opens</div>
                         <div class="total-text">Total Sent <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
                     {% endif %}

@@ -33,7 +33,7 @@
         </div>
         <div class="col-xs-3 text-center">
           <div class="info">
-            <span class="label-info">Redemptions this month</span>
+            <span class="label-info">Opens this month</span>
             <strong class="info">{{ dashboard.redemptions }}</strong>
           </div>
         </div>
@@ -75,7 +75,7 @@
                           {% endif %}
                     </time>
                     <div class="progress">
-                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Redeems</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
+                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Opens</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
                   </article>
                     {% endfor %}
@@ -94,7 +94,7 @@
                   <article class="col-sx-12">
                     <a href="{% url 'client_edit_promotion' promotion.id %}"><strong>{{ promotion.name }}</strong></a>
                     <div class="progress mbm">
-                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Redeems</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
+                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Opens</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
                     </div>
                   </article>
                 {% endfor %}
