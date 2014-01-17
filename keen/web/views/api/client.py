@@ -6,7 +6,7 @@ from base64 import b64decode
 
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
-from django.db import DatabaseError
+from django.db import DatabaseError, transaction
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
@@ -291,29 +291,21 @@ class SignupFormList(APIView):
             logger.error('Illegal signup form status %s' % status)
             return Response(status=HTTP_400_BAD_REQUEST)
 
-        form, created = SignupForm.objects.get_or_create(client=client, slug=slug)
-        if created:
-            CustomerSource.objects.get_or_create(
-                client=client, slug=slug, defaults={
-                    'ref_source': 'submit',
-                    'ref_id': form.id,
-                })
-        else:
-            logger.error('Form with slug %s already exists' % slug)
-            return Response(status=HTTP_400_BAD_REQUEST)
-
-        form.status = status
-        form.data = data
         try:
-            form.save()
-            CustomerSource(client=client, slug='signup:%s' % slug, ref_source='signup',
-                           ref_id=form.id).save()
-            schedule_screenshot(request, form)
+            with transaction.atomic():
+                form = SignupForm.objects.create(client=client, slug=slug,
+                                                 status=status, data=data)
+
+                CustomerSource.objects.create(
+                    client=client, slug='signup:%s' % slug,
+                    ref_source='signup', ref_id=form.id).save()
         except DatabaseError:
             logger.exception('Failed to create signup form')
-            raise
+            return Response(status=HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            schedule_screenshot(request, form)
 
-        return Response('', status=HTTP_201_CREATED)
+        return Response(status=HTTP_201_CREATED)
 
 
 class SignupFormView(APIView):
@@ -362,7 +354,10 @@ class SignupFormView(APIView):
         form = get_object_or_404(SignupForm, clinet=client, slug=form_slug)
 
         try:
-            form.delete()
+            with transaction.atomic():
+                CustomerSource.objects.filter(ref_source='signup',
+                                              ref_id=form.id).delete()
+                form.delete()
         except DatabaseError:
             logger.exception('Failed to delete signup form')
             raise
