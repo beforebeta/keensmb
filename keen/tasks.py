@@ -77,7 +77,7 @@ def mailchimp_subscribe(self, customer_id):
     }
     if customer.source and customer.source.ref_source == 'signup':
         try:
-            form = SignupForm.objects.get(customer.source.red_id)
+            form = SignupForm.objects.get(customer.source.ref_id)
         except SignupForm.DoesNotExist:
             logger.warn('Customer signup form with id %s not found' % customer.source.ref_id)
         else:
