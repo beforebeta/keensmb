@@ -28,7 +28,7 @@ except:
     logger.warn('Possible misconfiguration: no MAILCHIMP_API_KEY in Django settings!')
 else:
     # Mailchimp will look there
-    os.environ['MAILCHIMP_API_KEY'] = mailchimp_api_key
+    os.environ['MAILCHIMP_APIKEY'] = mailchimp_api_key
 
 
 @app.task
