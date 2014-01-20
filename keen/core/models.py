@@ -162,6 +162,8 @@ class Client(Timestamps):
     main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
     customer_fields = models.ManyToManyField(CustomerField)
     web_url = models.TextField(blank=True, null=True)
+    ref_id_type = models.CharField(max_length=255, null=True, blank=True)
+    ref_id = models.CharField(max_length=255, null=True, blank=True)
 
     def customer_page(self, offset=0, filter=None, page_size=100):
         q = self.customers.all()
