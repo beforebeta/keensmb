@@ -5,7 +5,7 @@ from celery import Celery
 from celery.exceptions import Ignore
 from celery.utils.log import get_task_logger
 
-from django.config import settings
+from django.conf import settings
 
 from PIL import Image
 from mailchimp import Mailchimp
