@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from keen.core.models import Client, Customer, CustomerSource
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
+from keen.tasks import mailchimp_subscribe
 
 from tracking.models import Visitor
 
@@ -55,6 +56,7 @@ def signup_view(request, client_slug, form_slug):
 
             try:
                 customer.save()
+                mailchimp_subscribe.delay(customer.id)
             except DatabaseError:
                 logger.exception('Failed to save new customer')
             else:
