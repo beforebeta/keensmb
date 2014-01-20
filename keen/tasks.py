@@ -8,7 +8,7 @@ from celery.utils.log import get_task_logger
 from django.conf import settings
 
 from PIL import Image
-from mailchimp import Mailchimp
+import mailchimp
 
 from keen.core.models import Customer
 from keen.web.models import SignupForm
