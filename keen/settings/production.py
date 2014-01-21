@@ -1,7 +1,7 @@
 from . import *
 
 
-DEBUG = TEMPLATE_DEBUG = DEV = True
+DEBUG = TEMPLATE_DEBUG = DEV = False
 
 CELERY_ALWAYS_EAGER = False
 
