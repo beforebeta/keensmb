@@ -13,6 +13,10 @@ from keen.tasks import send_email
 logger = logging.getLogger(__name__)
 
 
+
+logger = logging.getLogger(__name__)
+
+
 @receiver(post_save, sender=Customer, weak=False)
 def customer_created(sender, instance, created, **kwargs):
     if created:
