@@ -73,6 +73,13 @@
               </div>
             </div>
           </div>
+          {% if client.web_url %}
+          <script>
+            setTimeout(function() {
+              window.location.href = "{{ client.web_url | safe }}";
+            }, 15);
+          </script>
+          {% endif %}
           {% else %}
           <form class="su-form"
             action=""

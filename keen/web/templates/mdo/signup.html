@@ -15,6 +15,13 @@
 <body>
   {% if success %}
   <h1>Thank you! Your form was successfully submitted!</h1>
+  {% if client.web_url %}
+  <script>
+    setTimeout(function() {
+      window.location.href = "{{ client.web_url | safe }}";
+    }, 15);
+  </script>
+  {% endif %}
   {% else %}
 	<div id="wrapper">
 		<div class="w1">
