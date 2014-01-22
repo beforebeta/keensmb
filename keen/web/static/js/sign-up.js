@@ -266,8 +266,7 @@
             return str.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, '');
         };
 
-        $scope.saveForm = function() {
-
+        $scope.saveForm = function(status) {
 
             // wait for all blur events
             $timeout(function() {
@@ -275,14 +274,16 @@
                 suService.checkFormSlug($scope.permalink.text).then(function(res) {
                     if (suService.formSlug) {
                         // update data
-                        saveFormData(true);
+                        saveFormData(status, true);
                         return false;
                     }
                     var link = suService.getFormLink($scope.permalink.text);
                     notify('Form with a slug <a href="'+link+'" target="_blank">'+$scope.permalink.text+'</a> already exists.');
                 }, function(err) {
                     suService.formSlug = $scope.permalink.text;
-                    saveFormData();
+                    $scope.formSlug = $scope.permalink.text;
+                    // create data
+                    saveFormData(status, false);
                 });
             }, 100);
         };
@@ -423,11 +424,13 @@
             return defer.promise;
         };
 
-        var saveFormData = function(update) {
+        $scope.isLoading = false;
+        var saveFormData = function(status, update) {
+            $scope.isLoading = true;
             prepareFormData()
                 .then(function(formData) {
                     var method = update ? 'updateFormData' : 'createFormData';
-                    suService[method](formData, $scope.permalink.text)
+                    suService[method](formData, $scope.permalink.text, status)
                         .then(function(res) {
                             $scope.createdIsPreview = false;
                             $scope.formCreatedLink = suService.getFormLink($scope.permalink.text);
@@ -435,6 +438,8 @@
                         }, function(err) {
                             console.warn(err);
                             notify('Some error occured while saving your form.');
+                        }).finally(function() {
+                            $scope.isLoading = false;
                         });
                 });
 
@@ -683,23 +688,27 @@
                     method: 'GET'
                 });
             },
-            createFormData: function(data, slug) {
+            createFormData: function(data, slug, status) {
+                if (!status) {status = 'published';}
                 return $http({
                     url: apiClientUrl+'/signup_forms',
                     method: 'POST',
                     data: {
                         data: data,
-                        slug: slug
+                        slug: slug,
+                        status: status
                     }
                 });
             },
-            updateFormData: function(data, slug) {
+            updateFormData: function(data, slug, status) {
+                if (!status) {status = 'published';}
                 return $http({
                     url: apiClientUrl+'/signup_forms/'+slug,
                     method: 'PUT',
                     data: {
                         data: data,
-                        slug: slug
+                        slug: slug,
+                        status: status
                     }
                 });
             },

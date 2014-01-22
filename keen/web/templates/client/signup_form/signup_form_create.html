@@ -43,7 +43,6 @@
                 ng-click='cancelEditing(title)'>Cancel</button>
       </div>
     </div>
-
     <div class="su-subtitle su-editable form-group row mts mbl"
          ng-class='{editing: permalink.isEditing}'>
       <div class="col-md-10">
@@ -68,7 +67,7 @@
       </div>
     </div>
 
-    <div class="su-form-wrapper mbm">
+    <div class="su-form-wrapper">
 
     <!-- Banner Logo -->
       <div class="banner-logo js-image-container"
@@ -272,12 +271,18 @@
         </div>
       </div>
     </div>
+    <div class="text-center">
+      <div class="loader fade" ng-class="{in: isLoading}"></div>
+    </div>
 
     <button class="btn btn-primary btn-secondary btn-wide pull-right btn-embossed mbl mlm"
-            ng-click='saveForm()'>Save & Publish</button>
-    <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm">Save Draft</button>
+            ng-click='saveForm("published")'
+            ng-disabled='isLoading'>Save & Publish</button>
     <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm"
-            ng-click='saveFormAsPreview()'>Generate Preview</button>
+            ng-click='saveForm("draft")'>Save Draft</button>
+    <button class="btn btn-default btn-wide pull-right btn-embossed mbl mlm"
+            ng-click='saveFormAsPreview()'
+            ng-disabled='isLoading'>Generate Preview</button>
     <button class="btn btn-danger btn-wide pull-right btn-embossed mbl mlm"
             ng-click='discard()'>Discard</button>
 
