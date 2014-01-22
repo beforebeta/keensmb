@@ -38,11 +38,12 @@
         $item.css('background-image', 'url(' + imgSrc + ')');
     });
 
-//    $('.carousel').carousel({interval: 5000});
+    $('.carousel').carousel({interval: 5000});
 
     $('#tryFree').on('shown.bs.modal', function () {
-        $("#trykeenform input[name='name']").focus();
+        $(".trykeenform input[name='name']").focus();
     });
+
     $('#loginModal').on('shown.bs.modal', function () {
         $("#signInForm input[name='email']").focus();
     });

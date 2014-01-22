@@ -4,30 +4,32 @@
 	
 	<div id="myCarousel" class="carousel slide">
 		<div class="carousel-inner">
-			<div data-image-bg="../../static/images/exaple-image-new0.jpg" class="active item js-preload-image">
+            {% for image in images %}
+			<div data-image-bg="{% static "images/exaple-image-new" %}{{ image }}.jpg" class="{% if forloop.counter0 == 0 %}active{% endif %} item js-preload-image">
 				<div class="logo">
-					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
+					<a href="/"><img src="{% static "images/logo-big-blue.png" %}" alt="Keen logo" class="logo"></a>
 				</div>
 				<h1 class="flat-font tagline">Keen is a Customer Relationship Management (CRM) Platform that helps your local business acquire more customers and learn more about the ones you already have</h1>
 			</div>
-			<div data-image-bg="../../static/images/exaple-image-new1.jpg" class="item js-preload-image">
-				<div class="logo">
-					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
-				</div>
-				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
-			</div>
-			<div data-image-bg="../../static/images/exaple-image-new2.jpg" class="item js-preload-image">
-				<div class="logo">
-					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
-				</div>
-				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
-			</div>
-			<div data-image-bg="../../static/images/exaple-image-new3.jpg" class="item js-preload-image">
-				<div class="logo">
-					<a href="/"><img src="{% static "assets/keen_logo.png" %}" alt="Keen logo" class="logo"></a>
-				</div>
-				<h6 class="flat-font tagline">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, consequatur cupiditate accusamus sint magni amet?</h6>
-			</div>
+            {% endfor %}
+			<!--<div data-image-bg="../../static/images/exaple-image-new1.jpg" class="item js-preload-image">-->
+				<!--<div class="logo">-->
+					<!--<a href="/"><img src="{% static "images/logo-big-blue.png" %}" alt="Keen logo" class="logo"></a>-->
+				<!--</div>-->
+				<!--<h1 class="flat-font tagline">Keen is a Customer Relationship Management (CRM) Platform that helps your local business acquire more customers and learn more about the ones you already have</h1>-->
+			<!--</div>-->
+			<!--<div data-image-bg="../../static/images/exaple-image-new2.jpg" class="item js-preload-image">-->
+				<!--<div class="logo">-->
+					<!--<a href="/"><img src="{% static "images/logo-big-blue.png" %}" alt="Keen logo" class="logo"></a>-->
+				<!--</div>-->
+				<!--<h1 class="flat-font tagline">Keen is a Customer Relationship Management (CRM) Platform that helps your local business acquire more customers and learn more about the ones you already have</h1>-->
+			<!--</div>-->
+			<!--<div data-image-bg="../../static/images/exaple-image-new3.jpg" class="item js-preload-image">-->
+				<!--<div class="logo">-->
+					<!--<a href="/"><img src="{% static "images/logo-big-blue.png" %}" alt="Keen logo" class="logo"></a>-->
+				<!--</div>-->
+				<!--<h1 class="flat-font tagline">Keen is a Customer Relationship Management (CRM) Platform that helps your local business acquire more customers and learn more about the ones you already have</h1>-->
+			<!--</div>-->
 		</div>
 		<div class="login">
       <a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#loginModal">Sign In</a>
