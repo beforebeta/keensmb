@@ -1,5 +1,6 @@
 import logging
 from itertools import cycle
+import random
 
 from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
@@ -18,6 +19,8 @@ rotate_templates = cycle((
 
 @ensure_csrf_cookie
 def landing_view(request):
+    images = range(4)
+    random.shuffle(images)
     user = request.user
     if user and user.is_authenticated() and 'client_slug' in request.session:
         return redirect(reverse('client_dashboard'))
@@ -28,4 +31,5 @@ def landing_view(request):
         logger.debug('New landing page selected {0}'.format(template))
         request.session['landing_page'] = template
 
-    return render(request, template)
+    context = dict(images=images)
+    return render(request, template, context)
