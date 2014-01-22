@@ -17,15 +17,14 @@ from tracking.models import Visitor
 
 class Timestamps(models.Model):
 
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
+    created = models.DateTimeField(editable=False, blank=True)
+    modified = models.DateTimeField(editable=False, blank=True)
 
     def save(self, *args, **kw):
         if not self.id:
             if not self.created:
                 self.created = now()
-        if not self.modified:
-            self.modified = now()
+        self.modified = now()
         super(Timestamps, self).save(*args, **kw)
 
     class Meta:
