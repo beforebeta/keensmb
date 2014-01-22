@@ -77,6 +77,8 @@ class Event(Timestamps):
         ('cust_redemption', 'Customer Redeemed Promotion'),
         ('promo_new', 'New Promotion Created'),
         ('promo_expiring', 'Promotion is Expiring'),
+        ('promo_active', 'Promotion Activated'),
+        ('promo_scheduled', 'Promotion Scheduled'),
     )
 
     client = models.ForeignKey(Client)
