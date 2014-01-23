@@ -1,7 +1,9 @@
-from keen.core.models import Client
-
 def add_client(request):
+    context = {}
     try:
-        return {"client":Client.objects.get(slug=request.session['client_slug'])}
-    except:
-        return {}
+        # `keen.core.models.Client` instance is injected by
+        # `keen.web.views.client.client_view` decorator
+        context["client"] = request.client
+    except AttributeError:
+        pass
+    return context
