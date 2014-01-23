@@ -6,11 +6,6 @@ server {
         listen 80 default_server; 
 	server_name .keensmb.com;
 	client_max_body_size 32M;
-	
-	location / {
-		uwsgi_pass keen_app;
-		include uwsgi_params;
-	}
 
 	location = /favicon.ico {
 		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
@@ -43,4 +38,9 @@ server {
 		gzip_vary on;
 		gzip_disable "msi6";
     	}
+	
+	location / {
+		uwsgi_pass keen_app;
+		include uwsgi_params;
+	}
 }
