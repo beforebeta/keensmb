@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 rotate_templates = cycle((
     'front-page/index.html',
-    'front-page/landing2.html',
+#    'front-page/landing2.html',
     'front-page/landing3.html',
 ))
 
