@@ -108,7 +108,7 @@
                 {% else %}
                 <div class="form-group mbm">
                 {% endif %}
-                  <input type="text" name="full_name" class="form-control" placeholder='Full Name' value="{{ form.full_name.value|default:"" }}">
+                  <input type="text" name="full_name" class="form-control" placeholder='Full Name *' value="{{ form.full_name.value|default:"" }}">
                 </div>
                 {% if form.email.errors %}
                 <div class="form-group mbm has-error js-popover-hover"
@@ -117,7 +117,7 @@
                 {% else %}
                 <div class="form-group mbm">
                 {% endif %}
-                  <input type="email" name="email" class="form-control" placeholder='Email Address' value="{{ form.email.value|default:"" }}">
+                  <input type="email" name="email" class="form-control" placeholder='Email Address *' value="{{ form.email.value|default:"" }}">
                 </div>
               </div>
 
