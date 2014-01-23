@@ -37,6 +37,7 @@ def client_view(func):
                              % request.session['client_slug'])
                 del request.session['client_slug']
             else:
+                request.client = client
                 return func(request, client, *args, **kw)
         return redirect('/#' + request.path)
     return wrapper
