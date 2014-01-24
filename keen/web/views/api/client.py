@@ -293,7 +293,7 @@ class SignupFormList(APIView):
 
         try:
             with transaction.atomic():
-                data['thumbnail'] = '%s.png' % uuid1().hex
+                data['thumbnail'] = '%s.png' % uuid4().hex
                 form = SignupForm.objects.create(client=client, slug=slug,
                                                  status=status, data=data)
 
