@@ -1,3 +1,5 @@
+from django.conf import settings
+
 def add_client(request):
     context = {}
     try:
@@ -6,4 +8,9 @@ def add_client(request):
         context["client"] = request.client
     except AttributeError:
         pass
+    context["debug"] = settings.DEBUG
+    try:
+        context["host"] = request.get_host()
+    except:
+        context["host"] = None
     return context

@@ -39,11 +39,13 @@
         {% endcompress %}
         {% block sub_head %}
         {% endblock %}
-        {% if client %}
+        {% if client and not debug %}
             <script id="IntercomSettingsScriptTag">
               window.intercomSettings = {
                 name: "{{ client.name }}",
                 email: "{{ request.user.email }}",
+                "host": {% if host %}"{{ host }}"{% else %}null{% endif %},
+                user_id: "{{ host }}-{{ request.user.id }}",
                 created_at: {{ request.user.date_joined|date:"U" }},
                 app_id: "b454855f402bf064795de52507094ed9cb05e812"
               };
