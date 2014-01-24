@@ -3,6 +3,7 @@ import re
 import logging
 from hashlib import sha256
 from base64 import b64decode
+from uuid import uuid4
 
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
@@ -64,8 +65,7 @@ def schedule_screenshot(request, form):
     take_screenshot.delay(
         url,
         os.path.join(
-            settings.MEDIA_ROOT,
-            'client/%s/form-thumb/%s.png' % (form.client.slug, form.slug)),
+            settings.MEDIA_ROOT, 'signup-form-thumbnails', form.data['thumbnail']),
         (142, 116),
     )
 
@@ -293,6 +293,7 @@ class SignupFormList(APIView):
 
         try:
             with transaction.atomic():
+                data['thumbnail'] = '%s.png' % uuid1().hex
                 form = SignupForm.objects.create(client=client, slug=slug,
                                                  status=status, data=data)
 
@@ -339,12 +340,16 @@ class SignupFormView(APIView):
         if 'data' in request.DATA:
             form.data.update(request.DATA['data'])
 
+        # FIXME: remove previous thumbail
+        form.data['thumbnail'] = '%s.png' % uuid4().hex
+
         try:
             form.save()
-            schedule_screenshot(request, form)
         except DatabaseError:
             logger.exception('Failed to save signup form')
             raise
+        else:
+            schedule_screenshot(request, form)
 
         return Response(status=HTTP_204_NO_CONTENT)
 

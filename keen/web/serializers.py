@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from rest_framework.serializers import (
@@ -136,5 +137,5 @@ class SignupFormSerializer(DynamicSerializer):
         return form.visitors.count()
 
     def get_thumb_url(self, form):
-        return '/media/client/%s/form-thumb/%s.png' % (
-            form.client.slug, form.slug)
+        return '%s/signup-form-thumbnails/%s' % (
+            settings.MEDIA_URL, form.data.get('thumbnail', 'default.png'))
