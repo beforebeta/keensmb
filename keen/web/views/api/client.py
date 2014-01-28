@@ -36,7 +36,7 @@ from keen.web.serializers import (
     SignupFormSerializer,
 )
 from keen.web.forms import CustomerForm
-from keen.tasks import take_screenshot
+from keen.tasks import take_screenshot, enrich_customers_data
 
 
 logger = logging.getLogger(__name__)
@@ -87,7 +87,8 @@ class ClientProfile(APIView):
                 'new_signups': 0,
             }
         elif part == 'customer_fields':
-            available_fields = list(client.customer_fields.all().order_by('group_ranking'))
+            available_fields = list(client.customer_fields.select_related('group')
+                                    .order_by('group_ranking'))
 
             try:
                 page = PageCustomerField.objects.get(page='db', client=client)
@@ -205,6 +206,22 @@ class CustomerList(APIView):
         return Response(CustomerSerializer(customer).data, status=HTTP_201_CREATED)
 
 
+@ensure_csrf_cookie
+@api_view(['POST'])
+def enrich_customers_data_view(request, client_slug):
+    try:
+        if client_slug != request.session['client_slug']:
+            return Http404()
+        client = get_object_or_404(Client, slug=client_slug)
+        customers = map(int, request.DATA['customers'])
+    except (KeyError, ValueError, TypeError):
+        return Response(status=HTTP_400_BAD_REQUEST)
+
+    enrich_customers_data.delay(client, customers)
+
+    return Response()
+
+
 class CustomerProfile(APIView):
 
     permission_classes = (IsClientUser,)
@@ -256,7 +273,7 @@ def current_client_view(request):
     try:
         client_slug = request.session['client_slug']
     except KeyError:
-        return Http404()
+        return Response(status=403)
 
     client = get_object_or_404(Client, slug=client_slug)
 

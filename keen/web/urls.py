@@ -2,7 +2,8 @@ from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 
 from .views.api.client import (ClientProfile, CustomerList, CustomerProfile,
-                               SignupFormList, SignupFormView, ImageList)
+                               SignupFormList, SignupFormView, ImageList,
+                               enrich_customers_data_view)
 
 
 client_api_urls = patterns(
@@ -24,6 +25,7 @@ client_api_urls = patterns(
         url(r'^signup_forms/(?P<form_slug>[\w-]+)$', SignupFormView.as_view(),
             name='api_signup_form'),
         url(r'^images$', ImageList.as_view(), name='api_images'),
+        url(r'^enrich$', enrich_customers_data_view, name='api_enrich'),
     ))),
 )
 

@@ -6,6 +6,8 @@ from celery.exceptions import Ignore
 from celery.utils.log import get_task_logger
 
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template import Context, Template
 
 from PIL import Image
 import mailchimp
@@ -92,3 +94,25 @@ def mailchimp_subscribe(self, customer_id):
     except mailchimp.Error as exc:
         logger.exception('Failed to subscribe customer to Mailchimp list')
         raise self.retry(exc=exc)
+
+
+template = Template('''
+Client {{ client.name }} wants to enrich data of the following customers:
+
+    {% for customer in customers %}
+    {{ customer.data.email }}, {{ customer.data.full_name }}, {{ customer.id }}
+    {% endfor %}
+''')
+
+@app.task
+def enrich_customers_data(client, customers):
+
+    customers = list(Customer.objects.filter(
+        client=client, id__in=customers))
+
+    msg = template.render(Context({
+        'client': client,
+        'customers': customers,
+    }))
+
+    send_mail('New Enrichment Request', msg, 'do-not-reply@keensmb.com', ['workflow@keensmb.com'])

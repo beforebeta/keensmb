@@ -202,6 +202,10 @@
                 return false;
             };
 
+            $scope.customerSelectionChanged = function() {
+                $scope.customersSelected = _.where($scope.customers, {selected: true}).length;
+            };
+
             $scope.anyCustomerSelected = function() {
                 var customers = angular.copy($scope.customers);
                 return _.findWhere(customers, {selected: true}) ? true : false;
@@ -212,6 +216,7 @@
                 _.each($scope.customers, function(customer) {
                     customer.selected = !state;
                 });
+                $scope.customerSelectionChanged();
             };
 
             $scope.deleteCustomers = function() {
@@ -237,6 +242,25 @@
                         scrollList();
                     }
                 };
+            };
+
+            $scope.enrichCustomersData = function() {
+                var $modal = $('#enrichModal'), selectedIDs = _.map(
+                    _.where($scope.customers, {selected: true}),
+                    function(customer) {
+                        return customer.id;
+                    });
+
+                customerService.enrichCustomersData(selectedIDs).then(
+                    function success(response) {
+                        // It's not recommended to do any DOM manipulation
+                        // in controller but that's the easiest way to make job done.
+                        // Beside this will be changed anyway
+                        $modal.modal('show');
+                    },
+                    function failure(response) {
+                    }
+                );
             };
 
             var closeGlobalAlert = function(e) {
@@ -361,6 +385,15 @@
                 },
                 resetCounter: function() {
                     currentOffset = -this.limitData;
+                },
+                enrichCustomersData: function(customers) {
+                    return $http({
+                        url: '/api/client/' + clientSlug + '/enrich', 
+                        method: 'POST',
+                        data: {
+                            customers: customers
+                        }
+                    });
                 }
             };
         }]).directive('checkboxik', [function(){
