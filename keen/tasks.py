@@ -6,11 +6,13 @@ from celery.exceptions import Ignore
 from celery.utils.log import get_task_logger
 
 from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template import Context, Template
 
 from PIL import Image
 import mailchimp
 
-from keen.core.models import Customer
+from keen.core.models import Customer, EnrichmentRequest, Promotion
 from keen.web.models import SignupForm
 
 
@@ -92,3 +94,37 @@ def mailchimp_subscribe(self, customer_id):
     except mailchimp.Error as exc:
         logger.exception('Failed to subscribe customer to Mailchimp list')
         raise self.retry(exc=exc)
+
+
+template = Template('''
+
+    Client {{ client.name }} wants to enrich data of the following customers:
+
+    {% for customer in customers %}
+    {{ customer.data.email }}, {{ customer.data.full_name }}, {{ customer.id }}
+    {% endfor %}
+
+''')
+
+@app.task
+def enrich_customers_data(request_id):
+    request = EnrichmentRequest.objects.get(id=request_id)
+    msg = template.render(Context({
+        'client': request.client,
+        'customers': request.customers.all(),
+    }))
+
+    EmailMessage('New Enrichment Request', msg, 'backend@keensmb.com',
+                 ['workflow@keensmb.com']).send()
+
+
+@app.task
+def send_promotion_status_mail(status, promotion_id):
+    promotion = Promotion.objects.get(id=promotion_id)
+    msg = '''
+    Promotion {title} ({promotion_id}) status changet to {status}
+    '''.format(title=promotion.name, status=status, promotion_id=promotion_id)
+
+    EmailMessage(
+        'Promotion status changed to {0}'.format(status), msg,
+        'backend@keensmb.com', ['workflow@keensmb.com']).send()

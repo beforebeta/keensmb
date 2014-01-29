@@ -3,9 +3,11 @@ import logging
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from django.utils.timezone import now
+from django.contrib.contenttypes.models import ContentType
 
-from keen.core.models import *
-from keen.events.models import *
+from keen.core.models import Customer, Promotion
+from keen.events.models import Event
+from keen.tasks import send_promotion_status_mail
 
 
 logger = logging.getLogger(__name__)
@@ -43,6 +45,7 @@ def promotion_status_changed(sender, instance, **kw):
                 subject=instance,
                 occurrence_datetime=now(),
             )
+            send_promotion_status_mail('ACTIVE', instance.id)
         elif instance.status == Promotion.PROMOTION_STATUS.scheduled:
             Event.objects.record_event(
                 client=instance.client,
@@ -50,6 +53,7 @@ def promotion_status_changed(sender, instance, **kw):
                 subject=instance,
                 occurrence_datetime=now(),
             )
+            send_promotion_status_mail('SCHEDULED', instance.id)
 
 
 @receiver(post_save, sender=Promotion, weak=False)

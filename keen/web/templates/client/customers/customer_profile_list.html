@@ -153,16 +153,16 @@
     </div>
   </div>
 
-  <div ng-show='anyCustomerSelected()' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
+  <div ng-show='customersSelected' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
     <div class="navbar-collapse">
       <p class='item-actions white pull-left mtm mll mbn'>Item Actions:</p>
       <ul class="nav navbar-nav navbar-right pull-right">
         <!-- temporary removed -->
-        <li class='mrl hidden'>
-          <p class='mtm mbn'><small class='white'>You must select (4) more customers to enrich data</small></p>
+        <li class='mrl' ng-hide='customersSelected >= 5'>
+          <p class='mtm mbn'><small class='white'>Select at least five customers to enrich their data</small></p>
         </li>
         <li>
-          <button class="btn btn-sm btn-embossed btn-primary btn-secondary mts mrl" disabled>
+          <button class="btn btn-sm btn-embossed btn-primary btn-secondary mts mrl" ng-disabled='customersSelected < 5' ng-click="enrichCustomersData()">
             <span>Enrich</span>
           </button>
         </li>
@@ -252,6 +252,7 @@
                 <input checkboxik=''
                        type="checkbox"
                        ng-model='customer.selected'
+                       ng-change='customerSelectionChanged()'
                        id="checkbox-table-{{ $index }}"
                        class='custom-checkbox'>
               </td>
@@ -422,7 +423,7 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
-  <div id="csvImportModal" class="modal">
+  <div id="csvImportModal" class="modal" tabIndex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -442,7 +443,7 @@
     </div>
   </div>
 
-  <div id="csvExportModal" class="modal">
+  <div id="csvExportModal" class="modal" tabIndex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -574,11 +575,32 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+
+  <div id="enrichModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h6 class="modal-title">Enrich Customer Data</h6>
+        </div>
+
+        <div class="modal-body">
+          Thank you! Your customer support representative is going to reach out
+          to you within 24 hours to initiate the enrichment process.
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="mtl mbm btn btn-default btn-step-csv btn-embossed pull-right" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endverbatim %}
 
 </section>
-
-
 
 <!-- /.container -->
 

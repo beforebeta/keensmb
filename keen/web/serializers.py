@@ -85,7 +85,8 @@ class CustomerSerializer(DynamicSerializer):
 
     class Meta:
         model = Customer
-        fields = ('id', 'client', 'data', 'created', 'modified')
+        fields = ('id', 'client', 'data', 'created', 'modified',
+                  'enrichment_status', 'enrichment_date')
 
 
 class ImageSerializer(DynamicSerializer):
