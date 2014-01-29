@@ -513,3 +513,8 @@ class Promotion(Timestamps):
         if self.valid_to and not self.valid_from:
             self.valid_from = datetime.date.today()
         super(Promotion, self).save(*args, **kwargs)
+
+
+class EnrichmentRequest(Timestamps):
+    client = models.ForeignKey(Client, related_name='enrichment_requests')
+    customers = models.ManyToManyField(Customer, related_name='enrichment_requests')

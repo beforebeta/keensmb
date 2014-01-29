@@ -26,7 +26,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAdminUser
 
-from keen.core.models import Client, Customer, Image, CustomerSource
+from keen.core.models import Client, Customer, Image, CustomerSource, EnrichmentRequest
 from keen.web.models import PageCustomerField, SignupForm
 from keen.web.serializers import (
     ClientSerializer,
@@ -217,7 +217,15 @@ def enrich_customers_data_view(request, client_slug):
     except (KeyError, ValueError, TypeError):
         return Response(status=HTTP_400_BAD_REQUEST)
 
-    enrich_customers_data.delay(client, customers)
+    try:
+        req = EnrichmentRequest.objects.create(client=client)
+        req.customers = Customer.objects.filter(client=client, id__in=customers)
+        req.save()
+    except DatabaseError:
+        logger.exception('Failed to save Enrichment Request')
+        return Response(status=500)
+
+    enrich_customers_data.delay(req.id)
 
     return Response()
 

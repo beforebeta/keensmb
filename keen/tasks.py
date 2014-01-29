@@ -6,13 +6,13 @@ from celery.exceptions import Ignore
 from celery.utils.log import get_task_logger
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.template import Context, Template
 
 from PIL import Image
 import mailchimp
 
-from keen.core.models import Customer
+from keen.core.models import Customer, EnrichmentRequest
 from keen.web.models import SignupForm
 
 
@@ -97,22 +97,22 @@ def mailchimp_subscribe(self, customer_id):
 
 
 template = Template('''
-Client {{ client.name }} wants to enrich data of the following customers:
+
+    Client {{ client.name }} wants to enrich data of the following customers:
 
     {% for customer in customers %}
     {{ customer.data.email }}, {{ customer.data.full_name }}, {{ customer.id }}
     {% endfor %}
+
 ''')
 
 @app.task
-def enrich_customers_data(client, customers):
-
-    customers = list(Customer.objects.filter(
-        client=client, id__in=customers))
-
+def enrich_customers_data(request_id):
+    request = EnrichmentRequest.objects.get(id=request_id)
     msg = template.render(Context({
-        'client': client,
-        'customers': customers,
+        'client': request.client,
+        'customers': request.customers.all(),
     }))
 
-    send_mail('New Enrichment Request', msg, 'do-not-reply@keensmb.com', ['workflow@keensmb.com'])
+    EmailMessage('New Enrichment Request', msg, 'backend@keensmb.com',
+                 ['workflow@keensmb.com']).send()
