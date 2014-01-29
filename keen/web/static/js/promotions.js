@@ -1,8 +1,7 @@
 (function ($) {
     'use strict';
 
-    $(function () {
-        filepicker && filepicker.setKey('AlEC17z10RIuLOpyhK2n2z');
+    if (filepicker) {filepicker.setKey('AlEC17z10RIuLOpyhK2n2z');}
 
     var preview_promotion = function($button) {
         var $this = $button;
