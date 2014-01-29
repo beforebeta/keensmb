@@ -32,4 +32,6 @@ def landing_view(request):
         request.session['landing_page'] = template
 
     context = dict(images=images)
+    context['production'] = request.META.get('HTTP_HOST', '').lower() == 'keensmb.com'
+
     return render(request, template, context)
