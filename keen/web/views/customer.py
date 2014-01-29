@@ -56,7 +56,7 @@ def signup_view(request, client_slug, form_slug):
 
             try:
                 customer.save()
-                mailchimp_subscribe.delay(customer.id)
+                mailchimp_new_customer(customer)
             except DatabaseError:
                 logger.exception('Failed to save new customer')
             else:
@@ -74,3 +74,38 @@ def signup_view(request, client_slug, form_slug):
     return render(request,
                   signup_form.data.get('template', 'customer/signup.html'),
                   context)
+
+
+def mailchimp_new_customer(customer):
+    if customer.client.ref_id_type != 'mailchimp':
+        logger.warn('Client %s has no Mailchimp list ID' % customer.client.name)
+    else:
+        list_id = customer.client.ref_id
+        email = customer.data['email']
+
+        merge_vars = {
+            'CUSTOMERID': customer.id,
+            'FNAME': customer.data.get('first_name', ''),
+            'LNAME': customer.data.get('last_name', ''),
+            'FULLNAME': customer.data.get('full_name', ''),
+            'NUMBER': customer.data.get('phone', ''),
+            'ZIPCODE': customer.data.get('address__ipcode', ''),
+            'BIRTHDAY': customer.data.get('dob', ''),
+            'GENDER': customer.data.get('gender', ''),
+            'SIGNUPNAME': '',
+            'SIGNUPID': '',
+        }
+
+        if customer.source and customer.source.ref_source == 'signup':
+            try:
+                form = SignupForm.objects.get(id=customer.source.ref_id)
+            except SignupForm.DoesNotExist:
+                logger.warn('Customer signup form with id %s not found' %
+                            customer.source.ref_id)
+            else:
+                merge_vars['SIGNUPNAME'] = form.data.get('pageTitle', '')
+                merge_vars['SIGNUPID'] = form.id
+
+        mailchimp_subscribe.delay(list_id, email, merge_vars,
+                                  double_optin=False, update_existing=True,
+                                  send_welcome=True)

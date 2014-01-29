@@ -7,12 +7,11 @@ from celery.utils.log import get_task_logger
 
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.template import Context, Template
 
 from PIL import Image
 import mailchimp
 
-from keen.core.models import Customer, EnrichmentRequest, Promotion
+from keen.core.models import Customer, Promotion
 from keen.web.models import SignupForm
 
 
@@ -48,83 +47,21 @@ def take_screenshot(url, file_name, thumbnail=False):
 
 
 @app.task(bind=True)
-def mailchimp_subscribe(self, customer_id):
-    try:
-        customer = Customer.objects.get(id=customer_id)
-    except Customer.DoesNotExist:
-        logger.error('Failed to find customer with id=%s' % customer_id)
-        raise Ignore()
-
-    if customer.client.ref_id_type != 'mailchimp':
-        logger.info('Client %s has no Mailchimp list ID' % customer.client.name)
-        raise Ignore()
-
-    list_id = customer.client.ref_id
-
-    email = {
-        'email': customer.data['email'],
-    }
-
-    merge_vars = {
-        'CUSTOMERID': customer.id,
-        'FNAME': customer.data.get('first_name', ''),
-        'LNAME': customer.data.get('last_name', ''),
-        'FULLNAME': customer.data.get('full_name', ''),
-        'NUMBER': customer.data.get('phone', ''),
-        'ZIPCODE': customer.data.get('address__ipcode', ''),
-        'BIRTHDAY': customer.data.get('dob', ''),
-        'GENDER': customer.data.get('gender', ''),
-        'SIGNUPNAME': '',
-        'SIGNUPID': '',
-    }
-    if customer.source and customer.source.ref_source == 'signup':
-        try:
-            form = SignupForm.objects.get(id=customer.source.ref_id)
-        except SignupForm.DoesNotExist:
-            logger.warn('Customer signup form with id %s not found' % customer.source.ref_id)
-        else:
-            merge_vars['SIGNUPNAME'] = form.data.get('pageTitle', '')
-            merge_vars['SIGNUPID'] = form.id
+def mailchimp_subscribe(self, list_id, email, merge_vars, **kw):
+    if isinstance(email, basestring):
+        email = {'email': email}
 
     try:
         m = mailchimp.Mailchimp()
-        m.lists.subscribe(list_id, email, merge_vars=merge_vars,
-                          double_optin=False, update_existing=True,
-                          send_welcome=True)
+        m.lists.subscribe(list_id, email, merge_vars=merge_vars, **kw)
     except mailchimp.Error as exc:
         logger.exception('Failed to subscribe customer to Mailchimp list')
         raise self.retry(exc=exc)
 
 
-template = Template('''
-
-    Client {{ client.name }} wants to enrich data of the following customers:
-
-    {% for customer in customers %}
-    {{ customer.data.email }}, {{ customer.data.full_name }}, {{ customer.id }}
-    {% endfor %}
-
-''')
-
 @app.task
-def enrich_customers_data(request_id):
-    request = EnrichmentRequest.objects.get(id=request_id)
-    msg = template.render(Context({
-        'client': request.client,
-        'customers': request.customers.all(),
-    }))
+def send_email(subject, body, recipients, sender=None):
+    if sender is None:
+        sender = settings.DEFAULT_FROM_EMAIL
 
-    EmailMessage('New Enrichment Request', msg, 'backend@keensmb.com',
-                 ['workflow@keensmb.com']).send()
-
-
-@app.task
-def send_promotion_status_mail(status, promotion_id):
-    promotion = Promotion.objects.get(id=promotion_id)
-    msg = '''
-    Promotion {title} ({promotion_id}) status changet to {status}
-    '''.format(title=promotion.name, status=status, promotion_id=promotion_id)
-
-    EmailMessage(
-        'Promotion status changed to {0}'.format(status), msg,
-        'backend@keensmb.com', ['workflow@keensmb.com']).send()
+    EmailMessage(subject, body, sender, recipients).send()

@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from keen.core.models import Customer, Promotion
 from keen.events.models import Event
-from keen.tasks import send_promotion_status_mail
+from keen.tasks import send_email
 
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ def promotion_status_changed(sender, instance, **kw):
                 subject=instance,
                 occurrence_datetime=now(),
             )
-            send_promotion_status_mail('ACTIVE', instance.id)
+            send_promotion_status_email(instance)
         elif instance.status == Promotion.PROMOTION_STATUS.scheduled:
             Event.objects.record_event(
                 client=instance.client,
@@ -53,7 +53,7 @@ def promotion_status_changed(sender, instance, **kw):
                 subject=instance,
                 occurrence_datetime=now(),
             )
-            send_promotion_status_mail('SCHEDULED', instance.id)
+            send_promotion_status_email(instance)
 
 
 @receiver(post_save, sender=Promotion, weak=False)
@@ -69,3 +69,11 @@ def promotion_deleted(sender, instance, **kwargs):
         data__contains={'subject_type_id': str(ContentType.objects.get_for_model(instance).id),
                         'subject_id': str(instance.id)}
     ).delete()
+
+
+def send_promotion_status_email(promotion):
+    send_email.delay(
+        'Promotion status changed to {0.status}'.format(promotion),
+        'Promotion {0.name} ({0.id}) status changet to {0.status}'.format(promotion)
+        ['workflow@keensmb.com'],
+    )
