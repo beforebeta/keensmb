@@ -1,4 +1,5 @@
 import logging
+from uuid import uuid1
 
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -12,7 +13,7 @@ from keen.core.models import ClientUser
 from keen.web.models import TrialRequest
 from keen.web.forms import TrialRequestForm
 from keen.web.serializers import ClientSerializer
-from keen.tasks import send_email
+from keen.tasks import send_email, mailchimp_subscribe
 
 from tracking.models import Visitor
 
@@ -78,9 +79,10 @@ def request_free_trial(request):
             # FIXME: should we return an error?
             # for now lets pretend all went well
 
+        email = trial_request.email or uuid1().hex
         mailchimp_subscribe.delay(
             'aba1a09617',
-            trial_request.email,
+            email,
             {
                 'NAME': trial_request.name or '',
                 'BIZNAME': trial_request.business or '',
