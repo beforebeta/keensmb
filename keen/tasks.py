@@ -12,7 +12,7 @@ from django.template import Context, Template
 from PIL import Image
 import mailchimp
 
-from keen.core.models import Customer, EnrichmentRequest
+from keen.core.models import Customer, EnrichmentRequest, Promotion
 from keen.web.models import SignupForm
 
 
@@ -116,3 +116,15 @@ def enrich_customers_data(request_id):
 
     EmailMessage('New Enrichment Request', msg, 'backend@keensmb.com',
                  ['workflow@keensmb.com']).send()
+
+
+@app.task
+def send_promotion_status_mail(status, promotion_id):
+    promotion = Promotion.objects.get(id=promotion_id)
+    msg = '''
+    Promotion {title} ({promotion_id}) status changet to {status}
+    '''.format(title=promotion.name, status=status, promotion_id=promotion_id)
+
+    EmailMessage(
+        'Promotion status changed to {0}'.format(status), msg,
+        'backend@keensmb.com', ['workflow@keensmb.com']).send()
