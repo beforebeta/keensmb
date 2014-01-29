@@ -189,34 +189,21 @@
                 $customersList.scrollTop(0);
             };
 
-            // var customersToDelete = [],
-            //     $toggleAllCheckbox = $('.tables-wrapper .toggle-all-customers :checkbox'),
-            //     $itemActionsBlock = $('.js-item-selected');
-
-            $scope.allChecked = function() {
-
+            var countSelected = function() {
                 var customers = angular.copy($scope.customers);
-                if (customers.length && _.where(customers, {selected: true}).length === customers.length) {
-                    return true;
-                }
-                return false;
+                var selectedNumber = customers.length ? _.where(customers, {selected: true}).length : 0;
+
+                return selectedNumber;
             };
 
-            $scope.customerSelectionChanged = function() {
-                $scope.customersSelected = _.where($scope.customers, {selected: true}).length;
-            };
+            $scope.customersSelected = countSelected;
 
-            $scope.anyCustomerSelected = function() {
-                var customers = angular.copy($scope.customers);
-                return _.findWhere(customers, {selected: true}) ? true : false;
-            };
 
             $scope.markAll = function() {
-                var state = $scope.allChecked();
+                var state = ($scope.customersSelected() === $scope.customers.length);
                 _.each($scope.customers, function(customer) {
                     customer.selected = !state;
                 });
-                $scope.customerSelectionChanged();
             };
 
             $scope.deleteCustomers = function() {
@@ -238,7 +225,10 @@
                 var customersDeletedSuccess = function() {
                     $scope.customers = _.difference($scope.customers, selectedCustomers);
                     notify(selectedCustomers.length + ' selected Customers removed');
-                    if ($scope.customers.length < customerService.limitData) {
+
+                    if (!$scope.customers.length) {
+                        $scope.loadMoreCustomers();
+                    } else if ($scope.customers.length < customerService.limitData) {
                         scrollList();
                     }
                 };
@@ -396,7 +386,7 @@
                 },
                 enrichCustomersData: function(customers) {
                     return $http({
-                        url: '/api/client/' + clientSlug + '/enrich', 
+                        url: '/api/client/' + clientSlug + '/enrich',
                         method: 'POST',
                         data: {
                             customers: customers

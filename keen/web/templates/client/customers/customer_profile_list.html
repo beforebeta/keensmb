@@ -153,16 +153,17 @@
     </div>
   </div>
 
-  <div ng-show='anyCustomerSelected()' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
+  <div ng-show='customersSelected() > 0' class="navbar navbar-inverse mbn profile-toolbar toolbar-secondary js-item-selected">
     <div class="navbar-collapse">
       <p class='item-actions white pull-left mtm mll mbn'>Item Actions:</p>
       <ul class="nav navbar-nav navbar-right pull-right">
-        <!-- temporary removed -->
-        <li class='mrl' ng-hide='customersSelected >= 5'>
-          <p class='mtm mbn'><small class='white'>Select at least five customers to enrich their data</small></p>
+        <li class='mrl' ng-hide='customersSelected() >= 5'>
+          <p class='mtm mbn'>
+            <small class='white'>Select at least five customers to enrich their data</small>
+          </p>
         </li>
         <li>
-          <button class="btn btn-sm btn-embossed btn-primary btn-secondary mts mrl" ng-disabled='customersSelected < 5' ng-click="enrichCustomersData()">
+          <button class="btn btn-sm btn-embossed btn-primary btn-secondary mts mrl" ng-disabled='customersSelected() < 5' ng-click="enrichCustomersData()">
             <span>Enrich</span>
           </button>
         </li>
@@ -197,8 +198,8 @@
               <th width='50' class='text-center'>
                 <input checkboxik=''
                        type="checkbox"
-                       ng-checked='allChecked()'
-                       ng-click='markAll($event)'
+                       ng-checked='customersSelected() === customers.length'
+                       ng-click='markAll()'
                        id="checkbox-table-all"
                        class='custom-checkbox'>
 
@@ -252,8 +253,7 @@
                 <input checkboxik=''
                        type="checkbox"
                        ng-model='customer.selected'
-                       ng-change='customerSelectionChanged()'
-                       id="checkbox-table-{{ $index }}"
+                       id="checkbox-table-{{ customer.id }}"
                        class='custom-checkbox'>
               </td>
 
