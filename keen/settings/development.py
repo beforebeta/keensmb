@@ -33,3 +33,11 @@ DEBUG_TOOLBAR_CONFIG = {
 #    'debug_toolbar.panels.signals.SignalDebugPanel',
 #    'debug_toolbar.panels.logger.LoggingPanel',
 #)
+
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 25
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+#EMAIL_USE_SSL = True
+#EMAIL_USE_TLS = True
+
