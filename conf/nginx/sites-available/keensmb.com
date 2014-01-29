@@ -11,10 +11,6 @@ server {
 		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
 	}
 
-	location = /favicon.ico {
-		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
-	}
-
 	location /static/ { 
         	alias /var/apps/keensmb.com/keen/static/;
 		autoindex off;
