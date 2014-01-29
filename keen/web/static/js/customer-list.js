@@ -67,7 +67,7 @@
             var tempFields = [];
             var initCustomersFields = function() {
                 customerService.getCustomersFields().then(function(data) {
-                    var availableFields = data.data.available_customer_fields;
+                    // var availableFields = data.data.available_customer_fields;
 
                     var customerFields = data.data.display_customer_fields;
                     $scope.customerFields = customerFields;
@@ -189,9 +189,9 @@
                 $customersList.scrollTop(0);
             };
 
-            var customersToDelete = [],
-                $toggleAllCheckbox = $('.tables-wrapper .toggle-all-customers :checkbox'),
-                $itemActionsBlock = $('.js-item-selected');
+            // var customersToDelete = [],
+            //     $toggleAllCheckbox = $('.tables-wrapper .toggle-all-customers :checkbox'),
+            //     $itemActionsBlock = $('.js-item-selected');
 
             $scope.allChecked = function() {
 
@@ -245,8 +245,7 @@
                 $alertBlock.removeClass('in').hide();
             };
 
-            var $tablesWrapper = $('.tables-wrapper'),
-                $scrollFlex = $('.js-list-flexible'),
+            var $scrollFlex = $('.js-list-flexible'),
                 $scrollFixed = $('.js-list-fixed');
 
             var scrollList = function() {
@@ -260,15 +259,16 @@
             };
             var lazyScrollList = _.throttle(scrollList, 200);
 
-            var $fixedTop = $scrollFlex.children('.customers-table');
+            // var $fixedTop = $scrollFlex.children('.customers-table');
             var scrollFixedList = function() {
                 var scrollTop = $scrollFixed.scrollTop();
-                // $scrollFlex.scrollTop(scrollTop);
+                $scrollFlex.scrollTop(scrollTop);
                 // $fixedTop.css('margin-top', -scrollTop);
 
-                // lazyScrollList();
+                lazyScrollList();
             };
-            var $flexTop = $scrollFixed.children('.customers-table');
+
+            // var $flexTop = $scrollFixed.children('.customers-table');
             var scrollFlexList = function() {
                 var scrollTop = $scrollFlex.scrollTop();
                 $scrollFixed.scrollTop(scrollTop);
@@ -300,9 +300,17 @@
             var lazyCheckTableSize = _.debounce(checkTableSize, 200);
 
             $doc.on('click', '.global-alert .close', closeGlobalAlert);
-            $scrollFlex.on('scroll', scrollFlexList);
             $win.on('resize', lazyCheckTableSize);
-            // $scrollFixed.on('scroll', scrollFixedList);
+
+            $scrollFlex.hover(
+                function() {$scrollFlex.on('scroll', scrollFlexList);},
+                function() {$scrollFlex.off('scroll', scrollFlexList);}
+            );
+
+            $scrollFixed.hover(
+                function() {$scrollFixed.on('scroll', scrollFixedList);},
+                function() {$scrollFixed.off('scroll', scrollFixedList);}
+            );
 
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 

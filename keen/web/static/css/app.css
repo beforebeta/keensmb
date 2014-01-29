@@ -393,7 +393,11 @@ header.navbar .navbar-nav > li:hover > a {
 
 .customers-list-fixed .customers-table tr > td:first-child,
 .customers-list-fixed .customers-table tr > th:first-child {
-  padding-left: 28px;
+  padding-left: 15px;
+}
+.customers-list-fixed .customers-table tr > td:last-child,
+.customers-list-fixed .customers-table tr > th:last-child {
+  padding-right: 20px;
 }
 .customers-table {
     /*table-layout: fixed;*/
@@ -407,14 +411,15 @@ header.navbar .navbar-nav > li:hover > a {
   margin-left: -1px;
 }
 .customers-list-fixed  .customers-list {
-  overflow: hidden;
+  overflow-x: hidden;
   /*padding-right: 15px;*/
 }
+.customers-list-fixed  .customers-list::-webkit-scrollbar {
+    display: none;
+}
 .customers-list-flex {
-  /*position: absolute;
-  left: 484px;
-  top: 0;
-  width: 436px;*/
+  position: relative;
+  left: -17px;
   overflow-x: auto;
   overflow-y: hidden;
   background-color: #fff;
@@ -490,7 +495,7 @@ header.navbar .navbar-nav > li:hover > a {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 7px 4px;
+  padding: 7px 4px 7px 6px;
   border:1px dashed #ebeff0;
   background: #fff;
   -webkit-transition: all .2s;
