@@ -79,7 +79,7 @@
   </div>
 </footer>
 
-        {% if request.META.HTTP_HOST == 'keensmb.com' %}
+        {% if production %}
         {% include "front-page/mixpanel.html" with mixpanel_track="landing2" %}
         {% endif %}
 
