@@ -79,7 +79,7 @@ def request_free_trial(request):
             # FIXME: should we return an error?
             # for now lets pretend all went well
 
-        email = trial_request.email or uuid1().hex
+        email = trial_request.email or 'ignore+{0}@keensmb.com'.format(uuid1().hex)
         mailchimp_subscribe.delay(
             'aba1a09617',
             email,
