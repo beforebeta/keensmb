@@ -6,6 +6,7 @@ String.prototype.repeat = function(num) {
 };
 
 (function($) {
+  'use strict';
 
   // Add segments to a slider
   $.fn.addSliderSegments = function (amount) {

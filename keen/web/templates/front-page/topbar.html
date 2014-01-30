@@ -5,7 +5,7 @@
 	<div id="myCarousel" class="carousel slide">
 		<div class="carousel-inner">
             {% for image in images %}
-			<div data-image-bg="{% static "images/exaple-image-new" %}{{ image }}.jpg" class="{% if forloop.counter0 == 0 %}active{% endif %} item js-preload-image">
+			<div data-image-bg="{% static "images/keen-landing-" %}{{ image }}.jpg?v=1" class="{% if forloop.counter0 == 0 %}active{% endif %} item js-preload-image">
 				<div class="logo">
 					<a href="/"><img src="{% static "images/logo-big-blue.png" %}" alt="Keen logo" class="logo"></a>
 				</div>

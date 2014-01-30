@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.template import Context, Template
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 
@@ -36,7 +37,7 @@ from keen.web.serializers import (
     SignupFormSerializer,
 )
 from keen.web.forms import CustomerForm
-from keen.tasks import take_screenshot
+from keen.tasks import take_screenshot, send_email
 
 
 logger = logging.getLogger(__name__)
@@ -87,7 +88,8 @@ class ClientProfile(APIView):
                 'new_signups': 0,
             }
         elif part == 'customer_fields':
-            available_fields = list(client.customer_fields.all().order_by('group_ranking'))
+            available_fields = list(client.customer_fields.select_related('group')
+                                    .order_by('group_ranking'))
 
             try:
                 page = PageCustomerField.objects.get(page='db', client=client)
@@ -256,7 +258,7 @@ def current_client_view(request):
     try:
         client_slug = request.session['client_slug']
     except KeyError:
-        return Http404()
+        return Response(status=403)
 
     client = get_object_or_404(Client, slug=client_slug)
 

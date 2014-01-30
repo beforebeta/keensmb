@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'keen.core',
     'keen.web',
     'keen.events',
+    'keen.enrichment',
 )
 
 # Place bcrypt first in the list, so it will be the default password hashing
@@ -249,8 +250,8 @@ INTERNAL_IPS = ('127.0.0.1')
 # Set this to true if you use a proxy that sets X-Forwarded-Host
 #USE_X_FORWARDED_HOST = False
 
-SERVER_EMAIL = "webmaster@example.com"
-DEFAULT_FROM_EMAIL = "webmaster@example.com"
+SERVER_EMAIL = "backend@keensmb.com"
+DEFAULT_FROM_EMAIL = "backend@keensmb.com"
 SYSTEM_EMAIL_PREFIX = "[keen]"
 
 ## Log settings

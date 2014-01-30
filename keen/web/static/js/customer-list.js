@@ -67,7 +67,7 @@
             var tempFields = [];
             var initCustomersFields = function() {
                 customerService.getCustomersFields().then(function(data) {
-                    var availableFields = data.data.available_customer_fields;
+                    // var availableFields = data.data.available_customer_fields;
 
                     var customerFields = data.data.display_customer_fields;
                     $scope.customerFields = customerFields;
@@ -189,26 +189,18 @@
                 $customersList.scrollTop(0);
             };
 
-            var customersToDelete = [],
-                $toggleAllCheckbox = $('.tables-wrapper .toggle-all-customers :checkbox'),
-                $itemActionsBlock = $('.js-item-selected');
-
-            $scope.allChecked = function() {
-
+            var countSelected = function() {
                 var customers = angular.copy($scope.customers);
-                if (customers.length && _.where(customers, {selected: true}).length === customers.length) {
-                    return true;
-                }
-                return false;
+                var selectedNumber = customers.length ? _.where(customers, {selected: true}).length : 0;
+
+                return selectedNumber;
             };
 
-            $scope.anyCustomerSelected = function() {
-                var customers = angular.copy($scope.customers);
-                return _.findWhere(customers, {selected: true}) ? true : false;
-            };
+            $scope.customersSelected = countSelected;
+
 
             $scope.markAll = function() {
-                var state = $scope.allChecked();
+                var state = ($scope.customersSelected() === $scope.customers.length);
                 _.each($scope.customers, function(customer) {
                     customer.selected = !state;
                 });
@@ -233,10 +225,32 @@
                 var customersDeletedSuccess = function() {
                     $scope.customers = _.difference($scope.customers, selectedCustomers);
                     notify(selectedCustomers.length + ' selected Customers removed');
-                    if ($scope.customers.length < customerService.limitData) {
+
+                    if (!$scope.customers.length) {
+                        $scope.loadMoreCustomers();
+                    } else if ($scope.customers.length < customerService.limitData) {
                         scrollList();
                     }
                 };
+            };
+
+            $scope.enrichCustomersData = function() {
+                var $modal = $('#enrichModal'), selectedIDs = _.map(
+                    _.where($scope.customers, {selected: true}),
+                    function(customer) {
+                        return customer.id;
+                    });
+
+                customerService.enrichCustomersData(selectedIDs).then(
+                    function success(response) {
+                        // It's not recommended to do any DOM manipulation
+                        // in controller but that's the easiest way to make job done.
+                        // Beside this will be changed anyway
+                        $modal.modal('show');
+                    },
+                    function failure(response) {
+                    }
+                );
             };
 
             var closeGlobalAlert = function(e) {
@@ -245,8 +259,7 @@
                 $alertBlock.removeClass('in').hide();
             };
 
-            var $tablesWrapper = $('.tables-wrapper'),
-                $scrollFlex = $('.js-list-flexible'),
+            var $scrollFlex = $('.js-list-flexible'),
                 $scrollFixed = $('.js-list-fixed');
 
             var scrollList = function() {
@@ -260,15 +273,16 @@
             };
             var lazyScrollList = _.throttle(scrollList, 200);
 
-            var $fixedTop = $scrollFlex.children('.customers-table');
+            // var $fixedTop = $scrollFlex.children('.customers-table');
             var scrollFixedList = function() {
                 var scrollTop = $scrollFixed.scrollTop();
-                // $scrollFlex.scrollTop(scrollTop);
+                $scrollFlex.scrollTop(scrollTop);
                 // $fixedTop.css('margin-top', -scrollTop);
 
-                // lazyScrollList();
+                lazyScrollList();
             };
-            var $flexTop = $scrollFixed.children('.customers-table');
+
+            // var $flexTop = $scrollFixed.children('.customers-table');
             var scrollFlexList = function() {
                 var scrollTop = $scrollFlex.scrollTop();
                 $scrollFixed.scrollTop(scrollTop);
@@ -300,9 +314,17 @@
             var lazyCheckTableSize = _.debounce(checkTableSize, 200);
 
             $doc.on('click', '.global-alert .close', closeGlobalAlert);
-            $scrollFlex.on('scroll', scrollFlexList);
             $win.on('resize', lazyCheckTableSize);
-            // $scrollFixed.on('scroll', scrollFixedList);
+
+            $scrollFlex.hover(
+                function() {$scrollFlex.on('scroll', scrollFlexList);},
+                function() {$scrollFlex.off('scroll', scrollFlexList);}
+            );
+
+            $scrollFixed.hover(
+                function() {$scrollFixed.on('scroll', scrollFixedList);},
+                function() {$scrollFixed.off('scroll', scrollFixedList);}
+            );
 
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 
@@ -361,6 +383,15 @@
                 },
                 resetCounter: function() {
                     currentOffset = -this.limitData;
+                },
+                enrichCustomersData: function(customers) {
+                    return $http({
+                        url: '/api/client/' + clientSlug + '/enrich',
+                        method: 'POST',
+                        data: {
+                            customers: customers
+                        }
+                    });
                 }
             };
         }]).directive('checkboxik', [function(){

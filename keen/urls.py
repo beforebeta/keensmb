@@ -14,15 +14,8 @@ urlpatterns = patterns(
     url(r'', include('keen.web.urls')),
 )
 
-## In DEBUG mode, serve media files through Django.
 if settings.DEBUG:
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    import debug_toolbar
 
-    urlpatterns += staticfiles_urlpatterns()
-    # Remove leading and trailing slashes so the regex matches.
-    media_url = settings.MEDIA_URL.lstrip('/').rstrip('/')
     urlpatterns += patterns(
-        '',
-        (r'^%s/(?P<path>.*)$' % media_url, 'django.views.static.serve',
-         {'document_root': settings.MEDIA_ROOT}),
-    )
+        '', url(r'^__debug__/', include(debug_toolbar.urls)))

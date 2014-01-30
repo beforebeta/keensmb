@@ -71,12 +71,15 @@ class ClientSerializer(DynamicSerializer):
 
     locations = LocationSerializer(many=True)
     main_location = SlugRelatedField(slug_field='name', required=False)
-    customer_fields = CustomerFieldSerializer(many=True)
+    customer_fields = SerializerMethodField('get_customer_fields')
 
     class Meta:
         model = Client
         fields = ('slug', 'name', 'locations',
                   'main_location', 'customer_fields', 'created', 'modified')
+
+    def get_customer_fields(self, client):
+        return CustomerFieldSerializer(client.customer_fields.select_related('group').all(), many=True).data
 
 
 class CustomerSerializer(DynamicSerializer):
@@ -85,7 +88,8 @@ class CustomerSerializer(DynamicSerializer):
 
     class Meta:
         model = Customer
-        fields = ('id', 'client', 'data', 'created', 'modified')
+        fields = ('id', 'client', 'data', 'created', 'modified',
+                  'enrichment_status', 'enrichment_date')
 
 
 class ImageSerializer(DynamicSerializer):

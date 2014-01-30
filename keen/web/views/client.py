@@ -4,24 +4,23 @@ from functools import wraps
 from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
-from keen import print_stack_trace, InvalidOperationException
+from django.core.urlresolvers import reverse
 
 from keen.util import get_first_day_of_month_as_dt, get_last_day_of_month_as_dt
 from keen.core.models import Client, Customer, Location, Promotion
-from keen.core.models import Client, Customer, Location
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm, PromotionForm
 from keen.web.serializers import SignupFormSerializer
-from django.core.urlresolvers import reverse
+from keen import print_stack_trace, InvalidOperationException
 
 
 logger = logging.getLogger(__name__)
+
 
 def client_view(func):
     """Prevent unauthorized access to and provide client argument to a view
@@ -33,8 +32,8 @@ def client_view(func):
             try:
                 client = Client.objects.get(slug=request.session['client_slug'])
             except Client.DoesNotExist:
-                logger.error('Failed to locate client with slug %s'
-                             % request.session['client_slug'])
+                logger.error('Failed to locate client with slug %s' %
+                             request.session['client_slug'])
                 del request.session['client_slug']
             else:
                 request.client = client
@@ -97,7 +96,7 @@ def create_edit_promotion(request, client, promotion_id=None):
                 promotion_instance.client = client
                 promotion_instance.save()
                 url = "%s%s" % (str(reverse('client_edit_promotion', args=[promotion_instance.id])), "#preview" if "preview_promotion" in request.POST else "")
-                return HttpResponseRedirect(url)
+                return redirect(url)
     else:
         if promotion_id:
             form = PromotionForm(instance=promotion_instance)

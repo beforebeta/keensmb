@@ -1,4 +1,5 @@
 import logging
+from uuid import uuid1
 
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -12,8 +13,10 @@ from keen.core.models import ClientUser
 from keen.web.models import TrialRequest
 from keen.web.forms import TrialRequestForm
 from keen.web.serializers import ClientSerializer
+from keen.tasks import send_email, mailchimp_subscribe
 
 from tracking.models import Visitor
+
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +78,36 @@ def request_free_trial(request):
             logger.exception('Failed to save free trial request')
             # FIXME: should we return an error?
             # for now lets pretend all went well
+
+        email = trial_request.email or 'ignore+{0}@keensmb.com'.format(uuid1().hex)
+        mailchimp_subscribe.delay(
+            'aba1a09617',
+            email,
+            {
+                'EMAIL': email,
+                'NAME': trial_request.name or '',
+                'BIZNAME': trial_request.business or '',
+                'NUMBER': trial_request.phone or '',
+                'REFERRAL': trial_request.question or '',
+                'QUESTIONS': trial_request.comments or '',
+            },
+            double_optin=False,
+            update_existing=True,
+            send_welcome=False,
+        )
+
+        send_email.delay(
+            'Free Trial Request',
+            '''
+            Name: {0.name}
+            Business name: {0.business}
+            Phone number: {0.phone}
+            Email: {0.email}
+            Referral: {0.question}
+            Questions: {0.comments}
+            '''.format(trial_request),
+            ['workflow@keensmb.com'],
+        )
 
         result = {
             'success': 'We will be in touch shortly',
