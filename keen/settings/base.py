@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'keen.core',
     'keen.web',
     'keen.events',
+    'keen.enrichment',
 )
 
 # Place bcrypt first in the list, so it will be the default password hashing
