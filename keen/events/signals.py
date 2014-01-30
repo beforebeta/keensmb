@@ -78,6 +78,6 @@ def promotion_deleted(sender, instance, **kwargs):
 def send_promotion_status_email(promotion):
     send_email.delay(
         'Promotion status changed to {0.status}'.format(promotion),
-        'Promotion {0.name} ({0.id}) status changet to {0.status}'.format(promotion)
+        'Promotion {0.name} ({0.id}) status changed to {0.status}'.format(promotion)
         ['workflow@keensmb.com'],
     )
