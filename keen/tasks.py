@@ -52,7 +52,7 @@ def mailchimp_subscribe(self, list_id, email, merge_vars, **kw):
         email = {'email': email}
 
     try:
-        m = mailchimp.Mailchimp()
+        m = mailchimp.Mailchimp(debug=settings.DEBUG)
         m.lists.subscribe(list_id, email, merge_vars=merge_vars, **kw)
     except mailchimp.Error as exc:
         logger.exception('Failed to subscribe customer to Mailchimp list')
