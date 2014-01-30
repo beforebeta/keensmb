@@ -90,7 +90,10 @@ def request_free_trial(request):
                 'NUMBER': trial_request.phone or '',
                 'REFERRAL': trial_request.question or '',
                 'QUESTIONS': trial_request.comments or '',
-            }
+            },
+            double_optin=False,
+            update_existing=True,
+            send_welcome=False,
         )
 
         send_email.delay(
