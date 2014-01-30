@@ -84,6 +84,7 @@ def request_free_trial(request):
             'aba1a09617',
             email,
             {
+                'EMAIL': email,
                 'NAME': trial_request.name or '',
                 'BIZNAME': trial_request.business or '',
                 'NUMBER': trial_request.phone or '',
