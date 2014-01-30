@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from keen.enrichment.models import EnrichmentRequest
+
+
+class EnrichmentRequestAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(EnrichmentRequest, EnrichmentRequestAdmin)
