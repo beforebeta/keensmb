@@ -84,15 +84,16 @@ class TrialRequestForm(forms.Form):
         business = data.get('business')
         if not (name or business):
             raise forms.ValidationError(
-                _('Please give us your name and/or business name'))
+                _('Please provide your name and/or business name'))
 
         phone = data.get('phone')
         email = data.get('email')
         if not (phone or email):
             raise forms.ValidationError(
-                _('Please give us some contact information'))
+                _('Please provide either an email address or a phone number'))
 
         return data
+
 
 class PromotionForm(forms.ModelForm):
     class Meta:
