@@ -423,6 +423,7 @@ header.navbar .navbar-nav > li:hover > a {
   overflow-x: auto;
   overflow-y: hidden;
   background-color: #fff;
+  border-left: 1px solid #ebeff0;
 }
 .customers-list-flex .customers-list {
   margin-right: 21px;

@@ -273,20 +273,24 @@
             };
             var lazyScrollList = _.throttle(scrollList, 200);
 
-            // var $fixedTop = $scrollFlex.children('.customers-table');
             var scrollFixedList = function() {
                 var scrollTop = $scrollFixed.scrollTop();
+
+                // TODO: bad sulution, but its working... will think about perfomance later
+                $scrollFlex.off('scroll', scrollFlexList);
                 $scrollFlex.scrollTop(scrollTop);
-                // $fixedTop.css('margin-top', -scrollTop);
+                $scrollFlex.on('scroll', scrollFlexList);
 
                 lazyScrollList();
             };
 
-            // var $flexTop = $scrollFixed.children('.customers-table');
             var scrollFlexList = function() {
                 var scrollTop = $scrollFlex.scrollTop();
+
+                // TODO: bad sulution, but its working... will think about perfomance later
+                $scrollFixed.off('scroll', scrollFixedList);
                 $scrollFixed.scrollTop(scrollTop);
-                // $flexTop.css('margin-top', -scrollTop);
+                $scrollFixed.on('scroll', scrollFixedList);
 
                 lazyScrollList();
             };
@@ -313,18 +317,11 @@
 
             var lazyCheckTableSize = _.debounce(checkTableSize, 200);
 
+            $scrollFlex.on('scroll', scrollFlexList);
+            $scrollFixed.on('scroll', scrollFixedList);
+
             $doc.on('click', '.global-alert .close', closeGlobalAlert);
             $win.on('resize', lazyCheckTableSize);
-
-            $scrollFlex.hover(
-                function() {$scrollFlex.on('scroll', scrollFlexList);},
-                function() {$scrollFlex.off('scroll', scrollFlexList);}
-            );
-
-            $scrollFixed.hover(
-                function() {$scrollFixed.on('scroll', scrollFixedList);},
-                function() {$scrollFixed.off('scroll', scrollFixedList);}
-            );
 
         }]).factory('customerService', ['$http','$q','$timeout', function($http, $q, $timeout) {
 
