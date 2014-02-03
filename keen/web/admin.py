@@ -1,15 +1,10 @@
 from django.contrib import admin
 
 from keen.web.models import (
-    Dashboard,
     PageCustomerField,
     SignupForm,
     TrialRequest,
 )
-
-
-class DashboardAdmin(admin.ModelAdmin):
-    list_display = ('total_customers', 'new_customers','promotions_this_month', 'redemptions')
 
 
 class PageCustomerFieldAdmin(admin.ModelAdmin):
@@ -29,7 +24,6 @@ class TrialRequestAdmin(admin.ModelAdmin):
     name_and_business.short_description = 'Name/Business'
 
 
-admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(PageCustomerField, PageCustomerFieldAdmin)
 admin.site.register(SignupForm, SignupFormAdmin)
 admin.site.register(TrialRequest, TrialRequestAdmin)
