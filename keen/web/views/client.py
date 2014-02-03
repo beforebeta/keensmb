@@ -16,6 +16,7 @@ from keen.core.models import Client, Customer, Location, Promotion
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm, PromotionForm
 from keen.web.serializers import SignupFormSerializer
+from keen.events.models import Event
 from keen import print_stack_trace, InvalidOperationException
 
 
@@ -48,11 +49,9 @@ def client_view(func):
 
 @client_view
 def dashboard(request, client):
-    dashboard = client.get_dashboard()
     context = {
         'client': client,
-        'dashboard': dashboard,
-        'updates': dashboard.get_updates()
+        'updates': Event.objects.filter(client=client).order_by('-occurrence_datetime')[:14],
     }
     return render(request, 'client/dashboard.html', context)
 

@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
 from keen.core.models import Client, CustomerField, CustomerSource, Customer, ClientUser
-from keen.web.models import Dashboard
 from tracking.models import Visitor
 
 
@@ -31,8 +30,6 @@ class Command(BaseCommand):
             self.phone_numbers = {}
             for filename in args:
                 self._import(filename)
-            for dashboard in Dashboard.objects.all():
-                dashboard.refresh()
 
         self._fix_sequences()
 
