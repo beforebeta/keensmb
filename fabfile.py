@@ -193,6 +193,7 @@ def deploy(profile, branch):
     migrate()
     with virtualenv():
         run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py collectstatic --noinput' % env)
+        run('env DJANGO_SETTINGS_MODULE=keen.settings.%(profile)s ./manage.py compress' % env)
     with warn_only():
         uwsgi_stop()
     # giv it some time to release port
