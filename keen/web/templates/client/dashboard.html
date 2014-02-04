@@ -7,7 +7,6 @@
 
 {% block content %}
 
-
   <!-- Content -->
   <section class='clearfix dashboard'>
     <div class="dash-wrapper">
@@ -16,25 +15,25 @@
         <div class="col-xs-3 text-center">
           <div class="danger">
             <span class="label-danger">Total Customers</span>
-            <strong class="danger">{{ dashboard.total_customers }}</strong>
+            <strong class="danger">{{ client.customers.count }}</strong>
           </div>
         </div>
         <div class="col-xs-3 text-center">
           <div class="warning">
             <span class="label-warning">New Customers this month</span>
-            <strong class="warning">{{ dashboard.new_customers }}</strong>
+            <strong class="warning">{{ client.new_customers.count }}</strong>
           </div>
         </div>
         <div class="col-xs-3 text-center">
           <div class="primary">
             <span class="label-primary">Promotions this month</span>
-            <strong class="primary">{{ dashboard.promotions_this_month }}</strong>
+            <strong class="primary">{{ client.promotions_this_month.count }}</strong>
           </div>
         </div>
         <div class="col-xs-3 text-center">
           <div class="info">
             <span class="label-info">Opens this month</span>
-            <strong class="info">{{ dashboard.redemptions }}</strong>
+            <strong class="info">{{ 0 }}</strong>
           </div>
         </div>
       </div>
@@ -47,40 +46,36 @@
           </div>
           <div class="kn-section-content news">
             <div class="row small">
-                {% if dashboard.get_active_promotions_count == 0 %}
-                  <article class="col-sx-12">
-                    <p class="mts mbn">There are currently no promotions active.</p>
-                  </article>
+              {% for promotion in client.get_active_promotions %}
+              <article class="col-sx-12">
+              <div>
+                <h6 class="mts mbs"><a href="{% url 'client_edit_promotion' promotion.id %}">{{ promotion.name }}</a></h6>
+                <time class="mtx">
+                {% if promotion.valid_to %}
+                <em>Expiring</em>
+                {{ promotion.valid_to }}
                 {% else %}
-                {% for promotion in dashboard.get_active_promotions %}
-                  <article class="col-sx-12">
-                    <div>
-                      <h6 class="mts mbs"><a href="{% url 'client_edit_promotion' promotion.id %}">{{ promotion.name }}</a></h6>
-                      <time class="mtx">
-                          {% if promotion.valid_to %}
-                            <em>Expiring</em>
-                            {{ promotion.valid_to }}
-                          {% else %}
-                            <em>Does not expire</em>
-                          {% endif %}
-                      </time>
-                    </div>
-                    <p class="mts mbn">{{ promotion.description|truncatesmart:200 }}</p>
-                    <time class="mbs dib">
-                            <em>Launched</em>
-                          {% if promotion.valid_from %}
-                            {{ promotion.valid_from }}
-                          {% else %}
-                            {{ promotion.created.date }}
-                          {% endif %}
-                    </time>
-                    <div class="progress">
-                      <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Opens</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
-                    </div>
-                  </article>
-                    {% endfor %}
-                  <a href="/promotions/active">See more...</a>
+                <em>Does not expire</em>
                 {% endif %}
+                </time>
+              </div>
+              <p class="mts mbn">{{ promotion.description|truncatesmart:200 }}</p>
+              <time class="mbs dib">
+              <em>Launched</em>
+              {% firstof promotion.valid_from promotion.created.date %}
+              </time>
+              <div class="progress">
+                <div class="progress-bar" style="width: {{ promotion.analytics.redemptions_percentage }}%;"><strong>{{ promotion.analytics.redemptions }}</strong> <span>Opens</span></div> <div class="total-text"><span>Total Sent</span> <strong>{{ promotion.analytics.total_sent }}</strong></div>
+              </div>
+              </article>
+              {% if foorloop.last %}
+              <a href="/promotions/active">See more...</a>
+              {% endif %}
+              {% empty %}
+              <article class="col-sx-12">
+                <p class="mts mbn">There are currently no promotions active.</p>
+              </article>
+              {% endfor %}
             </div>
           </div>
       </div>
@@ -90,7 +85,7 @@
           </div>
           <div class="kn-section-content">
             <div class="row small">
-                {% for promotion in dashboard.get_top_promotions %}
+                {% for promotion in client.get_top_promotions %}
                   <article class="col-sx-12">
                     <a href="{% url 'client_edit_promotion' promotion.id %}"><strong>{{ promotion.name }}</strong></a>
                     <div class="progress mbm">
@@ -118,7 +113,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for customer in dashboard.get_top_customers %}
+                  {% for customer in client.get_top_customers %}
                       <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ customer.get_name }}</td>
@@ -277,11 +272,3 @@
   <!-- /.container -->
 
 {% endblock %}
-
-{% block bottom_js %}
-
-    {% compress js %}
-    {% endcompress %}
-
-{% endblock %}
-
