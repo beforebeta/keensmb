@@ -15,7 +15,6 @@ from keen.core.models import (
     Promotion,
     CustomerSource,
 )
-from keen.events.models import Event
 
 from tracking.models import Visitor
 
