@@ -6,11 +6,13 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
+from django.utils.timezone import now
 
 from django_hstore import hstore
 from model_utils import Choices
 
 from keen.core.models import Timestamps, Client, Customer, Promotion
+from keen.tasks import send_email
 
 
 logger = logging.getLogger(__name__)
@@ -180,6 +182,6 @@ def promotion_deleted(sender, instance, **kwargs):
 def send_promotion_status_email(promotion):
     send_email.delay(
         'Promotion status changed to {0.status}'.format(promotion),
-        'Promotion {0.name} ({0.id}) status changed to {0.status}'.format(promotion)
+        'Promotion {0.name} ({0.id}) status changed to {0.status}'.format(promotion),
         ['workflow@keensmb.com'],
     )
