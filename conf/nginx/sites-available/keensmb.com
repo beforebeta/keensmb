@@ -7,6 +7,10 @@ server {
 	server_name .keensmb.com;
 	client_max_body_size 32M;
 
+	location = /robots.txt {
+		alias /var/apps/keensmb.com/keen/conf/robots.txt;
+	}
+
 	location = /favicon.ico {
 		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
 	}
