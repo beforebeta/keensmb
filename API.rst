@@ -41,19 +41,20 @@ Retrieve customer fields information for the client as a object/hash with the fo
 
 	``available_customer_fields``
 		Unordered list of customer field **objects**
+
 	``display_customer_fields``
 		Ordered list of customer field **names**
 
 Each customer field object consists of the following fields:
 
-        ``name``
-                Short field name
+	``name``
+		Short field name
 
-        ``title``
-                Field description suitable as form input labels or table column captions
+	``title``
+		Field description suitable as form input labels or table column captions
 
-        ``type``
-                Field type
+	``type``
+		Field type
 
         ``required``
                 Whether or not this field is mandatory for every customer of this client
@@ -68,16 +69,16 @@ PUT /api/client/:client_slug/customer_fields
 Update customer fields to display on customer list. Request JSON-encoded body should have
 the following parameters:
 
-        ``display_customer_fields``
-                List of customer field **names**
+	``display_customer_fields``
+		List of customer field **names**
 
 Response is JSON-encoded objec/hash and includes the following fields:
 
-        ``display_customers_fields``
-                List of customer field **names** as it's been saved on server.
-                
-                **Note** This can be different from what was in request due to filtering
-                and other reasons.
+	``display_customers_fields``
+		List of customer field **names** as it's been saved on server.
+		
+		**Note** This can be different from what was in request due to filtering
+		and other reasons.
 
 
 GET /api/client/:client_slug/customers
@@ -87,6 +88,7 @@ Retrieve list of client's customers. Each customer object consists of the follow
 
 	``id``
 		Customer ID
+
 	``data``
 		Object with dynamic set of fields. Its content depends on what is stored in
 		database but can be restricted by ``fields`` qery string parameter
@@ -116,7 +118,7 @@ The following query string parameters can be used to contol result:
 	``search``
 		Do full-text search across customer list. Example:
 
-                        GET /api/client/abc/customers?search=John+Doe
+			GET /api/client/abc/customers?search=John+Doe
 
 Any combination of qury string parameters is allowed as long as there is only one of each parameter.
 ``limit`` and ``offset`` parameters are applied after ``search`` and ``order``, that's it customers
@@ -221,8 +223,8 @@ GET /api/client/:client_slug/images
 
 Retrieve JSON-encoded list of Image objects. Each object contains following fields:
 
-        ``id``
-                Unique image ID
+	``id``
+		Unique image ID
 
 	``type``
 		Information about image type. Currently, this filed can have one of the following values:
@@ -255,8 +257,8 @@ Upload new image. Expects JSON-formatted objects with the following fields:
 If request handled without errors response will have JSON-encoded image object matching uploaded image
 with the following fields:
 
-        ``id``
-                Unique image ID
+	``id``
+		Unique image ID
 
 	``content_type``
 		MIME type of file
@@ -271,3 +273,72 @@ DELETE /api/client/:client_slug/:image_id
 
 Delete existing image. Returns response with 204 HTTP status code and no content if image was deleted.
 Returns HTTP code 404 if image was not found and code 400 if image was not deleted for any other reson.
+
+
+POST /api/client/:client_slug/customers/import
+----------------------------------------------
+
+Upload file to Initiate customers import process. Request is standart POST request with file sent as request body.
+Response is JSON-encoded object with the following attributes:
+
+	``import_request_id``
+		Unique import request ID
+
+	``available_fields``
+		List of field objects with the following attributes:
+
+			``name``
+				Unique field name
+			
+			``title``
+				Field title
+
+			``type``
+				Field type
+
+			``required``
+				Whether or not this field is mandatory
+
+	``import_fields``
+		List of `source-field-name`, `destination-field-name` pairs as guessed by server with `destination-field-name`
+		being optional. This is not what will be imported but simply an attempt to assist client in makeing the list.
+
+
+GET /api/client/:client_slug/customers/import/:import_request_id
+----------------------------------------------------------------
+
+Retrieve status of import request. Response is JSON-encoded object with the following attributes:
+
+	``status``
+		One of "new", "in-progress", "complete", "aborted"
+
+	``done``
+		Integer number from 0 to 100. Can be used to show import progress bar. This attribute is optional and
+		will be returned along with `status` set to `in-progress`.
+	
+	``imported``
+		Number of successfully imported customers. This attribute is optional and will be returned along with `status`
+		set to `complete`.
+
+
+PUT /api/client/:client_slug/customers/import/:import_request_id
+-----------------------------------------------------------------
+
+Start import process. Request is JSON-encoded object with the following attributes:
+
+	``import_fields``
+		Start this import request. Value if that atribute is a list of `source-field-name`, `destination-field-name` pairs.
+		Unlike in response to previous API call `destination-field-name` is required but there could be less pairs
+		than fields in file being imported.
+		The same `source-field-name` may not be used more than once. It is allowed to use the same `destination-field-name`
+		more than once.
+
+
+DELETE /api/client/:client_slug/customers/import/:import_request_id
+-------------------------------------------------------------------
+
+Abort import process. The response is JSON-encoded object with the following attributes:
+
+	``status``
+		Either "complete" or"aborted" depending on whether or not import was complete at the time this request was handled.
+		
