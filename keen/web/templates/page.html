@@ -112,6 +112,11 @@
     <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
     <script src="{% static "js/vendor/jquery/jquery.autosize.js" %}"></script>
 
+    <script src="{% static "js/vendor/caman.full.js" %}"></script>
+    <script src="{% static "js/vendor/fileapi/FileAPI.js" %}"></script>
+    <script src="{% static "js/vendor/chromoselector.min.js" %}"></script>
+    <script src="{% static "js/vendor/select2.min.js" %}"></script>
+
     <script src="{% static "js/vendor/angular/angular-1.2.7.js" %}"></script>
     <script src="{% static "js/vendor/angular/angular-sanitize.js" %}"></script>
     <script src="{% static "js/vendor/angular/angular-bindonce.js" %}"></script>
@@ -133,9 +138,13 @@
     <script src="{% static "js/application.js" %}"></script>
     <script src="{% static "js/promotions.js" %}"></script>
 
+    {# angular staff #}
     <script src="{% static "js/module.js" %}"></script>
+    <script src="{% static "js/controllers/customerListCtrl.js" %}"></script>
+    <script src="{% static "js/controllers/importCsvCtrl.js" %}"></script>
+    <script src="{% static "js/services/customerList.js" %}"></script>
+    <script src="{% static "js/directives/checkbox.js" %}"></script>
 
-    <script src="{% static "js/customer-list.js" %}"></script>
     <script src="{% static "js/csv-import.js" %}"></script>
     <script src="{% static "js/sign-up.js" %}"></script>
 {#        <script src="{% static "js/profiles.js" %}"></script>#}

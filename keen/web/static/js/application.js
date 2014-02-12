@@ -1,5 +1,7 @@
 // Some general UI pack related JS
 // Extend JS String with repeat method
+"use strict";
+
 String.prototype.repeat = function (num) {
     return new Array(num + 1).join(this);
 };
@@ -18,12 +20,12 @@ keen.showMessageModal = function(title, message) {
     $(document).ajaxSend(function(event, xhr, settings) {
         function getCookie(name) {
             var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
+            if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = jQuery.trim(cookies[i]);
                     // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
                     }
@@ -38,8 +40,8 @@ keen.showMessageModal = function(title, message) {
             var sr_origin = '//' + host;
             var origin = protocol + sr_origin;
             // Allow absolute or scheme relative URLs to same origin
-            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            return (url === origin || url.slice(0, origin.length + 1) === origin + '/') ||
+                (url === sr_origin || url.slice(0, sr_origin.length + 1) === sr_origin + '/') ||
                 // or any other URL that isn't scheme relative or absolute i.e relative.
                 !(/^(\/\/|http:|https:).*/.test(url));
         }
@@ -155,7 +157,7 @@ keen.showMessageModal = function(title, message) {
         $('.input-group').on('focus', '.form-control',function () {
             $(this).closest('.form-group, .navbar-search').addClass('focus');
         }).on('blur', '.form-control', function () {
-                $(this).closest('.form-group, .navbar-search').removeClass('focus');
+            $(this).closest('.form-group, .navbar-search').removeClass('focus');
         });
 
         // Table: Toggle all checkboxes
@@ -236,52 +238,48 @@ keen.showMessageModal = function(title, message) {
         window.prettyPrint && prettyPrint();
     });
 
-  $buttonWrap = $('.enrichment-estimated-price .kn-section-content');
+    var $buttonWrap = $('.enrichment-estimated-price .kn-section-content');
+    $('.enrichment-checkbox-container .js-estimated-label').on('click', function(){
 
-  $('.enrichment-checkbox-container .js-estimated-label').on('click', function(){
+        var innerText = $(this).children('strong').html(),
+            data = $(this).data('label'),
+            $buttonBox = $buttonWrap.prev('.button-default').clone();
 
-      var innerText = $(this).children('strong').html(),
-          data = $(this).data('label'),
-          $buttonBox = $buttonWrap.prev('.button-default').clone();
+        $buttonBox.find('span').text(innerText);
+        $buttonBox.attr('data-button-name', data);
 
-      $buttonBox.find('span').text(innerText);
-      $buttonBox.attr('data-button-name', data);
+        if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
 
+            $(this).addClass('checked disabled');
 
-      if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
-
-          $(this).addClass('checked disabled');
-
-          $buttonWrap.find('.unselect').hide();
-          $buttonBox.appendTo($buttonWrap).show();
-
-      }
-      else {
-          return false;
-      }
-  });
-  $buttonWrap.on('click', '.js-delete', function(){
-
-      var $thisButton = $(this).parent('button'),
-          labelName = $thisButton.data('button-name');
-
-      $('.js-estimated-label').each(function() {
-
-        var $this = $(this),
-            $dataLabel = $this.data("label");
-
-        if($dataLabel === labelName) {
-          $this.removeClass('checked disabled');
+            $buttonWrap.find('.unselect').hide();
+            $buttonBox.appendTo($buttonWrap).show();
+        } else {
+            return false;
         }
+    });
+    $buttonWrap.on('click', '.js-delete', function(){
 
-      });
+        var $thisButton = $(this).parent('button'),
+            labelName = $thisButton.data('button-name');
 
-      $thisButton.remove();
+        $('.js-estimated-label').each(function() {
 
-      if(!$buttonWrap.children('button').length){
-        $('.unselect').show();
-      }
-  });
+            var $this = $(this),
+                $dataLabel = $this.data("label");
+
+            if ($dataLabel === labelName) {
+                $this.removeClass('checked disabled');
+            }
+
+        });
+
+        $thisButton.remove();
+
+        if(!$buttonWrap.children('button').length){
+            $('.unselect').show();
+        }
+    });
 
 })(jQuery);
 

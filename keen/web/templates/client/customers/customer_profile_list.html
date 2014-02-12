@@ -38,7 +38,7 @@
 {% endif %}
 
 <!-- Content -->
-<section class='clearfix customers-page-content' ng-controller='customersCtrl'>
+<section class='clearfix customers-page-content' ng-controller='customerListCtrl'>
 
   <h1 class='page-title mbn'>Customer Profiles</h1>
 
@@ -108,7 +108,7 @@
               </a>
               <ul class='pull-right'>
                 <!-- <li><a href="#fakelink">Mailing list</a></li> -->
-                <li><a data-toggle='modal' data-target="#csvImportModal" href="#fakelink">.CSV file</a></li>
+                <li><a data-toggle='modal' data-target="#ModalCsvImport" href="#fakelink">.CSV file</a></li>
               </ul>
             </li>
             <li>
@@ -464,7 +464,11 @@
   </div>
 
 <!-- import .CSV modal -->
-  <div id="ModalCsvImport" class="ModalCsvImport modal fade in" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="ModalCsvImport"
+       class="ModalCsvImport modal fade in"
+       ng-controller='importCsvCtrl as importCtrl'
+       tabindex="-1" role="dialog"
+       aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
 
@@ -488,12 +492,20 @@
                 <span>Import Status</span>
               </div>
             </div>
+
             <div class="upload ptm pbl mbl">
-              <span class="mtx">Drag Files Here</span>
-              <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">
-                Browse...
-              </div>
-              <input type="file" id="popup-ulpoad-csvfile" class="hidden" value="Browse...">
+              <p>O: {{ importCtrl.pam }}</p>
+
+              <form action="" id="import-form">
+                <span class="mtx">Drag Files Here</span>
+                <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">Browse...
+                </div>
+                <input type="file"
+                       id="popup-ulpoad-csvfile"
+                       ng-file-select="importCtrl.onFileSelect($files)"
+                       class="hidden"
+                       accept='.csv'>
+              </form>
             </div>
             <div style="display: none;" class="added-file mtl">
               <div>
@@ -504,8 +516,8 @@
                 </button>
               </div>
             </div>
-            <div style="display: none;" class="download-success text-primary">Sucess!</div>
-            <div style="display: none;" class="download-progress mtl ptm text-muted small">
+            <div class="download-success text-primary">Sucess!</div>
+            <div class="download-progress mtl ptm text-muted small">
               <div class="result pbs">
                 <span class="pull-left">
                   Reading file...
@@ -526,7 +538,7 @@
                 </span>
               </div>
             </div>
-            <table style="display: none;" class="table">
+            <table class="table">
               <tbody>
                 <tr>
                   <td>text1</td>
