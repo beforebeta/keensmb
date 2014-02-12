@@ -1,3 +1,4 @@
+/* global filepicker */
 (function ($) {
     'use strict';
 
