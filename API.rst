@@ -26,10 +26,10 @@ Retrieve client summary consisting of following named values:
 
 	``totat_customers``
 		Number of customers in database
-	
+
 	``redeemers``
 		Number of customers that redeemed coupon
-	
+
 	``new_signups``
 		Number of new customers
 
@@ -76,7 +76,7 @@ Response is JSON-encoded objec/hash and includes the following fields:
 
 	``display_customers_fields``
 		List of customer field **names** as it's been saved on server.
-		
+
 		**Note** This can be different from what was in request due to filtering
 		and other reasons.
 
@@ -100,14 +100,14 @@ The following query string parameters can be used to contol result:
 
 	``limit``
 		Limit number of returend customers to ``limit``. If omitted no limit is set
-	
+
 	``fields``
 		Comma-separated list of field names to include into data field. Must be a
 		subset of client's customer fields set. If not specified all fields will be included
 		in response. Example:
 
 			GET /api/client/abc/customers?fields=email,first_name,last_name,dob,phone
-	
+
 	``order``
 		Ordered list of comma-separated field names. Controls sorting order of customer objects.
 		If name is prefixed with "-" descending order on that field is used. If not specified
@@ -139,7 +139,7 @@ Retrieve list of client's signup form objects in JSON format. Each object contai
 
 	``status``
 		Status of the form. Possible values "draft" and "published"
-	
+
 	``data``
 		Object that defines signup form status and rendering information. For details see description of
 		``data`` field in ``POST  /api/client/:client_slug/signup_forms`` section below.
@@ -237,7 +237,7 @@ Retrieve JSON-encoded list of Image objects. Each object contains following fiel
 				Big image
 	``content_type``
 		Image content MIME-type. Examples: "image/jpeg", "image/png"
-	
+
 	``url``
 		Image URL
 
@@ -262,7 +262,7 @@ with the following fields:
 
 	``content_type``
 		MIME type of file
-	
+
 	``url``
 		URL of file. This URL is generated based on file content so uploading exactly the same
 		file more than once would be responded with HTTP 400 status code.
@@ -289,7 +289,7 @@ Response is JSON-encoded object with the following attributes:
 
 			``name``
 				Unique field name
-			
+
 			``title``
 				Field title
 
@@ -315,7 +315,7 @@ Retrieve status of import request. Response is JSON-encoded object with the foll
 	``done``
 		Integer number from 0 to 100. Can be used to show import progress bar. This attribute is optional and
 		will be returned along with `status` set to `in-progress`.
-	
+
 	``imported``
 		Number of successfully imported customers. This attribute is optional and will be returned along with `status`
 		set to `complete`.
@@ -341,4 +341,4 @@ Abort import process. The response is JSON-encoded object with the following att
 
 	``status``
 		Either "complete" or"aborted" depending on whether or not import was complete at the time this request was handled.
-		
+
