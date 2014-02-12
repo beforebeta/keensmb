@@ -1,3 +1,4 @@
+import os
 from uuid import uuid1
 
 from django.db import models
@@ -94,6 +95,10 @@ class TrialRequest(Timestamps):
     source = models.CharField(max_length=255, null=True, blank=True)
 
 
+def _upload_file_name(import_request, file_name):
+    return os.path.join('import', import_request.client.slug, uuid1().hex)
+
+
 class ImportRequest(Timestamps):
 
     STATUS = Choices(
@@ -103,11 +108,7 @@ class ImportRequest(Timestamps):
         ('aborted', 'Aborted'),
     )
 
-    @staticmethod
-    def _upload_file_name(import_request, file_name):
-        return os.path.join('import', import_request.client.slug, uuid1())
-
     client = models.ForeignKey(Client)
     status = models.CharField(max_length=32, choices=STATUS, default=STATUS.new)
     file = models.FileField(upload_to=_upload_file_name)
-    params = JSONField()
+    data = JSONField()
