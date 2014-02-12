@@ -43,7 +43,7 @@ class ImportAPI(APIView):
         response = {
             'status': imp.status,
         }
-        if imp.status == ImportRequest.STATUS.in_process:
+        if imp.status == ImportRequest.STATUS.in_progress:
             # TODO: add progress status here
             response['done'] = 0
         elif imp.status == ImportRequest.STATUS.complete:
