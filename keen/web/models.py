@@ -1,3 +1,5 @@
+from uuid import uuid1
+
 from django.db import models
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -62,3 +64,22 @@ class TrialRequest(Timestamps):
     comments = models.TextField(null=True, blank=True)
     visitor = models.ForeignKey(Visitor, null=True)
     source = models.CharField(max_length=255, null=True, blank=True)
+
+
+class ImportRequest(Timestamps):
+
+    STATUS = Choices(
+        ('new', 'New'),
+        ('in_progress', 'In-progress'),
+        ('complete', 'Complete'),
+        ('aborted', 'Aborted'),
+    )
+
+    @staticmethod
+    def _upload_file_name(import_request, file_name):
+        return os.path.join('import', import_request.client.slug, uuid1())
+
+    client = models.ForeignKey(Client)
+    status = models.CharField(max_length=32, choices=STATUS, default=STATUS.new)
+    file = models.FileField(upload_to=_upload_file_name)
+    params = JSONField()
