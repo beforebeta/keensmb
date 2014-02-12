@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 from .views.api.client import (ClientProfile, CustomerList, CustomerProfile,
                                SignupFormList, SignupFormView, ImageList)
+from .views.api.import_export import ImportAPI
 from keen.enrichment.views import enrich_customers_data_view
 
 
@@ -25,6 +26,8 @@ client_api_urls = patterns(
         url(r'^signup_forms/(?P<form_slug>[\w-]+)$', SignupFormView.as_view(),
             name='api_signup_form'),
         url(r'^images$', ImageList.as_view(), name='api_images'),
+        url(r'^import$', ImportAPI.as_view()),
+        url(r'^import/(?P<import_id>\d+)$', ImportAPI.as_view()),
     ))),
 )
 
