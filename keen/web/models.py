@@ -15,7 +15,6 @@ from keen.core.models import (
     Promotion,
     CustomerSource,
 )
-from keen.events.models import Event
 
 from tracking.models import Visitor
 
@@ -50,41 +49,6 @@ class SignupForm(Timestamps):
 
     class Meta:
         unique_together = ('client', 'slug')
-
-
-class Dashboard(Timestamps):
-    client = models.ForeignKey(Client)
-
-    #analytics
-    total_customers = models.IntegerField(default=0)
-    new_customers = models.IntegerField(default=0)
-    promotions_this_month = models.IntegerField(default=0)
-    redemptions = models.IntegerField(default=0)
-
-    def refresh(self):
-        self.total_customers = Customer.objects.filter(client=self.client).count()
-        self.new_customers = Customer.objects.filter(client=self.client, created__gte=util.get_first_day_of_month_as_dt()).count()
-        self.promotions_this_month = Promotion.objects.filter(
-                                    Q(valid_from__gte=util.get_first_day_of_month_as_dt()) | Q(valid_from__isnull=True),
-                                    Q(valid_to__lte=util.get_last_day_of_month_as_dt()) | Q(valid_to__isnull=True),
-                                    client=self.client).count()
-        self.redemptions = 0
-        self.save()
-
-    def get_updates(self):
-        return Event.objects.filter(client=self.client).order_by('-occurrence_datetime')[:14]
-
-    def get_top_customers(self):
-        return self.client.get_top_customers()[:5]
-
-    def get_top_promotions(self):
-        return self.client.get_top_promotions()[:4]
-
-    def get_active_promotions(self):
-        return self.client.get_active_promotions()[:3]
-
-    def get_active_promotions_count(self):
-        return self.client.get_active_promotions_count()
 
 
 class TrialRequest(Timestamps):

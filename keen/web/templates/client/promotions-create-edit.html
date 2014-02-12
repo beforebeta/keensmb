@@ -15,7 +15,7 @@
  <section class='clearfix promotions'>
         <form class="" action="{{ mode }}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <h1 class='page-title mtl'>Create New Promotion</h1>
+        <h1 class='page-title mtl'>{% if mode == 'create' %}Create New{% else %}Edit{% endif %} Promotion</h1>
         <div class="kn-section mtl mbl">
             <div class="kn-section-header">
               <h6 class="mbn mtn">Basic Promotion Information</h6>
@@ -368,7 +368,7 @@
               <input name="preview_promotion" class="btn btn-block btn-default" type="submit" value="Preview Promotion">
           </div>
           <div class="col-xs-3">
-            <button class="btn btn-block btn-primary">Send</button>
+            <button class="btn btn-block btn-primary" type="submit" name="send">Send</button>
           </div>
         </div>
         </form>

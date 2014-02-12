@@ -18,6 +18,8 @@ mailchimp
 
 # Templates
 django_compressor
+django-storages
+boto
 
 Fabric
 Pillow

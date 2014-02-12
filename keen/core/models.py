@@ -6,11 +6,13 @@ import datetime
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django_hstore import hstore
 from model_utils import Choices
-from keen import print_stack_trace, InvalidOperationException
+
+from keen import util, print_stack_trace, InvalidOperationException
 
 from tracking.models import Visitor
 
@@ -175,26 +177,34 @@ class Client(Timestamps):
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
 
-    def get_dashboard(self):
-        if self.dashboard_set.all().count() == 0:
-            self.dashboard_set.create(client=self)
-        return self.dashboard_set.all()[0]
+    def new_customers(self):
+        return self.customers.filter(created__gte=util.get_first_day_of_month_as_dt())
 
-    def get_top_customers(self):
-        return self.customers.extra(select={'full_name': "upper(core_customer.data -> 'full_name')"}).order_by('-full_name') #TODO: Change
+    def get_top_customers(self, count=5):
+        return self.customers.extra(
+            select={'full_name': "upper(core_customer.data -> 'full_name')"}
+        ).order_by('-full_name')[:count] #TODO: Change
 
     #Promotions
-    def get_top_promotions(self, order_by='-valid_to'):
-        #TODO: Change
-        return self.promotions.extra(select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}).order_by(order_by).order_by('-redemptions_percentage')
+    def promotions_this_month(self):
+        return self.promotions.filter(
+            Q(valid_from__gte=util.get_first_day_of_month_as_dt()) | Q(valid_from__isnull=True),
+            Q(valid_to__lte=util.get_last_day_of_month_as_dt()) | Q(valid_to__isnull=True),
+        )
 
-    def get_active_promotions(self, order_by='-valid_to'):
+    def get_top_promotions(self, order_by='-valid_to', count=4):
         #TODO: Change
-        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)
+        return self.promotions.extra(
+            select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}
+        ).order_by(order_by).order_by('-redemptions_percentage')[:count]
+
+    def get_active_promotions(self, order_by='-valid_to', count=4):
+        #TODO: Change
+        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)[:count]
 
     def get_active_promotions_count(self):
         #TODO: Change
-        return self.get_active_promotions().count()
+        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).count()
 
 
 class ClientUser(Timestamps):

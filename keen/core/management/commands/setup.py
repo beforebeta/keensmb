@@ -7,7 +7,7 @@ from django.db import transaction
 from fuzzywuzzy import process
 from keen import print_stack_trace
 from keen.core.models import *
-from keen.web.models import PageCustomerField, SignupForm, Dashboard
+from keen.web.models import PageCustomerField, SignupForm
 from dateutil.relativedelta import *
 
 class Command(BaseCommand):
@@ -228,7 +228,6 @@ def _setup_core():
 def _setup_sample_data_promotions(client):
     section("Creating Sample Promotions")
 
-    dashboard, created = Dashboard.objects.get_or_create(client=client)
     now = datetime.datetime.now()
     p, created = Promotion.objects.get_or_create(
         client=client,
@@ -345,8 +344,6 @@ def _setup_sample_data_promotions(client):
     )
     if created:
         p.mediums.add(PromotionMedium.objects.get_or_create(client=client, platform=PromotionMedium.PROMOTION_PLATFORMS.email)[0])
-
-    dashboard.refresh()
 
 
 def _setup_sample_data():
