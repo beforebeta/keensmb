@@ -466,7 +466,7 @@
 <!-- import .CSV modal -->
   <div id="ModalCsvImport"
        class="ModalCsvImport modal fade in"
-       ng-controller='importCsvCtrl as importCtrl'
+       ng-controller='importCsvCtrl as imp'
        tabindex="-1" role="dialog"
        aria-hidden="true">
     <div class="modal-dialog">
@@ -478,108 +478,115 @@
           </button>
           <h6 class="modal-title">Import .CSV File</h6>
         </div>
-        <div class="modal-body mbl">
-            <div class="steps mbl">
-              <div class="step-one progres">1
+        <div class="modal-body">
+            <ul class="steps mbl">
+              <li class="step" ng-class='{active: imp.activeStep == 1}'>
                 <span>Upload File</span>
-              </div>
-              <div class="progres-line"></div>
-              <div class="step-two">2
+              </li>
+              <li class="step" ng-class='{active: imp.activeStep == 2}'>
                 <span>Select Mapping</span>
-              </div>
-              <div class="progres-line"></div>
-              <div class="step-three">3
+              </li>
+              <li class="step" ng-class='{active: imp.activeStep == 3}'>
                 <span>Import Status</span>
+              </li>
+            </ul>
+
+            <div ng-if='imp.activeStep == 1'>
+              <div ng-file-drop='imp.onFileSelect($files)' class="upload ptm pbl mbl">
+                <form action="" id="import-form">
+                  <span class="mtx">Drag Files Here</span>
+                  <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">Browse...
+                  </div>
+                  <input type="file"
+                         name='file'
+                         id="popup-ulpoad-csvfile"
+                         ng-file-select="imp.onFileSelect($files)"
+                         class="hidden"
+                         accept='.csv'>
+                </form>
               </div>
+
+              <div ng-if='imp.fileSelected.name' class="added-file mtl">
+                <div>
+                  <span>{{ imp.fileSelected.name }}</span>
+                  <strong>({{ imp.fileSelected.size }})</strong>
+                  <button  class="close"
+                           ng-click='imp.removeFile()'>
+                    <i class="fui-cross js-close"></i>
+                  </button>
+                </div>
+              </div>
+
+
+              <div ng-if='imp.fileSelected.uploaded'
+                   class="download-success text-primary fade-onload">Sucess!</div>
+
+  <!--            <div class="download-progress mtl ptm text-muted small">
+                <div class="result pbs">
+                  <span class="pull-left">Reading file...</span>
+                  <span class="pull-right">25MB of 100MB</span>
+                </div>
+                <div class="progress mbn">
+                  <div class="progress-bar" style="width: 40%;"></div>
+                </div>
+                <div class="result pts">
+                  <span class="pull-left">
+                    Time remaining
+                  </span>
+                  <span class="pull-right">
+                    38 seconds
+                  </span>
+                </div>
+              </div> -->
             </div>
 
-            <div class="upload ptm pbl mbl">
-              <form action="" id="import-form">
-                <span class="mtx">Drag Files Here</span>
-                <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">Browse...
-                </div>
-                <input type="file"
-                       name='file'
-                       id="popup-ulpoad-csvfile"
-                       ng-file-select="importCtrl.onFileSelect($files)"
-                       class="hidden"
-                       accept='.csv'>
-              </form>
+            <div ng-if='imp.activeStep == 2'>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>text1</td>
+                    <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
+                    <td>
+                      <div class="input-group pull-right chosen">
+                        <input type="text" class="form-control input-sm prx" placeholder="Search for field" value="Email">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn input-sm pln"><i class="dib fui-cross"></i></button>
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>text1</td>
+                    <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
+                    <td>
+                      <div class="input-group pull-right">
+                        <input type="text" class="form-control input-sm prx" placeholder="Search for field">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div style="display: none;" class="added-file mtl">
-              <div>
-                <span></span>
-                <strong></strong>
-                <button type="button" class="close">
-                  <i class="fui-cross js-close"></i>
-                </button>
-              </div>
-            </div>
-            <div class="download-success text-primary">Sucess!</div>
-            <div class="download-progress mtl ptm text-muted small">
-              <div class="result pbs">
-                <span class="pull-left">
-                  Reading file...
-                </span>
-                <span class="pull-right">
-                  25MB of 100MB
-                </span>
-              </div>
-              <div class="progress mbn">
-                <div class="progress-bar" style="width: 40%;"></div>
-              </div>
-              <div class="result pts">
-                <span class="pull-left">
-                  Time remaining
-                </span>
-                <span class="pull-right">
-                  38 seconds
-                </span>
-              </div>
-            </div>
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td>text1</td>
-                  <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
-                  <td>
-                    <div class="input-group pull-right chosen">
-                      <input type="text" class="form-control input-sm prx" placeholder="Search for field" value="Email">
-                      <span class="input-group-btn">
-                        <button type="submit" class="btn input-sm pln"><i class="dib fui-cross"></i></button>
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>text1</td>
-                  <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
-                  <td>
-                    <div class="input-group pull-right">
-                      <input type="text" class="form-control input-sm prx" placeholder="Search for field">
-                      <span class="input-group-btn">
-                        <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>text1</td>
-                  <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
-                  <td>
-                    <div class="input-group pull-right">
-                      <input type="text" class="form-control input-sm prx" placeholder="Search for field">
-                      <span class="input-group-btn">
-                        <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="loader fade text-center" ng-class="{in: imp.isWaiting}"></div>
         </div>
-        <div class="modal-footer mtl ptn pbn">
-          <button type="button" class="mtl mbm btn btn-primary btn-step-csv btn-embossed btn-secondary pull-right mll">Next</button>
+        <div class="modal-footer ptn pbn">
+
+          <button ng-if='imp.activeStep == 1 && !imp.fileSelected.uploaded'
+                  class="btn btn-primary btn-embossed btn-secondary btn-step-csv pull-right mtl mbm mll"
+                  ng-disabled='!imp.fileSelected.name'
+                  ng-click='imp.uploadFile()'>Upload</button>
+
+          <button ng-if='imp.activeStep == 1 && imp.fileSelected.uploaded'
+                  class="btn btn-primary btn-embossed btn-secondary btn-step-csv pull-right mtl mbm mll"
+                  ng-click='imp.activeStep = 2'>Finish</button>
+
+          <button ng-if='imp.activeStep == 2'
+                  class="btn btn-primary btn-embossed btn-secondary btn-step-csv pull-right mtl mbm mll"
+                  ng-click='imp.activeStep = 1'>Go back</button>
+
           <button type="button" class="mtl mbm btn btn-default btn-step-csv btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
 

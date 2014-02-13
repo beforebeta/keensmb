@@ -1,14 +1,12 @@
+.ModalCsvImport {
+  counter-reset: section;
+}
 .ModalCsvImport .modal-dialog {
   width: 464px;
 }
 .ModalCsvImport .modal-content {
   width: 464px;
   overflow: hidden;
-}
-
-.ModalCsvImport .modal-content .modal-body > * {
-  float: left;
-  width: 100%;
 }
 
 .ModalCsvImport .modal-header {
@@ -26,19 +24,57 @@
 }
 
 .ModalCsvImport .modal-body {
-  padding: 5px 30px 20px 32px;
+  padding: 5px 30px 0 30px;
 }
+
+.ModalCsvImport .modal-body .loader {}
 
 .ModalCsvImport .steps {
+  position: relative;
   overflow: hidden;
-  padding-bottom: 22px;
+  list-style-type: none;
+  padding-left: 0;
+  text-align: justify;
+  font-size: 0; /*fix list height*/
 }
 
-.ModalCsvImport .steps > * {
-  float: left;
+/*grey gorizontal line*/
+.ModalCsvImport .steps:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 25px;
+  left: 0;
+  height: 1px;
+  background-color: #c9ced1;
 }
 
-.ModalCsvImport .steps div[class|='step'] {
+/*hack for justifying list*/
+.ModalCsvImport .steps:after {
+  content: '';
+  width: 100%;
+  display: inline-block;
+  height: 0;
+}
+
+.ModalCsvImport .step {
+  display: inline-block;
+  padding-top: 55px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+
+/*round block above the stteps text*/
+.ModalCsvImport .step:after {
+  counter-increment: section;
+  content: counter(section);
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -25px;
   width: 50px;
   height: 50px;
   background-color: #c9ced1;
@@ -47,47 +83,32 @@
   text-align: center;
   line-height: 48px;
   color: #fff;
-  text-indent: -1px;
-  position: relative;
+  font-size: 18px;
   font-weight: bold;
+  transition: background-color .2s;
+}
+.ModalCsvImport .step:first-child:after {
+  left: 0;
+  margin-left: 0;
+}
+.ModalCsvImport .step:last-child:after {
+  right: 0;
+  left: auto;
+  margin-left: 0;
+}
+.ModalCsvImport .step.active span {
+  color: #169e83;
+}
+.ModalCsvImport .step.active:after {
+  background-color: #169e83;
+  border: 1px solid #17a488;
 }
 
-.ModalCsvImport .steps div[class|='step'] span {
+.ModalCsvImport .step span {
   color: #95a5a6;
-  font-size: 13px;
-  position: absolute;
-  bottom: -24px;
-  left: -24px;
-  white-space: nowrap;
+  font-size: 14px;
   font-weight: normal;
   line-height: normal;
-}
-
-.ModalCsvImport .steps div.step-one span {
-  left: 0;
-}
-
-.ModalCsvImport .steps div.step-three span {
-  left: auto;
-  right: 0;
-}
-
-.ModalCsvImport .steps .progres {
-  background-color: #169e83!important;
-  border: 1px solid #17a488!important;
-}
-
-.ModalCsvImport .steps .progres span {
-  color: #169e83!important;
-}
-
-.ModalCsvImport .steps .progres-line {
-  width: 132px;
-  height: 1px;
-  border-bottom: 1px solid #c9ced1;
-  margin-top: 26px;
-  margin-left: -3px;
-  margin-right: -3px;
 }
 
 .ModalCsvImport .upload {
@@ -177,8 +198,6 @@
 }
 
 .ModalCsvImport .modal-footer {
-  float: left;
-  width: 100%;
 }
 
 .ModalCsvImport table tr:first-child td {
@@ -223,7 +242,6 @@
   font-size: 17px;
   line-height: normal;
   margin-top: 14px;
-  margin-bottom: -14px;
 }
 
 .ModalCsvImport .input-group input {
