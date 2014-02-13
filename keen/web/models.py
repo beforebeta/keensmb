@@ -106,6 +106,7 @@ class ImportRequest(Timestamps):
         ('in_progress', 'In-progress'),
         ('complete', 'Complete'),
         ('aborted', 'Aborted'),
+        ('failed', 'Failed'),
     )
 
     client = models.ForeignKey(Client)
