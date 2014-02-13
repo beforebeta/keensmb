@@ -1,11 +1,7 @@
 import csv
-from functools import wraps
 
 from django.db import DatabaseError
-from django.http.response import HttpResponseNotFound
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,29 +10,11 @@ from fuzzywuzzy import process
 from keen.core.models import Client
 from keen.web.models import ImportRequest
 from keen.web.serializers import CustomerFieldSerializer
-from keen.web.views.api.client import IsClientUser
+from keen.web.views.api.client import ClientAPI
 
 
-def client_api_meth(meth):
-    @wraps(meth)
-    @method_decorator(ensure_csrf_cookie)
-    def wrapper(self, request, client_slug, *args, **kw):
-        try:
-            client = Client.objects.get(slug=client_slug)
-        except Client.DoesNotExist:
-            del request.session['client_slug']
-            raise HttpResponseNotFound()
+class ImportAPI(ClientAPI):
 
-        return meth(self, request, client, *args, **kw)
-
-    return wrapper
-
-
-class ImportAPI(APIView):
-
-    permission_classes = (IsClientUser,)
-
-    @client_api_meth
     def get(self, request, client, import_id):
         imp = get_object_or_404(ImportRequest, client=client, id=import_id)
         response = {
@@ -48,7 +26,6 @@ class ImportAPI(APIView):
         return Response(response)
 
 
-    @client_api_meth
     def post(self, request, client):
 
         try:
