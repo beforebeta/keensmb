@@ -297,7 +297,7 @@ Response is JSON-encoded object with the following attributes:
 				Field type
 
 			``required``
-				Whether or not this field is mandatory
+				Whether or not this field is required
 
 	``import_fields``
 		List of `source-field-name`, `destination-field-name` pairs as guessed by server with `destination-field-name`
@@ -310,15 +310,16 @@ GET /api/client/:client_slug/customers/import/:import_request_id
 Retrieve status of import request. Response is JSON-encoded object with the following attributes:
 
 	``status``
-		One of "new", "in-progress", "complete", "aborted"
-
-	``done``
-		Integer number from 0 to 100. Can be used to show import progress bar. This attribute is optional and
-		will be returned along with `status` set to `in-progress`.
+		One of "new", "in-progress", "complete", "aborted", "failed"
 
 	``imported``
-		Number of successfully imported customers. This attribute is optional and will be returned along with `status`
-		set to `complete`.
+		Number of successfully imported customers.
+
+	``failed``
+		Number of records that couldn't be imported.
+
+	``errors``
+		List of error messages
 
 
 PUT /api/client/:client_slug/customers/import/:import_request_id
@@ -330,8 +331,8 @@ Start import process. Request is JSON-encoded object with the following attribut
 		Start this import request. Value if that atribute is a list of `source-field-name`, `destination-field-name` pairs.
 		Unlike in response to previous API call `destination-field-name` is required but there could be less pairs
 		than fields in file being imported.
-		The same `source-field-name` may not be used more than once. It is allowed to use the same `destination-field-name`
-		more than once.
+		It is allowed to use the same `source-field-name` more than once.The same `destination-field-name` may not be used
+		more than once. 
 
 
 DELETE /api/client/:client_slug/customers/import/:import_request_id
