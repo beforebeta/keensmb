@@ -320,4 +320,4 @@ angular.module('keen')
         $doc.on('click', '.global-alert .close', closeGlobalAlert);
         $win.on('resize', lazyCheckTableSize);
 
-    }])
+    }]);
