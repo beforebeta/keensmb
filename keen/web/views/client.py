@@ -100,7 +100,6 @@ def create_edit_promotion(request, client, promotion_id=None):
         if form.is_valid():
             promotion_instance = form.save(commit=False)
             promotion_instance.client = client
-            url = reverse('client_edit_promotion', args=[promotion_instance.id])
 
             if "save_draft" in request.POST or 'send' in request.POST:
                 promotion_instance.status = Promotion.PROMOTION_STATUS.draft
@@ -108,6 +107,7 @@ def create_edit_promotion(request, client, promotion_id=None):
                 url += '#preview'
 
             promotion_instance.save()
+            url = reverse('client_edit_promotion', args=[promotion_instance.id])
             return redirect(url)
     else:
         if promotion_id:
