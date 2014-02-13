@@ -39,17 +39,12 @@ class ImportAPI(APIView):
     @client_api_meth
     def get(self, request, client, import_id):
         imp = get_object_or_404(ImportRequest, client=client, id=import_id)
-
         response = {
             'status': imp.status,
+            'imported': imp.data.get('imported', 0),
+            'failed': imp.data.get('failed', 0),
+            'errors': imp.data.get('errors', []),
         }
-        if imp.status == ImportRequest.STATUS.in_progress:
-            # TODO: add progress status here
-            response['done'] = 0
-        elif imp.status == ImportRequest.STATUS.complete:
-            # TODO: provide detailed result of import here
-            response['imported'] = 0
-
         return Response(response)
 
 
