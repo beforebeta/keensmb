@@ -57,7 +57,7 @@
 //         $('.added-file span').text(fileName);
 //         $('.added-file strong').text('(' + fileSize + ')');
 
-//         var size = (999999 >= fileSize) ? Math.round(fileSize / 1000) : Math.round(fileSize / 1000000);
+//         var size = (999999 >= fileSize) ? Math.round(fileSize / 1000) : Math.round(fileSize / 100000)/10;
 //         $('.added-file strong').text(size + 'KB');
 
 //         $('.js-close').on('click', function() {
