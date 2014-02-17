@@ -6,6 +6,7 @@ from celery.exceptions import Ignore
 from celery.utils.log import get_task_logger
 
 from django.conf import settings
+from django.db import transaction
 from django.core.mail import EmailMessage
 
 from PIL import Image
@@ -65,3 +66,28 @@ def send_email(subject, body, recipients, sender=None):
         sender = settings.DEFAULT_FROM_EMAIL
 
     EmailMessage(subject, body, sender, recipients).send()
+
+
+@app.task
+def import_customers(import_id):
+    from keen.core.models import Customer
+    from keen.web.models import ImportRequest
+
+    with transaction.atomic():
+        imp = ImportRequest.objects.select_for_update().get(id=import_id)
+
+        if imp.status != ImportRequest.STATUS.new:
+            logger.error('Cannot process import request in status {0}'.format(imp.status))
+            return
+
+        imp.status = ImportRequest.STATUS.in_process
+        imp.data['imported'] = 0
+        imp.data['failed'] = 0
+        imp.data['errors'] = []
+        imp.save()
+
+    imp.file.open()
+
+    reader = csv.reader(imp.file.file)
+    file_fields = reader.next()
+
