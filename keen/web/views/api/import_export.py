@@ -76,6 +76,8 @@ class ImportAPI(ClientAPI):
 
         import_customers.delay(imp.id)
 
+        return Response(status=HTTP_204_NO_CONTENT)
+
     def delete(self, request, client, import_id):
         """Abort import request
         """
