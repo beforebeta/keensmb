@@ -7,8 +7,10 @@
 }
 
 .promotions .promotions-list {
-    /*padding: 80px 0 0 0;*/
     padding:0;
+    padding-bottom: 1000px;
+    margin-bottom: -1000px;
+    border-right: 1px solid #ebeff0;
 }
 
 .promotions .promotions-list li {
@@ -74,7 +76,6 @@
 /*}*/
 
 .promotions .promotions-border-left {
-    border-left: 1px solid #ebeff0;
 }
 
 .promotions .promotions-select .dropdown-menu {

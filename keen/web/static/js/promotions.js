@@ -1,4 +1,4 @@
-/* global filepicker */
+/* global filepicker, keen */
 (function ($) {
     'use strict';
 
@@ -47,7 +47,7 @@
                 window.location.reload();
             },
             error: function (msg) {
-                alert("An error occurred!")
+                alert("An error occurred!");
                 window.location.reload();
             }
         });
@@ -114,65 +114,79 @@
 
 
 // 'Target Your Audience' section
-    var $sectionWrap = $('.promsection-segment-wrapper');
+    var $sectionWrap = $('.promsection-segment-wrapper'),
+        $defaultBanner = $('.promotion-narrow-field');
 
-    $sectionWrap.find('.section-default').each(function() {
+    if ($sectionWrap.length) {
 
-        var innerText =  $(this).find('.kn-section-header span').text(),
-            data =  $(this).data('section-name'),
-            $itemInList = $('.promotion-scroll-menu').prev('li').clone();
+        // select all options
+        $sectionWrap.find('option').prop('selected', true);
 
-        $itemInList.attr('data-item', data);
-        $itemInList.text(innerText);
-        $itemInList.appendTo($('.promotion-scroll-menu')).show();
-    });
+        // generate menu items
+        $sectionWrap.find('.section-default').each(function(i, item) {
 
-    $('.js-prom-mock-item').on('click', function() {
-        var $this = $(this),
-            itemData = $this.data('item');
+            var $item = $(item),
+                innerText =  $item.find('.kn-section-header span').text(),
+                data =  $item.data('section-name'),
+                $itemInList = $('.promotion-scroll-menu').prev('li').clone();
 
-        if(!$this.hasClass('active')) {
+            $itemInList
+                .attr('data-item', data)
+                .text(innerText)
+                .appendTo($('.promotion-scroll-menu'))
+                .show();
+        });
 
-            $this.addClass('active');
-
-            $('.promotion-narrow-field').hide();
-            $('.section-default').find('select').select2();
-
-            $('.section-default').each(function() {
-
-                var sectionData = $(this).data('section-name');
-
-                if(itemData === sectionData) {
-                    $(this).show();
-                }
-            });
-        }
-    });
-
-
-
-    $sectionWrap.on('click', '.promotion-icon-close-height', function(){
-
-        var $thisSection = $(this).closest('.section-default'),
-            itemName = $thisSection.data('section-name');
-
-        $('.js-prom-mock-item').each(function() {
-
+        // click on menu item handler
+        $('.js-prom-mock-item').on('click', function() {
             var $this = $(this),
-                $dataItem = $this.data('item');
+                itemData = $this.data('item');
 
-            if($dataItem === itemName) {
-                $this.removeClass('active');
+            if(!$this.hasClass('active')) {
+
+                $this.addClass('active');
+
+                $('.section-default[data-section-name='+itemData+']').show();
+
+                if ($defaultBanner.is(':visible')) {
+                    $defaultBanner.hide();
+                    // deselect all options
+                    $sectionWrap.find('option').prop('selected', false);
+                }
+
+                // reinitialize select2
+                $('.section-default').find('select').select2();
+
+                updateTargetCustomers();
             }
 
         });
 
-        $thisSection.hide();
-        $thisSection.find('select').val('');
+        // close options
+        $sectionWrap.on('click', '.promotion-icon-close-height', function(){
 
-        if(!$sectionWrap.children('.section-default').length){
-            $('.promotion-narrow-field').show();
-        }
-    });
+            var $thisSection = $(this).closest('.section-default'),
+                itemName = $thisSection.data('section-name');
+
+            $('.js-prom-mock-item.active[data-item='+itemName+']').removeClass('active');
+
+            $thisSection.hide();
+            $thisSection.find('select').val('');
+
+            if(!$sectionWrap.children('.section-default:visible').length){
+                $defaultBanner.show();
+                $sectionWrap.find('option').prop('selected', true);
+            }
+
+            updateTargetCustomers();
+        });
+
+        var $targetCounter = $('.js-target-count');
+        var updateTargetCustomers = function() {
+            var selectedNum = $sectionWrap.children('.section-default:visible').length;
+            $targetCounter.text(selectedNum);
+        };
+    }
+
 
 })(jQuery);
