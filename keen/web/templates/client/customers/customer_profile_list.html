@@ -477,26 +477,25 @@
             <i class="fui-cross"></i>
           </button>
           <h6 class="modal-title">Import .CSV File</h6>
+          <ul class="steps mth">
+            <li class="step" ng-class='{active: imp.activeStep == 1}'>
+              <span>Upload File</span>
+            </li>
+            <li class="step" ng-class='{active: imp.activeStep == 2}'>
+              <span>Select Mapping</span>
+            </li>
+            <li class="step" ng-class='{active: imp.activeStep == 3}'>
+              <span>Import Status</span>
+            </li>
+          </ul>
         </div>
         <div class="modal-body">
-            <ul class="steps mbl">
-              <li class="step" ng-class='{active: imp.activeStep == 1}'>
-                <span>Upload File</span>
-              </li>
-              <li class="step" ng-class='{active: imp.activeStep == 2}'>
-                <span>Select Mapping</span>
-              </li>
-              <li class="step" ng-class='{active: imp.activeStep == 3}'>
-                <span>Import Status</span>
-              </li>
-            </ul>
 
             <div ng-if='imp.activeStep == 1'>
               <div ng-file-drop='imp.onFileSelect($files)' class="upload ptm pbl mbl">
                 <form action="" id="import-form">
                   <span class="mtx">Drag Files Here</span>
-                  <div data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">Browse...
-                  </div>
+                  <button data-target="#popup-ulpoad-csvfile" class="btn btn-default btn-wide btn-embossed js-trigger">Browse...</button>
                   <input type="file"
                          name='file'
                          id="popup-ulpoad-csvfile"
@@ -507,13 +506,18 @@
               </div>
 
               <div ng-if='imp.fileSelected.name' class="added-file mtl">
-                <div>
-                  <span>{{ imp.fileSelected.name }}</span>
-                  <strong>({{ imp.fileSelected.size }})</strong>
-                  <button  class="close"
-                           ng-click='imp.removeFile()'>
-                    <i class="fui-cross js-close"></i>
-                  </button>
+                <button class="btn btn-default btn-embossed btn-secondary btn-sm pull-right"
+                        ng-disabled='imp.fileSelected.uploaded'
+                        ng-click='imp.uploadFile()'>Upload</button>
+                <div class='box-overflow'>
+                  <div class="added-file-content mrl mtm">
+                    <span>{{ imp.fileSelected.name }}</span>
+                    <strong>({{ imp.fileSelected.size }})</strong>
+                    <button class="close"
+                            ng-click='imp.removeFile()'>
+                      <i class="fui-cross js-close"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -540,10 +544,22 @@
               </div> -->
             </div>
 
-            <div ng-if='imp.activeStep == 2'>
+            <div ng-if='imp.activeStep == 2' class='mtl'>
               <table class="table">
                 <tbody>
-                  <tr>
+                  <tr ng-repeat='field in imp.importFields'>
+                    <td>{{ field[0] }}</td>
+                    <td><span class="text-muted">{{ field[1] }}</span></span></td>
+                    <td>
+                      <div class="input-group pull-right">
+                        <input type="text" class="form-control input-sm prx" placeholder="Search for field">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                  <!-- <tr>
                     <td>text1</td>
                     <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
                     <td>
@@ -554,40 +570,34 @@
                         </span>
                       </div>
                     </td>
-                  </tr>
-                  <tr>
-                    <td>text1</td>
-                    <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
-                    <td>
-                      <div class="input-group pull-right">
-                        <input type="text" class="form-control input-sm prx" placeholder="Search for field">
-                        <span class="input-group-btn">
-                          <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
             </div>
+
+            <div ng-if='imp.activeStep == 3' class='mtl'>
+              <div class='text-center'>Import status : {{ imp.importStatus }}</div>
+            </div>
+
             <div class="loader fade text-center" ng-class="{in: imp.isWaiting}"></div>
         </div>
-        <div class="modal-footer ptn pbn">
+        <div class="modal-footer">
 
-          <button ng-if='imp.activeStep == 1 && !imp.fileSelected.uploaded'
-                  class="btn btn-primary btn-embossed btn-secondary btn-step-csv pull-right mtl mbm mll"
-                  ng-disabled='!imp.fileSelected.name'
-                  ng-click='imp.uploadFile()'>Upload</button>
-
-          <button ng-if='imp.activeStep == 1 && imp.fileSelected.uploaded'
-                  class="btn btn-primary btn-embossed btn-secondary btn-step-csv pull-right mtl mbm mll"
-                  ng-click='imp.activeStep = 2'>Finish</button>
+          <button ng-if='imp.activeStep == 1'
+                  class="btn btn-primary btn-embossed btn-secondary btn-sm btn-wide pull-right mll"
+                  ng-disabled='!imp.fileSelected.uploaded'
+                  ng-click='imp.activeStep = 2'>Next</button>
 
           <button ng-if='imp.activeStep == 2'
-                  class="btn btn-primary btn-embossed btn-secondary btn-step-csv pull-right mtl mbm mll"
-                  ng-click='imp.activeStep = 1'>Go back</button>
+                  class="btn btn-primary btn-embossed btn-secondary btn-sm btn-wide pull-right mll"
+                  ng-click='imp.uploadImportFields()'>Next</button>
 
-          <button type="button" class="mtl mbm btn btn-default btn-step-csv btn-embossed pull-right" data-dismiss="modal">Close</button>
+          <button ng-if='imp.activeStep == 3'
+                  class="btn btn-primary btn-embossed btn-secondary btn-sm btn-wide pull-right mll"
+                  ng-click='imp.resetForm()'
+                  data-dismiss="modal">Finish</button>
+
+          <button type="button" class="btn btn-default btn-sm btn-embossed btn-wide pull-right mll" data-dismiss="modal">Close</button>
         </div>
 
       </div><!-- /.modal-content -->
@@ -610,7 +620,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="mtl mbm btn btn-default btn-step-csv btn-embossed pull-right" data-dismiss="modal">Close</button>
+          <button type="button" class="mtl mbm btn btn-default btn-sm btn-embossed pull-right" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

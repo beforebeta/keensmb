@@ -3,9 +3,8 @@
 'use strict';
 
 angular.module('keen')
-    .controller('importCsvCtrl', ['$scope', '$timeout', '$upload', '$http', 'customerListService', function($scope, $timeout, $upload, $http, customerService){
-        var imScope = this,
-            clientSlug = customerService.clientSlug;
+    .controller('importCsvCtrl', ['$scope', '$timeout', '$upload', '$http', 'importCsv', function($scope, $timeout, $upload, $http, importCsv){
+        var imScope = this;
 
         function init() {
             imScope.isWaiting = false;
@@ -38,37 +37,19 @@ angular.module('keen')
             selectedFile = file;
         };
 
+        imScope.activeReqId = 0;
         imScope.uploadFile = function() {
             if (selectedFile) {
                 imScope.isWaiting = true;
-                $upload.upload({
-                    url: '/api/client/'+clientSlug+'/customers/import',
-                    method: 'POST',
-                    // headers: {'headerKey': 'headerValue'},
-                    // withCredential: true,
-                    // data: {myObj: $scope.myModelObj},
-                    file: selectedFile,
-                    // file: $files, //upload multiple files, this feature only works in HTML5 FromData browsers
-                    /* set file formData name for 'Content-Desposition' header. Default: 'file' */
-                    //fileFormDataName: myFile, //OR for HTML5 multiple upload only a list: ['name1', 'name2', ...]
-                    //formDataAppender: function(formData, key, val){} //#40#issuecomment-28612000
-                }).progress(function(evt) {
-                    // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                }).success(function(data, status, headers, config) {
-                    console.log(data);
-
-                    var reqId = data.import_requiest_id;
+                importCsv.uploadFile(selectedFile).then(function(data) {
+                    imScope.isWaiting = false;
                     imScope.fileSelected.uploaded = true;
 
-                    $timeout(function() {
-                        $http({
-                            method: 'GET',
-                            url: '/api/client/'+ clientSlug +'/customers/import/'+reqId
-                        }).then(function(res) {
-                            imScope.isWaiting = false;
-                            console.log('res: ', res);
-                        });
-                    }, 1000);
+                    console.log(data);
+
+                    imScope.activeReqId = data.import_requiest_id;
+
+                    imScope.importFields = data.import_fields;
                 });
             }
         };
@@ -77,21 +58,34 @@ angular.module('keen')
             selectedFile = undefined;
             imScope.fileSelected = {};
         };
-        // FileAPI.event.on(el, 'change', function (evt){
-        //     var files = FileAPI.getFiles(evt);
 
-            // var xhr = FileAPI.upload({
-            //     url: '/api/client/'+clientSlug+'/customers/import',
-            //     files: { file: files[0] },
-            //     complete: function (err, xhr){
-            //         if( !err ){
-            //             var result = xhr.responseText;
-            //             console.log(result);
-            //         } else {
-            //             console.error(err);
-            //         }
-            //     }
-            // });
-        // });
+        imScope.uploadImportFields = function() {
+            imScope.activeStep = 3;
+            imScope.importStatus = 'uploading';
+            imScope.isWaiting = true;
+
+            importCsv.uploadImportFields(imScope.importFields, imScope.activeReqId).then(function(data) {
+                imScope.isWaiting = false;
+                imScope.importFieldsUploaded = true;
+
+                imScope.importStatus = 'Success!';
+                console.log(data);
+
+                $timeout(function() {
+                    $http({
+                        method: 'GET',
+                        url: '/api/client/default_client/customers/import/'+imScope.activeReqId
+                    }).then(function(res) {
+                        imScope.isWaiting = false;
+                        console.log('res: ', res);
+                    });
+                }, 1000);
+
+            });
+        };
+        imScope.resetForm = function() {
+            $('#ModalCsvImport').modal('hide');
+            $timeout(function() {init();}, 1000);
+        };
 
     }]);
