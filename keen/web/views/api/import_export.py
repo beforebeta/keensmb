@@ -43,14 +43,18 @@ class ImportAPI(ClientAPI):
             logger.exception('Failed to create import request')
             raise
 
-        all_fields = list(client.customer_fields.select_related('group'))
-        import_field_names = csv.reader(imp.file.file).next()
+        imp.file.open()
+        reader = csv_reader(imp.file.file)
+        columns = reader.next()
+        while not all(columns):
+            row = reader.next()
+            for i, value in enumerate(columns):
+                if not value and row[i]:
+                    columns[i] = row[i]
 
         return Response({
             'import_requiest_id': imp.id,
-            'available_fields': CustomerFieldSerializer(all_fields, many=True).data,
-            'import_fields': [
-                map_field(name, all_fields) for name in import_field_names],
+            'columns': columns,
         })
 
     @transaction.atomic()
@@ -67,11 +71,14 @@ class ImportAPI(ClientAPI):
 
         try:
             import_fields = request.DATA['import_fields']
-        except KeyError:
+            skip_first_row = request.DATA['skip_first_row']
+        except KeyError, exc:
             return Response({
+                'error': 'Missing {0} parameter'.format(exc.args[0]),
             })
 
         imp.data['import_fields'] = import_fields
+        imp.data['skip_first_row'] = skip_first_row
         imp.save()
 
         import_customers.delay(imp.id)
@@ -91,12 +98,9 @@ class ImportAPI(ClientAPI):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-def map_field(name, fields):
-    field, score = process.extractOne(name, fields, processor=lambda field: field.title)
-    field2, score2 = process.extractOne(name, fields, processor=lambda field: field.title)
-    if score2 > score:
-        score = score2
-        field = field2
-    if score < 80:
-        return (name, '')
-    return (name, field.name)
+def csv_reader(f):
+    """Generate sequence of rows from CSV file striping whitespace from each value
+    """
+    reader = csv.reader(f)
+    for row in reader:
+        yield map(str.strip, row)

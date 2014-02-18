@@ -243,24 +243,8 @@ Response is JSON-encoded object with the following attributes:
 	``import_request_id``
 		Unique import request ID
 
-	``available_fields``
-		List of field objects with the following attributes:
-
-			``name``
-				Unique field name
-
-			``title``
-				Field title
-
-			``type``
-				Field type
-
-			``required``
-				Whether or not this field is required
-
-	``import_fields``
-		List of `source-field-name`, `destination-field-name` pairs as guessed by server with `destination-field-name`
-		being optional. This is not what will be imported but simply an attempt to assist client in makeing the list.
+	``columns``
+		List of non-empty values one per each column in import file.
 
 
 GET /api/client/:client_slug/customers/import/:import_request_id
@@ -287,11 +271,12 @@ PUT /api/client/:client_slug/customers/import/:import_request_id
 Start import process. Request is JSON-encoded object with the following attributes:
 
 	``import_fields``
-		Start this import request. Value if that atribute is a list of `source-field-name`, `destination-field-name` pairs.
-		Unlike in response to previous API call `destination-field-name` is required but there could be less pairs
-		than fields in file being imported.
-		It is allowed to use the same `source-field-name` more than once.The same `destination-field-name` may not be used
-		more than once. 
+		List of `column`, `destination-field-name` pairs. `destination-field-name` can be empty meaning `column` should
+                not be imported. `destination-field-name` may not be used more than once.
+
+	``skip_first_row``
+		"yes" means first row of file should be skipped because it contains column names and not data. "no" or any other
+		value means there is no header and import should include first row.
 
 
 DELETE /api/client/:client_slug/customers/import/:import_request_id
