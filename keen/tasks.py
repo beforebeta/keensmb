@@ -71,7 +71,7 @@ def send_email(subject, body, recipients, sender=None):
 @app.task
 def import_customers(import_id):
     from keen.core.models import Customer
-    from keen.web.models import ImportRequest
+    from keen.web.models import CustomerField, ImportRequest
 
     with transaction.atomic():
         imp = ImportRequest.objects.select_for_update().get(id=import_id)
@@ -80,14 +80,48 @@ def import_customers(import_id):
             logger.error('Cannot process import request in status {0}'.format(imp.status))
             return
 
-        imp.status = ImportRequest.STATUS.in_process
+        imp.status = ImportRequest.STATUS.in_progress
         imp.data['imported'] = 0
         imp.data['failed'] = 0
         imp.data['errors'] = []
         imp.save()
 
+    client = imp.client
+    fields = [
+        (CustomerField.objects.get(name=field) if field else None)
+        for field in imp.data['import_fields']
+    ]
+
     imp.file.open()
-
     reader = csv.reader(imp.file.file)
-    file_fields = reader.next()
+    if imp.data['skip_first_row']:
+        reader.next()
 
+    with transaction.atomic():
+        source = CustomerSource.objects.create(
+            clinet=client,
+            slug='import-csv-{0}'.format(imp.id),
+            ref_source='import-csv',
+            ref_id=imp.id,
+        )
+
+        for row in reader:
+            data = {}
+            for i, field in enumerate(fields):
+                if field:
+                    data[field.name] = row[i]
+            sp = transaction.savepoint()
+            try:
+                Customer.objects.create(client=client, source=source, data=data)
+            except DatabaseError:
+                logger.exception('Failed to save imported client')
+                transaction.savepoint_rollback(sp)
+                imp.data['failed'] += 1
+            else:
+                transaction.savepoint_commit(sp)
+                imp.data['imported'] += 1
+
+            imp.save()
+
+        imp.status = ImportRequest.STATUS.complete
+        imp.save()
