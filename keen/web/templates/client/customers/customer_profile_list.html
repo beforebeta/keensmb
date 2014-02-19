@@ -488,9 +488,19 @@
               <span>Import Status</span>
             </li>
           </ul>
+
+          <div class='mtm' ng-if='imp.activeStep == 2'>
+            <input checkboxik='first column is header'
+               type="checkbox"
+               ng-model='imp.firstIsHeader'
+               id="import-column-header"
+               class='custom-checkbox'>
+          </div>
         </div>
+
         <div class="modal-body">
 
+          <!-- STEP 1 -->
             <div ng-if='imp.activeStep == 1'>
               <div ng-file-drop='imp.onFileSelect($files)' class="upload ptm pbl mbl">
                 <form action="" id="import-form">
@@ -544,12 +554,26 @@
               </div> -->
             </div>
 
+
+          <!-- STEP 2 -->
             <div ng-if='imp.activeStep == 2' class='mtl'>
               <table class="table">
                 <tbody>
                   <tr ng-repeat='field in imp.importFields'>
-                    <td>{{ field[0] }}</td>
-                    <td><span class="text-muted">{{ field[1] }}</span></span></td>
+                    <td>{{ field.columnName }}</td>
+                    <td class='text-right'>
+                      <select class="select-fields full"
+                              name="topLocSortRegion"
+                              ng-model='field.destination'
+                              ng-change='imp.selectField()'>
+                        <option value="" selected>----</option>
+                        <option ng-repeat='f in imp.availableFields'
+                                value="{{ f.fieldName }}"
+                                ng-disabled='f.selected'>{{ f.fieldName }}</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <!-- <tr>
                     <td>
                       <div class="input-group pull-right">
                         <input type="text" class="form-control input-sm prx" placeholder="Search for field">
@@ -559,7 +583,7 @@
                       </div>
                     </td>
                   </tr>
-                  <!-- <tr>
+                  <tr>
                     <td>text1</td>
                     <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
                     <td>
@@ -575,6 +599,7 @@
               </table>
             </div>
 
+          <!-- STEP 3 -->
             <div ng-if='imp.activeStep == 3' class='mtl'>
               <div class='text-center'>Import status : {{ imp.importStatus }}</div>
             </div>
@@ -597,7 +622,10 @@
                   ng-click='imp.resetForm()'
                   data-dismiss="modal">Finish</button>
 
-          <button type="button" class="btn btn-default btn-sm btn-embossed btn-wide pull-right mll" data-dismiss="modal">Close</button>
+          <button type="button"
+                  class="btn btn-default btn-sm btn-embossed btn-wide pull-right mll"
+                  ng-click='imp.resetForm()'
+                  data-dismiss="modal">Close</button>
         </div>
 
       </div><!-- /.modal-content -->

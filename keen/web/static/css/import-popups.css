@@ -5,7 +5,7 @@
   width: 464px;
 }
 .ModalCsvImport .modal-body {
-  max-height: 400px;
+  max-height: 355px;
   overflow: auto;
 }
 .ModalCsvImport .modal-content {
@@ -271,9 +271,10 @@
   opacity: 1;
 }
 
-/*.ModalCsvImport .btn-step-csv {
-  padding-top: 7px;
-  padding-bottom: 7px;
-  min-width: 100px;
+.ModalCsvImport .select-fields {
+  max-width: 200px;
 }
-*/
+
+
+
+

@@ -15,7 +15,7 @@ angular.module('keen')
             },
             uploadFile: function(file) {
                 var defer = $q.defer();
-                // imScope.isWaiting = true;
+
                 $upload.upload({
                     url: '/api/client/'+clientSlug+'/customers/import',
                     method: 'POST',
@@ -30,11 +30,14 @@ angular.module('keen')
 
                 return defer.promise;
             },
-            uploadImportFields: function(fields, reqId) {
+            uploadImportFields: function(fields, reqId, skipFirst) {
+                var skipFirstRow = skipFirst ? 'yes' : false;
+
                 return $http({
                     url: '/api/client/'+clientSlug+'/customers/import/'+reqId,
                     method: 'PUT',
                     data: {
+                        skip_first_row: skipFirstRow,
                         import_fields: fields
                     }
                 });
