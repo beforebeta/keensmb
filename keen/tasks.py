@@ -81,7 +81,7 @@ def import_customers(import_id):
             logger.error('Cannot process import request in status {0}'.format(imp.status))
             return
 
-        imp.status = ImportRequest.STATUS.in_progress
+        imp.status = 'in-progress'
         imp.data['imported'] = 0
         imp.data['failed'] = 0
         imp.data['errors'] = []
