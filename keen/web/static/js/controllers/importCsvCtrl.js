@@ -144,7 +144,7 @@ angular.module('keen')
             importCsv.getStatus(imScope.activeReqId).then(function(res) {
                 imScope.importStatus = res.data.status;
 
-                if (res.data.status !== 'done') {
+                if (res.data.status !== 'complete') {
                     $timeout(function() {
                         getStatus();
                     }, 1000);
