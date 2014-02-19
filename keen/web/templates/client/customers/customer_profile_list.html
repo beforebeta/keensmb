@@ -535,23 +535,23 @@
               <div ng-if='imp.fileSelected.uploaded'
                    class="download-success text-primary fade-onload">Sucess!</div>
 
-  <!--            <div class="download-progress mtl ptm text-muted small">
+              <div ng-show='imp.fileSelected.uploadedPercent' class="download-progress mtl ptm text-muted small">
                 <div class="result pbs">
                   <span class="pull-left">Reading file...</span>
-                  <span class="pull-right">25MB of 100MB</span>
+              <!--<span class="pull-right">25MB of 100MB</span>-->
                 </div>
                 <div class="progress mbn">
-                  <div class="progress-bar" style="width: 40%;"></div>
+                  <div class="progress-bar" style="width: {{imp.fileSelected.uploadedPercent}}%"></div>
                 </div>
-                <div class="result pts">
+                <!-- <div class="result pts">
                   <span class="pull-left">
                     Time remaining
                   </span>
                   <span class="pull-right">
                     38 seconds
                   </span>
-                </div>
-              </div> -->
+                </div>-->
+              </div>
             </div>
 
 
@@ -567,7 +567,7 @@
                               ng-model='field.destination'
                               ng-change='imp.selectField()'>
                         <option value="" selected>----</option>
-                        <option ng-repeat='f in imp.availableFields'
+                        <option ng-repeat='f in imp.availableFields | orderBy:"fieldTitle"'
                                 value="{{ f.fieldName }}"
                                 ng-disabled='f.selected'>{{ f.fieldTitle }}</option>
                       </select>

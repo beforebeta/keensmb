@@ -41,6 +41,12 @@ angular.module('keen')
                         import_fields: fields
                     }
                 });
+            },
+            getStatus: function(reqId) {
+                return $http({
+                    method: 'GET',
+                    url: '/api/client/default_client/customers/import/'+reqId
+                });
             }
         };
     }]);
