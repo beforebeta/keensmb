@@ -115,9 +115,15 @@ def import_customers(import_id):
 
         for row in reader:
             data = {}
-            for i, field in enumerate(fields):
-                if field:
-                    data[field.name] = row[i]
+            try:
+                for i, field in enumerate(fields):
+                    if field:
+                        data[field.name] = row[i]
+            except IndexError:
+                logger.exception('Number of columns in row does not match number of fields: {0!r}'.format(row))
+                imp.data['failed'] += 1
+                continue
+
             sp = transaction.savepoint()
             try:
                 Customer.objects.create(client=client, source=source, data=data)
