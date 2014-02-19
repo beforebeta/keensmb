@@ -271,7 +271,8 @@ PUT /api/client/:client_slug/customers/import/:import_request_id
 Start import process. Request is JSON-encoded object with the following attributes:
 
 	``import_fields``
-		List of `column`, `destination-field-name` pairs. `destination-field-name` can be empty meaning `column` should
+		List of `destination-field-name` strings. The length should match length of `columns` list received in
+                response to POST request. `destination-field-name` can be empty meaning `column` should
                 not be imported. `destination-field-name` may not be used more than once.
 
 	``skip_first_row``
