@@ -16,7 +16,8 @@ angular.module('keen')
         customerService.getCustomersFields().then(function(res) {
             var availableFields = _.map(res.data.available_customer_fields, function(field) {
                 return {
-                    fieldName: field.title,
+                    fieldTitle: field.title,
+                    fieldName: field.name,
                     selected: false
                 };
             });
@@ -31,7 +32,7 @@ angular.module('keen')
                 .value();
 
             _.each(imScope.availableFields, function(item) {
-                item.selected = _.contains(selectedFields, item.fieldName) ? true : false;
+                item.selected = _.contains(selectedFields, item.fieldTitle) ? true : false;
             });
         };
 
@@ -100,7 +101,11 @@ angular.module('keen')
             imScope.importStatus = 'uploading';
             imScope.isWaiting = true;
 
-            importCsv.uploadImportFields(imScope.importFields, imScope.activeReqId, imScope.firstIsHeader)
+            var fieldsColumns = _.map(imScope.importFields, function(field) {
+                return field.destination;
+            });
+
+            importCsv.uploadImportFields(fieldsColumns, imScope.activeReqId, imScope.firstIsHeader)
                 .then(function(data) {
                     imScope.isWaiting = false;
                     imScope.importFieldsUploaded = true;

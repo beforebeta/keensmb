@@ -41,26 +41,26 @@ module.exports = function (grunt) {
           livereload: LIVERELOAD_PORT
         }
       },
-      less: {
-        files: '<%= yeoman.app %>/less/*.less',
-        tasks: ['less'],
-        options: {
-          livereload: LIVERELOAD_PORT,
-          dumpLineNumbers: "comments",
-          env: "development",
-          relativeUrls: false
-        }
-      },
-      livereload: {
-        options: {
-          livereload: LIVERELOAD_PORT
-        },
-        files: [
-          '<%= yeoman.app %>/../templates/{,*/}*.html',
-          '<%= yeoman.app %>/js/{,*/}*.js',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-        ]
-      }
+      // less: {
+      //   files: '<%= yeoman.app %>/less/*.less',
+      //   tasks: ['less'],
+      //   options: {
+      //     livereload: LIVERELOAD_PORT,
+      //     dumpLineNumbers: "comments",
+      //     env: "development",
+      //     relativeUrls: false
+      //   }
+      // },
+      // livereload: {
+      //   options: {
+      //     livereload: LIVERELOAD_PORT
+      //   },
+      //   files: [
+      //     '<%= yeoman.app %>/../templates/{,*/}*.html',
+      //     '<%= yeoman.app %>/js/{,*/}*.js',
+      //     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+      //   ]
+      // }
     },
     less: {
       development: {
