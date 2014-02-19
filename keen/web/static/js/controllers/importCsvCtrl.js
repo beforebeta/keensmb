@@ -8,7 +8,9 @@ angular.module('keen')
 
         function init() {
             imScope.isWaiting = false;
-            imScope.fileSelected = {};
+            imScope.fileSelected = {
+                uploadedPercent: 0
+            };
             imScope.activeStep = 1;
         }
         init();
@@ -32,7 +34,7 @@ angular.module('keen')
                 .value();
 
             _.each(imScope.availableFields, function(item) {
-                item.selected = _.contains(selectedFields, item.fieldTitle) ? true : false;
+                item.selected = _.contains(selectedFields, item.fieldName) ? true : false;
             });
         };
 
@@ -59,18 +61,35 @@ angular.module('keen')
             selectedFile = file;
         };
 
+        var incrUploadedPercent = function() {
+            if (imScope.fileSelected.uploaded) {return false;}
+
+            $timeout(function() {
+                var per = imScope.fileSelected.uploadedPercent;
+
+                if (per === 0) {
+                    imScope.fileSelected.uploadedPercent = 10;
+                } else {
+                    imScope.fileSelected.uploadedPercent = per+Math.floor((100-per)/10);
+                }
+
+                incrUploadedPercent();
+            }, 300);
+        };
         imScope.activeReqId = 0;
         imScope.uploadFile = function() {
             if (selectedFile) {
                 imScope.isWaiting = true;
+
+                imScope.fileSelected.uploadedPercent = 1;
+                incrUploadedPercent();
                 importCsv.uploadFile(selectedFile).then(function(data) {
                     imScope.isWaiting = false;
                     imScope.fileSelected.uploaded = true;
-
-                    console.log(data);
-
+                    imScope.fileSelected.uploadedPercent = 100;
                     imScope.activeReqId = data.import_requiest_id;
 
+                    // console.log(data);
                     imScope.importFields = _.map(data.columns, function(column) {
                         return {
                             columnName: column,
@@ -101,9 +120,8 @@ angular.module('keen')
             imScope.importStatus = 'uploading';
             imScope.isWaiting = true;
 
-            var fieldsColumns = _.map(imScope.importFields, function(field) {
-                return field.destination;
-            });
+            // map -> returns destination values
+            var fieldsColumns = _.pluck(imScope.importFields, 'destination');
 
             importCsv.uploadImportFields(fieldsColumns, imScope.activeReqId, imScope.firstIsHeader)
                 .then(function(data) {
@@ -112,6 +130,7 @@ angular.module('keen')
 
                     imScope.importStatus = 'in_progress';
 
+                    n = 0;
                     getStatus();
                 });
         };
@@ -122,10 +141,7 @@ angular.module('keen')
             if (n >= 10) {return false;}
             n += 1;
 
-            $http({
-                method: 'GET',
-                url: '/api/client/default_client/customers/import/'+imScope.activeReqId
-            }).then(function(res) {
+            importCsv.getStatus(imScope.activeReqId).then(function(res) {
                 imScope.importStatus = res.data.status;
 
                 if (res.data.status !== 'done') {
@@ -133,7 +149,6 @@ angular.module('keen')
                         getStatus();
                     }, 1000);
                 }
-                console.log('res: ', res);
             });
         };
 
