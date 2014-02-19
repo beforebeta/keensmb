@@ -35,7 +35,7 @@ class ImportAPI(ClientAPI):
             'failed': imp.data.get('failed', 0),
             'errors': imp.data.get('errors', []),
         }
-        return Response(status=204)
+        return Response(response)
 
 
     def post(self, request, client):
