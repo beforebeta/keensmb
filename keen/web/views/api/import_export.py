@@ -1,3 +1,4 @@
+import logging
 import csv
 
 from django.db import DatabaseError, transaction
@@ -19,6 +20,9 @@ from keen.web.views.api.client import ClientAPI
 from keen.tasks import import_customers
 
 
+logger = logging.getLogger(__name__)
+
+
 class ImportAPI(ClientAPI):
 
     def get(self, request, client, import_id):
@@ -31,7 +35,7 @@ class ImportAPI(ClientAPI):
             'failed': imp.data.get('failed', 0),
             'errors': imp.data.get('errors', []),
         }
-        return Response(response)
+        return Response(status=204)
 
 
     def post(self, request, client):
@@ -69,6 +73,8 @@ class ImportAPI(ClientAPI):
                 'error': 'Cannot process import request in {0} state'.format(imp.state),
             })
 
+        logger.debug('Received import request: {0!r}'.format(request.DATA))
+
         try:
             import_fields = request.DATA['import_fields']
             skip_first_row = request.DATA['skip_first_row']
@@ -78,7 +84,7 @@ class ImportAPI(ClientAPI):
             })
 
         imp.data['import_fields'] = import_fields
-        imp.data['skip_first_row'] = skip_first_row
+        imp.data['skip_first_row'] = skip_first_row == 'yes'
         imp.save()
 
         import_customers.delay(imp.id)

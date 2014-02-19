@@ -70,7 +70,8 @@ def send_email(subject, body, recipients, sender=None):
 
 @app.task
 def import_customers(import_id):
-    from keen.core.models import Customer
+    import csv
+    from keen.core.models import Customer, CustomerSource
     from keen.web.models import CustomerField, ImportRequest
 
     with transaction.atomic():
@@ -87,10 +88,17 @@ def import_customers(import_id):
         imp.save()
 
     client = imp.client
-    fields = [
-        (CustomerField.objects.get(name=field) if field else None)
-        for field in imp.data['import_fields']
-    ]
+
+    try:
+        fields = [
+            (CustomerField.objects.get(name=field) if field else None)
+            for field in imp.data['import_fields']
+        ]
+    except CustomerField.DoesNotExist:
+        imp.status = ImportRequest.STATUS.failed
+        imp.errors.append('Failed to build customer field list')
+        imp.save()
+        return
 
     imp.file.open()
     reader = csv.reader(imp.file.file)
@@ -99,7 +107,7 @@ def import_customers(import_id):
 
     with transaction.atomic():
         source = CustomerSource.objects.create(
-            clinet=client,
+            client=client,
             slug='import-csv-{0}'.format(imp.id),
             ref_source='import-csv',
             ref_id=imp.id,
