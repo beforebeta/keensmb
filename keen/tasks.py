@@ -126,7 +126,7 @@ def import_customers(import_id):
             customer = find_customer(client, data)
 
             if customer:
-                merge_customer_data(customer, data):
+                merge_customer_data(customer, data)
                 action = 'updated'
             else:
                 customer = Customer(client=client, source=source, data=data)
