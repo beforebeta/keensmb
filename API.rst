@@ -241,10 +241,14 @@ Upload file to Initiate customers import process. Request is standart POST reque
 Response is JSON-encoded object with the following attributes:
 
 	``import_request_id``
-		Unique import request ID
+		Unique import request ID.
 
 	``columns``
-		List of non-empty values one per each column in import file.
+		List of values from first row of import file. Possibly the header of the CSV-file.
+
+	``sample_data``
+		List of non-empty values collected from second and following rows of the file. Contains
+		sample data from all columns.
 
 
 GET /api/client/:client_slug/customers/import/:import_request_id
@@ -257,6 +261,9 @@ Retrieve status of import request. Response is JSON-encoded object with the foll
 
 	``imported``
 		Number of successfully imported customers.
+
+	``updated``
+		Number of existing customer records that were updated.
 
 	``failed``
 		Number of records that couldn't be imported.

@@ -83,11 +83,10 @@ def import_customers(import_id):
 
         imp.status = 'in-progress'
         imp.data['imported'] = 0
+        imp.data['updated'] = 0
         imp.data['failed'] = 0
         imp.data['errors'] = []
         imp.save()
-
-    client = imp.client
 
     try:
         fields = [
@@ -100,42 +99,76 @@ def import_customers(import_id):
         imp.save()
         return
 
-    imp.file.open()
-    reader = csv.reader(imp.file.file)
-    if imp.data['skip_first_row']:
-        reader.next()
+    num_fields = len(fields)
+    client = imp.client
 
-    with transaction.atomic():
+    try:
         source = CustomerSource.objects.create(
             client=client,
             slug='import-csv-{0}'.format(imp.id),
             ref_source='import-csv',
             ref_id=imp.id,
         )
+    except DatabaseError:
+        imp.status = ImportRequest.STATUS.failed
+        imp.errors.append('Failed to create customer source')
+        imp.save()
+        return
 
-        for row in reader:
-            data = {}
-            try:
-                for i, field in enumerate(fields):
-                    if field:
-                        data[field.name] = row[i]
-            except IndexError:
-                logger.exception('Number of columns in row does not match number of fields: {0!r}'.format(row))
+    with transaction.atomic():
+        for row in row_reader(imp):
+            # malformed rows are skipped
+            if len(row) != num_fields:
                 imp.data['failed'] += 1
                 continue
 
+            data = dict((field.name, row[i]) for i, field in enumerate(fields) if field)
+            customer = find_customer(client, data)
+
+            if customer:
+                merge_customer_data(customer, data):
+                action = 'updated'
+            else:
+                customer = Customer(client=client, source=source, data=data)
+                action = 'imported'
+
             sp = transaction.savepoint()
             try:
-                Customer.objects.create(client=client, source=source, data=data)
+                customer.save()
             except DatabaseError:
-                logger.exception('Failed to save imported client')
+                logger.exception('Failed to save customer')
                 transaction.savepoint_rollback(sp)
                 imp.data['failed'] += 1
             else:
                 transaction.savepoint_commit(sp)
-                imp.data['imported'] += 1
-
-            imp.save()
+                imp.data[action] += 1
 
         imp.status = ImportRequest.STATUS.complete
         imp.save()
+
+
+def row_reader(imp):
+    imp.file.open()
+    reader = csv.reader(imp.file.file)
+    if imp.data['skip_first_row']:
+        reader.next()
+    for row in reader:
+        yield map(str.strip, row)
+
+
+def find_customer(client, data):
+    for field in 'email', 'social__facebook', 'social__googleplus', 'social__twitter':
+        value = data.get(field, None)
+        if value:
+            customer = Customer.objects.filter(data__contains={field: value}).first()
+            if customer:
+                return customer
+    # if no identity matches
+    # return Customer.objects.filter(data__contains=data).first()
+    return None
+
+
+def merge_customer_data(customer, data):
+    for key, value in data.items():
+        if value:
+            customer.data[key] = value

@@ -50,15 +50,17 @@ class ImportAPI(ClientAPI):
         imp.file.open()
         reader = csv_reader(imp.file.file)
         columns = reader.next()
-        while not all(columns):
+        sample_data = reader.next()
+        while not all(sample_data):
             row = reader.next()
-            for i, value in enumerate(columns):
+            for i, value in enumerate(sample_data):
                 if not value and row[i]:
-                    columns[i] = row[i]
+                    sample_data[i] = row[i]
 
         return Response({
             'import_requiest_id': imp.id,
             'columns': columns,
+            'sample_data': sample_data,
         })
 
     @transaction.atomic()
