@@ -18,7 +18,7 @@ server {
 	rewrite ^/blog$ /blog/ permanent;
 
 	location /blog/ {
-		alias /var/apps/keensmb.com/wordpress/;
+		root /var/apps/keensmb.com/;
 		index index.php index.html index.htm;
 		try_files $uri $uri/ /blog/index.php?$args;
 
