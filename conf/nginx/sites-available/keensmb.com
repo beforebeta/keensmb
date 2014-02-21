@@ -15,6 +15,24 @@ server {
 		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
 	}
 
+	rewrite ^/blog$ /blog/ permanent;
+
+	location /blog/ {
+		alias /var/apps/keensmb.com/wordpress/;
+		index index.php index.html index.htm;
+		try_files $uri $uri/ /blog/index.php?$args;
+
+		location ~* \.(html|htm|css|jpeg|jpg|gif|png)$ {
+			# serve static files 
+			log_not_found off;
+		}
+
+		location ~ \.php$ {
+			fastcgi_pass 127.0.0.1:9000;
+			include fastcgi_params;
+		}
+	}
+
 	location /static/ { 
         	alias /var/apps/keensmb.com/keen/static/;
 		autoindex off;
