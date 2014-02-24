@@ -34,6 +34,7 @@ class ImportAPI(ClientAPI):
             'imported': imp.data.get('imported', 0),
             'updated': imp.data.get('imported', 0),
             'failed': imp.data.get('failed', 0),
+            'duplicates': imp.data.get('duplicates', 0),
             'errors': imp.data.get('errors', []),
         }
         return Response(response)

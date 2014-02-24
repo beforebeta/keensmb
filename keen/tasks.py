@@ -86,6 +86,7 @@ def import_customers(import_id):
         imp.data['imported'] = 0
         imp.data['updated'] = 0
         imp.data['failed'] = 0
+        imp.data['duplicates'] = 0
         imp.data['errors'] = []
         imp.save()
 
@@ -127,7 +128,12 @@ def import_customers(import_id):
             customer = find_customer(client, data)
 
             if customer:
+                old_data = dict(customer.data)
                 merge_customer_data(customer, data)
+                if old_data == dict(customer.data):
+                    imp.data['duplicates'] += 1
+                    continue
+                CustomerDataVersion.objects.create(customer=customer, data=data)
                 action = 'updated'
             else:
                 customer = Customer(client=client, source=source, data=data)
@@ -161,7 +167,7 @@ def find_customer(client, data):
     for field in 'email', 'social__facebook', 'social__googleplus', 'social__twitter':
         value = data.get(field, None)
         if value:
-            customer = Customer.objects.filter(data__contains={field: value}).first()
+            customer = Customer.objects.filter(client=client, data__contains={field: value}).first()
             if customer:
                 return customer
     # if no identity matches

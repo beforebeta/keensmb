@@ -221,19 +221,24 @@ class CustomerProfile(ClientAPI):
         form = CustomerForm(client, request.POST)
 
         if form.is_valid():
+            old_data = dict(customer.data)
             for field in form:
                 if field.name.startswith('data_'):
                     name = field.name[5:]
                     # FIXME: should check if this field is actually in
                     # customer_fields of that client
-                    customer[name] = field.value
-
-            try:
-                customer.save()
-            except DatabaseError:
-                logger.exception('Failed to update customer')
-                return response('Failed to save customer profile',
-                                status=HTTP_400_BAD_REQUEST)
+                    customer.data[name] = field.value
+            if old_data != dict(customer.data):
+                try:
+                    with transaction.atomic():
+                        customer.save()
+                        CustomerDataVersion.objects.create(
+                            customer=customer, data=data,
+                            changed_by=request.user)
+                except DatabaseError:
+                    logger.exception('Failed to update customer')
+                    return response('Failed to save customer profile',
+                                    status=HTTP_400_BAD_REQUEST)
 
         return Response(CustomerSerializer(customer).data)
 

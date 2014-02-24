@@ -424,6 +424,13 @@ class Customer(Timestamps):
         return self.get_name()
 
 
+class CustomerDataVersion(Timestamps):
+
+    customer = models.ForeignKey(Customer, related_name='data_history')
+    changed_by = models.ForeignKey(User, null=True)
+    data = hstore.DictionaryField()
+
+
 ########################################################################################################################
 # Promotions
 ########################################################################################################################
