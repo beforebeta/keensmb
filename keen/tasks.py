@@ -13,7 +13,7 @@ from django.core.mail import EmailMessage
 from PIL import Image
 import mailchimp
 
-from keen.core.models import Customer, Promotion
+from keen.core.models import Customer, Promotion, CustomerDataVersion
 from keen.web.models import SignupForm
 
 
