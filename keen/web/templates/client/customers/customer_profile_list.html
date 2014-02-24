@@ -498,7 +498,7 @@
           </div>
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body fixed-height">
 
           <!-- STEP 1 -->
             <div ng-if='imp.activeStep == 1'>
@@ -516,9 +516,6 @@
               </div>
 
               <div ng-if='imp.fileSelected.name' class="added-file mtl">
-                <button class="btn btn-default btn-embossed btn-secondary btn-sm pull-right"
-                        ng-disabled='imp.fileSelected.uploaded'
-                        ng-click='imp.uploadFile()'>Upload</button>
                 <div class='box-overflow'>
                   <div class="added-file-content mrl mtm">
                     <span>{{ imp.fileSelected.name }}</span>
@@ -556,17 +553,20 @@
 
 
           <!-- STEP 2 -->
-            <div ng-if='imp.activeStep == 2' class='mtl'>
+            <div ng-if='imp.activeStep == 2' class='mtl fade-onload'>
               <table class="table">
                 <tbody>
                   <tr ng-repeat='field in imp.importFields'>
                     <td>{{ field.columnName }}</td>
+                    <td>{{ field.sampleData }}</td>
                     <td class='text-right'>
-                      <select class="select-fields full"
-                              name="topLocSortRegion"
-                              ng-model='field.destination'
-                              ng-change='imp.selectField()'>
-                        <option value="" selected>----</option>
+                     <select data-placeholder='Search for field'
+                             ui-select2='imp.select2Options'
+                             class="select-fields full"
+                             name="topLocSortRegion"
+                             ng-model='field.destination'
+                             ng-change='imp.selectField()'>
+                        <option value=""></option>
                         <option ng-repeat='f in imp.availableFields | orderBy:"fieldTitle"'
                                 value="{{ f.fieldName }}"
                                 ng-disabled='f.selected'>{{ f.fieldTitle }}</option>
@@ -600,17 +600,54 @@
             </div>
 
           <!-- STEP 3 -->
-            <div ng-if='imp.activeStep == 3' class='mtl'>
-              <div class='text-center'>Import status : {{ imp.importStatus }}</div>
+            <div ng-if='imp.activeStep == 3' class='mtl fade-onload'>
+              <table>
+                <tr>
+                  <td>Import status:</td>
+                  <td>{{ imp.importStatus.status }}</td>
+                </tr>
+                <tr>
+                  <td>Imported: </td>
+                  <td>{{ imp.importStatus.imported }}</td>
+                </tr>
+                <tr>
+                  <td>Failed: </td>
+                  <td>{{ imp.importStatus.failed }}</td>
+                </tr>
+                <tr>
+                  <td>Updated: </td>
+                  <td>{{ imp.importStatus.updated }}</td>
+                </tr>
+                <tr ng-if='imp.importStatus.errors.length' class='alert-error'>
+                  <td>errors:</td>
+                  <td>
+                    <p ng-repeat='err in mp.importStatus.errors'>{{ err }}</p>
+                  </td>
+                </tr>
+              </table>
             </div>
+        </div>
+
+        <!-- loader and errors: -->
+        <div class="modal-body">
+          <div ng-if='imp.activeStep == 2 && imp.requiredTitles.length' class='text-right alert-error prm'>
+            required fields:
+            <b ng-repeat='f in imp.requiredTitles'>{{ f }} <span ng-if='!$last'>, </span></b>
+          </div>
 
             <div class="loader fade text-center" ng-class="{in: imp.isWaiting}"></div>
         </div>
+
+        <!-- import popup footer -->
         <div class="modal-footer">
 
-          <button ng-if='imp.activeStep == 1'
+          <button ng-if='imp.activeStep == 1 && !imp.fileSelected.uploaded'
+                  ng-disabled='!imp.fileSelected.name'
                   class="btn btn-primary btn-embossed btn-secondary btn-sm btn-wide pull-right mll"
-                  ng-disabled='!imp.fileSelected.uploaded'
+                  ng-click='imp.uploadFile()'>Upload</button>
+
+          <button ng-if='imp.activeStep == 1 && imp.fileSelected.uploaded'
+                  class="btn btn-primary btn-embossed btn-secondary btn-sm btn-wide pull-right mll"
                   ng-click='imp.activeStep = 2'>Next</button>
 
           <button ng-if='imp.activeStep == 2'

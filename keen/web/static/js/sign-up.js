@@ -1,4 +1,4 @@
-
+/*global FileAPI*/
 // JS for SignUp page
 'use strict';
 
@@ -536,7 +536,7 @@
                 scopeObject = $container.data('scope-object');
 
             // disabling retina ratio
-            Caman.prototype.hiDPIDisabled = function() {return true};
+            // Caman.prototype.hiDPIDisabled = function() {return true;};
 
             FileAPI.filterFiles(files, function (file, info){
                 if( /^image/.test(file.type) ){

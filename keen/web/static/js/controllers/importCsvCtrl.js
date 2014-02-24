@@ -1,9 +1,7 @@
-/*global FileAPI*/
-
 'use strict';
 
 angular.module('keen')
-    .controller('importCsvCtrl', ['$scope', '$timeout', '$upload', '$http', 'importCsv', 'customerListService', function($scope, $timeout, $upload, $http, importCsv, customerService){
+    .controller('importCsvCtrl', ['$scope', '$timeout', 'importCsv', 'customerListService', function($scope, $timeout, importCsv, customerService){
         var imScope = this;
 
         function init() {
@@ -12,20 +10,33 @@ angular.module('keen')
                 uploadedPercent: 0
             };
             imScope.activeStep = 1;
+            setAvailableFields();
         }
         init();
 
-        customerService.getCustomersFields().then(function(res) {
-            var availableFields = _.map(res.data.available_customer_fields, function(field) {
-                return {
-                    fieldTitle: field.title,
-                    fieldName: field.name,
-                    selected: false
-                };
+        imScope.select2Options = {
+            containerCssClass: 'choose-field-container',
+            dropdownCssClass: 'choose-field-dropdown',
+            allowClear: true
+        };
+
+        function setAvailableFields() {
+            customerService.getCustomersFields().then(function(res) {
+
+                imScope.availableFields = _.map(res.data.available_customer_fields, function(field) {
+                    return {
+                        fieldTitle: field.title,
+                        fieldName: field.name,
+                        selected: false
+                    };
+                });
+
+                imScope.requiredFields = _.chain(res.data.available_customer_fields)
+                    .filter(function(field) {return field.required;})
+                    .pluck('name')
+                    .value();
             });
-            imScope.availableFields = availableFields;
-            // imScope.availableFields = res.data.available_customer_fields;
-        });
+        }
 
         imScope.selectField = function() {
             var selectedFields = _.chain(imScope.importFields)
@@ -76,6 +87,7 @@ angular.module('keen')
                 incrUploadedPercent();
             }, 300);
         };
+
         imScope.activeReqId = 0;
         imScope.uploadFile = function() {
             if (selectedFile) {
@@ -84,15 +96,17 @@ angular.module('keen')
                 imScope.fileSelected.uploadedPercent = 1;
                 incrUploadedPercent();
                 importCsv.uploadFile(selectedFile).then(function(data) {
+                    console.log(data);
                     imScope.isWaiting = false;
                     imScope.fileSelected.uploaded = true;
                     imScope.fileSelected.uploadedPercent = 100;
                     imScope.activeReqId = data.import_requiest_id;
 
-                    // console.log(data);
-                    imScope.importFields = _.map(data.columns, function(column) {
+                    imScope.importFields = _.map(data.columns, function(column, i) {
+
                         return {
                             columnName: column,
+                            sampleData: data.sample_data[i],
                             destination: ''
                         };
                     });
@@ -116,23 +130,42 @@ angular.module('keen')
         };
 
         imScope.uploadImportFields = function() {
-            imScope.activeStep = 3;
-            imScope.importStatus = 'uploading';
-            imScope.isWaiting = true;
-
             // map -> returns destination values
             var fieldsColumns = _.pluck(imScope.importFields, 'destination');
 
-            importCsv.uploadImportFields(fieldsColumns, imScope.activeReqId, imScope.firstIsHeader)
-                .then(function(data) {
-                    imScope.isWaiting = false;
-                    imScope.importFieldsUploaded = true;
+            var intersect = _.intersection(fieldsColumns, imScope.requiredFields);
 
-                    imScope.importStatus = 'in_progress';
+            var filter = _.filter(imScope.requiredFields, function(field) {
+                return !_.contains(fieldsColumns, field);
+            });
 
-                    n = 0;
-                    getStatus();
+            if (filter.length) {
+                imScope.requiredTitles = _.map(filter, function(field) {
+                    return _.findWhere(imScope.availableFields, {fieldName: field}).fieldTitle;
                 });
+
+                return false;
+
+            } else {
+                imScope.requiredTitles = [];
+
+                imScope.activeStep = 3;
+                imScope.importStatus = {
+                    status: 'uploading'
+                };
+                imScope.isWaiting = true;
+
+                importCsv.uploadImportFields(fieldsColumns, imScope.activeReqId, imScope.firstIsHeader)
+                    .then(function(data) {
+                        imScope.importFieldsUploaded = true;
+
+                        // imScope.importStatus = 'in_progress';
+
+                        n = 0;
+                        getStatus();
+                    });
+            }
+
         };
 
         var n = 0;
@@ -142,12 +175,14 @@ angular.module('keen')
             n += 1;
 
             importCsv.getStatus(imScope.activeReqId).then(function(res) {
-                imScope.importStatus = res.data.status;
+                imScope.importStatus = res.data;
 
                 if (res.data.status !== 'complete') {
                     $timeout(function() {
                         getStatus();
                     }, 1000);
+                } else {
+                    imScope.isWaiting = false;
                 }
             });
         };

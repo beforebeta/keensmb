@@ -5,12 +5,15 @@
   width: 464px;
 }
 .ModalCsvImport .modal-body {
+  padding: 5px 30px 0 30px;
+}
+.ModalCsvImport .modal-body.fixed-height {
   max-height: 355px;
   overflow: auto;
 }
 .ModalCsvImport .modal-content {
-  width: 490px;
-  overflow: hidden;
+  /*width: 490px;*/
+  /*overflow: hidden;*/
 }
 
 .ModalCsvImport .modal-header {
@@ -27,12 +30,6 @@
   margin-top: 6px;
   font-size: 12px;
 }
-
-.ModalCsvImport .modal-body {
-  padding: 5px 30px 0 30px;
-}
-
-.ModalCsvImport .modal-body .loader {}
 
 .ModalCsvImport .steps {
   margin-bottom: 0;
