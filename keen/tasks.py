@@ -8,6 +8,7 @@ from celery.utils.log import get_task_logger
 
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Q
 from django.core.mail import EmailMessage
 
 from PIL import Image
@@ -164,12 +165,17 @@ def row_reader(imp):
 
 
 def find_customer(client, data):
+    q = Q()
+    blanks = []
     for field in 'email', 'social__facebook', 'social__googleplus', 'social__twitter':
         value = data.get(field, None)
         if value:
-            customer = Customer.objects.filter(client=client, data__contains={field: value}).first()
-            if customer:
-                return customer
+            d = dict.fromkeys(blanks, '')
+            d[field] = value
+            q |= Q(data__contains=d)
+        blanks.append(field)
+    if q:
+        return Customer.objects.filter(client=client, q).first()
     # if no identity matches
     # return Customer.objects.filter(data__contains=data).first()
     return None
