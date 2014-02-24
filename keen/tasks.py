@@ -175,7 +175,7 @@ def find_customer(client, data):
             q |= Q(data__contains=d)
         blanks.append(field)
     if q:
-        return Customer.objects.filter(client=client, q).first()
+        return Customer.objects.filter(q, client=client).first()
     # if no identity matches
     # return Customer.objects.filter(data__contains=data).first()
     return None
