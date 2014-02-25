@@ -56,7 +56,7 @@ def get_visitor(request):
         try:
             data = cookie.split('.', 4)[-1]
             data = dict(match.groups() for match in re.finditer(
-                r'(utm(?:csr|cnn|cmd|ctr))=([^\|]*)', data))
+                r'(utm(?:csr|ccn|cmd|ctr))=([^\|]*)', data))
         except (ValueError, IndexError):
             logger.error('Malformed GA cookie: {0!r}'.format(cookie))
         else:
