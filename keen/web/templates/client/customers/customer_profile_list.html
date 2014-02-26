@@ -468,7 +468,8 @@
        class="ModalCsvImport modal fade in"
        ng-controller='importCsvCtrl as imp'
        tabindex="-1" role="dialog"
-       aria-hidden="true">
+       aria-hidden="true"
+       data-backdrop="false">
     <div class="modal-dialog">
       <div class="modal-content">
 
@@ -490,11 +491,17 @@
           </ul>
 
           <div class='mtm' ng-if='imp.activeStep == 2'>
-            <input checkboxik='first column is header'
+            <input checkboxik='First Row is Header'
                type="checkbox"
                ng-model='imp.firstIsHeader'
                id="import-column-header"
                class='custom-checkbox'>
+
+            <ul class='list-justify table-csv-header'>
+              <li>Column Name</li>
+              <li>Sample</li>
+              <li>Mapping</li>
+            </ul>
           </div>
         </div>
 
@@ -528,7 +535,6 @@
                 </div>
               </div>
 
-
               <div ng-if='imp.fileSelected.uploaded'
                    class="download-success text-primary fade-onload">Sucess!</div>
 
@@ -557,7 +563,8 @@
               <table class="table">
                 <tbody>
                   <tr ng-repeat='field in imp.importFields'>
-                    <td>{{ field.columnName }}</td>
+                    <td ng-if='!imp.firstIsHeader'>Column {{ $index+1 }}</td>
+                    <td ng-if='imp.firstIsHeader'>{{ field.columnName }}</td>
                     <td>{{ field.sampleData }}</td>
                     <td class='text-right'>
                      <select data-placeholder='Search for field'
@@ -573,28 +580,6 @@
                       </select>
                     </td>
                   </tr>
-                  <!-- <tr>
-                    <td>
-                      <div class="input-group pull-right">
-                        <input type="text" class="form-control input-sm prx" placeholder="Search for field">
-                        <span class="input-group-btn">
-                          <button type="submit" class="btn input-sm pln"><span class="fui-search"></span></button>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>text1</td>
-                    <td><input type="text" placeholder="Preview of ceil" class="form-control input-sm" /></td>
-                    <td>
-                      <div class="input-group pull-right chosen">
-                        <input type="text" class="form-control input-sm prx" placeholder="Search for field" value="Email">
-                        <span class="input-group-btn">
-                          <button type="submit" class="btn input-sm pln"><i class="dib fui-cross"></i></button>
-                        </span>
-                      </div>
-                    </td>
-                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -634,9 +619,8 @@
 
         <!-- loader and errors: -->
         <div class="modal-body">
-          <div ng-if='imp.activeStep == 2 && imp.requiredTitles.length' class='text-right alert-error prm'>
-            required fields:
-            <b ng-repeat='f in imp.requiredTitles'>{{ f }} <span ng-if='!$last'>, </span></b>
+          <div ng-if='imp.activeStep == 2 && imp.requiredTitles' class='text-right alert-error prm'>
+            At a minimum, you need to provide mapping for the Full Name and the Email field in order to import the data
           </div>
 
             <div class="loader fade text-center" ng-class="{in: imp.isWaiting}"></div>

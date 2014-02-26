@@ -1,8 +1,10 @@
 .ModalCsvImport {
   counter-reset: section;
+  background: rgb(36, 51, 66);
+  background: rgba(36, 51, 66, 0.95);
 }
 .ModalCsvImport .modal-dialog {
-  width: 464px;
+  /*width: 464px;*/
 }
 .ModalCsvImport .modal-body {
   padding: 5px 30px 0 30px;
@@ -206,7 +208,6 @@
 
 .ModalCsvImport table tr td:first-child {
   padding-left: 0;
-  padding-right: 50px;
 }
 
 .ModalCsvImport table tr td {
@@ -221,11 +222,11 @@
   float: left;
 }
 
-.ModalCsvImport table td > input {
+/*.ModalCsvImport table td > input {
   min-width: 111px;
   max-width: 130px;
   line-height: normal;
-}
+}*/
 
 .ModalCsvImport .table [class*="fui-"] {
   font-size: 12px;
@@ -234,6 +235,14 @@
 
 .ModalCsvImport .table td {
   padding-right: 0;
+  padding-left: 5px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ModalCsvImport .table td:last-child {
+  width: 160px;
+  padding-left: 5px;
 }
 
 .ModalCsvImport .download-success {
@@ -272,6 +281,30 @@
   max-width: 200px;
 }
 
+.list-justify {
+  padding-left: 0;
+  text-align: justify;
+  list-style-type: none;
+}
 
+.list-justify li {
+  display: inline-block;
+}
 
+.list-justify:after {
+  content: '';
+  width: 100%;
+  display: inline-block;
+  height: 0;
+}
+.table-csv-header {
+  position: relative;
+  height: 35px;
+  margin: 10px 10px -30px 0;
+  padding: 0 20px 0 5px;
+  border-top: 2px solid #eef0f0;
+  border-bottom: 2px solid #eef0f0;
+  background-color: #f2f2f2;
+  z-index: 2;
+}
 

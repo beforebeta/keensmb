@@ -10,6 +10,7 @@ angular.module('keen')
                 uploadedPercent: 0
             };
             imScope.activeStep = 1;
+            imScope.firstIsHeader = false;
             setAvailableFields();
             stopCheckingStatus = true;
         }
@@ -138,14 +139,10 @@ angular.module('keen')
             });
 
             if (filter.length) {
-                imScope.requiredTitles = _.map(filter, function(field) {
-                    return _.findWhere(imScope.availableFields, {fieldName: field}).fieldTitle;
-                });
-
+                imScope.requiredTitles = true;
                 return false;
-
             } else {
-                imScope.requiredTitles = [];
+                imScope.requiredTitles = false;
 
                 imScope.activeStep = 3;
                 imScope.importStatus = {
