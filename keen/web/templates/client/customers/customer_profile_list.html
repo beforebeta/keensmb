@@ -618,6 +618,10 @@
                   <td>Updated: </td>
                   <td>{{ imp.importStatus.updated }}</td>
                 </tr>
+                <tr>
+                  <td>Duplicates: </td>
+                  <td>{{ imp.importStatus.duplicates }}</td>
+                </tr>
                 <tr ng-if='imp.importStatus.errors.length' class='alert-error'>
                   <td>errors:</td>
                   <td>
