@@ -282,78 +282,37 @@
                     <em class="small">You can make promotions more effective by targeting segments of your customers. Choose a segment on the left to narrow your target.</em>
                   </div>
                   <div id="target-audience" class="row promsection-segment-wrapper">
-                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="martial-status">
+                    {% for filter in target_audience_filters %}
+                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="target_{{ filter.name }}">
                       <div class="kn-section mbl">
                         <div class="kn-section-header">
-                          <span class="small">Marital Status</span>
+                          <span class="small">{{ filter.title }}</span>
                           <button type="button" class="close mtn">
                             <i class="promotion-icon-close-height fui-cross"></i>
                           </button>
                         </div>
+                        {% if filter.choices %}
                         <div class="kn-section-content promotion-select-multiple">
-                          <select name="martial-status" multiple>
-                             <option value="married">Married</option>
-                             <option value="not-married">Not married</option>
-                           </select>
+                          <select name="target_{{ filter.name }}" multiple>
+                            {% for choice in filter.choices %}
+                            <option value="{{ choice.value }}">{{ choice.title }}</option>
+                            {% endfor %}
+                          </select>
                         </div>
+                        {% else %}
+                        <div class="kn-section-content">
+                          <input type="{{ filter.type }}" id="target_{{ filter.name }}" name="target_{{ filter.name }}" value="{{ filter.value }}">
+                        </div>
+                        {% endif %}
                       </div>
                     </div>
-                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="age">
-                      <div class="kn-section mbl">
-                        <div class="kn-section-header">
-                          <span class="small">Age</span>
-                          <button type="button" class="close mtn">
-                            <i class="promotion-icon-close-height fui-cross"></i>
-                          </button>
-                        </div>
-                        <div class="kn-section-content promotion-select-multiple">
-                          <select name="age" multiple>
-                             <option value="young">18 -</option>
-                             <option value="old">18 +</option>
-                           </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="gender">
-                      <div class="kn-section mbl">
-                        <div class="kn-section-header">
-                          <span class="small">Gender</span>
-                          <button type="button" class="close mtn">
-                            <i class="promotion-icon-close-height fui-cross"></i>
-                          </button>
-                        </div>
-                        <div class="kn-section-content promotion-select-multiple">
-                          <select name="gender" multiple>
-                             <option value="male">Male</option>
-                             <option value="female">Female</option>
-                           </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="children">
-                      <div class="kn-section mbl">
-                        <div class="kn-section-header">
-                          <span class="small">Children</span>
-                          <button type="button" class="close mtn">
-                            <i class="promotion-icon-close-height fui-cross"></i>
-                          </button>
-                        </div>
-                        <div class="kn-section-content promotion-select-multiple">
-                          <select name="children" multiple>
-                             <option value="yes">Yes</option>
-                             <option value="no">No</option>
-                           </select>
-                        </div>
-                      </div>
-                    </div>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-
 
         <div class="col-xs-12 small">
           *indicates required field
@@ -381,7 +340,6 @@
       <div id="promotionPreviewModal" class="modal fade modal-large" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content center-block">
-
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 <i class="fui-cross"></i>
@@ -389,7 +347,7 @@
               <h4 class="modal-title">Preview Promotion</h4>
             </div>
             <div class="modal-body">
-                <iframe src="" width="702" height="600" frameborder="0"></iframe>
+              <iframe src="" width="702" height="600" frameborder="0"></iframe>
             </div>
             <div class="modal-footer ptm pbn">
               <!--<button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>-->

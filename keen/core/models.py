@@ -10,6 +10,8 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django_hstore import hstore
+
+from jsonfield import JSONField
 from model_utils import Choices
 
 from keen import util, print_stack_trace, InvalidOperationException
@@ -293,6 +295,33 @@ CUSTOMER_FIELD_NAMES = Choices(
 
 CUSTOMER_FIELD_NAMES_DICT = dict(CUSTOMER_FIELD_NAMES)
 
+CUSTOMER_FIELD_CHOICES = {
+    'age': (
+        '18-20', '21-24', '25-34', '35-44', '45-54', '55-64', '65+'),
+    'gender': (
+        'Male', 'Female'),
+    'education': (
+        'Completed High School', 'Attended College', 'Completed College',
+        'Completed Graduate School', 'Attended Vocational/Technical'),
+    'home_market_value': (
+        '1k-25k', '25k-50k', '50k-75k', '75k-100k', '100k-150k', '150k-200k',
+        '200k-250k', '300k-350k', '350k-500k', '500k-1mm', '1mm+'),
+    'income': (
+        '0-15k', '15k-25k', '25k-35k', '35k-50k', '50k-75k', '75k-100k',
+        '100k-125k', '125k-150', '175k-200k', '200k-250k', '250k+'),
+    'length_of_residence': (
+        'Less than 1 year', '1 year', '2 years', '3 years', '4 years',
+        '5 years', '6 years', '7 years', '8 years', '9 years', '10 years',
+        '11-15 years', '16-19 years', '20+ years'),
+    'marital_status': (
+        'Single', 'Married'),
+    'occupation': (
+        'Blue Collar Worker', 'Business Owner', 'Civil Service', 'Technology',
+        'ExecuNve/Upper Management', 'Health Services', 'Homemaker',
+        'Middle Management', 'Military Personnel', 'Nurse', 'Part Time',
+        'Professional', 'ReNred', 'Secretary', 'Student', 'Teacher',
+        'White Collar Worker'),
+}
 
 class Customer(Timestamps):
 
@@ -487,8 +516,7 @@ class Promotion(Timestamps):
     image_url = models.CharField(max_length=255, null=True, blank=True, verbose_name='', help_text='Every promotion has to have an image. The image must be 300 px wide and have a height of 290 px. You may also use photos that you have uploaded for previous promotions.')
     send_later = models.BooleanField(default=False, choices=SEND_LATER_CHOICES)
     send_schedule = models.DateTimeField(null=True, blank=True, verbose_name='', help_text='You can send this promotion immediately after completing this form or you can schedule a specific start date and time. and we will automatically activate the promotion for you then.')
-    target_customers = models.ManyToManyField(Customer, null=True, blank=True, verbose_name='', help_text='')
-
+    target_audience = JSONField(null=True, blank=True)
     analytics = hstore.DictionaryField(null=True, blank=True, verbose_name='', help_text='')
 
     objects = PromotionsManager()

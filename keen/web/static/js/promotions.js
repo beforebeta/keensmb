@@ -146,7 +146,7 @@
 
                 $this.addClass('active');
 
-                $('.section-default[data-section-name='+itemData+']').show();
+                $('.section-default[data-section-name="'+itemData+'"]').show();
 
                 if ($defaultBanner.is(':visible')) {
                     $defaultBanner.hide();
