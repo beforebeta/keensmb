@@ -11,8 +11,8 @@ angular.module('keen')
             };
             imScope.activeStep = 1;
             setAvailableFields();
+            stopCheckingStatus = true;
         }
-        init();
 
         imScope.select2Options = {
             containerCssClass: 'choose-field-container',
@@ -133,8 +133,6 @@ angular.module('keen')
             // map -> returns destination values
             var fieldsColumns = _.pluck(imScope.importFields, 'destination');
 
-            var intersect = _.intersection(fieldsColumns, imScope.requiredFields);
-
             var filter = _.filter(imScope.requiredFields, function(field) {
                 return !_.contains(fieldsColumns, field);
             });
@@ -161,18 +159,16 @@ angular.module('keen')
 
                         // imScope.importStatus = 'in_progress';
 
-                        n = 0;
+                        stopCheckingStatus = false;
                         getStatus();
                     });
             }
 
         };
 
-        var n = 0;
+        var stopCheckingStatus = false;
         var getStatus = function() {
-            // check 10 sec only;
-            if (n >= 10) {return false;}
-            n += 1;
+            if (stopCheckingStatus) {return false;}
 
             importCsv.getStatus(imScope.activeReqId).then(function(res) {
                 imScope.importStatus = res.data;
@@ -192,4 +188,5 @@ angular.module('keen')
             $timeout(function() {init();}, 1000);
         };
 
+        init();
     }]);
