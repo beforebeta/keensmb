@@ -118,8 +118,8 @@ def import_customers(import_id):
         imp.save()
         return
 
-    for row in row_reader(imp):
-        if row and not row % 10:
+    for count, row in enumerate(row_reader(imp)):
+        if count and not (count % 10):
             imp.save()
 
         # malformed rows are skipped
