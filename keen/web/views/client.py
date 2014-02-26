@@ -122,7 +122,7 @@ def create_edit_promotion(request, client, promotion_id=None):
             url = reverse('client_edit_promotion', args=[promotion_instance.id])
             if preview_promotion:
                 url += '#preview'
-                
+
             return redirect(url)
     else:
         if promotion_id:
