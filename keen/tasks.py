@@ -118,41 +118,40 @@ def import_customers(import_id):
         imp.save()
         return
 
-    with transaction.atomic():
-        for row in row_reader(imp):
-            # malformed rows are skipped
-            if len(row) != num_fields:
-                imp.data['failed'] += 1
+    for row in row_reader(imp):
+        if row and not row % 10:
+            imp.save()
+
+        # malformed rows are skipped
+        if len(row) != num_fields:
+            imp.data['failed'] += 1
+            continue
+
+        data = dict((field.name, row[i]) for i, field in enumerate(fields) if field)
+        customer = find_customer(client, data)
+
+        if customer:
+            old_data = dict(customer.data)
+            merge_customer_data(customer, data)
+            if old_data == dict(customer.data):
+                imp.data['duplicates'] += 1
                 continue
+            CustomerDataVersion.objects.create(customer=customer, data=data)
+            action = 'updated'
+        else:
+            customer = Customer(client=client, source=source, data=data)
+            action = 'imported'
 
-            data = dict((field.name, row[i]) for i, field in enumerate(fields) if field)
-            customer = find_customer(client, data)
+        try:
+            customer.save()
+        except DatabaseError:
+            logger.exception('Failed to save customer')
+            imp.data['failed'] += 1
+        else:
+            imp.data[action] += 1
 
-            if customer:
-                old_data = dict(customer.data)
-                merge_customer_data(customer, data)
-                if old_data == dict(customer.data):
-                    imp.data['duplicates'] += 1
-                    continue
-                CustomerDataVersion.objects.create(customer=customer, data=data)
-                action = 'updated'
-            else:
-                customer = Customer(client=client, source=source, data=data)
-                action = 'imported'
-
-            sp = transaction.savepoint()
-            try:
-                customer.save()
-            except DatabaseError:
-                logger.exception('Failed to save customer')
-                transaction.savepoint_rollback(sp)
-                imp.data['failed'] += 1
-            else:
-                transaction.savepoint_commit(sp)
-                imp.data[action] += 1
-
-        imp.status = ImportRequest.STATUS.complete
-        imp.save()
+    imp.status = ImportRequest.STATUS.complete
+    imp.save()
 
 
 def row_reader(imp):
