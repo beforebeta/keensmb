@@ -166,18 +166,14 @@ class PromotionForm(forms.ModelForm):
                 raise forms.ValidationError("This date cannot be in the past")
         return send_schedule
 
-    #def clean(self):
-    #    cleaned_data = super(PromotionForm, self).clean()
-    #    valid_to = self.cleaned_data.get('valid_to', None)
-    #    valid_from = self.cleaned_data.get('valid_from', None)
-    #    if valid_to:
-    #        if valid_from:
-    #            if valid_to < valid_from:
-    #                #self._errors["valid_to"] = ErrorList(["This date should be on or after the valid from date"])
-    #                raise forms.ValidationError({"valid_to": "This date should be on or after the valid from date"})
-    #        else:
-    #            raise forms.ValidationError({"valid_from": "Please provide the date the promotion is valid from"})
-    #    return cleaned_data
+    def clean(self):
+        cleaned_data = super(PromotionForm, self).clean()
+        data = ((name[7:], self.data.getlist(name))
+                 for name in self.data.keys()
+                 if name.startswith('target_'))
+        cleaned_data['target_audience'] = dict((name, value) for name, value
+                                               in data if name and value)
+        return cleaned_data
 
     def clean_valid_to(self):
         valid_to = self.cleaned_data.get('valid_to', None)

@@ -12,7 +12,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.urlresolvers import reverse
 
 from keen.util import get_first_day_of_month_as_dt, get_last_day_of_month_as_dt
-from keen.core.models import Client, Customer, Location, Promotion
+from keen.core.models import Client, Customer, Location, Promotion, CUSTOMER_FIELD_NAMES, CUSTOMER_FIELD_CHOICES
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm, PromotionForm
 from keen.web.serializers import SignupFormSerializer
@@ -104,6 +104,7 @@ def create_edit_promotion(request, client, promotion_id=None):
             form = PromotionForm(request.POST, request.FILES)
 
         if form.is_valid():
+            logger.debug('Promotion form data: {0!r}\n\n{1!r}'.format(form.data, form.cleaned_data))
             promotion_instance = form.save(commit=False)
             promotion_instance.client = client
             preview_promotion = False
@@ -125,6 +126,12 @@ def create_edit_promotion(request, client, promotion_id=None):
             form = PromotionForm()
 
     context['form'] = form
+    context['target_audience_filters'] = [
+        {
+            'name': name,
+            'title': title,
+            'choices': CUSTOMER_FIELD_CHOICES.get(name),
+        } for name, title in CUSTOMER_FIELD_NAMES]
     return render(request, 'client/promotions-create-edit.html', context)
 
 @client_view
