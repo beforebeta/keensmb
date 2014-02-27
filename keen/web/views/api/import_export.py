@@ -23,7 +23,7 @@ from keen.tasks import import_customers
 
 logger = logging.getLogger(__name__)
 
-header_re = re.compile(r'\b(e-?mail|google|twitter|facebook)\b', re.I)
+header_re = re.compile(r'\b(e-?mail|google|twitter|facebook|(first|last|full)\s+name)\b', re.I)
 
 
 class ImportAPI(ClientAPI):
@@ -52,12 +52,12 @@ class ImportAPI(ClientAPI):
             logger.exception('Failed to create import request')
             raise
 
-        imp.file.open()
         reader = csv_reader(imp.file.file)
 
         # first row might be a list of column names instead of data
         columns = map(str.strip, reader.next())
-        skip_first_row = all(columns) and any(map(header_re.search, columns))
+        # header with empty column names is acceptible
+        skip_first_row = any(map(header_re.search, columns))
 
         # collect some non-empty data for each column
         sample_data = reader.next()
@@ -120,6 +120,13 @@ class ImportAPI(ClientAPI):
 def csv_reader(f):
     """Generate sequence of rows from CSV file striping whitespace from each value
     """
+    # we cannot use f as source here since there migt be CSV files with weired
+    # end-of-line marks
+    # we need to make sure file is open in universal-newline mode
+    f.close()
+    f.open('rU')
+    f = iter(f.readline, '')
+
     reader = csv.reader(f)
     for row in reader:
         yield map(str.strip, row)
