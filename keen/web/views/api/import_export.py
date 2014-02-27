@@ -71,7 +71,7 @@ class ImportAPI(ClientAPI):
         return Response({
             'import_requiest_id': imp.id,
             'columns': columns,
-            'skip_first_row': ('no', 'yes')[skip_first_row],
+            'skip_first_row': skip_first_row,
             'sample_data': sample_data,
         })
 
@@ -98,7 +98,7 @@ class ImportAPI(ClientAPI):
             })
 
         imp.data['import_fields'] = import_fields
-        imp.data['skip_first_row'] = skip_first_row == 'yes'
+        imp.data['skip_first_row'] = skip_first_row in ('true', 'yes')
         imp.save()
 
         import_customers.delay(imp.id)

@@ -244,7 +244,7 @@ Response is JSON-encoded object with the following attributes:
 		Unique import request ID.
 
 	``skip_first_row``
-		First row contains column names instead of data. Possible values ``yes`` and ``no``.
+		First row contains column names instead of data. Possible values ``true`` and ``false``.
 	``columns``
 		List of values from first row of import file. Possibly the header of the CSV-file.
 
@@ -285,7 +285,7 @@ Start import process. Request is JSON-encoded object with the following attribut
                 not be imported. `destination-field-name` may not be used more than once.
 
 	``skip_first_row``
-		"yes" means first row of file should be skipped because it contains column names and not data. "no" or any other
+		"true" means first row of file should be skipped because it contains column names and not data. "false" or any other
 		value means there is no header and import should include first row.
 
 
