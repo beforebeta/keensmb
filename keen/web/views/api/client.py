@@ -4,6 +4,7 @@ import logging
 from hashlib import sha256
 from base64 import b64decode
 from uuid import uuid4
+from functools import wraps
 
 from django.conf import settings
 from django.db import DatabaseError, transaction
@@ -66,18 +67,26 @@ class ClientAPI(APIView):
     """
     permission_classes = ()
 
-    @method_decorator(ensure_csrf_cookie)
-    def dispatch(self, request, client_slug, *args, **kw):
-        try:
-            assert client_slug == request.session['client_slug']
-        except (AssertionError, AttributeError, KeyError):
-            # request has no sesion attribute, there is no "client_slug" in
-            # session or client_slug parameter does not match one from session
-            return Response(status=HTTP_403_FORBIDDEN)
+    def __init__(self, *args, **kw):
+        super(ClientAPI, self).__init__(*args, **kw)
+        for name in self.http_method_names:
+            meth = getattr(self, name, None)
+            if meth:
+                setattr(self, name, self._wrap_api_method(meth))
 
-        client = get_object_or_404(Client, slug=client_slug)
-
-        return super(ClientAPI, self).dispatch(request, client, *args, **kw)
+    def _wrap_api_method(self, meth):
+        @wraps(meth)
+        @ensure_csrf_cookie
+        def wrapper(request, client_slug, *args, **kw):
+            try:
+                assert client_slug == request.session['client_slug']
+            except (AssertionError, AttributeError, KeyError):
+                # request has no sesion attribute, there is no "client_slug" in
+                # session or client_slug parameter does not match one from session
+                return Response(status=HTTP_403_FORBIDDEN)
+            client = get_object_or_404(Client, slug=client_slug)
+            return meth(request, client, *args, **kw)
+        return wrapper
 
 
 class ClientProfile(ClientAPI):
