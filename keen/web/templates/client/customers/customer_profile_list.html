@@ -619,8 +619,8 @@
 
         <!-- loader and errors: -->
         <div class="modal-body">
-          <div ng-if='imp.activeStep == 2 && imp.requiredTitles' class='text-right alert-error prm'>
-            At a minimum, you need to provide mapping for the Full Name and the Email field in order to import the data
+          <div ng-if='imp.activeStep == 2 && imp.requiredTitles' class='alert-error prm pll'>
+            <b>At a minimum, you need to provide mapping for the Full Name and the Email field in order to import the data</b>
           </div>
 
             <div class="loader fade text-center" ng-class="{in: imp.isWaiting}"></div>

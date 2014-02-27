@@ -31,13 +31,11 @@ angular.module('keen')
                 return defer.promise;
             },
             uploadImportFields: function(fields, reqId, skipFirst) {
-                var skipFirstRow = skipFirst ? 'yes' : false;
-
                 return $http({
                     url: '/api/client/'+clientSlug+'/customers/import/'+reqId,
                     method: 'PUT',
                     data: {
-                        skip_first_row: skipFirstRow,
+                        skip_first_row: skipFirst,
                         import_fields: fields
                     }
                 });

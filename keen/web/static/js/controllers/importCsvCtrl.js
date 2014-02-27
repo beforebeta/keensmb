@@ -97,14 +97,13 @@ angular.module('keen')
                 imScope.fileSelected.uploadedPercent = 1;
                 incrUploadedPercent();
                 importCsv.uploadFile(selectedFile).then(function(data) {
-                    console.log(data);
                     imScope.isWaiting = false;
                     imScope.fileSelected.uploaded = true;
                     imScope.fileSelected.uploadedPercent = 100;
                     imScope.activeReqId = data.import_requiest_id;
+                    imScope.firstIsHeader = data.skip_first_row || false;
 
                     imScope.importFields = _.map(data.columns, function(column, i) {
-
                         return {
                             columnName: column,
                             sampleData: data.sample_data[i],
