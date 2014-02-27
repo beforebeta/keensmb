@@ -1,5 +1,4 @@
 import logging
-import csv
 import re
 
 from django.db import DatabaseError, transaction
@@ -18,6 +17,7 @@ from keen.core.models import Client
 from keen.web.models import ImportRequest
 from keen.web.serializers import CustomerFieldSerializer
 from keen.web.views.api.client import ClientAPI
+from keen.web.utils import csv_reader
 from keen.tasks import import_customers
 
 
@@ -52,14 +52,15 @@ class ImportAPI(ClientAPI):
             logger.exception('Failed to create import request')
             raise
 
-        reader = csv_reader(imp.file.file)
+        f = open(imp.file.path, 'rU')
+        reader = csv_reader(f)
 
         # first row might be a list of column names instead of data
-        columns = map(str.strip, reader.next())
+        columns = reader.next()
         # header with empty column names is acceptible
         skip_first_row = any(map(header_re.search, columns))
 
-        # collect some non-empty data for each column
+        # collect some non-empty data for each column starting from second row
         sample_data = reader.next()
         while not all(sample_data):
             row = reader.next()
@@ -115,18 +116,3 @@ class ImportAPI(ClientAPI):
             logger.exception('Failed to delete import request')
             raise
         return Response(status=HTTP_204_NO_CONTENT)
-
-
-def csv_reader(f):
-    """Generate sequence of rows from CSV file striping whitespace from each value
-    """
-    # we cannot use f as source here since there migt be CSV files with weired
-    # end-of-line marks
-    # we need to make sure file is open in universal-newline mode
-    f.close()
-    f.open('rU')
-    f = iter(f.readline, '')
-
-    reader = csv.reader(f)
-    for row in reader:
-        yield map(str.strip, row)

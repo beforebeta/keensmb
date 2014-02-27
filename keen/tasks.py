@@ -14,8 +14,9 @@ from django.core.mail import EmailMessage
 from PIL import Image
 import mailchimp
 
-from keen.core.models import Customer, Promotion, CustomerDataVersion
-from keen.web.models import SignupForm
+from keen.core.models import Customer, CustomerSource, Promotion, CustomerDataVersion
+from keen.web.models import SignupForm, CustomerField, ImportRequest
+from keen.web.utils import csv_reader
 
 
 logger = get_task_logger(__name__)
@@ -72,10 +73,6 @@ def send_email(subject, body, recipients, sender=None):
 
 @app.task
 def import_customers(import_id):
-    import csv
-    from keen.core.models import Customer, CustomerSource
-    from keen.web.models import CustomerField, ImportRequest
-
     with transaction.atomic():
         imp = ImportRequest.objects.select_for_update().get(id=import_id)
 
@@ -118,7 +115,8 @@ def import_customers(import_id):
         imp.save()
         return
 
-    for count, row in enumerate(row_reader(imp)):
+    f = open(imp.file.path, 'rU')
+    for count, row in enumerate(csv_reader(f)):
         if count and not (count % 10):
             imp.save()
 
@@ -152,15 +150,6 @@ def import_customers(import_id):
 
     imp.status = ImportRequest.STATUS.complete
     imp.save()
-
-
-def row_reader(imp):
-    imp.file.open()
-    reader = csv.reader(imp.file.file)
-    if imp.data['skip_first_row']:
-        reader.next()
-    for row in reader:
-        yield map(str.strip, row)
 
 
 def find_customer(client, data):
