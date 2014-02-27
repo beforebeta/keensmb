@@ -45,7 +45,7 @@ angular.module('keen')
             getStatus: function(reqId) {
                 return $http({
                     method: 'GET',
-                    url: '/api/client/default_client/customers/import/'+reqId
+                    url: '/api/client/'+clientSlug+'/customers/import/'+reqId
                 });
             }
         };
