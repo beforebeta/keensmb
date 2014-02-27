@@ -1,5 +1,6 @@
 import logging
 import csv
+import re
 
 from django.db import DatabaseError, transaction
 from django.shortcuts import get_object_or_404
@@ -21,6 +22,8 @@ from keen.tasks import import_customers
 
 
 logger = logging.getLogger(__name__)
+
+header_re = re.compile(r'\b(e-?mail|google|twitter|facebook)\b', re.I)
 
 
 class ImportAPI(ClientAPI):
@@ -51,7 +54,12 @@ class ImportAPI(ClientAPI):
 
         imp.file.open()
         reader = csv_reader(imp.file.file)
-        columns = reader.next()
+
+        # first row might be a list of column names instead of data
+        columns = map(str.strip, reader.next())
+        skip_first_row = all(columns) and any(map(header_re.search, columns))
+
+        # collect some non-empty data for each column
         sample_data = reader.next()
         while not all(sample_data):
             row = reader.next()
@@ -62,6 +70,7 @@ class ImportAPI(ClientAPI):
         return Response({
             'import_requiest_id': imp.id,
             'columns': columns,
+            'skip_first_row': ('no', 'yes')[skip_first_row],
             'sample_data': sample_data,
         })
 

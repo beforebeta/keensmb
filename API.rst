@@ -243,6 +243,8 @@ Response is JSON-encoded object with the following attributes:
 	``import_request_id``
 		Unique import request ID.
 
+	``skip_first_row``
+		First row contains column names instead of data. Possible values ``yes`` and ``no``.
 	``columns``
 		List of values from first row of import file. Possibly the header of the CSV-file.
 
