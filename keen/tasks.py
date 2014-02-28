@@ -164,9 +164,8 @@ def find_customer(client, data):
         blanks.append(field)
     if q:
         return Customer.objects.filter(q, client=client).first()
-    # if no identity matches
-    # return Customer.objects.filter(data__contains=data).first()
-    return None
+    # if no identity provided do full-match lookup
+    return Customer.objects.filter(data__contains=data).first()
 
 
 def merge_customer_data(customer, data):
