@@ -26,7 +26,7 @@
 
     <div class="su-title su-editable row mtl mbn"
          ng-class='{editing: title.isEditing}'>
-      <div class="col-md-10">
+      <div class="col-xs-10">
         <div class="form-group mbn">
           <input type="text"
                  class='form-control page-title'
@@ -35,7 +35,7 @@
                  on-enter='saveEditing(title)'>
         </div>
       </div>
-      <div class="col-md-2">
+      <div class="col-xs-2">
         <button class="btn btn-primary btn-sm pull-right mtx"
                 ng-click='saveEditing(title)'>Save</button>
 
@@ -45,7 +45,7 @@
     </div>
     <div class="su-subtitle su-editable form-group row mts mbl"
          ng-class='{editing: permalink.isEditing}'>
-      <div class="col-md-10">
+      <div class="col-xs-10">
         <span class='mtx dib top'>
           <b>Permalink:</b>
           <span>http://keensmb.com/{{ clientSlug }}/</span><span ng-if='formSlug'>{{ formSlug }}</span>
@@ -58,7 +58,7 @@
                  on-enter='validateSlug(permalink)'>
         </div>
       </div>
-      <div ng-if='!formSlug' class="col-md-2">
+      <div ng-if='!formSlug' class="col-xs-2">
         <button class="btn btn-primary btn-sm pull-right"
                 ng-click='validateSlug(permalink)'>Save</button>
 
@@ -178,7 +178,7 @@
           </p>
 
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
               <div class="form-group mbm">
                 <input type="text" class="form-control" placeholder='Full Name'>
               </div>
@@ -186,12 +186,12 @@
                 <input type="email" class="form-control" placeholder='Email Address'>
               </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-xs-5">
               <div class="form-group mbm">
                 <input type="text" class="form-control" placeholder='Zip Code'>
               </div>
             </div>
-            <div class="col-md-7 pln">
+            <div class="col-xs-7 pln">
               <div class="form-group mbm">
                 <div class="input-group">
                   <input type="text" class="form-control datapicker" placeholder="Birthday">
@@ -201,12 +201,12 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-xs-7">
               <div class="form-group mbm">
                 <input type="text" class="form-control" placeholder='Phone'>
               </div>
             </div>
-            <div class="col-md-5 pln">
+            <div class="col-xs-5 pln">
               <div class="form-group mbm">
                 <select name="gender" id="gender" class='simple full mbs'>
                   <option value="0" selected disabled>Gender</option>

@@ -657,6 +657,51 @@ header.navbar .navbar-nav > li:hover > a {
   background: rgba(0,0,0,0.5);
 }
 
+/* Signup form */
+.signup-form-stable.container {
+  width: auto;
+  max-width: 960px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.signup-form-stable .su-form-wrapper .banner-logo {
+  height: 0;
+  padding-bottom: 18%;
+}
+
+@media (min-width: 480px) {
+
+}
+
+@media (max-width: 479px) {
+  .signup-form-stable {
+  }
+
+  .signup-form-stable .su-form-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .signup-form-stable .su-title {
+    display: none;
+  }
+  .signup-form-stable .banner-logo {
+    max-height: 50px;
+  }
+  .signup-form-stable .su-form {
+    width: auto;
+    max-width: 300px;
+    right: 30px;
+  }
+}
+
+@media (max-width: 359px) {
+  .signup-form-stable .su-form > .row > div {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
 /* Signup page */
 
 .su-form-wrapper.su-form-overview {
