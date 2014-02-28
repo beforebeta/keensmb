@@ -295,7 +295,7 @@
                         <div class="kn-section-content promotion-select-multiple">
                           <select name="target_{{ filter.name }}" multiple>
                             {% for choice in filter.choices %}
-                            <option value="{{ choice.value }}">{{ choice.title }}</option>
+                            <option value="{{ choice }}">{{ choice }}</option>
                             {% endfor %}
                           </select>
                         </div>
