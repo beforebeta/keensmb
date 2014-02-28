@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>{% block title %}{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {% compress css %}
         <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
@@ -26,7 +26,7 @@
     </head>
 
   <body>
-    <div class="container stable-width">
+    <div class="container stable-width signup-form-stable">
 
       <div class="su-title mtl mbn mll">
         <h1 class="page-title">{{ form_data.pageTitle }}</h1>
@@ -98,7 +98,7 @@
               {% csrf_token %}
               {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
 
-              <div class="col-md-12">
+              <div class="col-xs-12">
                 {% if form.full_name.errors %}
                 <div class="form-group mbm has-error js-popover-hover"
                   data-toggle='popover' data-content='{% for error in form.full_name.errors %}
@@ -121,7 +121,7 @@
                 </div>
               </div>
 
-              <div class="col-md-5">
+              <div class="col-xs-5">
                 {% if form.address__zipcode.errors %}
                 <div class="form-group mbm has-error"
                   data-toggle='popover' data-content='{% for error in form.address__zipcode.errors %}
@@ -133,7 +133,7 @@
                   <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
                 </div>
               </div>
-              <div class="col-md-7 pln">
+              <div class="col-xs-7 pln">
                 {% if form.dob.errors %}
                 <div class="form-group mbm has-error"
                   data-toggle='popover' data-content='{% for error in form.dob.errors %}
@@ -150,7 +150,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-7">
+              <div class="col-xs-7">
                 {% if form.phone.errors %}
                 <div class="form-group mbm has-error js-popover-hover"
                   data-toggle='popover' data-content='{% for error in form.phone.errors %}
@@ -162,7 +162,7 @@
                   <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
                 </div>
               </div>
-              <div class="col-md-5 pln">
+              <div class="col-xs-5 pln">
                 {% if form.gender.errors %}
                 <div class="form-group mbm has-error js-popover-hover"
                   data-toggle='popover' data-content='{% for error in form.gender.errors %}
