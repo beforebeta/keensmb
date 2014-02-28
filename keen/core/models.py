@@ -303,6 +303,8 @@ CUSTOMER_FIELD_CHOICES = {
     'education': (
         'Completed High School', 'Attended College', 'Completed College',
         'Completed Graduate School', 'Attended Vocational/Technical'),
+    'home_owner_status': (
+        'Own', 'Rent'),
     'home_market_value': (
         '1k-25k', '25k-50k', '50k-75k', '75k-100k', '100k-150k', '150k-200k',
         '200k-250k', '300k-350k', '350k-500k', '500k-1mm', '1mm+'),
@@ -322,6 +324,35 @@ CUSTOMER_FIELD_CHOICES = {
         'Professional', 'ReNred', 'Secretary', 'Student', 'Teacher',
         'White Collar Worker'),
 }
+
+BOOLEAN_CUSTOMER_FIELDS = set((
+    'high_net_worth',
+    'has_children',
+    'interest__arts',
+    'interest__blogging',
+    'interest__books',
+    'interest__business',
+    'interest__health',
+    'interest__news',
+    'purchase__automotive',
+    'purchase__baby',
+    'purchase__beauty',
+    'purchase__charitable',
+    'purchase__cooking',
+    'purchase__discount',
+    'purchase__high_end_brands',
+    'purchase__home_garden',
+    'purchase__home_improvement',
+    'purchase__luxury',
+    'purchase__magazine',
+    'purchase__outdoor',
+    'purchase__pets',
+    'purchase__power_shopper',
+    'purchase__sports',
+    'purchase__technology',
+    'purchase__travel',
+))
+
 
 class Customer(Timestamps):
 
