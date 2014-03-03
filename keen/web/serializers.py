@@ -54,6 +54,7 @@ class LocationSerializer(DynamicSerializer):
 class CustomerFieldSerializer(DynamicSerializer):
 
     group = SlugRelatedField(slug_field='name')
+    choices = Field()
 
     class Meta:
         model = CustomerField
