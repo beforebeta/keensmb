@@ -10,6 +10,8 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django_hstore import hstore
+
+from jsonfield import JSONField
 from model_utils import Choices
 
 from keen import util, print_stack_trace, InvalidOperationException
@@ -266,7 +268,7 @@ class CustomerField(Timestamps):
         if self.name in CUSTOMER_FIELD_CHOICES:
             return CUSTOMER_FIELD_CHOICES[self.name]
 
-        if choices in BOOLEAN_CUSTOMER_FIELDS:
+        if self.name in BOOLEAN_CUSTOMER_FIELDS:
             return ('yes', 'no')
 
         return None
@@ -555,8 +557,7 @@ class Promotion(Timestamps):
     image_url = models.CharField(max_length=255, null=True, blank=True, verbose_name='', help_text='Every promotion has to have an image. The image must be 300 px wide and have a height of 290 px. You may also use photos that you have uploaded for previous promotions.')
     send_later = models.BooleanField(default=False, choices=SEND_LATER_CHOICES)
     send_schedule = models.DateTimeField(null=True, blank=True, verbose_name='', help_text='You can send this promotion immediately after completing this form or you can schedule a specific start date and time. and we will automatically activate the promotion for you then.')
-    target_customers = models.ManyToManyField(Customer, null=True, blank=True, verbose_name='', help_text='')
-
+    target_audience = JSONField(null=True, blank=True)
     analytics = hstore.DictionaryField(null=True, blank=True, verbose_name='', help_text='')
 
     objects = PromotionsManager()
