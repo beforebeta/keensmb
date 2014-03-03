@@ -126,119 +126,6 @@ class CustomerFieldGroup(Timestamps):
         return self.name
 
 
-class CustomerField(Timestamps):
-
-    FIELD_TYPES = Choices(
-        ('string', 'String'),
-        ('int', 'Integer'),
-        ('date', 'Date'),
-        ('url', 'URL'),
-        ('email', 'E-mail Address'),
-        ('float', 'Float'),
-        ('location', 'Location'),
-        ('bool', 'Bool')
-    )
-
-    name = models.CharField(max_length=64, unique=True)
-    title = models.CharField(max_length=255, unique=True)
-    group = models.ForeignKey(CustomerFieldGroup, related_name='fields')
-    group_ranking = models.IntegerField(default=99999999)
-    type = models.CharField(max_length=20, choices=FIELD_TYPES)
-    required = models.BooleanField(default=False)
-    is_unique = models.BooleanField(default=False)
-    width = models.IntegerField(null=True, blank=True)
-
-    def group_name(self):
-        try:
-            return self.group.name
-        except:
-            return ""
-
-    def __unicode__(self):
-        return self.name
-
-
-class Client(Timestamps):
-
-    slug = models.CharField(max_length=255, db_index=True)
-    name = models.CharField(max_length=255, db_index=True)
-    main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
-    customer_fields = models.ManyToManyField(CustomerField)
-    web_url = models.TextField(blank=True, null=True)
-    ref_id_type = models.CharField(max_length=255, null=True, blank=True)
-    ref_id = models.CharField(max_length=255, null=True, blank=True)
-
-    def customer_page(self, offset=0, filter=None, page_size=100):
-        q = self.customers.all()
-        if not filter is None:
-            q = q.filter(**filter)
-        q = q.extra(select={'email': "upper(core_customer.data -> 'email')"})
-        q = q.order_by('email')
-        return q[offset:offset + page_size]
-
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return self.name
-
-    def new_customers(self):
-        return self.customers.filter(created__gte=util.get_first_day_of_month_as_dt())
-
-    def get_top_customers(self, count=5):
-        return self.customers.extra(
-            select={'full_name': "upper(core_customer.data -> 'full_name')"}
-        ).order_by('-full_name')[:count] #TODO: Change
-
-    #Promotions
-    def promotions_this_month(self):
-        return self.promotions.filter(
-            Q(valid_from__gte=util.get_first_day_of_month_as_dt()) | Q(valid_from__isnull=True),
-            Q(valid_to__lte=util.get_last_day_of_month_as_dt()) | Q(valid_to__isnull=True),
-        )
-
-    def get_top_promotions(self, order_by='-valid_to', count=4):
-        #TODO: Change
-        return self.promotions.extra(
-            select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}
-        ).order_by(order_by).order_by('-redemptions_percentage')[:count]
-
-    def get_active_promotions(self, order_by='-valid_to', count=4):
-        #TODO: Change
-        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)[:count]
-
-    def get_active_promotions_count(self):
-        #TODO: Change
-        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).count()
-
-
-class ClientUser(Timestamps):
-
-    client = models.ForeignKey(Client)
-    user = models.OneToOneField(User)
-    is_manager = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ('client', 'user')
-
-
-class CustomerSource(Timestamps):
-
-    client = models.ForeignKey(Client)
-    slug = models.CharField(max_length=50)
-    url = models.TextField(blank=True, null=True)
-    # this may be a reference to a specific web.models.SignupForm model or a
-    # mailchimp list or anything else
-    ref_id = models.IntegerField(null=True, blank=True)
-    ref_source = models.CharField(max_length=50, null=True, blank=True)
-
-    #name = models.CharField(Client)
-    #is_bulk = models.BooleanField(default=False) #is this a source that creats customers in bulk - like mailchimp or setup
-
-    def __unicode__(self):
-        return self.slug
-
-    class Meta:
-        unique_together = ('client', 'slug')
-
-
 CUSTOMER_FIELD_NAMES = Choices(
     ('profile_image', 'Profile Image'),
     ('social__facebook', 'Facebook'),
@@ -352,6 +239,123 @@ BOOLEAN_CUSTOMER_FIELDS = set((
     'purchase__technology',
     'purchase__travel',
 ))
+
+
+class CustomerField(Timestamps):
+
+    FIELD_TYPES = Choices(
+        ('string', 'String'),
+        ('int', 'Integer'),
+        ('date', 'Date'),
+        ('url', 'URL'),
+        ('email', 'E-mail Address'),
+        ('float', 'Float'),
+        ('location', 'Location'),
+        ('bool', 'Bool')
+    )
+
+    name = models.CharField(max_length=64, unique=True)
+    title = models.CharField(max_length=255, unique=True)
+    group = models.ForeignKey(CustomerFieldGroup, related_name='fields')
+    group_ranking = models.IntegerField(default=99999999)
+    type = models.CharField(max_length=20, choices=FIELD_TYPES)
+    required = models.BooleanField(default=False)
+    is_unique = models.BooleanField(default=False)
+    width = models.IntegerField(null=True, blank=True)
+
+    @property
+    def choices(self):
+        if self.name in CUSTOMER_FIELD_CHOICES:
+            return CUSTOMER_FIELD_CHOICES[self.name]
+
+        if self.name in BOOLEAN_CUSTOMER_FIELDS:
+            return ('yes', 'no')
+
+        return None
+
+    def __unicode__(self):
+        return self.name
+
+
+class Client(Timestamps):
+
+    slug = models.CharField(max_length=255, db_index=True)
+    name = models.CharField(max_length=255, db_index=True)
+    main_location = models.ForeignKey('Location', null=True, blank=True, related_name='+')
+    customer_fields = models.ManyToManyField(CustomerField)
+    web_url = models.TextField(blank=True, null=True)
+    ref_id_type = models.CharField(max_length=255, null=True, blank=True)
+    ref_id = models.CharField(max_length=255, null=True, blank=True)
+
+    def customer_page(self, offset=0, filter=None, page_size=100):
+        q = self.customers.all()
+        if not filter is None:
+            q = q.filter(**filter)
+        q = q.extra(select={'email': "upper(core_customer.data -> 'email')"})
+        q = q.order_by('email')
+        return q[offset:offset + page_size]
+
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return self.name
+
+    def new_customers(self):
+        return self.customers.filter(created__gte=util.get_first_day_of_month_as_dt())
+
+    def get_top_customers(self, count=5):
+        return self.customers.extra(
+            select={'full_name': "upper(core_customer.data -> 'full_name')"}
+        ).order_by('-full_name')[:count] #TODO: Change
+
+    #Promotions
+    def promotions_this_month(self):
+        return self.promotions.filter(
+            Q(valid_from__gte=util.get_first_day_of_month_as_dt()) | Q(valid_from__isnull=True),
+            Q(valid_to__lte=util.get_last_day_of_month_as_dt()) | Q(valid_to__isnull=True),
+        )
+
+    def get_top_promotions(self, order_by='-valid_to', count=4):
+        #TODO: Change
+        return self.promotions.extra(
+            select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}
+        ).order_by(order_by).order_by('-redemptions_percentage')[:count]
+
+    def get_active_promotions(self, order_by='-valid_to', count=4):
+        #TODO: Change
+        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).order_by(order_by)[:count]
+
+    def get_active_promotions_count(self):
+        #TODO: Change
+        return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).count()
+
+
+class ClientUser(Timestamps):
+
+    client = models.ForeignKey(Client)
+    user = models.OneToOneField(User)
+    is_manager = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('client', 'user')
+
+
+class CustomerSource(Timestamps):
+
+    client = models.ForeignKey(Client)
+    slug = models.CharField(max_length=50)
+    url = models.TextField(blank=True, null=True)
+    # this may be a reference to a specific web.models.SignupForm model or a
+    # mailchimp list or anything else
+    ref_id = models.IntegerField(null=True, blank=True)
+    ref_source = models.CharField(max_length=50, null=True, blank=True)
+
+    #name = models.CharField(Client)
+    #is_bulk = models.BooleanField(default=False) #is this a source that creats customers in bulk - like mailchimp or setup
+
+    def __unicode__(self):
+        return self.slug
+
+    class Meta:
+        unique_together = ('client', 'slug')
 
 
 class Customer(Timestamps):
