@@ -144,7 +144,6 @@ class ClientProfile(ClientAPIView):
         return Response(data)
 
     def put(self, request, client, part=None):
-
         if part == 'customer_fields':
             fields = request.DATA.get('display_customer_fields', [])
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
@@ -239,9 +238,7 @@ class CustomerProfile(ClientAPIView):
 
     def delete(self, request, client, customer_id):
         customer = get_object_or_404(Customer, client=client, id=customer_id)
-
         customer.delete()
-
         return Response('Deleted')
 
     def post(self, request, client, customer_id):
@@ -293,6 +290,7 @@ def num_customers(request):
     result = client.customers_by_data(data).count()
     return Response(result)
 
+    permission_classes = (IsClientUser,)
 
 class SignupFormList(ClientAPIView):
 
@@ -340,7 +338,6 @@ class SignupFormView(ClientAPIView):
         """Retrieve form information
         """
         form = get_object_or_404(SignupForm, client=client, slug=form_slug)
-
         return Response(SignupFormSerializer(form).data)
 
     def put(self, request, client, form_slug):
