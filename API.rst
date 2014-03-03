@@ -57,6 +57,9 @@ Each customer field object consists of the following fields:
 
         ``required``
                 Whether or not this field is mandatory for every customer of this client
+	
+	``choices``
+		Optional list of allowed values for that field
 
 
 PUT /api/client/:client_slug/customer_fields

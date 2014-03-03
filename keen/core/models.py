@@ -124,6 +124,121 @@ class CustomerFieldGroup(Timestamps):
         return self.name
 
 
+CUSTOMER_FIELD_NAMES = Choices(
+    ('profile_image', 'Profile Image'),
+    ('social__facebook', 'Facebook'),
+    ('social__twitter', 'Twitter'),
+    ('social__googleplus', 'Google Plus'),
+    ('full_name', 'Full Name'),
+    ('dob', 'Birthday'),
+    ('age', 'Age'),
+    ('email', 'Email'),
+    ('gender', 'Gender'),
+    ('address__line1', 'Address Line 1'),
+    ('address__line2', 'Address Line 2'),
+    ('address__city', 'City'),
+    ('address__zipcode', 'ZipCode'),
+    ('address__state', 'State'),
+    ('address__country', 'Country'),
+    ('phone', 'Phone'),
+    ('occupation', 'Occupation'),
+    ('education', 'Education'),
+    ('marital_status', 'Marital Status'),
+    ('has_children', 'Presence of Children'),
+    ('home_owner_status', 'Home Owner Status'),
+    ('income', 'Household Income'),
+    ('home_market_value', 'Home Market Value'),
+    ('high_net_worth', 'High Net Worth'),
+    ('length_of_residence', 'Length of Residence'),
+    ('interest__arts', 'Interest in Arts and Crafts'),
+    ('interest__blogging', 'Interest in Blogging'),
+    ('interest__books', 'Interest in Books'),
+    ('interest__business', 'Interest in Business'),
+    ('interest__health', 'Interest in Health and Wellness'),
+    ('interest__news', 'Interest in News and Current Events'),
+    ('purchase__automotive', 'Purchases Automotive Goods'),
+    ('purchase__baby', 'Has Bought a Baby Product'),
+    ('purchase__beauty', 'Purchases Beauty Products'),
+    ('purchase__charitable',
+     'Indicates liklihood of Being a Charitable Donor'),
+    ('purchase__cooking', 'Purchases cooking magazines; interest in cooking'),
+    ('purchase__discount', 'Purchase behavior: Interest in discounts'),
+    ('purchase__high_end_brands',
+     'Has bought a premium CPG brand in the past 18 months '),
+    ('purchase__home_garden', 'Purchases Home & Garden Products'),
+    ('purchase__home_improvement', 'Purchases Home Improvement Products'),
+    ('purchase__luxury', 'Purchases Luxury Items'),
+    ('purchase__magazine', 'Purchases Magazine Subscriptions'),
+    ('purchase__outdoor', 'Purchases Outdoor and Adventure Products'),
+    ('purchase__pets', 'Purchases Pet Related Products'),
+    ('purchase__power_shopper',
+     'Purchases Items from Multiple Retail Channels'),
+    ('purchase__sports', 'Purchases Sporting Goods / Sports Related Products'),
+    ('purchase__technology', 'Purchases Technology Products'),
+    ('purchase__travel', 'Purchases Travel Related Goods')
+)
+
+CUSTOMER_FIELD_NAMES_DICT = dict(CUSTOMER_FIELD_NAMES)
+
+CUSTOMER_FIELD_CHOICES = {
+    'age': (
+        '18-20', '21-24', '25-34', '35-44', '45-54', '55-64', '65+'),
+    'gender': (
+        'Male', 'Female'),
+    'education': (
+        'Completed High School', 'Attended College', 'Completed College',
+        'Completed Graduate School', 'Attended Vocational/Technical'),
+    'home_owner_status': (
+        'Own', 'Rent'),
+    'home_market_value': (
+        '1k-25k', '25k-50k', '50k-75k', '75k-100k', '100k-150k', '150k-200k',
+        '200k-250k', '300k-350k', '350k-500k', '500k-1mm', '1mm+'),
+    'income': (
+        '0-15k', '15k-25k', '25k-35k', '35k-50k', '50k-75k', '75k-100k',
+        '100k-125k', '125k-150', '175k-200k', '200k-250k', '250k+'),
+    'length_of_residence': (
+        'Less than 1 year', '1 year', '2 years', '3 years', '4 years',
+        '5 years', '6 years', '7 years', '8 years', '9 years', '10 years',
+        '11-15 years', '16-19 years', '20+ years'),
+    'marital_status': (
+        'Single', 'Married'),
+    'occupation': (
+        'Blue Collar Worker', 'Business Owner', 'Civil Service', 'Technology',
+        'ExecuNve/Upper Management', 'Health Services', 'Homemaker',
+        'Middle Management', 'Military Personnel', 'Nurse', 'Part Time',
+        'Professional', 'ReNred', 'Secretary', 'Student', 'Teacher',
+        'White Collar Worker'),
+}
+
+BOOLEAN_CUSTOMER_FIELDS = set((
+    'high_net_worth',
+    'has_children',
+    'interest__arts',
+    'interest__blogging',
+    'interest__books',
+    'interest__business',
+    'interest__health',
+    'interest__news',
+    'purchase__automotive',
+    'purchase__baby',
+    'purchase__beauty',
+    'purchase__charitable',
+    'purchase__cooking',
+    'purchase__discount',
+    'purchase__high_end_brands',
+    'purchase__home_garden',
+    'purchase__home_improvement',
+    'purchase__luxury',
+    'purchase__magazine',
+    'purchase__outdoor',
+    'purchase__pets',
+    'purchase__power_shopper',
+    'purchase__sports',
+    'purchase__technology',
+    'purchase__travel',
+))
+
+
 class CustomerField(Timestamps):
 
     FIELD_TYPES = Choices(
@@ -145,6 +260,16 @@ class CustomerField(Timestamps):
     required = models.BooleanField(default=False)
     is_unique = models.BooleanField(default=False)
     width = models.IntegerField(null=True, blank=True)
+
+    @property
+    def choices(self):
+        if self.name in CUSTOMER_FIELD_CHOICES:
+            return CUSTOMER_FIELD_CHOICES[self.name]
+
+        if choices in BOOLEAN_CUSTOMER_FIELDS:
+            return ('yes', 'no')
+
+        return None
 
     def group_name(self):
         try:
@@ -235,63 +360,6 @@ class CustomerSource(Timestamps):
 
     class Meta:
         unique_together = ('client', 'slug')
-
-
-CUSTOMER_FIELD_NAMES = Choices(
-    ('profile_image', 'Profile Image'),
-    ('social__facebook', 'Facebook'),
-    ('social__twitter', 'Twitter'),
-    ('social__googleplus', 'Google Plus'),
-    ('full_name', 'Full Name'),
-    ('dob', 'Birthday'),
-    ('age', 'Age'),
-    ('email', 'Email'),
-    ('gender', 'Gender'),
-    ('address__line1', 'Address Line 1'),
-    ('address__line2', 'Address Line 2'),
-    ('address__city', 'City'),
-    ('address__zipcode', 'ZipCode'),
-    ('address__state', 'State'),
-    ('address__country', 'Country'),
-    ('phone', 'Phone'),
-    ('occupation', 'Occupation'),
-    ('education', 'Education'),
-    ('marital_status', 'Marital Status'),
-    ('has_children', 'Presence of Children'),
-    ('home_owner_status', 'Home Owner Status'),
-    ('income', 'Household Income'),
-    ('home_market_value', 'Home Market Value'),
-    ('high_net_worth', 'High Net Worth'),
-    ('length_of_residence', 'Length of Residence'),
-    ('interest__arts', 'Interest in Arts and Crafts'),
-    ('interest__blogging', 'Interest in Blogging'),
-    ('interest__books', 'Interest in Books'),
-    ('interest__business', 'Interest in Business'),
-    ('interest__health', 'Interest in Health and Wellness'),
-    ('interest__news', 'Interest in News and Current Events'),
-    ('purchase__automotive', 'Purchases Automotive Goods'),
-    ('purchase__baby', 'Has Bought a Baby Product'),
-    ('purchase__beauty', 'Purchases Beauty Products'),
-    ('purchase__charitable',
-     'Indicates liklihood of Being a Charitable Donor'),
-    ('purchase__cooking', 'Purchases cooking magazines; interest in cooking'),
-    ('purchase__discount', 'Purchase behavior: Interest in discounts'),
-    ('purchase__high_end_brands',
-     'Has bought a premium CPG brand in the past 18 months '),
-    ('purchase__home_garden', 'Purchases Home & Garden Products'),
-    ('purchase__home_improvement', 'Purchases Home Improvement Products'),
-    ('purchase__luxury', 'Purchases Luxury Items'),
-    ('purchase__magazine', 'Purchases Magazine Subscriptions'),
-    ('purchase__outdoor', 'Purchases Outdoor and Adventure Products'),
-    ('purchase__pets', 'Purchases Pet Related Products'),
-    ('purchase__power_shopper',
-     'Purchases Items from Multiple Retail Channels'),
-    ('purchase__sports', 'Purchases Sporting Goods / Sports Related Products'),
-    ('purchase__technology', 'Purchases Technology Products'),
-    ('purchase__travel', 'Purchases Travel Related Goods')
-)
-
-CUSTOMER_FIELD_NAMES_DICT = dict(CUSTOMER_FIELD_NAMES)
 
 
 class Customer(Timestamps):
