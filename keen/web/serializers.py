@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from rest_framework.serializers import (
+    Field,
     DateTimeField,
     ModelSerializer,
     RelatedField,
@@ -53,6 +54,7 @@ class LocationSerializer(DynamicSerializer):
 class CustomerFieldSerializer(DynamicSerializer):
 
     group = SlugRelatedField(slug_field='name')
+    choices = Field()
 
     class Meta:
         model = CustomerField
