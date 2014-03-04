@@ -51,21 +51,22 @@ class FieldSet(object):
 class CustomerForm(forms.Form):
     """Dynamically built customer form
     """
-    DEFAULT_FIELDS = ('full_name', 'email', 'dob', 'address__zipcode',
-                      'phone', 'gender')
+    FIXED_FIELDS = ('full_name', 'email')
+    DEFAULT_EXTRA_FIELDS = ('dob', 'address__zipcode', 'phone', 'gender')
 
-    def __init__(self, client, *args, **kw):
+    def __init__(self, signup_form, *args, **kw):
         super(CustomerForm, self).__init__(*args, **kw)
-
-        # We will use fieldsets to group fields on form
-        # self.fieldsets = {}
-
-        # Add fields to form. Pointless for now since set of signup form fields
-        # is hardcoded but it should come from SignupForm model in the future
-        self.fields = dict((field.name, FIELD_TYPE_MAP[field.type](field))
-                           for field in CustomerField.objects.filter(
-                               client=client,
-                               name__in=self.DEFAULT_FIELDS).order_by('group'))
+        client = signup_form.client
+        field_names = self.FIXED_FIELDS + tuple(
+            signup_form.data.get('extra_fields', self.DEFAULT_EXTRA_FIELDS)
+        )
+        field_cache = dict(
+            (field.name, field) for field in CustomerField.objects.filter(
+                client=client, name__in=field_names)
+        )
+        fields = (field_cache[name] for name in field_names)
+        self.fields = dict((name, FIELD_TYPE_MAP[field.type](field))
+                           for field in fields)
 
 
 class TrialRequestForm(forms.Form):
