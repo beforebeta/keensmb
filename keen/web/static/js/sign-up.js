@@ -3,14 +3,60 @@
 'use strict';
 
 (function($) {
-    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', '$sanitize', function($scope, $timeout, suService, $q, $sanitize){
+    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', '$sanitize', 'customerService', function($scope, $timeout, suService, $q, $sanitize, customerService){
 
-        // suService.getClienImages().then(function(data) {
-        //     console.log(data);
-        // });
-        // suService.getClientForms().then(function(data) {
-        //     console.log(data);
-        // });
+        // hardcoded:
+        var selectedFieldNames = ['address__zipcode', 'dob', 'phone', 'gender'];
+        var optionalFields = [];
+
+        customerService.getClientData().then(function(res) {
+            var customerFields = res.data.customer_fields,
+                optionalFieldsMap = {};
+
+            var notRequiredFields = _.where(customerFields, {required: false});
+            optionalFields = _.map(notRequiredFields, function(field) {
+                return {
+                    name: field.name,
+                    title: field.title,
+                    type: field.type,
+                    choices: field.choices,
+                    width: 6
+                };
+            });
+
+            console.table(optionalFields);
+
+            _.each(optionalFields, function(item) {
+                optionalFieldsMap[item.name] = item.title;
+            });
+
+            $scope.additionalFields = _.filter(optionalFields, function(item) {
+                return _.contains(selectedFieldNames, item.name);
+            });
+
+            $scope.optionalFieldsMap = optionalFieldsMap;
+        });
+
+
+        $scope.checkField = function(name) {
+            return _.find($scope.additionalFields, {name: name});
+        };
+
+        $scope.addField = function(name) {
+            if (!$scope.checkField(name)) {
+                var item = _.find(optionalFields, {name: name});
+                $scope.additionalFields.push(item);
+            }
+        };
+
+        $scope.removeField = function(name) {
+            if ($scope.checkField(name)) {
+                var item = _.find(optionalFields, {name: name});
+                $scope.additionalFields = _.without($scope.additionalFields, item);
+            }
+        };
+
+
         $scope.dataLoaded = false;
 
         suService.getInitialData().then(function(data) {
@@ -375,7 +421,9 @@
                     textColor: $scope.form.textColor,
                     title: $scope.formTitle.text,
                     description: $scope.formDescription.text
-                }
+                },
+
+                extra_fields: angular.copy($scope.additionalFields)
             };
 
             // save images to server
