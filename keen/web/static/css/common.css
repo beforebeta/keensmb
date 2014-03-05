@@ -380,3 +380,7 @@
   content:"\e034";
 }
 
+.dropup .caret {
+  border-top: 8px solid #bdc3c7;
+  border-bottom: none;
+}
