@@ -322,7 +322,7 @@ class Client(Timestamps):
 
     def get_top_promotions(self, order_by='-valid_to', count=4):
         #TODO: Change
-        return self.promotions.extra(
+        return self.promotions.filter(status__in=[Promotion.PROMOTION_STATUS.active, Promotion.PROMOTION_STATUS.expired]).extra(
             select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}
         ).order_by(order_by).order_by('-redemptions_percentage')[:count]
 
