@@ -5,37 +5,42 @@
 (function($) {
     angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', '$sanitize', 'customerService', function($scope, $timeout, suService, $q, $sanitize, customerService){
 
-        // hardcoded:
-        var selectedFieldNames = ['address__zipcode', 'dob', 'phone', 'gender'];
+
         var optionalFields = [];
+        var showExtraFields = function(fields) {
+            // hardcoded:
+            var selectedFieldNames = ['address__zipcode', 'dob', 'phone', 'gender'];
 
-        customerService.getClientData().then(function(res) {
-            var customerFields = res.data.customer_fields,
-                optionalFieldsMap = {};
+            customerService.getClientData().then(function(res) {
+                var customerFields = res.data.customer_fields,
+                    optionalFieldsMap = {};
 
-            var notRequiredFields = _.where(customerFields, {required: false});
-            optionalFields = _.map(notRequiredFields, function(field) {
-                return {
-                    name: field.name,
-                    title: field.title,
-                    type: field.type,
-                    choices: field.choices,
-                    width: 6
-                };
+                var notRequiredFields = _.where(customerFields, {required: false});
+                optionalFields = _.map(notRequiredFields, function(field) {
+                    return {
+                        name: field.name,
+                        title: field.title,
+                        type: field.type,
+                        choices: field.choices,
+                        width: 6
+                    };
+                });
+
+                _.each(optionalFields, function(item) {
+                    optionalFieldsMap[item.name] = item.title;
+                });
+
+                if (!fields) {
+                    $scope.additionalFields = _.filter(optionalFields, function(item) {
+                        return _.contains(selectedFieldNames, item.name);
+                    });
+                } else {
+                    $scope.additionalFields = fields;
+                }
+
+                $scope.optionalFieldsMap = optionalFieldsMap;
             });
-
-            console.table(optionalFields);
-
-            _.each(optionalFields, function(item) {
-                optionalFieldsMap[item.name] = item.title;
-            });
-
-            $scope.additionalFields = _.filter(optionalFields, function(item) {
-                return _.contains(selectedFieldNames, item.name);
-            });
-
-            $scope.optionalFieldsMap = optionalFieldsMap;
-        });
+        };
 
 
         $scope.checkField = function(name) {
@@ -66,6 +71,7 @@
 
         suService.getInitialData().then(function(data) {
             var formData = suService.formSlug ? parseFormData(data) : data;
+            console.log(data);
             $scope = angular.extend($scope, formData);
             $scope.clientSlug = suService.clientSlug;
             $scope.formSlug = suService.formSlug;
@@ -78,6 +84,8 @@
             });
 
             $scope.dataLoaded = true;
+
+            showExtraFields(formData.extraFields);
         });
 
         $scope.$watch('permalink.text', function(newVal, oldVal) {
@@ -393,6 +401,7 @@
             prepared.formDescription = {
                 text: formData.form.description
             };
+            prepared.extraFields = formData.extra_fields;
 
             return prepared;
         };
