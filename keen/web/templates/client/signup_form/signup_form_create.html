@@ -219,7 +219,18 @@
             </div>
           </div>
 
-          <button class="btn btn-default btn-wide full mbm add-field-button" data-toggle="modal" data-target="#newFieldModal">
+          <button class="btn btn-default btn-wide full mbm add-field-button"
+                  ng-if='additionalFields.length > 4'
+                  data-toggle="modal"
+                  data-target="#newFieldPreventModal">
+            <i>Add another field</i>
+            <i class="fui-plus"></i>
+          </button>
+
+          <button class="btn btn-default btn-wide full mbm add-field-button"
+                  ng-if='additionalFields.length < 5'
+                  data-toggle="modal"
+                  data-target="#newFieldModal">
             <i>Add another field</i>
             <i class="fui-plus"></i>
           </button>
@@ -317,6 +328,37 @@
                     class="btn btn-default btn-wide btn-embossed pull-right"
                     data-dismiss="modal"
                     ng-click='cancelAddingFields()'>Close</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+  <!-- new field modal -->
+    <div id="newFieldPreventModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fui-cross"></i>
+            </button>
+            <h4 class="modal-title">Are you sure you want to do that?</h4>
+          </div>
+
+          <div class="modal-body">
+            <p>We wouldn't recommend adding any more fields to your form. Having too much information to fill out might  scare your customers away. Stick to what's absolutely necessary. Less is more!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll"
+                    data-dismiss="modal"
+                    data-toggle="modal" data-target="#newFieldModal">Proceed</button>
+
+            <button type="button"
+                    class="btn btn-default btn-wide btn-embossed pull-right"
+                    data-dismiss="modal"
+                    ng-click='doneAddingFields()'>Ok, nevermind</button>
           </div>
 
         </div><!-- /.modal-content -->
