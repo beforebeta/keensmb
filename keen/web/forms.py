@@ -1,72 +1,85 @@
 import datetime
+
 from django import forms
 from django.forms import DateField
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
+from django.utils.datastructures import SortedDict
 
 from localflavor.us.forms import USPhoneNumberField
 
 from keen.core.models import CustomerField, Promotion
 
 
-def form_field_builder(field_type, widget_type):
-    def builder(field):
-        return field_type(
+def form_field_builder(field_class, widget_class):
+    def builder(field, field_data):
+        attrs = {
+            'id': field.name,
+            'name': field.name,
+            'required': field.required,
+            'placeholder': field.title + ('', ' *')[field.required],
+            'class': 'form-control',
+        }
+        choices = field.choices
+        if choices:
+            choices = [('', '')] + zip(choices, choices)
+            widget = forms.Select(attrs=attrs, choices=choices)
+        else:
+            widget=widget_class(attrs=attrs)
+
+        form_field = field_class(
             required=field.required,
             label=field.title,
-            widget=widget_type(attrs={
-                'id': field.name,
-                'name': field.name,
-                'required': field.required,
-                'placeholder': field.title + ('', ' *')[field.required],
-            }),
+            widget=widget,
         )
-
+        if field_data and 'width' in field_data:
+            form_field.custom_width = field_data['width']
+        return form_field
     return builder
 
 
 FIELD_TYPE_MAP = dict(
-    (name, form_field_builder(field, widget))
-    for name, field, widget in (
+    (data_type, form_field_builder(field_class, widget_class))
+    for data_type, field_class, widget_class in (
         (CustomerField.FIELD_TYPES.string, forms.CharField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.date, forms.DateField, forms.TextInput),
+        (CustomerField.FIELD_TYPES.date, forms.DateField, forms.DateInput),
         (CustomerField.FIELD_TYPES.int, forms.IntegerField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.email, forms.EmailField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.url, forms.URLField, forms.TextInput),
+        (CustomerField.FIELD_TYPES.email, forms.EmailField, forms.EmailInput),
+        (CustomerField.FIELD_TYPES.url, forms.URLField, forms.URLInput),
         (CustomerField.FIELD_TYPES.float, forms.FloatField, forms.TextInput),
         (CustomerField.FIELD_TYPES.location, forms.CharField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.bool, forms.BooleanField,
-         forms.CheckboxInput),
+        (CustomerField.FIELD_TYPES.bool, forms.BooleanField, forms.CheckboxInput),
     )
 )
-
-
-class FieldSet(object):
-
-    def __init__(self, title):
-        self.title = title
-        self.fields = []
 
 
 class CustomerForm(forms.Form):
     """Dynamically built customer form
     """
     FIXED_FIELDS = ('full_name', 'email')
-    DEFAULT_EXTRA_FIELDS = ('dob', 'address__zipcode', 'phone', 'gender')
 
     def __init__(self, signup_form, *args, **kw):
         super(CustomerForm, self).__init__(*args, **kw)
+
         client = signup_form.client
-        field_names = self.FIXED_FIELDS + tuple(
-            signup_form.data.get('extra_fields', self.DEFAULT_EXTRA_FIELDS)
+
+        extra_fields = signup_form.data.get('extra_fields', [])
+        extra_fields_map = dict(
+            (field['name'], field) for field in extra_fields
         )
+        # ordered list of all field names
+        field_names = self.FIXED_FIELDS + tuple(field['name'] for field in extra_fields)
+
         field_cache = dict(
             (field.name, field) for field in CustomerField.objects.filter(
                 client=client, name__in=field_names)
         )
+        # ordered list of CustomerField objects
         fields = (field_cache[name] for name in field_names)
-        self.fields = dict((name, FIELD_TYPE_MAP[field.type](field))
-                           for field in fields)
+
+        self.fields = SortedDict(
+            (field.name, FIELD_TYPE_MAP[field.type](field, extra_fields_map.get(field.name)))
+            for field in fields)
 
 
 class TrialRequestForm(forms.Form):
