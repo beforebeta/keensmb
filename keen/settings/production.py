@@ -11,8 +11,7 @@ CELERY_ALWAYS_EAGER = False
 
 MAILCHIMP_API_KEY = '4f1edbb00b9d47197be82bb7007c1b6d-us7'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+STATICFILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_SECURE_URLS = False
@@ -31,7 +30,7 @@ COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 COMPRESS_OUTPUT_DIR = ''
 COMPRESS_URL = STATIC_URL
-COMPRESS_STORAGE = DEFAULT_FILE_STORAGE
+COMPRESS_STORAGE = STATICFILE_STORAGE
 COMPRESS_CSS_FILTERS = [
         'compressor.filters.css_default.CssAbsoluteFilter',
         'compressor.filters.cssmin.CSSMinFilter',
