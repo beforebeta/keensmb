@@ -5,14 +5,45 @@ from django.forms import DateField
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.utils.datastructures import SortedDict
+from django.utils.html import format_html
 
 from localflavor.us.forms import USPhoneNumberField
 
 from keen.core.models import CustomerField, Promotion
 
 
+class CustomDateInput(forms.DateInput):
+
+    def render(self, name, value, attrs=None):
+        if attrs is None:
+            attrs = {'class': 'form-control datepicker'}
+        else:
+            attrs['class'] = ' '.join((attrs.get('class', ''), 'form-control datepicker'))
+
+        return format_html('''
+            <div class="input-group">
+                {0}
+                <span class="input-group-btn">
+                    <button class="btn btn-calendar" type="button">
+                        <span class="fui-calendar"></span>
+                    </button>
+                </span>
+            </div>
+            ''', super(CustomDateInput, self).render(name, value, attrs))
+
+
+class CustomSelect(forms.Select):
+
+    def render_options(self, choices, selected_choices):
+        options = super(CustomSelect, self).render_options( choices, selected_choices)
+        return format_html('''
+            <option value="" {0} disabled>{1}</option>
+            {2}
+            ''', ('' if selected_choices else 'selected'), self.label_tag, options)
+
+
 def form_field_builder(field_class, widget_class):
-    def builder(field, field_data):
+    def builder(field, properties):
         attrs = {
             'id': field.name,
             'name': field.name,
@@ -20,21 +51,12 @@ def form_field_builder(field_class, widget_class):
             'placeholder': field.title + ('', ' *')[field.required],
             'class': 'form-control',
         }
-        choices = field.choices
-        if choices:
-            choices = [('', '')] + zip(choices, choices)
-            widget = forms.Select(attrs=attrs, choices=choices)
-        else:
-            widget=widget_class(attrs=attrs)
-
-        form_field = field_class(
-            required=field.required,
-            label=field.title,
-            widget=widget,
-        )
-        if field_data and 'width' in field_data:
-            form_field.custom_width = field_data['width']
+        widget = widget_class(attrs=attrs)
+        form_field = field_class(required=field.required, label=field.title, widget=widget)
+        form_field.choices = field.choices
+        form_field.properties = properties
         return form_field
+
     return builder
 
 
@@ -42,7 +64,7 @@ FIELD_TYPE_MAP = dict(
     (data_type, form_field_builder(field_class, widget_class))
     for data_type, field_class, widget_class in (
         (CustomerField.FIELD_TYPES.string, forms.CharField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.date, forms.DateField, forms.DateInput),
+        (CustomerField.FIELD_TYPES.date, forms.DateField, CustomDateInput),
         (CustomerField.FIELD_TYPES.int, forms.IntegerField, forms.TextInput),
         (CustomerField.FIELD_TYPES.email, forms.EmailField, forms.EmailInput),
         (CustomerField.FIELD_TYPES.url, forms.URLField, forms.URLInput),

@@ -98,87 +98,29 @@
               {% csrf_token %}
               {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
 
-              <div class="col-xs-12">
-                {% if form.full_name.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.full_name.errors %}
-                  {{ error }}
-                  {% endfor %}'
-                  data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <input type="text" name="full_name" class="form-control" placeholder='Full Name *' value="{{ form.full_name.value|default:"" }}">
-                </div>
-                {% if form.email.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.email.errors %}{{ error }}{% endfor %}'
-                  data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <input type="email" name="email" class="form-control" placeholder='Email Address *' value="{{ form.email.value|default:"" }}">
-                </div>
-              </div>
-
-              <div class="col-xs-5">
-                {% if form.address__zipcode.errors %}
+              {% for field in form %}
+              <div class="col-xs-{{ field.field.properties.width | default:"12" }} su-optional-field">
+                {% if field.errors %}
                 <div class="form-group mbm has-error"
-                  data-toggle='popover' data-content='{% for error in form.address__zipcode.errors %}
+                  data-toggle='popover' data-content='{% for error in field.errors %}
                   {{ error }}
                   {% endfor %}' data-placement="right">
                 {% else %}
                 <div class="form-group mbm">
                 {% endif %}
-                  <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
-                </div>
-              </div>
-              <div class="col-xs-7 pln">
-                {% if form.dob.errors %}
-                <div class="form-group mbm has-error"
-                  data-toggle='popover' data-content='{% for error in form.dob.errors %}
-                  {{ error }}
-                  {% endfor %}' data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <div class="input-group">
-                    <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
-                    <span class="input-group-btn">
-                      <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xs-7">
-                {% if form.phone.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.phone.errors %}
-                  {{ error }}
-                  {% endfor %}' data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
-                </div>
-              </div>
-              <div class="col-xs-5 pln">
-                {% if form.gender.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.gender.errors %}
-                  {{ error }}
-                  {% endfor %}' data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <select name="gender" id="gender" class='simple full mbs'>
-                    <option value="0" selected disabled>Gender</option>
-                    <option value="1">Male</option>
-                    <option value="2">Female</option>
+                {% if field.field.choices %}
+                  <select name="{{ field.name }}" id="{{ field.name }}" class='simple full mbs'>
+                    <option value="" selected disabled>{{ field.label_tag }}</option>
+                    {% for choice in field.field.choices %}
+                    <option value="{{ choice }}" {% if field.value == choice %}selected{% endif %}>{{ choice }}</option>
+                    {% endfor %}
                   </select>
+                {% else %}
+                {{ field }}
+                {% endif %}
                 </div>
               </div>
-              {% for field in form_data.extra_fields %}
+              {% comment %}
                 <div class='col-xs-{{field.width}} su-optional-field'>
                   <div class="form-group mbm">
                   {% if not field.choices %}
@@ -202,7 +144,7 @@
                   {% endif %}
                   </div>
                 </div>
-
+              {% endcomment %}
               {% endfor %}
             </div>
             <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
