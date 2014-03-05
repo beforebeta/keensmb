@@ -385,4 +385,4 @@
 }
 
 .btn, .btn:focus {outline: 0;}
-input.datapicker {padding-left: 3px;}
+input.datepicker {padding-left: 2px; !important}

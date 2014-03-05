@@ -194,7 +194,7 @@ keen.showMessageModal = function(title, message) {
             // Now let's align datepicker with the prepend button
             $(selector).datepicker('widget').css({'margin-left': -$(selector).prev('.input-group-btn').find('.btn').outerWidth()});
         };
-        setup_date_picker('.datapicker', "mm/dd/yy", "c-99:+0");
+        setup_date_picker('.datepicker', "mm/dd/yy", "c-99:+0");
         setup_date_picker('.datepickerAlternate', "M d, yy", "c-10:+10");
 
 
