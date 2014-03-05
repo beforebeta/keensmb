@@ -56,6 +56,11 @@
             }
         };
 
+        $scope.resizeField = function(field) {
+            // newWidth = (12 + 6) - oldWidth;
+            field.width = 18 - field.width;
+        };
+
 
         $scope.dataLoaded = false;
 

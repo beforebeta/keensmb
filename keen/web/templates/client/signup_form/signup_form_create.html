@@ -187,9 +187,16 @@
               </div>
             </div>
 
-            <div class='col-xs-6 su-optional-field' ng-repeat='field in additionalFields'>
+            <div class='col-xs-{{field.width}} su-optional-field' ng-repeat='field in additionalFields'>
               <div class="form-group mbm">
-                <div class="delete-icon" ng-click='removeField(field.name)'>
+                <div class="resize-icon change-icon"
+                  ng-class='{shrink: field.width == 12}'
+                  ng-click='resizeField(field)'
+                  title='resize'>
+                  <i class="fui-arrow-left"></i>
+                  <i class="fui-arrow-right"></i>
+                </div>
+                <div class="delete-icon change-icon" ng-click='removeField(field.name)' title='delete'>
                   <i class="fui-cross"></i>
                 </div>
 
@@ -202,7 +209,7 @@
                   </span>
                 </div>
 
-                <div ng-if='field.choices.length' class="btn-group select simple full mbs">
+                <div ng-if='field.choices.length' class="btn-group select simple full mbn">
                   <button class="btn dropdown-toggle clearfix btn-sm btn-default">
                     <span class="filter-option pull-left">{{ field.title }}</span>&nbsp;<span class="caret"></span>
                   </button>
