@@ -47,6 +47,18 @@ class SignupForm(Timestamps):
     visits = models.IntegerField(default=0)
     visitors = models.ManyToManyField(Visitor, related_name='signup_forms')
 
+    @property
+    def extra_fields(self):
+        fields = self.data.get('extra_fields', [])
+        if fields:
+            names = [field['name'] for field in fields]
+            cache = dict(
+                (field.name, field) for field in
+                CustomerField.objects.filter(name__in=names)
+            )
+            fields = [cache(name) for name in names]
+        return fields
+
     class Meta:
         unique_together = ('client', 'slug')
 
