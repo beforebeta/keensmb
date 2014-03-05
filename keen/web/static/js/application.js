@@ -185,11 +185,11 @@ keen.showMessageModal = function(title, message) {
                 changeMonth: true,
                 changeYear: true
             }).siblings('.btn, .input-group-btn').on('click', function (e) {
-              e && e.preventDefault();
-              $(datepickerSelector).focus();
+                e && e.preventDefault();
+                $(selector).focus();
             });
             $.extend($.datepicker, {_checkOffset: function (inst, offset, isFixed) {
-                return offset
+                return offset;
             }});
             // Now let's align datepicker with the prepend button
             $(selector).datepicker('widget').css({'margin-left': -$(selector).prev('.input-group-btn').find('.btn').outerWidth()});

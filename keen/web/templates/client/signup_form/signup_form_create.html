@@ -177,7 +177,7 @@
                       ng-model='formDescription.text'></textarea>
           </p>
 
-          <div class="row">
+          <div class="row su-optional-field-list">
             <div class="col-xs-12">
               <div class="form-group mbm">
                 <input type="text" class="form-control" placeholder='Full Name'>
@@ -186,36 +186,37 @@
                 <input type="email" class="form-control" placeholder='Email Address'>
               </div>
             </div>
-            <div class="col-xs-5">
+
+            <div class='col-xs-6 su-optional-field' ng-repeat='field in additionalFields'>
               <div class="form-group mbm">
-                <input type="text" class="form-control" placeholder='Zip Code'>
-              </div>
-            </div>
-            <div class="col-xs-7 pln">
-              <div class="form-group mbm">
-                <div class="input-group">
-                  <input type="text" class="form-control datapicker" placeholder="Birthday">
+                <div class="delete-icon" ng-click='removeField(field.name)'>
+                  <i class="fui-cross"></i>
+                </div>
+
+                <input ng-if='!field.choices.length && field.type != "date"' class='form-control' type="text" placeholder='{{ field.title }}'>
+
+                <div ng-if='!field.choices.length && field.type == "date"' class="input-group">
+                  <input type="text" class="form-control datapicker hasDatepicker" placeholder="{{ field.title }}">
                   <span class="input-group-btn">
                     <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
                   </span>
                 </div>
-              </div>
-            </div>
-            <div class="col-xs-7">
-              <div class="form-group mbm">
-                <input type="text" class="form-control" placeholder='Phone'>
-              </div>
-            </div>
-            <div class="col-xs-5 pln">
-              <div class="form-group mbm">
-                <select name="gender" id="gender" class='simple full mbs'>
-                  <option value="0" selected disabled>Gender</option>
-                  <option value="1">Male</option>
-                  <option value="2">Female</option>
-                </select>
+
+                <div ng-if='field.choices.length' class="btn-group select simple full mbs">
+                  <button class="btn dropdown-toggle clearfix btn-sm btn-default">
+                    <span class="filter-option pull-left">{{ field.title }}</span>&nbsp;<span class="caret"></span>
+                  </button>
+                </div>
+
               </div>
             </div>
           </div>
+
+          <button class="btn btn-default btn-wide full mbm add-field-button" data-toggle="modal" data-target="#newFieldModal">
+            <i>Add another field</i>
+            <i class="fui-plus"></i>
+          </button>
+
           <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
         </div>
 
@@ -309,6 +310,57 @@
                     class="btn btn-default btn-wide btn-embossed pull-right"
                     data-dismiss="modal"
                     ng-click='cancelAddingFields()'>Close</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+  <!-- new field modal -->
+    <div id="newFieldModal" class="modal fade new-field-modal" tabindex="-1" role="dialog" aria-hidden="true" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fui-cross"></i>
+            </button>
+            <h4 class="modal-title">Select Fields to Add</h4>
+          </div>
+
+          <div class="modal-body">
+            <div class="row modal-body-section" ng-repeat='(name, item) in optionalFieldsMap'>
+              <div class="col-xs-9"><span>{{ item }}</span></div>
+
+              <div class="col-xs-3">
+                <button ng-if='!checkField(name)'
+                        class='btn btn-sm btn-primary btn-secondary btn-embossed col-xs-12'
+                        ng-click='addField(name)'>
+
+                  <span class='mrl'>Add Field</span>
+                  <i class="fui-plus"></i>
+                </button>
+
+                <button ng-if='checkField(name)'
+                        class='btn btn-sm btn-default btn-embossed col-xs-12'
+                        ng-click='removeField(name)'>
+
+                  <span class='mrl'>Remove</span>
+                  <i class="fui-cross"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll"
+                    data-dismiss="modal"
+                    ng-click='doneAddingFields()'>Done</button>
+
+            <button type="button"
+                    class="btn btn-default btn-wide btn-embossed pull-right"
+                    data-dismiss="modal"
+                    ng-click='cancelAddingFields()'>Cancel</button>
           </div>
 
         </div><!-- /.modal-content -->
