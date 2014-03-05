@@ -17,7 +17,7 @@ MIDDLEWARE_CLASSES += (
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-STATICFILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_SECURE_URLS = False
@@ -36,7 +36,7 @@ COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 COMPRESS_OUTPUT_DIR = ''
 COMPRESS_URL = STATIC_URL
-COMPRESS_STORAGE = STATICFILE_STORAGE
+COMPRESS_STORAGE = STATICFILES_STORAGE
 COMPRESS_CSS_FILTERS = [
         'compressor.filters.css_default.CssAbsoluteFilter',
         'compressor.filters.cssmin.CSSMinFilter',
