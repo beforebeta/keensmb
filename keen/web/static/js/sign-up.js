@@ -57,7 +57,9 @@
         $scope.removeField = function(name) {
             if ($scope.checkField(name)) {
                 var item = _.find(optionalFields, {name: name});
-                $scope.additionalFields = _.without($scope.additionalFields, item);
+                $scope.additionalFields = _.filter($scope.additionalFields, function(field) {
+                    return field.name !== item.name;
+                });
             }
         };
 
