@@ -118,6 +118,33 @@
                 {% else %}
                 {{ field }}
                 {% endif %}
+                </div>
+              </div>
+              {% comment %}
+                <div class='col-xs-{{field.width}} su-optional-field'>
+                  <div class="form-group mbm">
+                  {% if not field.choices %}
+                    {% if field.type != "date" %}
+                      <input class='form-control' type="text" placeholder='{{ field.title }}'>
+                    {% else %}
+                      <div class="input-group">
+                        <input type="text" class="form-control datepicker" placeholder="{{ field.title }}">
+                        <span class="input-group-btn">
+                          <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                        </span>
+                      </div>
+                    {% endif %}
+                  {% else %}
+                    <select name="{{ field.name }}" id="{{ field.name }}" class='simple full mbs'>
+                      <option value="0" selected disabled>{{ field.title }}</option>
+                      {% for choice in field.choices %}
+                        <option value="{{ choice }}">{{ choice }}</option>
+                      {% endfor %}
+                    </select>
+                  {% endif %}
+                  </div>
+                </div>
+              {% endcomment %}
               {% endfor %}
             </div>
             <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
