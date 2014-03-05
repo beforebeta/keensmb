@@ -768,29 +768,55 @@ header.navbar .navbar-nav > li:hover > a {
   padding: 0 15px 0 0;
 }
 
-.su-optional-field .delete-icon {
+.su-optional-field {
+  float: left;
+  -webkit-transition: width .2s;
+  -moz-transition: width .2s;
+  -ms-transition: width .2s;
+  -o-transition: width .2s;
+  transition: width .2s;
+}
+.su-optional-field .change-icon {
   width: 20px;
   height: 20px;
   position: absolute;
-  top: -6px;
+  top: -9px;
   right: -6px;
   background-color: #bdc3c7;
   color: #fff;
-  border-radius: 50%;
+  border-radius: 10px;
   font-size: 14px;
   line-height: 20px;
   text-align: center;
   z-index: 99;
   cursor: pointer;
   opacity: 0;
+  -webkit-transition: opacity .2s;
+  -moz-transition: opacity .2s;
+  -ms-transition: opacity .2s;
+  -o-transition: opacity .2s;
+  transition: opacity .2s;
 }
-.su-optional-field:hover .delete-icon {
+.su-optional-field:hover .change-icon {
   opacity: 1;
 }
-.su-optional-field .delete-icon:hover {
+.su-optional-field .change-icon:hover {
   box-shadow: 0 0 1px #777;
 }
-
+.su-optional-field .resize-icon {
+  right:20px;
+  width: 30px;
+}
+.su-optional-field .resize-icon > i {
+  position: absolute;
+  top: 0;
+  left: 2px;
+}
+.su-optional-field .resize-icon:not(.shrink) > i:last-child,
+.su-optional-field .resize-icon.shrink > i:first-child {
+  left: auto;
+  right: 2px;
+}
 .su-form-wrapper .instructions {
   display: none;
   position: absolute;
