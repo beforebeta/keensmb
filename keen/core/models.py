@@ -294,6 +294,10 @@ class Client(Timestamps):
     ref_id_type = models.CharField(max_length=255, null=True, blank=True)
     ref_id = models.CharField(max_length=255, null=True, blank=True)
 
+    # Use the signup form code field if you want to attach any code to every signup form
+    # for example if you want to attach remarketing tags or analytics tags
+    signup_form_code = models.TextField(blank=True, null=True, default="")
+
     def customer_page(self, offset=0, filter=None, page_size=100):
         q = self.customers.all()
         if not filter is None:
