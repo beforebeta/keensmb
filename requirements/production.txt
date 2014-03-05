@@ -6,7 +6,7 @@ uwsgi
 # Django stuff
 Django>=1.6
 
-django-hstore
+django-hstore==1.1.1
 djangorestframework
 
 django-jsonfield
