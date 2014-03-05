@@ -101,14 +101,17 @@ def create_edit_promotion(request, client, promotion_id=None):
         if form.is_valid():
             promotion_instance = form.save(commit=False)
             promotion_instance.client = client
-
+            preview_promotion = False
             if "save_draft" in request.POST or 'send' in request.POST:
                 promotion_instance.status = Promotion.PROMOTION_STATUS.draft
             elif "preview_promotion" in request.POST:
-                url += '#preview'
+                preview_promotion = True
 
             promotion_instance.save()
             url = reverse('client_edit_promotion', args=[promotion_instance.id])
+            if preview_promotion:
+                url += '#preview'
+                
             return redirect(url)
     else:
         if promotion_id:
