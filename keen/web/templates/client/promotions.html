@@ -82,10 +82,12 @@
             </div>
 
             <div class="col-xs-2 promotions-button mtl">
+                {% if promotion.status != 'active' and promotion.status != 'expired' %}
               <a href="{% url 'client_edit_promotion' promotion.id %}" class="btn btn-lg btn-primary pbs mrm mbm">
                 <i class="fui-new dib"></i>
                 <span class="dib small">Edit</span>
               </a>
+                {% endif %}
               <a href="#" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' promotion.id %}" data-title="{{ promotion.name }}" class="btn btn-lg btn-default pbs previewPromotionBtn mbm">
                 <i class="fui-eye dib"></i>
                 <span class="dib small">Preview</span>

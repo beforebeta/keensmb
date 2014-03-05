@@ -93,6 +93,7 @@ def create_edit_promotion(request, client, promotion_id=None):
             {"link": "/promotions/%s/edit" % promotion_id,
              "text": 'Edit Promotion: %s' % promotion_instance.name})
         context["mode"] = "edit"
+        assert promotion_instance.status != Promotion.PROMOTION_STATUS.active and promotion_instance.status != Promotion.PROMOTION_STATUS.expired, "cannot edit Active or Expired promotions"
     else:
         promotion_instance = None
         context['breadcrumbs'].append(
