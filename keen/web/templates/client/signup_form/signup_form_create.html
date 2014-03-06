@@ -219,18 +219,17 @@
             </div>
           </div>
 
-          <button class="btn btn-default btn-wide full mbm add-field-button"
+          <!--<button class="btn btn-default btn-wide full mbm add-field-button"
                   ng-if='additionalFields.length > 4'
                   data-toggle="modal"
                   data-target="#newFieldPreventModal">
             <i>Add another field</i>
             <i class="fui-plus"></i>
-          </button>
+          </button> -->
 
           <button class="btn btn-default btn-wide full mbm add-field-button"
-                  ng-if='additionalFields.length < 5'
                   data-toggle="modal"
-                  data-target="#newFieldModal">
+                  data-target="{{ additionalFields.length < 5 ? '#newFieldModal' : '#newFieldPreventModal' }}">
             <i>Add another field</i>
             <i class="fui-plus"></i>
           </button>
@@ -343,22 +342,16 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
               <i class="fui-cross"></i>
             </button>
-            <h4 class="modal-title">Are you sure you want to do that?</h4>
+            <h4 class="modal-title">We're Sorry But...</h4>
           </div>
 
           <div class="modal-body">
-            <p>We wouldn't recommend adding any more fields to your form. Having too much information to fill out might  scare your customers away. Stick to what's absolutely necessary. Less is more!</p>
+            <p>You can’t add more than 7 fields to a Sign Up form. Trust us, you don’t want to have more fields than that. Having too much information to fill out might scare your customers away. Stick to what's absolutely necessary. Less is more!</p>
           </div>
           <div class="modal-footer">
             <button type="button"
-                    class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll"
-                    data-dismiss="modal"
-                    data-toggle="modal" data-target="#newFieldModal">Proceed</button>
-
-            <button type="button"
-                    class="btn btn-default btn-wide btn-embossed pull-right"
-                    data-dismiss="modal"
-                    ng-click='doneAddingFields()'>Ok, nevermind</button>
+                    class="btn btn-primary btn-default btn-wide btn-embossed pull-right"
+                    data-dismiss="modal">Nevermind</button>
           </div>
 
         </div><!-- /.modal-content -->
@@ -384,34 +377,19 @@
               <div class="col-xs-3">
                 <button ng-if='!checkField(name)'
                         class='btn btn-sm btn-primary btn-secondary btn-embossed col-xs-12'
-                        ng-click='addField(name)'>
+                        ng-click='addField(name);'>
 
                   <span class='mrl'>Add Field</span>
                   <i class="fui-plus"></i>
                 </button>
 
                 <button ng-if='checkField(name)'
-                        class='btn btn-sm btn-default btn-embossed col-xs-12'
-                        ng-click='removeField(name)'>
-
-                  <span class='mrl'>Remove</span>
-                  <i class="fui-cross"></i>
+                        class='btn btn-sm btn-default btn-embossed col-xs-12'>
+                  <span>Added</span>
                 </button>
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button"
-                    class="btn btn-primary btn-wide btn-embossed btn-secondary pull-right mll"
-                    data-dismiss="modal"
-                    ng-click='doneAddingFields()'>Done</button>
-
-            <button type="button"
-                    class="btn btn-default btn-wide btn-embossed pull-right"
-                    data-dismiss="modal"
-                    ng-click='cancelAddingFields()'>Cancel</button>
-          </div>
-
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

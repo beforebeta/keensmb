@@ -51,6 +51,9 @@
             if (!$scope.checkField(name)) {
                 var item = _.find(optionalFields, {name: name});
                 $scope.additionalFields.push(item);
+
+                // hardcoded
+                $("#newFieldModal").modal("hide");
             }
         };
 
