@@ -3,6 +3,8 @@ import operator
 import random
 import urllib
 import datetime
+import re
+import logging
 
 from django.conf import settings
 from django.db import models
@@ -17,6 +19,11 @@ from model_utils import Choices
 from keen import util, print_stack_trace, InvalidOperationException
 
 from tracking.models import Visitor
+
+
+logger = logging.getLogger(__name__)
+
+customer_data_name = re.compile(r'^[a-z][a-z0-9]*(__[a-z][a-z0-9]*)?$')
 
 
 class Timestamps(models.Model):
@@ -326,6 +333,16 @@ class Client(Timestamps):
     def get_active_promotions_count(self):
         #TODO: Change
         return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).count()
+
+
+    def customers_by_data(self, data):
+        q = Q(client=self)
+        for name, value in data.items():
+            subq = Q()
+            for subval in value:
+                subq |= Q(data__contains={name: subval})
+            q &= subq
+        return Customer.objects.filter(q)
 
 
 class ClientUser(Timestamps):

@@ -11,6 +11,7 @@ client_api_urls = patterns(
     'keen.web.views.api.client',
     url(r'^current$', 'current_client_view',
         name='current_client'),
+    url(r'^num_customers$', 'num_customers'),
     url(r'^(?P<client_slug>[\w-]+)(?:/|$)', include(patterns(
         '',
         url(r'^$', ClientProfile.as_view(),
