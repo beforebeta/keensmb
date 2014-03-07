@@ -10,10 +10,10 @@ from fuzzywuzzy import process
 from keen.core.models import Client
 from keen.web.models import ImportRequest
 from keen.web.serializers import CustomerFieldSerializer
-from keen.web.views.api.client import ClientAPI
+from keen.web.views.api.client import ClientAPIView
 
 
-class ImportAPI(ClientAPI):
+class ImportAPI(ClientAPIView):
 
     def get(self, request, client, import_id):
         imp = get_object_or_404(ImportRequest, client=client, id=import_id)
@@ -24,7 +24,6 @@ class ImportAPI(ClientAPI):
             'errors': imp.data.get('errors', []),
         }
         return Response(response)
-
 
     def post(self, request, client):
 

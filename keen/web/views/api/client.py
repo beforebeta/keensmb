@@ -4,6 +4,7 @@ import logging
 from hashlib import sha256
 from base64 import b64decode
 from uuid import uuid4
+import functools
 
 from django.conf import settings
 from django.http import QueryDict, Http404, HttpResponseNotAllowed
@@ -45,17 +46,6 @@ logger = logging.getLogger(__name__)
 field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
 
 
-class IsClientUser(BasePermission):
-
-    def has_permission(self, request, view):
-        return (
-            request.user and
-            request.session and
-            'client_slug' in request.session and
-            request.session['client_slug'] == view.kwargs.get('client_slug')
-        )
-
-
 def schedule_screenshot(request, form):
     url = request.build_absolute_uri(
         reverse('customer_signup', kwargs={
@@ -71,14 +61,44 @@ def schedule_screenshot(request, form):
     )
 
 
-class ClientProfile(APIView):
-
-    permission_classes = (IsClientUser,)
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug, part=None):
+def client_api(func):
+    """
+    Decorate client API callable.
+    Replaces client_slug positional argument with Client instance.
+    Ensures user has permission to access that client
+    """
+    @functools.wraps(func)
+    @ensure_csrf_cookie
+    def wrapper(request, client_slug, *args, **kw):
+        try:
+            assert client_slug == request.session['client_slug']
+        except (AssertionError, AttributeError, KeyError):
+            # No request.session or no request.session['client_slug'] or it's
+            # not the same as client_slug parameter
+            return Response(status=HTTP_403_FORBIDDEN)
         client = get_object_or_404(Client, slug=client_slug)
+        # Call original with client_slug replaced with client object
+        return func(request, client, *args, **kw)
 
+    return wrapper
+
+
+class ClientAPIView(APIView):
+    """Base class that used client_api to decorate its methods
+    """
+    permission_classes = ()
+
+    def __init__(self, *args, **kw):
+        super(ClientAPIView, self).__init__(self, *args, **kw)
+        for name in self.http_method_names:
+            meth = getattr(self, name, None)
+            if callable(meth):
+                setattr(self, name, client_api(meth))
+
+
+class ClientProfile(ClientAPIView):
+
+    def get(self, request, client, part=None):
         if part is None:
             data = ClientSerializer(client).data
         elif part == 'summary':
@@ -112,10 +132,7 @@ class ClientProfile(APIView):
 
         return Response(data)
 
-    @method_decorator(ensure_csrf_cookie)
-    def put(self, request, client_slug, part=None):
-        client = get_object_or_404(Client, slug=client_slug)
-
+    def put(self, request, client, part=None):
         if part == 'customer_fields':
             fields = request.DATA.get('display_customer_fields', [])
             page, created = PageCustomerField.objects.get_or_create(page='db', client=client)
@@ -132,16 +149,11 @@ class ClientProfile(APIView):
         return Response(data)
 
 
-class CustomerList(APIView):
+class CustomerList(ClientAPIView):
 
-    permission_classes = (IsClientUser,)
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug):
+    def get(self, request, client):
         """Return one page of Customer objects
         """
-        client = get_object_or_404(Client, slug=client_slug)
-
         try:
             limit = int(request.GET['limit'])
         except (KeyError, ValueError):
@@ -189,11 +201,9 @@ class CustomerList(APIView):
             'customers': customers,
         })
 
-    @method_decorator(ensure_csrf_cookie)
-    def post(self, request, client_slug):
+    def post(self, request, client):
         """Create new customer
         """
-        client = get_object_or_404(Client, slug=client_slug)
         form = CustomerForm(client, request.POST)
 
         if form.is_valid():
@@ -207,30 +217,25 @@ class CustomerList(APIView):
         return Response(CustomerSerializer(customer).data, status=HTTP_201_CREATED)
 
 
-class CustomerProfile(APIView):
+class CustomerProfile(ClientAPIView):
 
-    permission_classes = (IsClientUser,)
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug, customer_id):
+    def get(self, request, client, customer_id):
         """Retrieve customer profile
         """
-        customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
+        customer = get_object_or_404(Customer, client=client, id=customer_id)
         return Response(CustomerSerializer(customer).data)
 
-    @method_decorator(ensure_csrf_cookie)
-    def delete(self, request, client_slug, customer_id):
-        customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
+    def delete(self, request, client, customer_id):
+        customer = get_object_or_404(Customer, client=client, id=customer_id)
 
         customer.delete()
 
         return Response('Deleted')
 
-    @method_decorator(ensure_csrf_cookie)
-    def post(self, request, client_slug, customer_id):
+    def post(self, request, client, customer_id):
         """Update customer profile
         """
-        customer = get_object_or_404(Customer, client__slug=client_slug, id=customer_id)
+        customer = get_object_or_404(Customer, client=client, id=customer_id)
 
         form = CustomerForm(client, request.POST)
 
@@ -259,28 +264,34 @@ def current_client_view(request):
         client_slug = request.session['client_slug']
     except KeyError:
         return Response(status=403)
-
     client = get_object_or_404(Client, slug=client_slug)
-
     return Response(ClientSerializer(client).data)
 
 
-class SignupFormList(APIView):
+@ensure_csrf_cookie
+@api_view(['GET'])
+def num_customers(request):
+    try:
+        client_slug = request.session['client_slug']
+    except KeyError:
+        return Response(status=403)
+    client = get_object_or_404(Client, slug=client_slug)
+    data = ((name, request.GET.getlist(name)) for name in request.GET.keys())
+    data = dict((name, value) for name, value in data if name and value)
+    result = client.customers_by_data(data).count()
+    return Response(result)
 
-    permission_classes = (IsClientUser,)
 
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug):
-        forms = SignupForm.objects.filter(client__slug=client_slug)\
+class SignupFormList(ClientAPIView):
+
+    def get(self, request, client):
+        forms = SignupForm.objects.filter(client=client)\
                 .exclude(slug__startswith='preview-')\
                 .order_by('-status', 'slug')
 
         return Response(SignupFormSerializer(forms, many=True).data)
 
-    @method_decorator(ensure_csrf_cookie)
-    def post(self, request, client_slug):
-        client = get_object_or_404(Client, slug=client_slug)
-
+    def post(self, request, client):
         try:
             slug = request.DATA['slug']
             data = request.DATA['data']
@@ -311,24 +322,18 @@ class SignupFormList(APIView):
         return Response(status=HTTP_201_CREATED)
 
 
-class SignupFormView(APIView):
+class SignupFormView(ClientAPIView):
 
-    permission_classes = (IsClientUser,)
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug, form_slug):
+    def get(self, request, client, form_slug):
         """Retrieve form information
         """
-        client = get_object_or_404(Client, slug=client_slug)
         form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
         return Response(SignupFormSerializer(form).data)
 
-    @method_decorator(ensure_csrf_cookie)
-    def put(self, request, client_slug, form_slug):
+    def put(self, request, client, form_slug):
         """Update form information
         """
-        client = get_object_or_404(Client, slug=client_slug)
         form = get_object_or_404(SignupForm, client=client, slug=form_slug)
 
         if 'status' in request.DATA:
@@ -355,11 +360,8 @@ class SignupFormView(APIView):
 
         return Response(status=HTTP_204_NO_CONTENT)
 
-    @method_decorator(ensure_csrf_cookie)
-    def delete(self, request, client_slug, form_slg):
-        client = get_object_or_404(Client, slug=client_slug)
+    def delete(self, request, client, form_slg):
         form = get_object_or_404(SignupForm, clinet=client, slug=form_slug)
-
         try:
             with transaction.atomic():
                 CustomerSource.objects.filter(ref_source='signup',
@@ -368,28 +370,19 @@ class SignupFormView(APIView):
         except DatabaseError:
             logger.exception('Failed to delete signup form')
             raise
-
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-class ImageList(APIView):
+class ImageList(ClientAPIView):
 
-    permission_classes = (IsClientUser,)
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, client_slug):
+    def get(self, request, client):
         """Retrieve list of images
         """
-        client = get_object_or_404(Client, slug=client_slug)
-
         return Response(ImageSerializer(client.images.all(), many=True).data)
 
-    @method_decorator(ensure_csrf_cookie)
-    def post(self, request, client_slug):
+    def post(self, request, client):
         """Upload new image
         """
-        client = get_object_or_404(Client, slug=client_slug)
-
         try:
             content_type = request.DATA['type']
             content = request.DATA['data']
@@ -423,11 +416,9 @@ class ImageList(APIView):
 
         return Response(ImageSerializer(image).data, status=HTTP_201_CREATED)
 
-    @method_decorator(ensure_csrf_cookie)
-    def delete(self, client_slug, image_id):
+    def delete(self, client, image_id):
         """Delete image
         """
-        client = get_object_or_404(Client, slug=client_slug)
         try:
             Image.objects.get(client=client, id=int(image_id)).delete()
         except Image.DoesNotExist:

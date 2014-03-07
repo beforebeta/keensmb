@@ -156,8 +156,6 @@
 
                 // reinitialize select2
                 $('.section-default').find('select').select2();
-
-                updateTargetCustomers();
             }
 
         });
@@ -177,15 +175,28 @@
                 $defaultBanner.show();
                 $sectionWrap.find('option').prop('selected', true);
             }
-
             updateTargetCustomers();
         });
 
-        var $targetCounter = $('.js-target-count');
+        var $targetCounter = $('.js-target-count'), $targetInput = $('#target-audience').find('input,select');
         var updateTargetCustomers = function() {
-            var selectedNum = $sectionWrap.children('.section-default:visible').length;
-            $targetCounter.text(selectedNum);
+        var target_params = $targetInput.map(function() {
+            var val = $(this).val(), name = this.name.substr(7);
+            if ($.isArray(val)) {
+                return $.map(val, function(val) {
+                    return {name:name, value:val};
+                });
+            }
+            return val ? {name:name, value: val} : null;
+        });
+            $.get('/api/client/num_customers', target_params, function(data) { $targetCounter.html(data); });
         };
+
+	$targetInput.on('change', function() {
+		updateTargetCustomers();
+	});
+
+	updateTargetCustomers();
     }
 
 
