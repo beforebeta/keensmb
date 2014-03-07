@@ -5,6 +5,26 @@ upstream keen_app {
 server {
         listen 80 default_server; 
 	server_name .keensmb.com;
+
+	location = /robots.txt {
+		alias /var/apps/keensmb.com/keen/conf/robots.txt;
+	}
+
+	location = /favicon.ico {
+		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
+	}
+
+	rewrite ^ https://$host$request_uri permanent;
+}
+
+server {
+	listen 443;
+	server_name .keensmb.com;
+
+	ssl on;
+	ssl_certificate /var/apps/keensmb.com/cert/keensmb+gd-ca.crt;
+	ssl_certificate_key /var/apps/keensmb.com/cert/keensmb.key;
+
 	client_max_body_size 32M;
 
 	location = /robots.txt {
