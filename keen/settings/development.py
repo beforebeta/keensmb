@@ -17,10 +17,13 @@ MIDDLEWARE_CLASSES += (
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'keen.web.storage.CachedS3BotoStorage'
+COMPRESS_STORAGE = STATICFILES_STORAGE
 
+from boto.s3.connection import ProtocolIndependentOrdinaryCallingFormat
+
+AWS_S3_CALLING_FORMAT = ProtocolIndependentOrdinaryCallingFormat()
 AWS_QUERYSTRING_AUTH = False
-AWS_S3_SECURE_URLS = False
 AWS_REDUCED_REDUNDANCY = True
 AWS_STORAGE_BUCKET_NAME = 'momyc'
 AWS_HEADERS = {
@@ -30,13 +33,11 @@ AWS_HEADERS = {
 AWS_ACCESS_KEY_ID = 'AKIAI22SZIJA336XJZIQ'
 AWS_SECRET_ACCESS_KEY = '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'
 
-STATIC_URL = 'http://{0}.s3.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME)
+STATIC_URL = '//s3.amazonaws.com/{0}/{1}/'.format(AWS_STORAGE_BUCKET_NAME, AWS_LOCATION)
+COMPRESS_URL = STATIC_URL
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
-COMPRESS_OUTPUT_DIR = ''
-COMPRESS_URL = STATIC_URL
-COMPRESS_STORAGE = STATICFILES_STORAGE
 COMPRESS_CSS_FILTERS = [
         'compressor.filters.css_default.CssAbsoluteFilter',
         'compressor.filters.cssmin.CSSMinFilter',
