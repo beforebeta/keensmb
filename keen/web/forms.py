@@ -135,7 +135,9 @@ class PromotionForm(forms.ModelForm):
                  for name in self.data.keys()
                  if name.startswith('target_'))
         cleaned_data['target_audience'] = dict((name, value) for name, value
-                                               in data if name and value)
+                                               in data if (
+                                                   name and value and (
+                                                       (len(value) > 1) or value[0])))
         return cleaned_data
 
     def clean_valid_to(self):

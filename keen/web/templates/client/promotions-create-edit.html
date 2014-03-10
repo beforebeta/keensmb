@@ -293,9 +293,9 @@
                         </div>
                         {% if filter.choices %}
                         <div class="kn-section-content promotion-select-multiple">
-                          <select name="target_{{ filter.name }}" multiple>
+                          <select name="target_{{ filter.name }}" multiple data-values="{{ filter.values }}">
                             {% for choice in filter.choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
+                            <option value="{{ choice }}" {% if choice in filter.values %}selected{% endif %}>{{ choice }}</option>
                             {% endfor %}
                           </select>
                         </div>

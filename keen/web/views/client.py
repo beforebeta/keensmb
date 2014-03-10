@@ -109,6 +109,7 @@ def create_edit_promotion(request, client, promotion_id=None):
         if form.is_valid():
             logger.debug('Promotion form data: {0!r}\n\n{1!r}'.format(form.data, form.cleaned_data))
             promotion_instance = form.save(commit=False)
+            promotion_instance.target_audience = form.cleaned_data.get('target_audience')
             promotion_instance.client = client
 
             if "save_draft" in request.POST or 'send' in request.POST:
@@ -133,6 +134,8 @@ def create_edit_promotion(request, client, promotion_id=None):
                 'name': name,
                 'title': CUSTOMER_FIELD_NAMES_DICT[name],
                 'choices': choices,
+                'values': promotion_instance.target_audience.get(name, []) if (
+                    promotion_instance and promotion_instance.target_audience) else [],
             } for name, choices in CUSTOMER_FIELD_CHOICES.items()
         ] + [
             # boolean fields have two choices "yes" and "no"
