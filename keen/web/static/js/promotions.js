@@ -123,16 +123,11 @@
         }
         $('.section-default[data-section-name="' + $listItem.data('section-name') + '"]');
         $defaultBanner.hide();
-        $section.find('select').select2();
         $section.show();
         $listItem.addClass('active');
     };
 
     if ($sectionWrap.length) {
-
-        // select all options
-        //$sectionWrap.find('option').prop('selected', true);
-
         // generate menu items
         $sectionWrap.find('.section-default').each(function(i, item) {
 
@@ -167,11 +162,10 @@
             $('.js-prom-mock-item.active[data-item='+itemName+']').removeClass('active');
 
             $thisSection.hide();
-            $thisSection.find('select').val('');
+            $thisSection.find('select').select2('val', '');
 
             if(!$sectionWrap.children('.section-default:visible').length){
                 $defaultBanner.show();
-                $sectionWrap.find('option').prop('selected', true);
             }
             updateTargetCustomers();
         });
