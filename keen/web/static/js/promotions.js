@@ -59,20 +59,20 @@
         $.ajax({
             type: "POST",
             url: $this.attr('data-location'),
-            data: {"obj_id":obj_id},
-            success: function (msg) {
-                $('#promotionApproveModal').modal('hide');
-                try{
-                    if (msg["success"] == 0) {
-                        keen.showMessageModal("Promotion not approved!", msg["msg"]);
-                    } else {
-                        window.location = '/promotions/upcoming';
-                    };
-                }catch(e){}
-            },
-            error: function (msg) {
-                keen.showMessageModal("An Error Occurred", "An error occurred while processing ");
-            }
+        data: {"obj_id":obj_id},
+        success: function (msg) {
+            $('#promotionApproveModal').modal('hide');
+            try{
+                if (msg["success"] == 0) {
+                keen.showMessageModal("Promotion not approved!", msg["msg"]);
+            } else {
+                window.location = '/promotions/upcoming';
+            };
+        }catch(e){}
+    },
+    error: function (msg) {
+        keen.showMessageModal("An Error Occurred", "An error occurred while processing ");
+    }
         });
     });
 
@@ -84,9 +84,9 @@
         $preview_image.attr('src','');
         $preview_image.hide();
         filepicker.pickAndStore({
-                mimetypes: ['image/*'],
-                container: 'modal',
-                services: ['COMPUTER', 'FACEBOOK', 'GMAIL']
+            mimetypes: ['image/*'],
+            container: 'modal',
+            services: ['COMPUTER', 'FACEBOOK', 'GMAIL']
             }, {
                 location:"S3"
             },
@@ -112,59 +112,56 @@
         }
     });
 
-
-// 'Target Your Audience' section
+    // 'Target Your Audience' section
     var $sectionWrap = $('.promsection-segment-wrapper'),
-        $defaultBanner = $('.promotion-narrow-field');
+    $defaultBanner = $('.promotion-narrow-field');
+
+    var activateSection = function(name) {
+    };
 
     if ($sectionWrap.length) {
 
         // select all options
-        $sectionWrap.find('option').prop('selected', true);
+        //$sectionWrap.find('option').prop('selected', true);
 
         // generate menu items
         $sectionWrap.find('.section-default').each(function(i, item) {
 
             var $item = $(item),
-                innerText =  $item.find('.kn-section-header span').text(),
-                data =  $item.data('section-name'),
-                $itemInList = $('.promotion-scroll-menu').prev('li').clone();
+            innerText =  $item.find('.kn-section-header span').text(),
+            data =  $item.data('section-name'),
+            $itemInList = $('.promotion-scroll-menu').prev('li').clone();
 
             $itemInList
-                .attr('data-item', data)
-                .text(innerText)
-                .appendTo($('.promotion-scroll-menu'))
-                .show();
+            .attr('data-item', data)
+            .text(innerText)
+            .appendTo($('.promotion-scroll-menu'))
+            .show();
         });
 
         // click on menu item handler
         $('.js-prom-mock-item').on('click', function() {
             var $this = $(this),
-                itemData = $this.data('item');
+            itemData = $this.data('item');
 
             if(!$this.hasClass('active')) {
-
                 $this.addClass('active');
-
                 $('.section-default[data-section-name="'+itemData+'"]').show();
-
                 if ($defaultBanner.is(':visible')) {
                     $defaultBanner.hide();
                     // deselect all options
-                    $sectionWrap.find('option').prop('selected', false);
+                    //$sectionWrap.find('option').prop('selected', false);
                 }
-
                 // reinitialize select2
                 $('.section-default').find('select').select2();
             }
-
         });
 
         // close options
         $sectionWrap.on('click', '.promotion-icon-close-height', function(){
 
             var $thisSection = $(this).closest('.section-default'),
-                itemName = $thisSection.data('section-name');
+            itemName = $thisSection.data('section-name');
 
             $('.js-prom-mock-item.active[data-item='+itemName+']').removeClass('active');
 
@@ -178,26 +175,28 @@
             updateTargetCustomers();
         });
 
-        var $targetCounter = $('.js-target-count'), $targetInput = $('#target-audience').find('input,select');
+        var $targetCounter = $('.js-target-count'),
+            $targetInput = $('#target-audience').find('input,select');
         var updateTargetCustomers = function() {
-        var target_params = $targetInput.map(function() {
-            var val = $(this).val(), name = this.name.substr(7);
-            if ($.isArray(val)) {
-                return $.map(val, function(val) {
-                    return {name:name, value:val};
-                });
-            }
-            return val ? {name:name, value: val} : null;
-        });
-            $.get('/api/client/num_customers', target_params, function(data) { $targetCounter.html(data); });
+            var target_params = $targetInput.map(function() {
+                var val = $(this).val(), name = this.name.substr(7);
+                if ($.isArray(val)) {
+                    return $.map(val, function(val) {
+                        return {name:name, value:val};
+                    });
+                }
+                return val ? {name:name, value: val} : null;
+            });
+            $.get('/api/client/num_customers', target_params, function(data) {
+                $targetCounter.html(data);
+            });
         };
 
-	$targetInput.on('change', function() {
-		updateTargetCustomers();
-	});
+        $targetInput.on('change', function() {
+            updateTargetCustomers();
+        });
 
-	updateTargetCustomers();
+        $('.section-default').find('select').select2();
+        updateTargetCustomers();
     }
-
-
 })(jQuery);

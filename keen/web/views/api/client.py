@@ -89,7 +89,7 @@ class ClientAPIView(APIView):
     permission_classes = ()
 
     def __init__(self, *args, **kw):
-        super(ClientAPIView, self).__init__(self, *args, **kw)
+        super(ClientAPIView, self).__init__(*args, **kw)
         for name in self.http_method_names:
             meth = getattr(self, name, None)
             if callable(meth):
