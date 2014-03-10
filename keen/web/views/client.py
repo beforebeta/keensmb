@@ -127,7 +127,7 @@ def create_edit_promotion(request, client, promotion_id=None):
             form = PromotionForm()
 
     context['form'] = form
-    context['target_audience_filters'] = (
+    context['target_audience_filters'] = sorted(
         [
             # fields with choices
             {
@@ -154,7 +154,7 @@ def create_edit_promotion(request, client, promotion_id=None):
                 and
                 name not in BOOLEAN_CUSTOMER_FIELDS
             )
-        ])
+        ], key=lambda i: i['title'])
     return render(request, 'client/promotions-create-edit.html', context)
 
 @client_view
