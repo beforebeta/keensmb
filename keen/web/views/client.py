@@ -143,6 +143,8 @@ def create_edit_promotion(request, client, promotion_id=None):
                 'name': name,
                 'title': CUSTOMER_FIELD_NAMES_DICT[name],
                 'choices': ('yes', 'no'),
+                'values': promotion_instance.target_audience.get(name, []) if (
+                    promotion_instance and promotion_instance.target_audience) else [],
             } for name in BOOLEAN_CUSTOMER_FIELDS
         ] + [
             # rest of the fields have no predefined choices
