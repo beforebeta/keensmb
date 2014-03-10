@@ -56,7 +56,7 @@ class SignupForm(Timestamps):
                 (field.name, field) for field in
                 CustomerField.objects.filter(name__in=names)
             )
-            fields = [cache(name) for name in names]
+            fields = [cache[name] for name in names]
         return fields
 
     class Meta:
