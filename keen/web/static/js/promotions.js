@@ -137,6 +137,13 @@
             .text(innerText)
             .appendTo($('.promotion-scroll-menu'))
             .show();
+
+	    var $section = $('.section-default[data-section-name="'+data+'"]');
+	    if ($section.find('select,input').val()) {
+                    $defaultBanner.hide();
+		    $section.show();
+		    $itemInList.addClass('active');
+	    }
         });
 
         // click on menu item handler
