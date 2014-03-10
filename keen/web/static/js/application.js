@@ -66,34 +66,43 @@ keen.showMessageModal = function(title, message) {
     $(function () {
 
         // Custom Selects
-        $("select[name='huge']").selectpicker({style: 'btn-hg btn-primary', menuStyle: 'dropdown-inverse'});
-        $("select[name='large']").selectpicker({style: 'btn-lg btn-danger'});
-        $("select[name='info']").selectpicker({style: 'btn-info'});
-        $("select[name='small']").selectpicker({style: 'btn-sm btn-warning'});
-        $("select.simple").selectpicker({style: 'btn-sm btn-default'});
+        if ($.fn.selectpicker) {
+            $("select[name='huge']").selectpicker({style: 'btn-hg btn-primary', menuStyle: 'dropdown-inverse'});
+            $("select[name='large']").selectpicker({style: 'btn-lg btn-danger'});
+            $("select[name='info']").selectpicker({style: 'btn-info'});
+            $("select[name='small']").selectpicker({style: 'btn-sm btn-warning'});
+            $("select.simple").selectpicker({style: 'btn-sm btn-default'});
+        }
+
+        // Select2
+        $.fn.select2 && $('.select2').select2({dropdownCssClass: 'choose-field-dropdown'});
 
         // Tabs
-        $(".nav-tabs a").on('click', function (e) {
-            e.preventDefault();
-            $(this).tab("show");
-        });
+        if ($.fn.tab) {
+            $(".nav-tabs a").on('click', function (e) {
+                e.preventDefault();
+                $(this).tab("show");
+            });
+        }
 
         // Tooltips
-        $("[data-toggle=tooltip]").tooltip("show");
+        $.fn.tooltip && $("[data-toggle=tooltip]").tooltip("show");
 
         // Tags Input
-        $(".tagsinput").tagsInput();
+        $.fn.tagsInput && $(".tagsinput").tagsInput();
 
         // jQuery UI Sliders
-        var $slider = $("#slider");
-        if ($slider.length > 0) {
-            $slider.slider({
-                min: 1,
-                max: 5,
-                value: 3,
-                orientation: "horizontal",
-                range: "min"
-            }).addSliderSegments($slider.slider("option").max);
+        if ($.fn.slider) {
+            var $slider = $("#slider");
+            if ($slider.length > 0) {
+                $slider.slider({
+                    min: 1,
+                    max: 5,
+                    value: 3,
+                    orientation: "horizontal",
+                    range: "min"
+                }).addSliderSegments($slider.slider("option").max);
+            }
         }
 
         // Add style class name to a tooltips
@@ -104,7 +113,7 @@ keen.showMessageModal = function(title, message) {
         });
 
         // Placeholders for input/textarea
-        $("input, textarea").placeholder();
+        $.fn.placeholder && $("input, textarea").placeholder();
 
         // Make pagination demo work
         $(".pagination a").on('click', function () {
@@ -120,19 +129,21 @@ keen.showMessageModal = function(title, message) {
             e.preventDefault();
         });
 
-        // jQuery UI Spinner
-        $.widget("ui.customspinner", $.ui.spinner, {
-            widgetEventPrefix: $.ui.spinner.prototype.widgetEventPrefix,
-            _buttonHtml: function () { // Remove arrows on the buttons
-                return "" +
-                    "<a class='ui-spinner-button ui-spinner-up ui-corner-tr'>" +
-                    "<span class='ui-icon " + this.options.icons.up + "'></span>" +
-                    "</a>" +
-                    "<a class='ui-spinner-button ui-spinner-down ui-corner-br'>" +
-                    "<span class='ui-icon " + this.options.icons.down + "'></span>" +
-                    "</a>";
-            }
-        });
+        if ($.ui.spinner) {
+            // jQuery UI Spinner
+            $.widget("ui.customspinner", $.ui.spinner, {
+                widgetEventPrefix: $.ui.spinner.prototype.widgetEventPrefix,
+                _buttonHtml: function () { // Remove arrows on the buttons
+                    return "" +
+                        "<a class='ui-spinner-button ui-spinner-up ui-corner-tr'>" +
+                        "<span class='ui-icon " + this.options.icons.up + "'></span>" +
+                        "</a>" +
+                        "<a class='ui-spinner-button ui-spinner-down ui-corner-br'>" +
+                        "<span class='ui-icon " + this.options.icons.down + "'></span>" +
+                        "</a>";
+                }
+            });
+        }
 
         // Focus state for append/prepend inputs
         $('.input-group').on('focus', '.form-control',function () {
@@ -148,11 +159,13 @@ keen.showMessageModal = function(title, message) {
         });
 
         // Popovers
-        $('.js-popover-hover').popover({
-            'trigger': 'hover',
-            'container': 'body',
-            'html': true
-        });
+        if ($.fn.popover) {
+            $('.js-popover-hover').popover({
+                'trigger': 'hover',
+                'container': 'body',
+                'html': true
+            });
+        }
 
         // Trigger click elements
         $(document).on('click', '.js-trigger', function (e) {
@@ -161,9 +174,7 @@ keen.showMessageModal = function(title, message) {
         });
 
         // Chromoselector
-        if ($('.chromoselector').chromoselector) {
-            $('.chromoselector').chromoselector();
-        }
+        $.fn.chromoselector && $('.chromoselector').chromoselector();
 
         // Table: Add class row selected
 //        $(document).on('check uncheck toggle', '.table tbody :checkbox', function (e) {
@@ -178,30 +189,32 @@ keen.showMessageModal = function(title, message) {
 //        });
 
         // jQuery UI Datepicker
-        var setup_date_picker = function(selector, dateFormat, yearRange) {
-            $(selector).datepicker({
-                showOtherMonths: true,
-                selectOtherMonths: true,
-                dateFormat: dateFormat,
-                yearRange: yearRange,
-                changeMonth: true,
-                changeYear: true
-            }).siblings('.btn, .input-group-btn').on('click', function (e) {
-                e && e.preventDefault();
-                $(datepickerSelector).focus();
-            });
-            $.extend($.datepicker, {_checkOffset: function (inst, offset, isFixed) {
-                return offset;
-            }});
-            // Now let's align datepicker with the prepend button
-            $(selector).datepicker('widget').css({'margin-left': -$(selector).prev('.input-group-btn').find('.btn').outerWidth()});
-        };
-        setup_date_picker('.datapicker', "mm/dd/yy", "c-99:+0");
-        setup_date_picker('.datepickerAlternate', "M d, yy", "c-10:+10");
+        if ($.fn.datepicker) {
+            var setup_date_picker = function(selector, dateFormat, yearRange) {
+                $(selector).datepicker({
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    dateFormat: dateFormat,
+                    yearRange: yearRange,
+                    changeMonth: true,
+                    changeYear: true
+                }).siblings('.btn, .input-group-btn').on('click', function (e) {
+                    e && e.preventDefault();
+                    $(selector).focus();
+                });
+                $.extend($.datepicker, {_checkOffset: function (inst, offset, isFixed) {
+                    return offset;
+                }});
+                // Now let's align datepicker with the prepend button
+                $(selector).datepicker('widget').css({'margin-left': -$(selector).prev('.input-group-btn').find('.btn').outerWidth()});
+            };
+            setup_date_picker('.datepicker', "mm/dd/yy", "c-99:+0");
+            setup_date_picker('.datepickerAlternate', "M d, yy", "c-10:+10");
+        }
 
 
         // Switch
-        $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
+        $.fn.bootstrapSwitch && $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
 
         // Typehead
         // $('.typeahead').typeahead();

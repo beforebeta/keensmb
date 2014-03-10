@@ -280,6 +280,12 @@ class CustomerField(Timestamps):
 
         return None
 
+    def group_name(self):
+        try:
+            return self.group.name
+        except:
+            return ""
+
     def __unicode__(self):
         return self.name
 
@@ -333,7 +339,6 @@ class Client(Timestamps):
     def get_active_promotions_count(self):
         #TODO: Change
         return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).count()
-
 
     def customers_by_data(self, data):
         q = Q(client=self)

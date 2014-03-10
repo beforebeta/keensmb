@@ -380,8 +380,8 @@
     text-align: left !important;
 }
 
-input.datapicker  {
-    padding-left: 2px !important;
+input.datepicker  {
+    /*padding-left: 2px !important;*/
 }
 
 .has-error {

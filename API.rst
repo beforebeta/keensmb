@@ -56,8 +56,11 @@ Each customer field object consists of the following fields:
 	``type``
 		Field type
 
-	``required``
-		Whether or not this field is mandatory for every customer of this client
+        ``required``
+                Whether or not this field is mandatory for every customer of this client
+	
+	``choices``
+		Optional list of allowed values for that field
 
 
 PUT /api/client/:client_slug/customer_fields
@@ -138,8 +141,8 @@ Retrieve list of client's signup form objects in JSON format. Each object contai
 		Status of the form. Possible values "draft" and "published"
 
 	``data``
-		Object with unspecified content. Normally, the content is accepted from front-end
-		as-is and can be used by form editor / renderer.
+		Object that defines signup form status and rendering information. For details see description of
+		``data`` field in ``POST  /api/client/:client_slug/signup_forms`` section below.
 
 
 POST /api/client/:client_slug/signup_forms
@@ -151,11 +154,48 @@ Create new signup form. Expects JSON-formatted object with the following fields:
 		Signup form slug. Unique for the client.
 
 	``status``
-		Status of the form. Possible values "draft" and "published"
-
+		Status of the form. Possible values ``draft`` and ``published``
+	
 	``data``
-		Object with unspecified content. Form editor can use this to pass parameters to
-		renderer.
+		Object with the following fields:
+
+		``thumbnail``
+			URL of form's thumbnail
+		``pageTitle``
+			Text to be shown as a page title
+		``bannerLogo``
+			Object with the following fields:
+			``imageSrc``
+				URL of logo image
+			``position``
+				Object with ``top`` and ``left`` fields that defines rendering position of
+				the logo image
+		``backgroundImage``
+			Object with the following fields:
+			``backgroundColor``
+				Background color of signup page
+			``imageSrc``
+				URL of background image of signup page
+			``position``
+				Object with ``top`` and ``left`` fields that defines rendering position of
+				background image
+		``form``
+			Object with the following fields:
+			``title``
+				Form title
+			``description``
+				Form description
+			``textColor``
+				Color of form title and description
+			``backgroundColor``
+				Background color of the form
+		``extra_fields``
+			List of extra fields to show on the form. Each signup form shows full_name and email fields.
+			The rest is defined by content of this list. Each object has the following fields:
+			``name``
+				Name of field to be shown
+			``width``
+				Size of the field. Possible values are ``full`` and ``half``
 
 
 GET /api/client/:client_slug/signup_forms/:form_slug
@@ -171,7 +211,8 @@ PUT /api/client/:client_slug/signup_forms/:form_slug
 Update form. Expects JSON-encoded object with the following fields:
 
 	``data``
-		Object with unspecified content
+		Object holding rendering information of signup form. For details see description od
+		``data`` field in ``POST  /api/client/:client_slug/signup_forms`` section above.
 
 	``status``
 		Status of the form. Possible values "draft" and "published"

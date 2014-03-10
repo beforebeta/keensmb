@@ -268,6 +268,10 @@
   border-bottom-color: #bdc3c7;
   border-top-color: #bdc3c7;
 }
+.dropdown-menu {
+  opacity: 0;
+  visibility: hidden;
+}
 .btn-group.select.simple .dropdown-menu {
   min-height: 0 !important;
 }
@@ -296,7 +300,8 @@
 }
 
 .input-group .input-group-btn .btn-calendar {
-  padding-left: 3px;
+  padding-left: 2px;
+  padding-right: 5px;
 }
 .input-group  .hasDatepicker {
   padding-right: 3px;
@@ -380,3 +385,9 @@
   content:"\e034";
 }
 
+.dropup .caret {
+  border-bottom: 8px solid #bdc3c7;
+  border-top: none;
+}
+
+.btn, .btn:focus {outline: 0;}
