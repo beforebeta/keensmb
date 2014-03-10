@@ -116,7 +116,12 @@
     var $sectionWrap = $('.promsection-segment-wrapper'),
     $defaultBanner = $('.promotion-narrow-field');
 
-    var activateSection = function(name) {
+    var activateSection = function(listItem, $section) {
+        var $listItem = $(listItem);
+        $section = $section || $('.section-default[data-section-name="' + $listItem.data('section-name') + '"]');
+        $defaultBanner.hide();
+        $section.show();
+        $listItem.addClass('active');
     };
 
     if ($sectionWrap.length) {
@@ -138,30 +143,15 @@
             .appendTo($('.promotion-scroll-menu'))
             .show();
 
-	    var $section = $('.section-default[data-section-name="'+data+'"]');
-	    if ($section.find('select,input').val()) {
-                    $defaultBanner.hide();
-		    $section.show();
-		    $itemInList.addClass('active');
-	    }
+            var $section = $('.section-default[data-section-name="'+data+'"]');
+            if ($section.find('select,input').val()) {
+                activateSection($itemInList, $section);
+            }
         });
 
         // click on menu item handler
         $('.js-prom-mock-item').on('click', function() {
-            var $this = $(this),
-            itemData = $this.data('item');
-
-            if(!$this.hasClass('active')) {
-                $this.addClass('active');
-                $('.section-default[data-section-name="'+itemData+'"]').show();
-                if ($defaultBanner.is(':visible')) {
-                    $defaultBanner.hide();
-                    // deselect all options
-                    //$sectionWrap.find('option').prop('selected', false);
-                }
-                // reinitialize select2
-                $('.section-default').find('select').select2();
-            }
+            activateSection(this);
         });
 
         // close options
@@ -204,6 +194,7 @@
         });
 
         $('.section-default').find('select').select2();
+
         updateTargetCustomers();
     }
 })(jQuery);
