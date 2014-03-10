@@ -116,10 +116,14 @@
     var $sectionWrap = $('.promsection-segment-wrapper'),
     $defaultBanner = $('.promotion-narrow-field');
 
-    var activateSection = function(listItem, $section) {
-        var $listItem = $(listItem);
-        $section = $section || $('.section-default[data-section-name="' + $listItem.data('section-name') + '"]');
+    var activateSection = function($listItem, $section) {
+        if (!$section) {
+            var name = $listItem.data('item');
+            $section = $('.section-default[data-section-name="'+name+'"]');
+        }
+        $('.section-default[data-section-name="' + $listItem.data('section-name') + '"]');
         $defaultBanner.hide();
+        $section.find('select').select2();
         $section.show();
         $listItem.addClass('active');
     };
@@ -151,7 +155,7 @@
 
         // click on menu item handler
         $('.js-prom-mock-item').on('click', function() {
-            activateSection(this);
+            activateSection($(this));
         });
 
         // close options
