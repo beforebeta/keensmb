@@ -250,6 +250,9 @@
 .text-blue {
   color: #446cb3;
 }
+.text-uppercase {
+  text-transform: uppercase;
+}
 
 .select .btn, .full {
   width: 100%;

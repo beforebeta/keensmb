@@ -67,6 +67,7 @@
 .choose-field-container .select2-choice.select2-default {
   background: #fff;
   border-color: #b2bcc5;
+  color: #b2bcc5 !important;
 }
 
 .choose-field-container .select2-choice .select2-arrow {

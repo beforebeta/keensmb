@@ -739,104 +739,6 @@ header.navbar .navbar-nav > li:hover > a {
   display: block;
 }*/
 
-.su-form-wrapper .add-field-button {
-  position: relative;
-  border: 2px dashed #bdc3c7;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 12px;
-  background-color: #eee;
-  color: #bdc3c7;
-  text-align: left;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.su-form-wrapper .add-field-button:hover {
-  background-color: #fff;
-}
-.su-form-wrapper .add-field-button > [class^="fui-"] {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 18px;
-}
-.su-optional-field-list {
-  padding-left: 15px;
-}
-.su-optional-field-list > div {
-  padding: 0 15px 0 0;
-}
-
-.su-optional-field {
-  float: left;
-  -webkit-transition: width .2s;
-  -moz-transition: width .2s;
-  -ms-transition: width .2s;
-  -o-transition: width .2s;
-  transition: width .2s;
-}
-.su-optional-field .choose-field-container .select2-chosen {
-  margin-right: 5px;
-}
-.su-optional-field .choose-field-container .select2-choice .select2-arrow {
-  background-color: #fff;
-  border-left: none;
-}
-.su-optional-field .choose-field-container .select2-choice .select2-arrow b {
-  background-position-y: 5px;
-}
-.su-optional-field .choose-field-container .select2-choice {
-  border: 2px solid #bdc3c7;
-  background-color: #fff;
-  padding: 8px 12px;
-  height: 42px;
-  line-height: 20px;
-}
-.su-optional-field .choose-field-container.select2-dropdown-open .select2-choice {
-  border-color: #169e83;
-}
-.su-optional-field .change-icon {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: -9px;
-  right: -6px;
-  background-color: #bdc3c7;
-  color: #fff;
-  border-radius: 10px;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  z-index: 99;
-  cursor: pointer;
-  opacity: 0;
-  -webkit-transition: opacity .2s;
-  -moz-transition: opacity .2s;
-  -ms-transition: opacity .2s;
-  -o-transition: opacity .2s;
-  transition: opacity .2s;
-}
-.su-optional-field:hover .change-icon {
-  opacity: 1;
-}
-.su-optional-field .change-icon:hover {
-  box-shadow: 0 0 1px #777;
-}
-.su-optional-field .resize-icon {
-  right:20px;
-  width: 30px;
-}
-.su-optional-field .resize-icon > i {
-  position: absolute;
-  top: 0;
-  left: 2px;
-}
-.su-optional-field .resize-icon:not(.shrink) > i:last-child,
-.su-optional-field .resize-icon.shrink > i:first-child {
-  left: auto;
-  right: 2px;
-}
 .su-form-wrapper .instructions {
   display: none;
   position: absolute;
@@ -908,7 +810,7 @@ header.navbar .navbar-nav > li:hover > a {
 .su-form {
   position: absolute;
   background: #fff45c;
-  padding: 15px;
+  padding: 20px;
   top: 0;
   bottom: 0;
   left: 70px;

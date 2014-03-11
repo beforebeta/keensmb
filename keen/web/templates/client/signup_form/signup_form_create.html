@@ -132,27 +132,6 @@
           <span class='mls dib mid'>Drag to Reposition Logo Banner</span>
         </div>
         <div class="su-form" style='background-color:{{ form.backgroundColor }};'>
-          <div class='hover-vis'>
-            <button class="btn btn-wide btn-sm btn-primary btn-secondary photo-actions"
-                    ng-click='toggleFormAppearance();'>
-              <span class='mrl'>Edit Appearance</span>
-              <i ng-if='!formAppearanceEditing' class="fui-arrow-right"></i>
-              <i ng-if='formAppearanceEditing' class="fui-arrow-left"></i>
-            </button>
-
-            <div ng-show='formAppearanceEditing' class="su-form-appearance hover-vis">
-              <div class="su-bg-color">
-                <button class='btn btn-primary btn-wide btn-sm'>Background Color</button>
-                <input type="text" id="su-bg-color" class='hidden'>
-              </div>
-
-              <div class="su-text-color mtl">
-                <button class='btn btn-primary btn-wide btn-sm'>Text Color</button>
-                <input type="text" id="su-text-color" class='hidden'>
-              </div>
-            </div>
-          </div>
-
           <div class='su-editable js-resize-wrapper'
                ng-class='{"editing": formTitle.isEditing}'>
             <textarea class='su-form-header col-xs-12 form-control non-resizing-gorizontal js-resize-area'
@@ -219,18 +198,10 @@
             </div>
           </div>
 
-          <!--<button class="btn btn-default btn-wide full mbm add-field-button"
-                  ng-if='additionalFields.length > 4'
-                  data-toggle="modal"
-                  data-target="#newFieldPreventModal">
-            <i>Add another field</i>
-            <i class="fui-plus"></i>
-          </button> -->
-
           <button class="btn btn-default btn-wide full mbm add-field-button"
                   data-toggle="modal"
                   data-target="{{ additionalFields.length < 5 ? '#newFieldModal' : '#newFieldPreventModal' }}">
-            <i>Add another field</i>
+            <i class='text-uppercase'>Add another field</i>
             <i class="fui-plus"></i>
           </button>
 
@@ -313,12 +284,16 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
               <i class="fui-cross"></i>
             </button>
-            <h4 class="modal-title">Form <span ng-if='createdIsPreview'>preview</span> created</h4>
+            <h4 ng-if='createdIsPreview' class='modal-title'>Congrats! You just created a new Signup Form.</h4>
+            <h4 ng-if='!createdIsPreview' class='modal-title'>A new Signup Form preview created.</h4>
           </div>
 
           <div class="modal-body">
-            <a href="" ng-href='{{ formCreatedLink }}' target='blank'>
-              <span class='mrm'>{{ title.text }}</span>
+            <p>To find and edit this form, go to <a href="#">Signup Forms</a> in the main navigation.</p>
+
+            <a href="" class='btn btn-sm btn-wide btn-primary btn-secondary btn-embossed' ng-href='{{ formCreatedLink }}' target='blank'>
+              <span ng-if='!createdIsPreview' class='mrm'>View Your Form</span>
+              <span ng-if='createdIsPreview' class='mrm'>Preview Your Form</span>
               <i class='fui-export'></i>
             </a>
           </div>
@@ -367,7 +342,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
               <i class="fui-cross"></i>
             </button>
-            <h4 class="modal-title">Select Fields to Add</h4>
+            <h4 class="modal-title">Select A Field to Add</h4>
           </div>
 
           <div class="modal-body">
