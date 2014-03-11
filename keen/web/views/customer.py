@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from keen.core.models import Client, Customer, CustomerSource
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm
-from keen.tasks import mailchimp_subscribe
+from keen.tasks import mailchimp_subscribe, send_email
 
 from tracking.models import Visitor
 
@@ -57,10 +57,12 @@ def signup_view(request, client_slug, form_slug):
 
             try:
                 customer.save()
-                mailchimp_new_customer(customer)
             except DatabaseError:
                 logger.exception('Failed to save new customer')
             else:
+                mailchimp_new_customer(signup_form, customer)
+                new_customer_notification(signup_form, customer)
+                new_customer_confirmation(signup_form, customer)
                 context['success'] = 'You have successfully signed up!'
                 redirect_url = signup_form.data.get('redirectUrl')
                 if redirect_url:
@@ -77,7 +79,7 @@ def signup_view(request, client_slug, form_slug):
                   context)
 
 
-def mailchimp_new_customer(customer):
+def mailchimp_new_customer(signup_form, customer):
     if customer.client.ref_id_type != 'mailchimp':
         logger.warn('Client %s has no Mailchimp list ID' % customer.client.name)
     else:
@@ -97,16 +99,36 @@ def mailchimp_new_customer(customer):
             'SIGNUPID': '',
         }
 
-        if customer.source and customer.source.ref_source == 'signup':
-            try:
-                form = SignupForm.objects.get(id=customer.source.ref_id)
-            except SignupForm.DoesNotExist:
-                logger.warn('Customer signup form with id %s not found' %
-                            customer.source.ref_id)
-            else:
-                merge_vars['SIGNUPNAME'] = form.data.get('pageTitle', '')
-                merge_vars['SIGNUPID'] = form.id
+        merge_vars['SIGNUPNAME'] = signup_form.data.get('pageTitle', '')
+        merge_vars['SIGNUPID'] = signup_form.id
 
         mailchimp_subscribe.delay(list_id, email, merge_vars,
                                   double_optin=False, update_existing=True,
                                   send_welcome=True)
+
+
+NOTIFICATION_BODY = '''
+A new customer signed up using the signup form you created on Keen.
+Here is the information they provided:
+
+'''
+
+def new_customer_notification(signup_form, customer):
+    if signup_form.submission_notification:
+        recipients = filter(None, map(
+            str.strip, signup_form.submission_notification.split(',')))
+        subject = 'Keen - new signup from {0}'.format(signup_form.title)
+        body = NOTIFICATION_BODY + (
+            '\n'.join('{0}: {1}'.format(name, value) for name, value in
+                      customer.data.items() if name and value))
+
+        send_email.delay(subject, body, recipients)
+
+
+def new_customer_confirmation(signup_form, customer):
+    if (customer.data['email'] and signup_form.submission_confirmation_html and
+        signup_form.signup_confirmation_subject):
+        resipients = [customer.data['email']]
+        subject = signup_form.signup_confirmation_subject
+        body = signup_form.submission_confirmation_html
+        send_email.delay(subject, body, recipients)
