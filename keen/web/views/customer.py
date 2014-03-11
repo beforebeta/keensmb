@@ -127,7 +127,7 @@ def new_customer_notification(signup_form, customer):
 def new_customer_confirmation(signup_form, customer):
     if (customer.data['email'] and signup_form.submission_confirmation_html and
         signup_form.signup_confirmation_subject):
-        resipients = [customer.data['email']]
+        recipients = [customer.data['email']]
         subject = signup_form.signup_confirmation_subject
         body = signup_form.submission_confirmation_html
         send_email.delay(subject, body, recipients)
