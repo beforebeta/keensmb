@@ -52,7 +52,8 @@ def signup_view(request, client_slug, form_slug):
                 ref_source='signup', ref_id=signup_form.id).first()
 
             for name, value in form.cleaned_data.items():
-                customer.data[name] = str(value)
+                if value is not None:
+                    customer.data[name] = str(value)
 
             try:
                 customer.save()
