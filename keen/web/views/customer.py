@@ -115,14 +115,13 @@ Here is the information they provided:
 
 def new_customer_notification(signup_form, customer):
     if signup_form.submission_notification:
-        recipients = filter(None, map(
-            str.strip, signup_form.submission_notification.split(',')))
-        subject = 'Keen - new signup from {0}'.format(signup_form.title)
-        body = NOTIFICATION_BODY + (
-            '\n'.join('{0}: {1}'.format(name, value) for name, value in
-                      customer.data.items() if name and value))
-
-        send_email.delay(subject, body, recipients)
+        recipients = filter(None, (email.strip() for email in signup_form.submission_notification.split(',')))
+        if recipients:
+            subject = 'Keen - new signup from {0}'.format(signup_form.data['pageTitle'])
+            body = NOTIFICATION_BODY + (
+                '\n'.join('{0}: {1}'.format(name, value) for name, value in
+                        customer.data.items() if name and value))
+            send_email.delay(subject, body, recipients)
 
 
 def new_customer_confirmation(signup_form, customer):
