@@ -50,6 +50,11 @@ class SignupForm(Timestamps):
     visits = models.IntegerField(default=0)
     visitors = models.ManyToManyField(Visitor, related_name='signup_forms')
 
+    submission_notification = models.TextField(blank=True, null=True)
+    signup_confirmation_subject = models.CharField(max_length=255, null=True,
+                                                   blank=True)
+    submission_confirmation_html = models.TextField(blank=True, null=True)
+
     class Meta:
         unique_together = ('client', 'slug')
 
