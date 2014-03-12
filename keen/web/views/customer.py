@@ -61,9 +61,14 @@ def signup_view(request, client_slug, form_slug):
             except DatabaseError:
                 logger.exception('Failed to save new customer')
             else:
-                mailchimp_new_customer(signup_form, customer)
-                new_customer_notification(signup_form, customer)
-                new_customer_confirmation(signup_form, customer)
+                for handler in (mailchimp_new_customer,
+                                new_customer_notification,
+                                new_customer_confirmation):
+                    try:
+                        handler(signup_form, customer)
+                    except:
+                        logger.exception('Submission handler failed')
+
                 context['success'] = 'You have successfully signed up!'
                 redirect_url = signup_form.data.get('redirectUrl')
                 if redirect_url:
