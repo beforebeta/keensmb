@@ -205,6 +205,27 @@
             <i class="fui-plus"></i>
           </button>
 
+          <div class='hover-vis'>
+            <button class="btn btn-wide btn-sm btn-primary btn-secondary photo-actions"
+                    ng-click='toggleFormAppearance();'>
+              <span class='mrl'>Edit Appearance</span>
+              <i ng-if='!formAppearanceEditing' class="fui-arrow-right"></i>
+              <i ng-if='formAppearanceEditing' class="fui-arrow-left"></i>
+            </button>
+
+            <div ng-show='formAppearanceEditing' class="su-form-appearance hover-vis">
+              <div class="su-bg-color">
+                <button class='btn btn-primary btn-wide btn-sm'>Background Color</button>
+                <input type="text" id="su-bg-color" class='hidden'>
+              </div>
+
+              <div class="su-text-color mtl">
+                <button class='btn btn-primary btn-wide btn-sm'>Text Color</button>
+                <input type="text" id="su-text-color" class='hidden'>
+              </div>
+            </div>
+          </div>
+
           <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
         </div>
 
@@ -284,8 +305,8 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
               <i class="fui-cross"></i>
             </button>
-            <h4 ng-if='createdIsPreview' class='modal-title'>Congrats! You just created a new Signup Form.</h4>
-            <h4 ng-if='!createdIsPreview' class='modal-title'>A new Signup Form preview created.</h4>
+            <h4 ng-if='!createdIsPreview' class='modal-title'>Congrats! You just created a new Signup Form.</h4>
+            <h4 ng-if='createdIsPreview' class='modal-title'>A new Signup Form preview created.</h4>
           </div>
 
           <div class="modal-body">

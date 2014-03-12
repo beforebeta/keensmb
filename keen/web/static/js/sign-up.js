@@ -17,12 +17,13 @@
 
                 var notRequiredFields = _.where(customerFields, {required: false});
                 optionalFields = _.map(notRequiredFields, function(field) {
+                    var fieldWidth = field.title.length > 10 ? 12 : 6;
                     return {
                         name: field.name,
                         title: field.title,
                         type: field.type,
                         choices: field.choices,
-                        width: 6
+                        width: fieldWidth
                     };
                 });
 
@@ -76,7 +77,6 @@
 
         suService.getInitialData().then(function(data) {
             var formData = suService.formSlug ? parseFormData(data) : data;
-            console.log(data);
             $scope = angular.extend($scope, formData);
             $scope.clientSlug = suService.clientSlug;
             $scope.formSlug = suService.formSlug;
@@ -520,6 +520,7 @@
                         .then(function(res) {
                             $scope.createdIsPreview = true;
                             $scope.formCreatedLink = suService.getFormLink(previewSlug);
+                            window.open(suService.getFormLink(previewSlug));
                             $('#formCreatedModal').modal('show');
                         }, function(err) {
                             console.warn(err);
