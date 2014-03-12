@@ -4,6 +4,7 @@ from django.db import DatabaseError
 from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 
 from keen.core.models import Client, Customer, CustomerSource
 from keen.web.models import SignupForm
@@ -115,12 +116,18 @@ Here is the information they provided:
 
 def new_customer_notification(signup_form, customer):
     if signup_form.submission_notification:
-        recipients = filter(None, (email.strip() for email in signup_form.submission_notification.split(',')))
+        recipients = filter(None, (email.strip() for email in
+                                   signup_form.submission_notification.split(',')))
         if recipients:
-            subject = 'Keen - new signup from {0}'.format(signup_form.data['pageTitle'])
-            body = NOTIFICATION_BODY + (
-                '\n'.join('{0}: {1}'.format(name, value) for name, value in
-                        customer.data.items() if name and value))
+            title = signup_form.data['pageTitle']
+            fields_cache = dict((f.name, f) for f in signup_form.client.customer_fields.all())
+            subject = 'Keen - new signup from {0}'.format(title)
+            body = render_to_string('submission_notification_email.html', {
+                'form_title': title,
+                'form_url': signup_form.url,
+                'customer_data': dict((fields_cache[name].title, value) for name, value in
+                                      customer.data.items() if (name in fields_cache) and value),
+            })
             send_email.delay(subject, body, recipients)
 
 

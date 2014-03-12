@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 
@@ -51,6 +52,15 @@ class SignupForm(Timestamps):
     signup_confirmation_subject = models.CharField(max_length=255, null=True,
                                                    blank=True)
     submission_confirmation_html = models.TextField(blank=True, null=True)
+
+    @property
+    def url(self):
+        return reverse('customer_signup',
+                       kwargs=dict(client_slug=self.client.slug,
+                                   form_slug=self.slug))
+
+    def __unicode__(self):
+        return '{0}/{1} {2}'.format(self.client.slug, self.slug, self.data['pageTitle'])
 
     class Meta:
         unique_together = ('client', 'slug')
