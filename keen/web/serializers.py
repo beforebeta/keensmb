@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from rest_framework.serializers import (
+    Field,
     DateTimeField,
     ModelSerializer,
     RelatedField,
@@ -107,10 +108,9 @@ class ImageSerializer(DynamicSerializer):
 
 class SignupFormSerializer(DynamicSerializer):
 
-    url = SerializerMethodField('get_url')
+    url = Field()
     edit_url = SerializerMethodField('get_edit_url')
     total_signups = SerializerMethodField('get_total_signups')
-#    total_visits = SerializerMethodField('get_total_visits')
     unique_visits = SerializerMethodField('get_unique_visits')
     thumb_url = SerializerMethodField('get_thumb_url')
 
@@ -120,10 +120,6 @@ class SignupFormSerializer(DynamicSerializer):
                   'url', 'edit_url', 'total_signups', 'visits',
                   'unique_visits', 'thumb_url',
                   )
-
-    def get_url(self, form):
-        return reverse('customer_signup', kwargs=dict(
-            client_slug=form.client.slug, form_slug=form.slug))
 
     def get_edit_url(self, form):
         return reverse('client_signup_form_edit', kwargs=dict(slug=form.slug))
