@@ -63,7 +63,7 @@ class SignupForm(Timestamps):
                                    form_slug=self.slug))
 
     def __unicode__(self):
-        return '{0}/{1} {2}'.format(self.client.slug, self.slug, self.data['pageTitle'])
+        return '{0}/{1}'.format(self.client.slug, self.slug)
 
     class Meta:
         unique_together = ('client', 'slug')
