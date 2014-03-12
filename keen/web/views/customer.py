@@ -128,7 +128,7 @@ def new_customer_notification(signup_form, customer):
                 'customer_data': dict((fields_cache[name].title, value) for name, value in
                                       customer.data.items() if (name in fields_cache) and value),
             })
-            send_email.delay(subject, body, recipients)
+            send_email.delay(subject, body, recipients, headers={'Content-type': 'text/html'})
 
 
 def new_customer_confirmation(signup_form, customer):
