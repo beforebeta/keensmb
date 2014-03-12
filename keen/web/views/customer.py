@@ -89,19 +89,14 @@ def mailchimp_new_customer(signup_form, customer):
 
         merge_vars = {
             'CUSTOMERID': customer.id,
-            'FNAME': customer.data.get('first_name', ''),
-            'LNAME': customer.data.get('last_name', ''),
             'FULLNAME': customer.data.get('full_name', ''),
             'NUMBER': customer.data.get('phone', ''),
-            'ZIPCODE': customer.data.get('address__ipcode', ''),
+            'ZIPCODE': customer.data.get('address__zipcode', ''),
             'BIRTHDAY': customer.data.get('dob', ''),
             'GENDER': customer.data.get('gender', ''),
-            'SIGNUPNAME': '',
-            'SIGNUPID': '',
+            'SIGNUPNAME': signup_form.data.get('pageTitle', ''),
+            'SIGNUPID': signup_form.id,
         }
-
-        merge_vars['SIGNUPNAME'] = signup_form.data.get('pageTitle', '')
-        merge_vars['SIGNUPID'] = signup_form.id
 
         mailchimp_subscribe.delay(list_id, email, merge_vars,
                                   double_optin=False, update_existing=True,
