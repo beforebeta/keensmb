@@ -108,12 +108,6 @@ def mailchimp_new_customer(signup_form, customer):
                                   send_welcome=True)
 
 
-NOTIFICATION_BODY = '''
-A new customer signed up using the signup form you created on Keen.
-Here is the information they provided:
-
-'''
-
 def new_customer_notification(signup_form, customer):
     if signup_form.submission_notification:
         recipients = filter(None, (email.strip() for email in
@@ -128,7 +122,7 @@ def new_customer_notification(signup_form, customer):
                 'customer_data': dict((fields_cache[name].title, value) for name, value in
                                       customer.data.items() if (name in fields_cache) and value),
             })
-            send_email.delay(subject, body, recipients, headers={'Content-type': 'text/html'})
+            send_email.delay(subject, body, recipients)
 
 
 def new_customer_confirmation(signup_form, customer):
@@ -137,4 +131,5 @@ def new_customer_confirmation(signup_form, customer):
         recipients = [customer.data['email']]
         subject = signup_form.signup_confirmation_subject
         body = signup_form.submission_confirmation_html
-        send_email.delay(subject, body, recipients)
+        sender = signup_form.submission_confirmation_sender
+        send_email.delay(subject, body, recipients, sender)

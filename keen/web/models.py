@@ -52,6 +52,7 @@ class SignupForm(Timestamps):
     signup_confirmation_subject = models.CharField(max_length=255, null=True,
                                                    blank=True)
     submission_confirmation_html = models.TextField(blank=True, null=True)
+    submission_confirmation_sender = models.EmailField(blank=True, null=True)
 
     @property
     def url(self):
