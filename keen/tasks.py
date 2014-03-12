@@ -60,8 +60,10 @@ def mailchimp_subscribe(self, list_id, email, merge_vars, **kw):
 
 
 @app.task
-def send_email(subject, body, recipients, sender=None):
+def send_email(subject, body, recipients, sender=None, **kw):
     if sender is None:
         sender = settings.DEFAULT_FROM_EMAIL
 
-    EmailMessage(subject, body, sender, recipients).send()
+    msg = EmailMessage(subject, body, sender, recipients, **kw)
+    msg.content_subtype = 'html'
+    msg.send()
