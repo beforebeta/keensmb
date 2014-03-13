@@ -7,6 +7,9 @@
 .icon.orange:hover {
   color: #e67d22;
 }
+.text-blue, .text-blue:hover {
+  color: '#446cb2';
+}
 
 .dib {display: inline-block;}
 .dib.mid {vertical-align: middle;}

@@ -73,7 +73,15 @@ keen.showMessageModal = function(title, message) {
         }
 
         // Select2
-        $.fn.select2 && $('.select2').select2({dropdownCssClass: 'choose-field-dropdown'});
+        if ($.fn.select2) {
+            $('.select2').each(function(i, select) {
+                var options = {dropdownCssClass: 'choose-field-dropdown'};
+                if ($(select).find('option').length < 4) {
+                    options.minimumResultsForSearch = -1;
+                }
+                $(select).select2(options);
+            });
+        }
 
         // Tabs
         if ($.fn.tab) {

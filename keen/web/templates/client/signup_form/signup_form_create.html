@@ -306,11 +306,11 @@
               <i class="fui-cross"></i>
             </button>
             <h4 ng-if='!createdIsPreview' class='modal-title'>Congrats! You just created a new Signup Form.</h4>
-            <h4 ng-if='createdIsPreview' class='modal-title'>A new Signup Form preview created.</h4>
+            <h4 ng-if='createdIsPreview' class='modal-title'>A new Signup Form has Been Created.</h4>
           </div>
 
           <div class="modal-body">
-            <p>To find and edit this form, go to <a href="#">Signup Forms</a> in the main navigation.</p>
+            <p>To find and edit this form, go to <a class='text-blue' href="#">Signup Forms</a> in the main navigation.</p>
 
             <a href="" class='btn btn-sm btn-wide btn-primary btn-secondary btn-embossed' ng-href='{{ formCreatedLink }}' target='blank'>
               <span ng-if='!createdIsPreview' class='mrm'>View Your Form</span>

@@ -269,7 +269,7 @@ class CustomerField(Timestamps):
             return CUSTOMER_FIELD_CHOICES[self.name]
 
         if self.name in BOOLEAN_CUSTOMER_FIELDS:
-            return ('YES', 'NO')
+            return ('Yes', 'No')
 
         return None
 
