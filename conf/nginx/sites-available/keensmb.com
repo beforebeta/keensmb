@@ -16,10 +16,6 @@ server {
 		alias /var/apps/keensmb.com/keen/shared_static/favicon.ico;
 	}
 
-	location = / {
-		return 301 https://$host/;
-	}
-
 	rewrite ^/(api|admin)/ https://$host$request_uri permanent;
 
 	rewrite ^/blog$ /blog/ permanent;
