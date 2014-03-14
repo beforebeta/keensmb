@@ -13,7 +13,7 @@
         <h4 class="modal-title">Sign In to Your Keen Account</h4>
       </div>
       <div class="modal-body">
-        <form action='/api/login' id='signInForm' method="POST">
+        <form action='https://{{ request.get_host }}/api/login' id='signInForm' method="POST">
           {% csrf_token %}
           <div class="row">
             <div class="col-md-10 col-md-offset-1">
