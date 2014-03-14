@@ -46,17 +46,6 @@ logger = logging.getLogger(__name__)
 field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
 
 
-class IsClientUser(BasePermission):
-
-    def has_permission(self, request, view):
-        return (
-            request.user and
-            request.session and
-            'client_slug' in request.session and
-            request.session['client_slug'] == view.kwargs.get('client_slug')
-        )
-
-
 def schedule_screenshot(request, form):
     url = request.build_absolute_uri(
         reverse('customer_signup', kwargs={
@@ -290,7 +279,6 @@ def num_customers(request):
     result = client.customers_by_data(data).count()
     return Response(result)
 
-    permission_classes = (IsClientUser,)
 
 class SignupFormList(ClientAPIView):
 
