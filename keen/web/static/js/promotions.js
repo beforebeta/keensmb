@@ -154,7 +154,7 @@
         });
 
         // close options
-        $sectionWrap.on('click', '.promotion-icon-close-height', function(){
+        $sectionWrap.on('click', '.close', function(){
 
             var $thisSection = $(this).closest('.section-default'),
             itemName = $thisSection.data('section-name');
