@@ -137,5 +137,6 @@ server {
 	location / {
 		uwsgi_pass keen_app;
 		include uwsgi_params;
+		uwsgi_param HTTPS on;
 	}
 }
