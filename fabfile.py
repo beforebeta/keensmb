@@ -199,7 +199,7 @@ def deploy(profile, branch):
     # giv it some time to release port
     local('sleep 3')
     uwsgi_start()
-    nginx_start()
+    nginx_restart()
 
 
 @task

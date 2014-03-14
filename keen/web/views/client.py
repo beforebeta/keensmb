@@ -38,6 +38,11 @@ def client_view(func):
     @wraps(func)
     @ensure_csrf_cookie
     def wrapper(request, *args, **kw):
+        if not request.is_secure():
+            url = request.build_absolute_uri()
+            url = 'https' + url[4:]
+            return redirect(url)
+
         if request.user.is_authenticated() and 'client_slug' in request.session:
             try:
                 client = Client.objects.get(slug=request.session['client_slug'])
