@@ -46,7 +46,7 @@ def install_dependencies():
 
 
 def configure_nginx():
-    sudo('ln -s %(project_dir)s/conf/nginx/sites-available/keensmb.com* /etc/nginx/sites-enabled/' % env)
+    sudo('ln -s %(project_dir)s/conf/nginx/sites-available/keensmb.com /etc/nginx/sites-enabled/' % env)
 
 
 def clone(repo=None):

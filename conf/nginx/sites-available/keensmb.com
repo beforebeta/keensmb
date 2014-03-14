@@ -8,7 +8,7 @@ server {
 
 	client_max_body_size 32M;
 
-	include keensmb.com.static;
+	include /var/apps/keensmb.com/keen/conf/nginx/keensmb.com.static;
 
 	location = / {
 		return 301 https://$host/;
@@ -39,7 +39,7 @@ server {
 
 	client_max_body_size 32M;
 
-	include keensmb.com.static;
+	include /var/apps/keensmb.com/keen/conf/nginx/keensmb.com.static;
 	
 	location / {
 		uwsgi_pass keen_app;
