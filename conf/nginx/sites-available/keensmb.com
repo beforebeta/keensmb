@@ -10,13 +10,22 @@ server {
 
 	include keensmb.com.static;
 
-	location ~ ^/(api|admin)/ {
+	location = / {
+		return 301 https://$host/;
+	}
+
+	location /api/ {
+		return 301 https://$host$request_uri;
+	}
+
+	location /admin/ {
 		return 301 https://$host$request_uri;
 	}
 	
 	location / {
 		uwsgi_pass keen_app;
 		include uwsgi_params;
+		uwsgi_param UWSGI_SCHEME $scheme;
 	}
 }
 

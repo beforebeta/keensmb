@@ -54,10 +54,8 @@ def login_view(request):
 def logout_view(request):
     request.session.pop('client_slug', None)
     logout(request)
-    home_url = request.build_absolute_uri(reverse('home'))
-    if home_url.startswith('https://'):
-        home_url = 'http' + home_url[5:]
-    return HttpResponseRedirect(home_url)
+
+    return HttpResponseRedirect(reverse('home'))
 
 
 @ensure_csrf_cookie
