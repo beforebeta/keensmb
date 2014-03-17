@@ -43,7 +43,7 @@ from keen.tasks import take_screenshot, send_email
 
 logger = logging.getLogger(__name__)
 
-field_name_re = re.compile(r'^[a-z_][a-z0-9_#]*$')
+field_name_re = re.compile(r'^[a-z][a-z0-9]*(__[a-z0-9]+)*$')
 
 
 def schedule_screenshot(request, form):
@@ -81,6 +81,19 @@ def client_api(func):
         return func(request, client, *args, **kw)
 
     return wrapper
+
+
+def session_client_api_view(func):
+    @functools.wraps(func)
+    @api_view(['GET'])
+    def view(request, *args, **kw):
+        try:
+            client = get_object_or_404(Client,
+                                       slug=request.session['client_slug'])
+        except KeyError:
+            return Response(status=403)
+        return func(request, client, *args, **kw)
+    return view
 
 
 class ClientAPIView(APIView):
@@ -255,29 +268,33 @@ class CustomerProfile(ClientAPIView):
         return Response(CustomerSerializer(customer).data)
 
 
-@ensure_csrf_cookie
-@api_view(['GET'])
-def current_client_view(request):
-    try:
-        client_slug = request.session['client_slug']
-    except KeyError:
-        return Response(status=403)
-    client = get_object_or_404(Client, slug=client_slug)
+@session_client_api_view
+def current_client_view(request, client):
     return Response(ClientSerializer(client).data)
 
 
-@ensure_csrf_cookie
-@api_view(['GET'])
-def num_customers(request):
-    try:
-        client_slug = request.session['client_slug']
-    except KeyError:
-        return Response(status=403)
-    client = get_object_or_404(Client, slug=client_slug)
+@session_client_api_view
+def num_customers(request, client):
     data = ((name, request.GET.getlist(name)) for name in request.GET.keys())
     data = dict((name, value) for name, value in data if name and value)
     result = client.customers_by_data(data).count()
     return Response(result)
+
+
+@session_client_api_view
+def field_choices(request, client, field_name):
+    logger.debug('Lookup for choices of {0}'.format(field_name))
+    if not field_name_re.match(field_name):
+        return Response({'error': 'Invalid field name'})
+    sql_expr = "(data->'{0}')".format(field_name)
+    choices = client.customers.extra({'choice': sql_expr}).values_list('choice', flat=True).distinct()
+    value = request.GET.get('q', '').strip()
+    if value:
+        choices = (choice for choice in choices if choice.startswith(value))
+
+    return Response({
+        'results': [{'id': choice, 'text': choice} for choice in choices],
+    })
 
 
 class SignupFormList(ClientAPIView):

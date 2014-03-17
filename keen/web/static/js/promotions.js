@@ -116,15 +116,14 @@
     var $sectionWrap = $('.promsection-segment-wrapper'),
     $defaultBanner = $('.promotion-narrow-field');
 
-    var activateSection = function($listItem, $section) {
-        if (!$section) {
-            var name = $listItem.data('item');
-            $section = $('.section-default[data-section-name="'+name+'"]');
+    var activateSection = function($listItem) {
+        if (! $listItem.hasClass('active')) {
+            var name = $listItem.data('item'),
+	            $section = $('.section-default[data-section-name="'+name+'"]');
+            $defaultBanner.hide();
+            $section.show();
+            $listItem.addClass('active');
         }
-        $('.section-default[data-section-name="' + $listItem.data('section-name') + '"]');
-        $defaultBanner.hide();
-        $section.show();
-        $listItem.addClass('active');
     };
 
     if ($sectionWrap.length) {
@@ -144,7 +143,7 @@
 
             var $section = $('.section-default[data-section-name="'+data+'"]');
             if ($section.find('select,input').val()) {
-                activateSection($itemInList, $section);
+                activateSection($itemInList);
             }
         });
 
@@ -192,6 +191,25 @@
         });
 
         $('.section-default').find('select').select2();
+        /*
+        $('.section-default').find('input[type=hidden]').each(function() {
+            var $this = $(this);
+            
+            $this.select2({
+                multiple: true,
+                //minimumInputLength: 1,
+                ajax: {
+                    url: '/api/client/choices/' + this.name.substr(7),
+                    data: function(term, page) {
+                        return {q: term, p: page};
+                    },
+                    results: function(data, page) {
+                        return data;
+                    }
+                }
+            });
+        });
+        */
 
         updateTargetCustomers();
     }

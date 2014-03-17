@@ -283,7 +283,7 @@
                   </div>
                   <div id="target-audience" class="row promsection-segment-wrapper">
                     {% for filter in target_audience_filters %}
-                    <div style="display: none;" class="col-xs-5 section-default" data-section-name="target_{{ filter.name }}">
+                    <div style="display:none" class="col-xs-6 section-default" data-section-name="target_{{ filter.name }}">
                       <div class="kn-section mbl">
                         <div class="kn-section-header">
                           <button type="button" class="close mtn pull-right">
@@ -291,19 +291,17 @@
                           </button>
                           <span class="small">{{ filter.title }}</span>
                         </div>
-                        {% if filter.choices %}
                         <div class="kn-section-content promotion-select-multiple">
-                          <select name="target_{{ filter.name }}" multiple data-values="{{ filter.values }}">
+                          {% if filter.choices %}
+                          <select name="target_{{ filter.name }}" multiple>
                             {% for choice in filter.choices %}
                             <option value="{{ choice }}" {% if choice in filter.values %}selected{% endif %}>{{ choice }}</option>
                             {% endfor %}
                           </select>
+                          {% else %}
+                          <input type="hidden" name="target_{{ filter.name }}">
+                          {% endif %}
                         </div>
-                        {% else %}
-                        <div class="kn-section-content">
-                          <input type="{{ filter.type }}" id="target_{{ filter.name }}" name="target_{{ filter.name }}" value="{{ filter.value }}">
-                        </div>
-                        {% endif %}
                       </div>
                     </div>
                     {% endfor %}
