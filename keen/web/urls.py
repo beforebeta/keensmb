@@ -12,6 +12,7 @@ client_api_urls = patterns(
     url(r'^current$', 'current_client_view',
         name='current_client'),
     url(r'^num_customers$', 'num_customers'),
+    url(r'^choices/(?P<field_name>[\w_]+)/?$', 'field_choices'),
     url(r'^(?P<client_slug>[\w-]+)(?:/|$)', include(patterns(
         '',
         url(r'^$', ClientProfile.as_view(),

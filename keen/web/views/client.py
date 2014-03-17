@@ -1,11 +1,11 @@
 import json
 import logging
 from functools import wraps
+from operator import itemgetter
 from dateutil.relativedelta import relativedelta
 
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, render_to_response, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -26,7 +26,7 @@ from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm, PromotionForm
 from keen.web.serializers import SignupFormSerializer
 from keen.events.models import Event
-from keen import print_stack_trace, InvalidOperationException
+from keen import InvalidOperationException
 
 
 logger = logging.getLogger(__name__)
@@ -83,8 +83,7 @@ def promotions(request, client, tab='active'):
         #include promotions in draft status along with promotions awaiting approval
         promotions.extend(list(Promotion.objects.get_promotions_for_status(Promotion.PROMOTION_STATUS.draft, client)))
     context["promotions"] = promotions
-    return render_to_response('client/promotions.html', context, context_instance=RequestContext(request))
-    #return render(request, 'client/promotions.html')
+    return render(request, 'client/promotions.html', context)
 
 @client_view
 def create_edit_promotion(request, client, promotion_id=None):
@@ -138,41 +137,39 @@ def create_edit_promotion(request, client, promotion_id=None):
     context['form'] = form
     context['target_audience_filters'] = sorted(
         [
-            # fields with choices
             {
                 'name': name,
                 'title': CUSTOMER_FIELD_NAMES_DICT[name],
-                'choices': choices,
+                'choices': get_field_choices(client, name),
                 'values': promotion_instance.target_audience.get(name, []) if (
                     promotion_instance and promotion_instance.target_audience) else [],
-            } for name, choices in CUSTOMER_FIELD_CHOICES.items()
-        ] + [
-            # boolean fields have two choices "yes" and "no"
-            {
-                'name': name,
-                'title': CUSTOMER_FIELD_NAMES_DICT[name],
-                'choices': ('yes', 'no'),
-                'values': promotion_instance.target_audience.get(name, []) if (
-                    promotion_instance and promotion_instance.target_audience) else [],
-            } for name in BOOLEAN_CUSTOMER_FIELDS
-        ] + [
-            # rest of the fields have no predefined choices
-            {
-                'name': name,
-                'title': title,
-            } for name, title in CUSTOMER_FIELD_NAMES if (
-                name not in CUSTOMER_FIELD_CHOICES
-                and
-                name not in BOOLEAN_CUSTOMER_FIELDS
-            )
-        ], key=lambda i: i['title'])
+            }
+            for name in CUSTOMER_FIELD_NAMES_DICT
+        ], key=itemgetter('title'))
     return render(request, 'client/promotions-create-edit.html', context)
+
+
+def get_field_choices(client, name):
+    if name in CUSTOMER_FIELD_CHOICES:
+        choices = CUSTOMER_FIELD_CHOICES[name]
+    elif name in BOOLEAN_CUSTOMER_FIELDS:
+        choices = ('yes', 'no')
+    else:
+        sql_expr = "(data->'{0}')".format(name)
+        choices = list(
+            client.customers.extra({'choice': sql_expr}).
+            values_list('choice', flat=True).order_by('choice').distinct())
+        #if name == 'email':
+        #    choices = (email.split('@', 1) for email in choices if '@' in email)
+        #    choices = sorted(set(domain for user, domain in choices))
+    return choices
+
 
 @client_view
 def preview_promotion(request, client, promotion_id):
     context = {}
     context["promotion"] = get_object_or_404(Promotion, id=promotion_id, client=client)
-    return render_to_response('client/promotions/preview_promotion.html', context, context_instance=RequestContext(request))
+    return render('client/promotions/preview_promotion.html', context)
 
 @client_view
 def delete_promotion(request, client):
@@ -185,7 +182,7 @@ def delete_promotion(request, client):
             promotion.delete()
         return HttpResponse(json.dumps({"success" : "1", "msg" : "Success"}), content_type="application/json")
     except:
-        print_stack_trace()
+        logger.exception('Failed to delete promotion')
         return HttpResponse(json.dumps({"success" : "0", "msg" : "An error occurred while deleting the object."}),
                                                                     content_type="application/json")
 
@@ -203,21 +200,19 @@ def approve_promotion(request, client):
             except InvalidOperationException, e:
                 return HttpResponse(json.dumps({"success" : "0", "msg" : str(e)}), content_type="application/json")
     except:
-        print_stack_trace()
+        logger.exception('Failed to approve promotion')
         return HttpResponse(json.dumps({"success" : "0", "msg" : "An error occurred while deleting the object."}),
                                                                     content_type="application/json")
 
 @client_view
 def email_template(request, client):
-    context={}
-    return render_to_response('email-template/index.html', context, context_instance=RequestContext(request))
+    return render('email-template/index.html')
 
 ####################################################################################################################
 # Customers
 ####################################################################################################################
 
 def _get_formatted_name(dt):
-    print dt
     return "%s %s" % (dt.strftime("%B"), dt.year)
 
 @client_view
@@ -249,7 +244,7 @@ def profile(request, client, customer_id=None):
     customer = get_object_or_404(Customer, client=client, id=customer_id)
     context["customer"] = customer
     context["client"] = customer.client
-    return render_to_response('client/customers/customer_profile_view.html', context, context_instance=RequestContext(request))
+    return render('client/customers/customer_profile_view.html', context)
 
 ####################################################################################################################
 # Signup Forms
