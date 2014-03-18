@@ -1,4 +1,6 @@
 import datetime
+import logging
+
 from django import forms
 from django.forms import DateField
 from django.forms.util import ErrorList
@@ -7,6 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 from localflavor.us.forms import USPhoneNumberField
 
 from keen.core.models import CustomerField, Promotion
+
+
+logger = logging.getLogger(__name__)
 
 
 def form_field_builder(field_type, widget_type):
@@ -130,10 +135,14 @@ class PromotionForm(forms.ModelForm):
         return send_schedule
 
     def clean(self):
+        logger.debug('Promotion form submitted: {0!r}'.format(self.data))
         cleaned_data = super(PromotionForm, self).clean()
         data = ((name[7:], self.data.getlist(name))
                  for name in self.data.keys()
                  if name.startswith('target_'))
+        data = ((name, value if (len(value) != 1
+                                 and '^^' not in value[0])
+                 else value[0].split('^^')) for name, value in data)
         cleaned_data['target_audience'] = dict((name, value) for name, value
                                                in data if (
                                                    name and value and (

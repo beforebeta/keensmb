@@ -161,7 +161,7 @@
             $('.js-prom-mock-item.active[data-item='+itemName+']').removeClass('active');
 
             $thisSection.hide();
-            $thisSection.find('select').select2('val', '');
+            $thisSection.find('select,input[type=hidden]').select2('val', '');
 
             if(!$sectionWrap.children('.section-default:visible').length){
                 $defaultBanner.show();
@@ -173,7 +173,7 @@
             $targetInput = $('#target-audience').find('input,select');
         var updateTargetCustomers = function() {
             var target_params = $targetInput.map(function() {
-                var val = $(this).val(), name = this.name.substr(7);
+                var val = $(this).select2('val'), name = this.name.substr(7);
                 if ($.isArray(val)) {
                     return $.map(val, function(val) {
                         return {name:name, value:val};
@@ -191,25 +191,37 @@
         });
 
         $('.section-default').find('select').select2();
-        /*
         $('.section-default').find('input[type=hidden]').each(function() {
             var $this = $(this);
             
             $this.select2({
                 multiple: true,
                 //minimumInputLength: 1,
+		separator: '^^',
                 ajax: {
                     url: '/api/client/choices/' + this.name.substr(7),
                     data: function(term, page) {
-                        return {q: term, p: page};
+                        return {q: term};
                     },
                     results: function(data, page) {
-                        return data;
+                        return {results: data};
                     }
+                },
+                initSelection: function(element, callback) {
+                    var value = $(element).val(), data = value.split('^^');
+                    if (data) {
+                        callback($.map(data, function(value) {
+                            return {id: value, text: value};
+                        }));
+                    }
+                },
+                createSearchChoice: function(term, data) {
+                    term = term.trim();
+                    if (term)
+                        return {id: term, text: term};
                 }
             });
         });
-        */
 
         updateTargetCustomers();
     }

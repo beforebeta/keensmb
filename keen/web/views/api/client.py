@@ -43,7 +43,7 @@ from keen.tasks import take_screenshot, send_email
 
 logger = logging.getLogger(__name__)
 
-field_name_re = re.compile(r'^[a-z][a-z0-9]*(__[a-z0-9]+)*$')
+field_name_re = re.compile(r'^[a-z][a-z0-9]*(__?[a-z0-9]+)*$')
 
 
 def schedule_screenshot(request, form):
@@ -292,9 +292,9 @@ def field_choices(request, client, field_name):
     if value:
         choices = (choice for choice in choices if choice.startswith(value))
 
-    return Response({
-        'results': [{'id': choice, 'text': choice} for choice in choices],
-    })
+    return Response([
+        {'id': choice, 'text': choice} for choice in choices
+    ])
 
 
 class SignupFormList(ClientAPIView):
