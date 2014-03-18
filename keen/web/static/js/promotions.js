@@ -197,7 +197,8 @@
             $this.select2({
                 multiple: true,
                 //minimumInputLength: 1,
-		separator: '^^',
+                separator: '^^',
+                quietMillis: 500,
                 ajax: {
                     url: '/api/client/choices/' + this.name.substr(7),
                     data: function(term, page) {
