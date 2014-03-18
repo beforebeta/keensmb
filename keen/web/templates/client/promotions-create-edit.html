@@ -283,7 +283,7 @@
                   </div>
                   <div id="target-audience" class="row promsection-segment-wrapper">
                     {% for filter in target_audience_filters %}
-                    <div style="display:none" class="col-xs-6 section-default" data-section-name="target_{{ filter.name }}">
+                    <div style="display:none" class="col-xs-5 section-default" data-section-name="target_{{ filter.name }}">
                       <div class="kn-section mbl">
                         <div class="kn-section-header">
                           <button type="button" class="close mtn pull-right">
@@ -299,7 +299,7 @@
                             {% endfor %}
                           </select>
                           {% else %}
-                          <input type="hidden" name="target_{{ filter.name }}">
+                          <input type="hidden" name="target_{{ filter.name }}" value="{{ filter.values | join:"^^" }}">
                           {% endif %}
                         </div>
                       </div>

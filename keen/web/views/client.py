@@ -155,10 +155,11 @@ def get_field_choices(client, name):
     elif name in BOOLEAN_CUSTOMER_FIELDS:
         choices = ('yes', 'no')
     else:
-        sql_expr = "(data->'{0}')".format(name)
-        choices = list(
-            client.customers.extra({'choice': sql_expr}).
-            values_list('choice', flat=True).order_by('choice').distinct())
+        choices = None
+#        sql_expr = "(data->'{0}')".format(name)
+#        choices = list(
+#            client.customers.extra({'choice': sql_expr}).
+#            values_list('choice', flat=True).order_by('choice').distinct())
         #if name == 'email':
         #    choices = (email.split('@', 1) for email in choices if '@' in email)
         #    choices = sorted(set(domain for user, domain in choices))
