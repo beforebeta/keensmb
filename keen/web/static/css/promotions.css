@@ -28,7 +28,8 @@
 }
 
 .promotions .promotions-list li a:hover {
-    background-color: #daf4ef;
+    color: #34495e;
+    background-color: #7b96c9;
 }
 
 .promotions .promotions-list .active a {
@@ -136,7 +137,7 @@
 }
 
 .promotions .kn-section-header {
-    padding: 8px 10px;
+    padding: 4px 10px;
     overflow: hidden;
 }
 
@@ -149,6 +150,7 @@
 }
 
 .promotions .kn-section-content {
+    padding-top: 11px;
     padding-bottom: 0px;
     border-radius: 0 0 5px 5px;
 }
@@ -318,17 +320,25 @@
   border: 1px solid #ebeff0;
   max-height: 408px;
   padding: 0;
+  margin-top: 10px;
   margin-left: 40px;
+  margin-right: 15px;
   overflow-y: scroll;
+}
+
+.promotion-scroll-menu,
+.promotion-narrow-field,
+#target-audience {
+  margin-top: 10px;
 }
 
 .promotion-scroll-menu li {
   list-style-type: none;
   line-height: 38px;
-  color: #bdc3c7;
+  color: #6c7881;
   padding-left: 20px;
   border-top: 1px solid #ebeff0;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -415,4 +425,8 @@ input[type=file]{
     position: absolute;
     right: 15px;
     top: 0;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    margin-right: 5px !important;
 }
