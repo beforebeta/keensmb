@@ -19,8 +19,6 @@ from keen.core.models import (
     Promotion,
     CUSTOMER_FIELD_NAMES,
     CUSTOMER_FIELD_NAMES_DICT,
-    CUSTOMER_FIELD_CHOICES,
-    BOOLEAN_CUSTOMER_FIELDS,
 )
 from keen.web.models import SignupForm
 from keen.web.forms import CustomerForm, PromotionForm
@@ -135,35 +133,17 @@ def create_edit_promotion(request, client, promotion_id=None):
             form = PromotionForm()
 
     context['form'] = form
-    context['target_audience_filters'] = sorted(
-        [
+    context['target_audience_filters'] = [
             {
-                'name': name,
-                'title': CUSTOMER_FIELD_NAMES_DICT[name],
-                'choices': get_field_choices(client, name),
-                'values': promotion_instance.target_audience.get(name, []) if (
+                'name': field.name,
+                'title': field.title,
+                'choices': field.choices,
+                'values': promotion_instance.target_audience.get(field.name, []) if (
                     promotion_instance and promotion_instance.target_audience) else [],
             }
-            for name in CUSTOMER_FIELD_NAMES_DICT
-        ], key=itemgetter('title'))
+            for field in client.customer_fields.order_by('title')
+        ]
     return render(request, 'client/promotions-create-edit.html', context)
-
-
-def get_field_choices(client, name):
-    if name in CUSTOMER_FIELD_CHOICES:
-        choices = CUSTOMER_FIELD_CHOICES[name]
-    elif name in BOOLEAN_CUSTOMER_FIELDS:
-        choices = ('yes', 'no')
-    else:
-        choices = None
-#        sql_expr = "(data->'{0}')".format(name)
-#        choices = list(
-#            client.customers.extra({'choice': sql_expr}).
-#            values_list('choice', flat=True).order_by('choice').distinct())
-        #if name == 'email':
-        #    choices = (email.split('@', 1) for email in choices if '@' in email)
-        #    choices = sorted(set(domain for user, domain in choices))
-    return choices
 
 
 @client_view
