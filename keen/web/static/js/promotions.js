@@ -196,7 +196,7 @@
             
             $this.select2({
                 multiple: true,
-                //minimumInputLength: 1,
+                minimumInputLength: 2,
                 separator: '^^',
                 quietMillis: 500,
                 ajax: {
@@ -205,7 +205,7 @@
                         return {q: term};
                     },
                     results: function(data, page) {
-                        return {results: data};
+                        return data;
                     }
                 },
                 initSelection: function(element, callback) {

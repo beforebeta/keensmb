@@ -281,13 +281,36 @@ class Client(Timestamps):
 
 
     def customers_by_data(self, data):
+        logger.debug('Filtering customers by {0!r}'.format(data))
         q = Q(client=self)
-        for name, value in data.items():
-            subq = Q()
-            for subval in value:
-                subq |= Q(data__contains={name: subval})
-            q &= subq
-        return Customer.objects.filter(q)
+        where = []
+        params = []
+        for name, values in data.items():
+            value_is_wildcard = [(value, '*' in value) for value in values]
+            if any(is_wildcard for value, is_wildcard in value_is_wildcard):
+                parts = []
+                for value, wildcard in value_is_wildcard:
+                    if wildcard:
+                        value = value.replace('*', '%')
+                        parts.append('((data->%s) ilike %s)')
+                    else:
+                        parts.append('((data->%s) = %s)')
+                    params.extend((name, value))
+                if parts:
+                    where.append(' or '.join(parts))
+            else:
+                # exact value(s)
+                subq = Q()
+                for value in values:
+                    subq |= Q(data__contains={name: value})
+                if subq:
+                    q &= subq
+
+        query = Customer.objects.filter(q)
+        if where:
+            query = query.extra(where=where, params=params)
+
+        return query
 
 
 class ClientUser(Timestamps):

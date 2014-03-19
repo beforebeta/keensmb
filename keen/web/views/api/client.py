@@ -288,13 +288,13 @@ def field_choices(request, client, field_name):
         return Response({'error': 'Invalid field name'})
     sql_expr = "(data->'{0}')".format(field_name)
     choices = client.customers.extra({'choice': sql_expr}).values_list('choice', flat=True).distinct()
-    value = request.GET.get('q', '').strip()
+    value = request.GET.get('q', '').lstrip()
     if value:
-        choices = (choice for choice in choices if choice.startswith(value))
+        choices = choices.extra(where=[sql_expr + ' ilike %s'], params=[value + '%%'])
 
-    return Response([
-        {'id': choice, 'text': choice} for choice in choices
-    ])
+    return Response({
+        'results': [{'id': choice, 'text': choice} for choice in choices[:100]],
+    })
 
 
 class SignupFormList(ClientAPIView):
