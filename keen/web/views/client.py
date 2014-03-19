@@ -138,12 +138,25 @@ def create_edit_promotion(request, client, promotion_id=None):
                 'name': field.name,
                 'title': field.title,
                 'choices': field.choices,
-                'values': promotion_instance.target_audience.get(field.name, []) if (
-                    promotion_instance and promotion_instance.target_audience) else [],
+                'values': get_field_value(field.name, form),
             }
             for field in client.customer_fields.order_by('title')
         ]
     return render(request, 'client/promotions-create-edit.html', context)
+
+
+def get_field_value(name, form):
+    if 'target_audience' in form.cleaned_data:
+        target_audience = form.cleaned_data.get('target_audience')
+    elif form.instance:
+        target_audience = form.instance.target_audience
+    else:
+        target_audience = None
+
+    if not target_audience:
+        return []
+
+    return target_audience.get(name, [])
 
 
 @client_view
