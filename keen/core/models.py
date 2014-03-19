@@ -182,64 +182,6 @@ CUSTOMER_FIELD_NAMES = Choices(
 
 CUSTOMER_FIELD_NAMES_DICT = dict(CUSTOMER_FIELD_NAMES)
 
-CUSTOMER_FIELD_CHOICES = {
-    'age': (
-        '18-20', '21-24', '25-34', '35-44', '45-54', '55-64', '65+'),
-    'gender': (
-        'Male', 'Female'),
-    'education': (
-        'Completed High School', 'Attended College', 'Completed College',
-        'Completed Graduate School', 'Attended Vocational/Technical'),
-    'home_owner_status': (
-        'Own', 'Rent'),
-    'home_market_value': (
-        '1k-25k', '25k-50k', '50k-75k', '75k-100k', '100k-150k', '150k-200k',
-        '200k-250k', '300k-350k', '350k-500k', '500k-1mm', '1mm+'),
-    'income': (
-        '0-15k', '15k-25k', '25k-35k', '35k-50k', '50k-75k', '75k-100k',
-        '100k-125k', '125k-150', '175k-200k', '200k-250k', '250k+'),
-    'length_of_residence': (
-        'Less than 1 year', '1 year', '2 years', '3 years', '4 years',
-        '5 years', '6 years', '7 years', '8 years', '9 years', '10 years',
-        '11-15 years', '16-19 years', '20+ years'),
-    'marital_status': (
-        'Single', 'Married'),
-    'occupation': (
-        'Blue Collar Worker', 'Business Owner', 'Civil Service', 'Technology',
-        'ExecuNve/Upper Management', 'Health Services', 'Homemaker',
-        'Middle Management', 'Military Personnel', 'Nurse', 'Part Time',
-        'Professional', 'ReNred', 'Secretary', 'Student', 'Teacher',
-        'White Collar Worker'),
-}
-
-BOOLEAN_CUSTOMER_FIELDS = set((
-    'high_net_worth',
-    'has_children',
-    'interest__arts',
-    'interest__blogging',
-    'interest__books',
-    'interest__business',
-    'interest__health',
-    'interest__news',
-    'purchase__automotive',
-    'purchase__baby',
-    'purchase__beauty',
-    'purchase__charitable',
-    'purchase__cooking',
-    'purchase__discount',
-    'purchase__high_end_brands',
-    'purchase__home_garden',
-    'purchase__home_improvement',
-    'purchase__luxury',
-    'purchase__magazine',
-    'purchase__outdoor',
-    'purchase__pets',
-    'purchase__power_shopper',
-    'purchase__sports',
-    'purchase__technology',
-    'purchase__travel',
-))
-
 
 class CustomerField(Timestamps):
 
@@ -262,16 +204,7 @@ class CustomerField(Timestamps):
     required = models.BooleanField(default=False)
     is_unique = models.BooleanField(default=False)
     width = models.IntegerField(null=True, blank=True)
-
-    @property
-    def choices(self):
-        if self.name in CUSTOMER_FIELD_CHOICES:
-            return CUSTOMER_FIELD_CHOICES[self.name]
-
-        if self.name in BOOLEAN_CUSTOMER_FIELDS:
-            return ('Yes', 'No')
-
-        return None
+    choices = JSONField(null=True, blank=True)
 
     def group_name(self):
         try:
