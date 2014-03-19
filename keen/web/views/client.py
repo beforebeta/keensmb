@@ -146,7 +146,7 @@ def create_edit_promotion(request, client, promotion_id=None):
 
 
 def get_field_value(name, form):
-    if 'target_audience' in form.cleaned_data:
+    if hasattr(form, 'cleaned_data') and 'target_audience' in form.cleaned_data:
         target_audience = form.cleaned_data.get('target_audience')
     elif form.instance:
         target_audience = form.instance.target_audience
