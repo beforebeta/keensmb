@@ -432,10 +432,10 @@ input[type=file]{
 }
 
 .select2-drop {
-	font-size: 15px;
+	font-size: 15px !important;
 }
 
-.select2-result-selectable.select2-highlighted, .select2-match {
-	color: #34495e;
-	background-color: #7b96c9;
+.select2-results select2-highlighted {
+	color: #34495e !important;
+	background-color: #7b96c9 !important;
 }
