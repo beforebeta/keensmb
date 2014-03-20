@@ -280,19 +280,23 @@ class Client(Timestamps):
         return self.promotions.filter(status=Promotion.PROMOTION_STATUS.active).count()
 
 
-    def customers_by_data(self, data):
+    def customers_by_data(self, data, not_set='(not set)'):
         logger.debug('Filtering customers by {0!r}'.format(data))
         q = Q(client=self)
         where = []
         params = []
         for name, values in data.items():
-            value_is_wildcard = [(value, '*' in value) for value in values]
+            value_is_wildcard = [(value, value == not_set or '*' in value) for value in values]
             if any(is_wildcard for value, is_wildcard in value_is_wildcard):
                 parts = []
                 for value, wildcard in value_is_wildcard:
                     if wildcard:
-                        value = value.replace('*', '%')
-                        parts.append('((data->%s) ilike %s)')
+                        if value == not_set:
+                            value = ''
+                            parts.append("(coalesce(trim(data->%s),'') = %s)")
+                        else:
+                            value = value.replace('*', '%')
+                            parts.append('((data->%s) ilike %s)')
                     else:
                         parts.append('((data->%s) = %s)')
                     params.extend((name, value))

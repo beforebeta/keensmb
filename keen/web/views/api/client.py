@@ -286,14 +286,17 @@ def field_choices(request, client, field_name):
     logger.debug('Lookup for choices of {0}'.format(field_name))
     if not field_name_re.match(field_name):
         return Response({'error': 'Invalid field name'})
-    sql_expr = "(data->'{0}')".format(field_name)
-    choices = client.customers.extra({'choice': sql_expr}).values_list('choice', flat=True).distinct()
-    value = request.GET.get('q', '').lstrip()
+    value = request.GET.get('q', '').strip()
     if value:
+        sql_expr = "(data->'{0}')".format(field_name)
+        choices = client.customers.extra({'choice': sql_expr}).values_list('choice', flat=True).distinct()
         choices = choices.extra(where=[sql_expr + ' ilike %s'], params=[value + '%%'])
+    else:
+        choices = []
 
     return Response({
-        'results': [{'id': choice, 'text': choice} for choice in choices[:100]],
+        'results': [{'id': '(not set)', 'text': '(not set)'}] + [
+            {'id': choice, 'text': choice} for choice in choices[:100]],
     })
 
 

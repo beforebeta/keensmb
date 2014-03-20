@@ -196,7 +196,6 @@
             
             $this.select2({
                 multiple: true,
-                minimumInputLength: 2,
                 separator: '^^',
                 quietMillis: 500,
                 ajax: {
