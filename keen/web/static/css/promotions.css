@@ -435,7 +435,7 @@ input[type=file]{
 	font-size: 15px !important;
 }
 
-.select2-results select2-highlighted {
+.select2-results .select2-highlighted {
 	color: #34495e !important;
 	background-color: #7b96c9 !important;
 }
