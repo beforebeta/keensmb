@@ -294,6 +294,7 @@
                         <div class="kn-section-content promotion-select-multiple">
                           {% if filter.choices %}
                           <select name="target_{{ filter.name }}" multiple>
+                            <option value="(not set)" {% if "(not set)" in filter.values %}selected{% endif %}>(not set)</option>
                             {% for choice in filter.choices %}
                             <option value="{{ choice }}" {% if choice in filter.values %}selected{% endif %}>{{ choice }}</option>
                             {% endfor %}
