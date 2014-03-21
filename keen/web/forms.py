@@ -70,7 +70,7 @@ FIELD_TYPE_MAP = dict(
         (CustomerField.FIELD_TYPES.url, forms.URLField, forms.URLInput),
         (CustomerField.FIELD_TYPES.float, forms.FloatField, forms.TextInput),
         (CustomerField.FIELD_TYPES.location, forms.CharField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.bool, forms.BooleanField, forms.CheckboxInput),
+        (CustomerField.FIELD_TYPES.bool, forms.CharField, forms.TextInput),
     )
 )
 
