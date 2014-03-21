@@ -57,8 +57,8 @@ class CustomerFieldSerializer(DynamicSerializer):
 
     class Meta:
         model = CustomerField
-        fields = ('name', 'title', 'type', 'required', 'choices', 'group',
-                  'width', 'created', 'modified')
+        fields = ('name', 'title', 'alt_title', 'type', 'required', 'hidden',
+                  'choices', 'group', 'width', 'created', 'modified')
 
 
 class CustomerFieldGroupSerializer(DynamicSerializer):

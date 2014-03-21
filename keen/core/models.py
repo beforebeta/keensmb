@@ -198,6 +198,7 @@ class CustomerField(Timestamps):
 
     name = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=255, unique=True)
+    alt_title = models.CharField(max_length=255, unique=True, null=True, blank=True)
     group = models.ForeignKey(CustomerFieldGroup, related_name='fields')
     group_ranking = models.IntegerField(default=99999999)
     type = models.CharField(max_length=20, choices=FIELD_TYPES)
@@ -205,6 +206,7 @@ class CustomerField(Timestamps):
     is_unique = models.BooleanField(default=False)
     width = models.IntegerField(null=True, blank=True)
     choices = JSONField(null=True, blank=True)
+    hidden = models.BooleanField(default=False)
 
     def group_name(self):
         try:

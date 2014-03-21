@@ -52,7 +52,7 @@ def form_field_builder(field_class, widget_class):
             'class': 'form-control',
         }
         widget = widget_class(attrs=attrs)
-        form_field = field_class(required=field.required, label=field.title, widget=widget)
+        form_field = field_class(required=field.required, label=field.alt_title or field.title, widget=widget)
         form_field.choices = field.choices
         form_field.properties = properties
         return form_field
