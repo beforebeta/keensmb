@@ -15,7 +15,7 @@
                 var customerFields = res.data.customer_fields,
                     optionalFieldsMap = {};
 
-                var notRequiredFields = _.where(customerFields, {required: false});
+                var notRequiredFields = _.where(customerFields, {required: false, hidden: false});
                 optionalFields = _.map(notRequiredFields, function(field) {
                     var fieldWidth = field.title.length > 10 ? 12 : 6;
                     return {
