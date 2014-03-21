@@ -115,7 +115,7 @@
                     data-placeholder='{{ field.label }}'
                     id="{{ field.name }}"
                     class='select2 choose-field-container full mbn'>
-                    <option></option>
+                    <option value="" disabled {% if not field.value %}selected{% endif %}>{{ field.label }}</option>
                     {% for choice in field.field.choices %}
                     <option value="{{ choice }}" {% if field.value == choice %}selected{% endif %}>{{ choice }}</option>
                     {% endfor %}
