@@ -20,7 +20,7 @@
                     var fieldWidth = field.title.length > 10 ? 12 : 6;
                     return {
                         name: field.name,
-                        title: field.title,
+                        title: field.alt_title || field.title,
                         type: field.type,
                         choices: field.choices,
                         width: fieldWidth
