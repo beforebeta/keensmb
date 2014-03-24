@@ -1,0 +1,168 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+{% load web_tags %}
+{% load cropping %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Content -->
+  <section class='clearfix promotions'>
+    <form class="" action="mode" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="btn-group pull-right">
+        <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+          <span>Use Information From Another Promo</span>
+          <span class="caret"></span>
+        </button>
+        <span class="dropdown-arrow"></span>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="#fakelink">
+              <i class="text-muted pull-right">In-Store</i> Name of Promotion:
+            </a>
+          </li>
+          <li>
+            <a href="#fakelink">
+              <i class="text-muted pull-right">Targeted</i> Name of Promotion:
+            </a>
+          </li>
+          <li>
+            <a href="#fakelink">
+              <i class="text-muted pull-right">Web</i> Name of Promotion:
+            </a>
+          </li>
+          <li>
+            <a href="#fakelink" class='text-blue'>Clear All Fields</a>
+          </li>
+        </ul>
+      </div>
+
+      <h1 class='page-title mtl'>Create New In-Store Promotion</h1>
+
+      <div class="kn-section mtl mbl">
+        <div class="kn-section-header">
+          <h6 class="mbn mtn">Basic Promotion Information</h6>
+        </div>
+        <div class="kn-section-content">
+
+          <div class="row">
+            {# Promotion Name #}
+            <div class="row mbl">
+              <div class="col-xs-3 small pll">
+                <span class="pll mll">Promotion Name*:</span>
+              </div>
+              <div class="col-xs-8">
+                <input type="text" name="name" value="" placeholder="Name of the promotion" class="form-control">
+              </div>
+              <div class="col-xs-1 pln">
+                  <div data-toggle='popover' data-content='form.name.name|promotion_help_text' class="js-popover-hover promotion-new-tooltip">?</div>
+              </div>
+            </div>
+
+            {# Promotion Description #}
+            <div class="row mbl">
+              <div class="col-xs-3 small">
+                <span class="pll mll">Promotion Description*:</span>
+              </div>
+              <div class="col-xs-8">
+                <textarea rows="7" name="form.description.name" placeholder="Add comment..." class="form-control">form.description.value|filter_none</textarea>
+              </div>
+              <div class="col-xs-1 pln">
+                  <div data-toggle='popover' data-content='form.description.name|promotion_help_text' class="js-popover-hover promotion-new-tooltip">?</div>
+              </div>
+            </div>
+
+            {# Call to Action #}
+            <div class="row mbl">
+              <div class="col-xs-3 small pll">
+                <span class="pll mll">Call to Action Text*:</span>
+              </div>
+              <div class="col-xs-3">
+                <input type="text" name="name" value="" placeholder='"Get This Deal!"' class="form-control">
+              </div>
+              <div class="col-xs-1 pln">
+                  <div data-toggle='popover' data-content='promotion_help_text' class="js-popover-hover promotion-new-tooltip">?</div>
+              </div>
+            </div>
+
+            <div class="row mbl">
+              <div class="col-xs-3 small">
+                <span class="pll mll">Promotion Image*:</span>
+              </div>
+              <div class="col-xs-8">
+                <div class="row prm">
+                  <div class="col-xs-8">
+                    <div class="prom-new-img pull-left">
+                      <img src="" id="preview_name" style="display:none">
+                      <input id="form.image_url.name" name="form.image_url.name" value="form.image_url.value|filter_none" type="hidden">
+                    </div>
+                    <span data-conversion_params="/convert?w=300&h=290&fit=crop" data-image_input_id="form.image_url.name" data-preview_image_id="preview_form.image_url.name" class="btn btn-default btn-embossed pull-right filePickerUpload">Change Image</span>
+                  </div>
+                  <div class="col-xs-2 pln">
+                    <div data-toggle='popover' data-content='form.image_url.name|promotion_help_text' class="js-popover-hover promotion-new-tooltip">?</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 small">
+        *indicates required field
+      </div>
+      <div class="row mtl mbl">
+        <div class="col-xs-3">
+          <a class="btn btn-block btn-default" href="{% url 'client_promotions' %}">Cancel</a>
+        </div>
+        <div class="col-xs-3">
+          <input name="save_draft" class="btn btn-block btn-default" type="submit" value="Save Draft">
+        </div>
+        <div class="col-xs-3">
+            <input name="preview_promotion" class="btn btn-block btn-default" type="submit" value="Preview Promotion">
+        </div>
+        <div class="col-xs-3">
+          <button class="btn btn-block btn-primary" type="submit" name="send">Send</button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+
+  <!-- /.container -->
+
+  {% comment %}
+
+      {% if form.instance.id %}
+      <span class="previewPromotionBtn" id="promotionPreviewTrigger" style="display:none;" data-toggle="modal" data-target="#promotionPreviewModal" data-location="//{{ request.get_host }}{% url 'client_preview_promotion' form.instance.id %}" data-title="{{ form.name.value }}"></span>
+      <div id="promotionPreviewModal" class="modal fade modal-large" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content center-block">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fui-cross"></i>
+              </button>
+              <h4 class="modal-title">Preview Promotion</h4>
+            </div>
+            <div class="modal-body">
+                <iframe src="" width="702" height="600" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer ptm pbn">
+              <!--<button type="button" class="mbm btn btn-sm btn-primary btn-wide btn-embossed btn-danger pull-right mll">Delete</button>-->
+              <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+     {% endif %}
+
+  {% endcomment %}
+{% endblock %}

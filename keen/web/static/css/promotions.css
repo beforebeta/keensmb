@@ -415,3 +415,152 @@ input[type=file]{
     right: 15px;
     top: 0;
 }
+
+.promotions .promotion-type {
+  padding: 0 25px;
+}
+.promotions .promotion-type .small {
+  line-height: 1.3;
+}
+.promotions .promotion-type > figure {
+  display: inline-block;
+  margin-top: 40px;
+  background-color: #999;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  text-align: center;
+}
+.promotions .promotion-type > figure:hover {
+  background-color: #45b19c;
+}
+.promotions .promotion-type > figure:before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+}
+.promotions .promotion-type > figure img {
+  height: 55%;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+
+.tmpl-block, .tmpl-pull {
+  padding: 10px 15px;
+  background-color: #169e83;
+  color: #fff;
+  line-height: 1.3;
+  border-radius: 0 0 10px 10px;
+  box-shadow: inset 0 -3px rgba(0,0,0,0.2);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+.tmpl-block {
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+.tmpl-block .form-control {
+  border: none;
+  box-shadow: 0 0 0 2px rgba(255,255,255, .4);
+}
+
+.tmpl-pull {
+  position: relative;
+  padding-top: 10px;
+  padding-right: 40px;
+}
+.tmpl-pull:after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: 15px;
+  bottom: 20px;
+  width: 0;
+  height: 0;
+  border: 8px solid #fff;
+  border-width: 8px 7px 8px 7px;
+  border-color: transparent transparent #fff transparent;
+}
+
+.tmpl-block small, .tmpl-block .small {
+  line-height: 1.3;
+}
+
+
+.tmpl-header {
+  font-size: 28px;
+}
+.tmpl-block + .tmpl-pull {
+  float: right;
+  margin-right: 20px;
+  padding-bottom: 15px;
+  position: relative;
+  top: -4px;
+  z-index: 2;
+}
+
+.tabs-wrap .btn {
+  background: #f7f7f7;
+  color: #446cb3;
+}
+.tabs-wrap + .tab-content {
+  border: none;
+  padding: 0;
+}
+.tabs-wrap .btn-group.active .btn {
+  color: #f7f7f7;
+  background: #446cb3;
+}
+
+.tab-content-custom {
+  border: none;
+}
+
+.tmpl-placeholder {
+  display: inline-block;
+  width: 126px;
+  height: 102px;
+  margin-right: 20px;
+  padding: 14px 18px 20px;
+  border-radius: 3px;
+  border: 6px solid #fff;
+  box-shadow: 0 0 0 2px #f3f3f3;
+  cursor: pointer;
+}
+.tmpl-placeholder.active {
+  box-shadow: 0 0 0 2px #4bc6a5;
+}
+
+.tmpl-placeholder .tmpl-header {
+  float: left;
+  margin: 0;
+  margin-top: 5px;
+  font-size: 24px;
+  display: inline-block;
+}
+.tmpl-placeholder .tmpl-text {
+  overflow: hidden;
+  margin: 0;
+  margin-left: 25px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+.tmpl-placeholder .tmpl-button {
+  height: 16px;
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 16px;
+  border-radius: 4px;
+  text-align: center;
+  color: #fff;
+}
+
+

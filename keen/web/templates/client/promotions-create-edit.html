@@ -5,7 +5,7 @@
 {% load web_tags %}
 {% load cropping %}
 
-{% block sub_head %}
+{% block javascripts %}
     <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
 {% endblock %}
 
@@ -13,8 +13,37 @@
 
   <!-- Content -->
  <section class='clearfix promotions'>
-        <form class="" action="{{ mode }}" method="post" enctype="multipart/form-data">
+      <form class="" action="{{ mode }}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+        <div class="btn-group pull-right">
+          <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+            <span>Use Information From Another Promo</span>
+            <span class="caret"></span>
+          </button>
+          <span class="dropdown-arrow"></span>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#fakelink">
+                <i class="text-muted pull-right">In-Store</i> Name of Promotion:
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink">
+                <i class="text-muted pull-right">Targeted</i> Name of Promotion:
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink">
+                <i class="text-muted pull-right">Web</i> Name of Promotion:
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink" class='text-blue'>Clear All Fields</a>
+            </li>
+          </ul>
+        </div>
+
         <h1 class='page-title mtl'>{% if mode == 'create' %}Create New{% else %}Edit{% endif %} Promotion</h1>
         <div class="kn-section mtl mbl">
             <div class="kn-section-header">

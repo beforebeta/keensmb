@@ -20,24 +20,40 @@
     </div>
     <div class="col-xs-9 promotions-border-left pbl">
       <div class="row">
-        <div class="col-xs-3 mll mtm pll">
-{#            <form role="form" action="{% url 'client_promotions_tab' tab %}" method="POST">#}
-{#                {% csrf_token %}#}
-{#                <select name="sorting" class="simple full promotions-select" onchange="this.form.submit()">#}
-{#                    <option value="sort by" disabled selected>Sort By</option>#}
-{#                    <option value="launched">Launched</option>#}
-{#                    <option value="performance">Performance</option>#}
-{#                    <option value="expiring">Expiring</option>#}
-{#                    <option value="name">Name</option>#}
-{#                </select>#}
-{#            </form>#}
-{##}
+        <div class="col-xs-3 mtm">
+          <form role="form" action="{% url 'client_promotions_tab' tab %}" method="POST" class='mls'>
+              {% csrf_token %}
+              <select name="sorting" class="simple full promotions-select" onchange="this.form.submit()">
+                <option value="sort by" disabled selected>Sort By</option>
+                <option value="recent">Most Recent</option>
+                <option value="redemptions">Most Redemptions</option>
+                <option value="ending">Ending Soon</option>
+                <option value="name">A-Z Promotion Name</option>
+              </select>
+          </form>
         </div>
         <div class="col-xs-4 pull-right mtm">
-          <a href="{% url 'client_create_promotion' %}" class="btn btn btn-sm btn-primary pull-right">
+          <div class="btn-group pull-right">
+            <a href='{% url "client_create_promotion_choose_type" %}' class="btn btn-primary btn-sm">Create New Promotion</a>
+            <button class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+            </button>
+            <span class="dropdown-arrow dropdown-arrow-inverse"></span>
+            <ul class="dropdown-menu dropdown-inverse">
+              <li><a href="{% url 'client_create_promotion' %}">Targeted Email Promotion</a></li>
+              <li><a href="{% url 'client_create_promotion_website' %}">Website Promotion</a></li>
+              <li><a href="{% url 'client_create_promotion_email' %}">Email Newsletter</a></li>
+              <li><a href="{% url 'client_create_promotion_instore' %}">In-Store Promotion</a></li>
+            </ul>
+          </div>
+
+
+      {% comment %}
+          <a href="{% url 'client_create_promotion' %}" class="btn btn-sm btn-primary pull-right">
             <span class="mrl">Create New Promotion</span>
             <i class="fui-plus mll"></i>
           </a>
+      {% endcomment %}
         </div>
       </div>
 

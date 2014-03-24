@@ -13,12 +13,12 @@
         {% compress css %}
         <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
         <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
+        <link href="{% static "css/chromoselector.css" %}" rel="stylesheet">
 
         <!-- Custom styles -->
         <link href="{% static "css/app.css" %}" rel="stylesheet">
         <link href="{% static "css/common.css" %}" rel="stylesheet">
         <link href="{% static "css/animations.css" %}" rel="stylesheet">
-        <link href="{% static "css/chromoselector.css" %}" rel="stylesheet">
 
         <link href="{% static "css/dashboard.css" %}" rel="stylesheet">
         <link href="{% static "css/promotions.css" %}" rel="stylesheet">
@@ -27,8 +27,10 @@
 
         <link href="{% static "css/enrichment.css" %}" rel="stylesheet">
 
-        <link rel="stylesheet" href="{% static "css/select2.css" %}">
-        <link rel="stylesheet" href="{% static "css/select2-overwrite.css" %}">
+        <link href="{% static "css/select2.css" %}" rel="stylesheet">
+        <link href="{% static "css/select2-overwrite.css" %}" rel="stylesheet">
+
+        <link href="{% static "css/tinymce-overwrite.css" %}" rel="stylesheet">
         {% endcompress %}
 
         {% compress js %}
@@ -131,7 +133,6 @@
 
     <script src="{% static "js/application.js" %}"></script>
     <script src="{% static "js/promotions.js" %}"></script>
-
     <script src="{% static "js/module.js" %}"></script>
 
     <script src="{% static "js/customer-list.js" %}"></script>
@@ -147,7 +148,7 @@
     {% include 'olark.html' %}
     {% include 'front-page/snippets/ga_tracking.html' %}
 
-    {% if settings.DEBUG %}
+    {% if debug %}
     <script src="http://localhost:35729/livereload.js?snipver=1" type="text/javascript"></script>
     {% endif %}
 
