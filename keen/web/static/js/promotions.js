@@ -11,13 +11,6 @@ $(function () {
             plugins: ['link image save'],
             toolbar: "undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
         });
-
-        if ($('textarea.tinymce').siblings('.tinymce-content').length) {
-            var content = $('textarea.tinymce').siblings('.tinymce-content').html();
-            setTimeout(function() {
-                tinyMCE.activeEditor.setContent(content);
-            }, 35);
-        }
     }
 
     var preview_promotion = function($button) {

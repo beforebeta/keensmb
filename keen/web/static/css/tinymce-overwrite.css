@@ -1,0 +1,38 @@
+textarea.tinymce {
+  opacity: 0;
+}
+
+.tmce-wrap {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.tmce-wrap .mce-panel {
+  border: none;
+  background: #f6f6f6;
+}
+.tmce-wrap .mce-toolbar-grp {
+  border-top: 1px solid #ebeff0;
+  border-bottom: 1px solid #ebeff0;
+  padding: 8px 5px;
+}
+.tmce-wrap .mce-toolbar-grp .mce-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+}
+.tmce-wrap .mce-toolbar-grp .mce-btn:hover {
+  background: #eee;
+}
+.tmce-wrap .mce-btn button {
+  padding: 4px 15px;
+}
+.tmce-wrap .mce-flow-layout-item {
+  margin-left: 10px;
+}
+.tmce-wrap .mce-path {
+  display: none;
+}
+.some {
+
+}

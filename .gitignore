@@ -22,7 +22,7 @@ __pycache__
 *.log
 *.pid
 logs/
-static/
+/static/
 media/
 keen/settings/local.py
 
