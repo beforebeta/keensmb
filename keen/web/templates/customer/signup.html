@@ -10,6 +10,8 @@
 
         {% compress css %}
         <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "css/select2.css" %}">
+        <link rel="stylesheet" href="{% static "css/select2-overwrite.css" %}">
         <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
         <link href="{% static "css/app.css" %}" rel="stylesheet">
         <link href="{% static "css/common.css" %}" rel="stylesheet">
@@ -94,90 +96,61 @@
                {{ form_data.form.description }}
             </p>
 
-            <div class="row">
+            <div class="row su-optional-field-list">
               {% csrf_token %}
               {% if list_id %}<input type="hidden" name="list_id" value="{{ list_id }}">{% endif %}
 
-              <div class="col-xs-12">
-                {% if form.full_name.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.full_name.errors %}
-                  {{ error }}
-                  {% endfor %}'
-                  data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <input type="text" name="full_name" class="form-control" placeholder='Full Name *' value="{{ form.full_name.value|default:"" }}">
-                </div>
-                {% if form.email.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.email.errors %}{{ error }}{% endfor %}'
-                  data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <input type="email" name="email" class="form-control" placeholder='Email Address *' value="{{ form.email.value|default:"" }}">
-                </div>
-              </div>
-
-              <div class="col-xs-5">
-                {% if form.address__zipcode.errors %}
+              {% for field in form %}
+              <div class="col-xs-{{ field.field.properties.width | default:"12" }} su-optional-field">
+                {% if field.errors %}
                 <div class="form-group mbm has-error"
-                  data-toggle='popover' data-content='{% for error in form.address__zipcode.errors %}
+                  data-toggle='popover' data-content='{% for error in field.errors %}
                   {{ error }}
                   {% endfor %}' data-placement="right">
                 {% else %}
                 <div class="form-group mbm">
                 {% endif %}
-                  <input type="text" name="address__zipcode" class="form-control" placeholder='Zip Code' value="{{ form.address__zipcode.value|default:"" }}">
+                {% if field.field.choices %}
+                  <select name="{{ field.name }}"
+                    data-placeholder='{{ field.label }}'
+                    id="{{ field.name }}"
+                    class='select2 choose-field-container full mbn'>
+                    <option value="" disabled {% if not field.value %}selected{% endif %}>{{ field.label }}</option>
+                    {% for choice in field.field.choices %}
+                    <option value="{{ choice }}" {% if field.value == choice %}selected{% endif %}>{{ choice }}</option>
+                    {% endfor %}
+                  </select>
+                {% else %}
+                {{ field }}
+                {% endif %}
                 </div>
               </div>
-              <div class="col-xs-7 pln">
-                {% if form.dob.errors %}
-                <div class="form-group mbm has-error"
-                  data-toggle='popover' data-content='{% for error in form.dob.errors %}
-                  {{ error }}
-                  {% endfor %}' data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <div class="input-group">
-                    <input type="text" name="dob" class="form-control datapicker" placeholder="Birthday" value="{{ form.dob.value|default:"" }}">
-                    <span class="input-group-btn">
-                      <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
-                    </span>
+              {% comment %}
+                <div class='col-xs-{{field.width}} su-optional-field'>
+                  <div class="form-group mbm">
+                  {% if not field.choices %}
+                    {% if field.type != "date" %}
+                      <input class='form-control' type="text" placeholder='{{ field.title }}'>
+                    {% else %}
+                      <div class="input-group">
+                        <input type="text" class="form-control datepicker" placeholder="{{ field.title }}">
+                        <span class="input-group-btn">
+                          <button class="btn btn-calendar" type="button"><span class="fui-calendar"></span></button>
+                        </span>
+                      </div>
+                    {% endif %}
+                  {% else %}
+                    <select name="{{ field.name }}" id="{{ field.name }}" class='simple full mbs'>
+                      <option value="0" selected disabled>{{ field.title }}</option>
+                      {% for choice in field.choices %}
+                        <option value="{{ choice }}">{{ choice }}</option>
+                      {% endfor %}
+                    </select>
+                  {% endif %}
                   </div>
                 </div>
-              </div>
-              <div class="col-xs-7">
-                {% if form.phone.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.phone.errors %}
-                  {{ error }}
-                  {% endfor %}' data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <input type="text" name="phone" class="form-control" placeholder='Phone' value="{{ form.phone.value|default:"" }}">
-                </div>
-              </div>
-              <div class="col-xs-5 pln">
-                {% if form.gender.errors %}
-                <div class="form-group mbm has-error js-popover-hover"
-                  data-toggle='popover' data-content='{% for error in form.gender.errors %}
-                  {{ error }}
-                  {% endfor %}' data-placement="right">
-                {% else %}
-                <div class="form-group mbm">
-                {% endif %}
-                  <select name="gender" id="gender" class='simple full mbs dropup'>
-                    <option value="" selected disabled>Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
-              </div>
+              {% endcomment %}
+              {% endfor %}
             </div>
             <button class="btn btn-primary btn-secondary btn-wide full">Submit</button>
           </form>
@@ -188,15 +161,17 @@
 
     {% compress js %}
     <script src="{% static "js/vendor/jquery/jquery-1.8.3.min.js" %}"></script>
-    <script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>
+    <!--<script src="{% static "js/vendor/jquery/jquery-ui-1.10.3.custom.min.js" %}"></script>-->
+    <script src="{% static "js/vendor/jquery/jquery-ui-datapicker.js" %}"></script>
     <script src="{% static "js/vendor/jquery/jquery.ui.touch-punch.min.js" %}"></script>
-    <script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>
+    <!--<script src="{% static "js/vendor/jquery/jquery.tagsinput.js" %}"></script>-->
     <script src="{% static "js/vendor/jquery/jquery.placeholder.js" %}"></script>
     <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
-    <script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>
-    <script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>
-    <script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>
-    <script src="{% static "js/vendor/flatui-radio.js" %}"></script>
+    <!--<script src="{% static "js/vendor/bootstrap/bootstrap-select.js" %}"></script>-->
+    <!--<script src="{% static "js/vendor/bootstrap/bootstrap-switch.js" %}"></script>-->
+    <script src="{% static "js/vendor/select2.js" %}"></script>
+    <!--<script src="{% static "js/vendor/flatui-checkbox.js" %}"></script>-->
+    <!--<script src="{% static "js/vendor/flatui-radio.js" %}"></script>-->
     <script src="{% static "js/application.js" %}"></script>
     <script>
       $(function($) {

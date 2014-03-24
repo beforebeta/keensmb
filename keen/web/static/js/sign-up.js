@@ -3,14 +3,76 @@
 'use strict';
 
 (function($) {
-    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', '$sanitize', function($scope, $timeout, suService, $q, $sanitize){
+    angular.module('keen').controller('signUpCtrl', ['$scope', '$timeout', 'signUpFormService', '$q', '$sanitize', 'customerService', function($scope, $timeout, suService, $q, $sanitize, customerService){
 
-        // suService.getClienImages().then(function(data) {
-        //     console.log(data);
-        // });
-        // suService.getClientForms().then(function(data) {
-        //     console.log(data);
-        // });
+
+        var optionalFields = [];
+        var showExtraFields = function(fields) {
+            // hardcoded:
+            var selectedFieldNames = ['address__zipcode', 'dob', 'phone', 'gender'];
+
+            customerService.getClientData().then(function(res) {
+                var customerFields = res.data.customer_fields,
+                    optionalFieldsMap = {};
+
+                var notRequiredFields = _.where(customerFields, {required: false, hidden: false});
+                optionalFields = _.map(notRequiredFields, function(field) {
+                    var fieldWidth = field.title.length > 10 ? 12 : 6;
+                    return {
+                        name: field.name,
+                        title: field.alt_title || field.title,
+                        type: field.type,
+                        choices: field.choices,
+                        width: fieldWidth
+                    };
+                });
+
+                _.each(optionalFields, function(item) {
+                    optionalFieldsMap[item.name] = item.title;
+                });
+
+                if (!fields) {
+                    $scope.additionalFields = _.filter(optionalFields, function(item) {
+                        return _.contains(selectedFieldNames, item.name);
+                    });
+                } else {
+                    $scope.additionalFields = fields;
+                }
+
+                $scope.optionalFieldsMap = optionalFieldsMap;
+            });
+        };
+
+
+        $scope.checkField = function(name) {
+            return _.find($scope.additionalFields, {name: name});
+        };
+
+        $scope.addField = function(name) {
+            if (!$scope.checkField(name)) {
+                var item = _.find(optionalFields, {name: name});
+                $scope.additionalFields.push(item);
+
+                // hardcoded
+                $("#newFieldModal").modal("hide");
+            }
+        };
+
+        $scope.removeField = function(name) {
+            if ($scope.checkField(name)) {
+                var item = _.find(optionalFields, {name: name});
+                $scope.additionalFields = _.filter($scope.additionalFields, function(field) {
+                    return field.name !== item.name;
+                });
+            }
+        };
+
+        $scope.resizeField = function(field) {
+            // newWidth = (12 + 6) - oldWidth;
+            field.width = 18 - field.width;
+        };
+
+
         $scope.dataLoaded = false;
 
         suService.getInitialData().then(function(data) {
@@ -27,6 +89,8 @@
             });
 
             $scope.dataLoaded = true;
+
+            showExtraFields(formData.extraFields);
         });
 
         $scope.$watch('permalink.text', function(newVal, oldVal) {
@@ -342,6 +406,7 @@
             prepared.formDescription = {
                 text: formData.form.description
             };
+            prepared.extraFields = formData.extra_fields;
 
             return prepared;
         };
@@ -375,7 +440,9 @@
                     textColor: $scope.form.textColor,
                     title: $scope.formTitle.text,
                     description: $scope.formDescription.text
-                }
+                },
+
+                extra_fields: angular.copy($scope.additionalFields)
             };
 
             // save images to server
@@ -453,6 +520,7 @@
                         .then(function(res) {
                             $scope.createdIsPreview = true;
                             $scope.formCreatedLink = suService.getFormLink(previewSlug);
+                            window.open(suService.getFormLink(previewSlug));
                             $('#formCreatedModal').modal('show');
                         }, function(err) {
                             console.warn(err);

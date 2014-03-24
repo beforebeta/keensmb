@@ -38,7 +38,7 @@ def signup_view(request, client_slug, form_slug):
     }
 
     if request.method == 'POST':
-        form = CustomerForm(client, request.POST)
+        form = CustomerForm(signup_form, request.POST)
         if form.is_valid():
             customer = Customer()
             customer.client = client
@@ -76,7 +76,7 @@ def signup_view(request, client_slug, form_slug):
         else:
             logger.debug('Signup form validation error(s): %r' % form.errors)
     else:
-        form = CustomerForm(client)
+        form = CustomerForm(signup_form)
 
     context['form'] = form
 

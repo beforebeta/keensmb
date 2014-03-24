@@ -7,6 +7,9 @@
 .icon.orange:hover {
   color: #e67d22;
 }
+.text-blue, .text-blue:hover {
+  color: '#446cb2';
+}
 
 .dib {display: inline-block;}
 .dib.mid {vertical-align: middle;}
@@ -250,6 +253,9 @@
 .text-blue {
   color: #446cb3;
 }
+.text-uppercase {
+  text-transform: uppercase;
+}
 
 .select .btn, .full {
   width: 100%;
@@ -267,6 +273,10 @@
 .btn-group.select.simple .caret {
   border-bottom-color: #bdc3c7;
   border-top-color: #bdc3c7;
+}
+.dropdown-menu {
+  opacity: 0;
+  visibility: hidden;
 }
 .btn-group.select.simple .dropdown-menu {
   min-height: 0 !important;
@@ -296,7 +306,8 @@
 }
 
 .input-group .input-group-btn .btn-calendar {
-  padding-left: 3px;
+  padding-left: 2px;
+  padding-right: 5px;
 }
 .input-group  .hasDatepicker {
   padding-right: 3px;
@@ -381,6 +392,8 @@
 }
 
 .dropup .caret {
-  border-top: 8px solid #bdc3c7;
-  border-bottom: none;
+  border-bottom: 8px solid #bdc3c7;
+  border-top: none;
 }
+
+.btn, .btn:focus {outline: 0;}

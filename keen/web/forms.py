@@ -1,71 +1,107 @@
 import datetime
+
 from django import forms
 from django.forms import DateField
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
+from django.utils.datastructures import SortedDict
+from django.utils.html import format_html
 
 from localflavor.us.forms import USPhoneNumberField
 
 from keen.core.models import CustomerField, Promotion
 
 
-def form_field_builder(field_type, widget_type):
-    def builder(field):
-        return field_type(
-            required=field.required,
-            label=field.title,
-            widget=widget_type(attrs={
-                'id': field.name,
-                'name': field.name,
-                'required': field.required,
-                'placeholder': field.title + ('', ' *')[field.required],
-            }),
-        )
+class CustomDateInput(forms.DateInput):
+
+    def render(self, name, value, attrs=None):
+        if attrs is None:
+            attrs = {'class': 'form-control datepicker'}
+        else:
+            attrs['class'] = ' '.join((attrs.get('class', ''), 'form-control datepicker'))
+
+        return format_html('''
+            <div class="input-group">
+                {0}
+                <span class="input-group-btn">
+                    <button class="btn btn-calendar" type="button">
+                        <span class="fui-calendar"></span>
+                    </button>
+                </span>
+            </div>
+            ''', super(CustomDateInput, self).render(name, value, attrs))
+
+
+class CustomSelect(forms.Select):
+
+    def render_options(self, choices, selected_choices):
+        options = super(CustomSelect, self).render_options( choices, selected_choices)
+        return format_html('''
+            <option value="" {0} disabled>{1}</option>
+            {2}
+            ''', ('' if selected_choices else 'selected'), self.label_tag, options)
+
+
+def form_field_builder(field_class, widget_class):
+    def builder(field, properties):
+        attrs = {
+            'id': field.name,
+            'name': field.name,
+            'required': field.required,
+            'placeholder': field.title + ('', ' *')[field.required],
+            'class': 'form-control',
+        }
+        widget = widget_class(attrs=attrs)
+        form_field = field_class(required=field.required, label=field.alt_title or field.title, widget=widget)
+        form_field.choices = field.choices
+        form_field.properties = properties
+        return form_field
 
     return builder
 
 
 FIELD_TYPE_MAP = dict(
-    (name, form_field_builder(field, widget))
-    for name, field, widget in (
+    (data_type, form_field_builder(field_class, widget_class))
+    for data_type, field_class, widget_class in (
         (CustomerField.FIELD_TYPES.string, forms.CharField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.date, forms.DateField, forms.TextInput),
+        (CustomerField.FIELD_TYPES.date, forms.DateField, CustomDateInput),
         (CustomerField.FIELD_TYPES.int, forms.IntegerField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.email, forms.EmailField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.url, forms.URLField, forms.TextInput),
+        (CustomerField.FIELD_TYPES.email, forms.EmailField, forms.EmailInput),
+        (CustomerField.FIELD_TYPES.url, forms.URLField, forms.URLInput),
         (CustomerField.FIELD_TYPES.float, forms.FloatField, forms.TextInput),
         (CustomerField.FIELD_TYPES.location, forms.CharField, forms.TextInput),
-        (CustomerField.FIELD_TYPES.bool, forms.BooleanField,
-         forms.CheckboxInput),
+        (CustomerField.FIELD_TYPES.bool, forms.CharField, forms.TextInput),
     )
 )
-
-
-class FieldSet(object):
-
-    def __init__(self, title):
-        self.title = title
-        self.fields = []
 
 
 class CustomerForm(forms.Form):
     """Dynamically built customer form
     """
-    DEFAULT_FIELDS = ('full_name', 'email', 'dob', 'address__zipcode',
-                      'phone', 'gender', 'program_of_interest')
+    FIXED_FIELDS = ('full_name', 'email')
 
-    def __init__(self, client, *args, **kw):
+    def __init__(self, signup_form, *args, **kw):
         super(CustomerForm, self).__init__(*args, **kw)
 
-        # We will use fieldsets to group fields on form
-        # self.fieldsets = {}
+        client = signup_form.client
 
-        # Add fields to form. Pointless for now since set of signup form fields
-        # is hardcoded but it should come from SignupForm model in the future
-        self.fields = dict((field.name, FIELD_TYPE_MAP[field.type](field))
-                           for field in CustomerField.objects.filter(
-                               client=client,
-                               name__in=self.DEFAULT_FIELDS).order_by('group'))
+        extra_fields = signup_form.data.get('extra_fields', [])
+        extra_fields_map = dict(
+            (field['name'], field) for field in extra_fields
+        )
+        # ordered list of all field names
+        field_names = self.FIXED_FIELDS + tuple(field['name'] for field in extra_fields)
+
+        field_cache = dict(
+            (field.name, field) for field in CustomerField.objects.filter(
+                client=client, name__in=field_names)
+        )
+        # ordered list of CustomerField objects
+        fields = (field_cache[name] for name in field_names)
+
+        self.fields = SortedDict(
+            (field.name, FIELD_TYPE_MAP[field.type](field, extra_fields_map.get(field.name)))
+            for field in fields)
 
 
 class TrialRequestForm(forms.Form):

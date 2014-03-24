@@ -115,6 +115,7 @@
     <script src="{% static "js/vendor/angular/angular-1.2.7.js" %}"></script>
     <script src="{% static "js/vendor/angular/angular-sanitize.js" %}"></script>
     <script src="{% static "js/vendor/angular/angular-bindonce.js" %}"></script>
+    {# <script src="{% static "js/vendor/angular/angular-ui-select2.js" %}"></script> #}
     {# <script src="{% static "js/vendor/angular/ui-bootstrap-custom-tpls-0.7.0.js" %}"></script>#}
 
     <script src="{% static "js/vendor/bootstrap/bootstrap.min.js" %}"></script>
@@ -127,7 +128,7 @@
     <script src="{% static "js/vendor/caman.full.js" %}"></script>
     <script src="{% static "js/vendor/fileapi/FileAPI.js" %}"></script>
     <script src="{% static "js/vendor/chromoselector.min.js" %}"></script>
-    <script src="{% static "js/vendor/select2.min.js" %}"></script>
+    <script src="{% static "js/vendor/select2.js" %}"></script>
 
     <script src="{% static "js/application.js" %}"></script>
     <script src="{% static "js/promotions.js" %}"></script>
@@ -147,7 +148,7 @@
     {% include 'olark.html' %}
     {% include 'front-page/snippets/ga_tracking.html' %}
 
-    {% if settings.DEBUG %}
+    {% if debug %}
     <script src="http://localhost:35729/livereload.js?snipver=1" type="text/javascript"></script>
     {% endif %}
 

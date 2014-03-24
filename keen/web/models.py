@@ -63,6 +63,18 @@ class SignupForm(Timestamps):
     def __unicode__(self):
         return '{0}/{1}'.format(self.client.slug, self.slug)
 
+    @property
+    def extra_fields(self):
+        fields = self.data.get('extra_fields', [])
+        if fields:
+            names = [field['name'] for field in fields]
+            cache = dict(
+                (field.name, field) for field in
+                CustomerField.objects.filter(name__in=names)
+            )
+            fields = [cache[name] for name in names]
+        return fields
+
     class Meta:
         unique_together = ('client', 'slug')
 

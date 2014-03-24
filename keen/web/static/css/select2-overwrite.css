@@ -48,3 +48,58 @@
 .select2-drop-active {
 	border: none;
 }
+
+.choose-field-container .select2-choice {
+  text-align: left;
+  border-width: 2px;
+  color: #34495e;
+  background: #eee;
+  border-color: #eee;
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  height: 34px;
+  -webkit-appearance: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: border .25s linear, color .25s linear, background-color .25s linear;
+  transition: border .25s linear, color .25s linear, background-color .25s linear;
+}
+.choose-field-container .select2-choice.select2-default {
+  background: #fff;
+  border-color: #b2bcc5;
+  color: #b2bcc5 !important;
+}
+
+.choose-field-container .select2-choice .select2-arrow {
+  background: #eee;
+  border-radius: 0;
+}
+
+.choose-field-container .select2-choice .select2-chosen {
+  margin-top: 2px;
+}
+
+.choose-field-container.select2-dropdown-open .select2-choice {
+  border-color: #169e83;
+  border-width: 2px;
+}
+
+.choose-field-dropdown {
+  font-size: 13px;
+  line-height: 15px;
+}
+.choose-field-dropdown .select2-result-unselectable {
+  color: #555;
+}
+.choose-field-dropdown .select2-highlighted {
+  background-color: #169e83;
+  color: #fff;
+}
+
+.choose-field-dropdown.select2-drop-active {
+  border: 2px solid #bdc3c7;
+}
+.choose-field-dropdown.select2-drop-active.select2-drop-active {
+  border: 2px solid #169e83;
+  padding-top: 2px;
+}
