@@ -47,10 +47,11 @@ def form_field_builder(field_class, widget_class):
         attrs = {
             'id': field.name,
             'name': field.name,
-            'required': field.required,
             'placeholder': field.title + ('', ' *')[field.required],
             'class': 'form-control',
         }
+        if field.required:
+            attrs['required'] = field.required
         widget = widget_class(attrs=attrs)
         form_field = field_class(required=field.required, label=field.alt_title or field.title, widget=widget)
         form_field.choices = field.choices

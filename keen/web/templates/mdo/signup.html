@@ -160,6 +160,8 @@
   <script>
     $(function() {
       $( "#dob" ).datepicker();
+      $('.form-control').removeClass('form-control');
+      $('.btn-calendar').parent().remove();
     });
   </script>
   {% endif %}
