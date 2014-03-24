@@ -16,11 +16,10 @@ class Migration(DataMigration):
             except orm.SignupForm.DoesNotExist:
                 continue
 
-            if 'extra_fields' not in form.data:
-                form.data['extra_fields'] = [
-                    dict(name=field_name) for field_name in extra_fields
-                ]
-                form.save()
+            form.data['extra_fields'] = [
+                dict(name=field_name) for field_name in extra_fields
+            ]
+            form.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
