@@ -11,7 +11,11 @@ class Migration(DataMigration):
             ('mdo', 'signup', ('dob', 'address__zipcode', 'phone')),
             ('branfordacademy', 'apply', ('phone', 'program_of_interest')),
         ):
-            form = mdo.signup_forms.get(client__slug=client_slug, slug=form_slug)
+            try:
+                form = orm.SignupForm.objects.get(client__slug=client_slug, slug=form_slug)
+            except orm.SignupForm.DoesNotExist:
+                continue
+
             if 'extra_fields' not in form.data:
                 form.data['extra_fields'] = [
                     dict(name=field_name) for field_name in extra_fields
