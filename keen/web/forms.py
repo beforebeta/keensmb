@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 from django import forms
 from django.forms import DateField
@@ -10,6 +11,9 @@ from django.utils.html import format_html
 from localflavor.us.forms import USPhoneNumberField
 
 from keen.core.models import CustomerField, Promotion
+
+
+logger = logging.getLogger(__name__)
 
 
 class CustomDateInput(forms.DateInput):
