@@ -15,6 +15,7 @@ django-localflavor
 newrelic
 
 mailchimp
+mandrill
 
 # Templates
 django_compressor
