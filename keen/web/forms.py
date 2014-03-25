@@ -180,7 +180,7 @@ class PromotionForm(forms.ModelForm):
                                  and '^^' not in value[0])
                  else value[0].split('^^')) for name, value in data)
         cleaned_data['target_audience'] = dict((name, value) for name, value
-                                               in data if name and value)
+                                               in data if name and value and (len(value) > 1 or value[0]))
         return cleaned_data
 
     def clean_valid_to(self):
