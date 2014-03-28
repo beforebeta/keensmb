@@ -1,0 +1,159 @@
+<html lang="en">
+  <head>
+    <meta name="description" content="[ DRA, when there is a promotion description and restrictions and additional information]" />
+    <script type="text/javascript">var NREUMQ=NREUMQ||[];NREUMQ.push(["mark","firstbyte",new Date().getTime()]);</script>
+    <meta charset="UTF-8">
+    <title>Email</title>
+  </head>
+  <body style="background-color: #f2f2f2;">
+
+    <table style="width: 100%; font-family: Helvetica, Arial, sans-serif; font-size: 13px;">
+      <tbody>
+        <tr>
+          <td></td>
+          <td style="display: block; width: 580px; margin:  auto; padding: 10px; clear: both; background-color: #f2f2f2;">
+            <table cellpadding="0" cellspacing="0" border="0" style="display: block; width: 580px; margin: 0 auto; background-color: #ffffff; border-collapse: collapse; border-spacing: 0; table-layout: fixed; border-radius: 10px; box-shadow: 3px 3px 8px #AFB6BA"; >
+              <tbody style="display: block; width: 100%;">
+                <tr>
+
+                  <!--BANNER LOGO-->                
+                  <td style="width: 100%;" colspan="2">
+                    <img style="max-width: 100%; border-top-left-radius: 7px; border-top-right-radius: 10px;" src="{{ promotion.banner_url }}" alt="">
+                  </td>
+                </tr>
+                <tr style="background-color: #FFFFFF;">
+
+                  <!--SHORT DESCRIPTION-->                
+                  <td style="padding: 10 0 0 20px; background-color: #E7ECED;">            
+                    <h1 style="padding-top: 10px; padding-left:10px; color: #19bc9c; font-weight: bold; font-size: 26px;">{{ promotion.name }}</h1>
+                  </td> 
+
+                  <td style="padding: 0 0 0 20px; background-color: #E7ECED;">
+                    <table width="100%">
+                      <tr>
+                        <!--EXPIRY SECTION-->                    
+                        <td style= "width: 25%" colspan="01" style="text-align: right;">
+                          {% if promotion.valid_from %}
+                          <span style="float: left; color: #85929e; font-size: 10px; line-height: 1.8; text-align: right; ">Valid From:</span>
+                          {% endif %}
+                          {% if promotion.valid_to %}
+                          <span style="float: left; color: #85929e; font-size: 10px; line-height: 1.8; text-align: right;"> Valid To:</span>
+                          {% endif %}
+                        </td>
+
+                        <td style= "width: 40%" colspan="0">
+                          {% if promotion.valid_from %}
+                          <span style="float: middle; color: #000; font-size: 10px; line-height: 1.8;">{{ promotion.valid_from }}</span>
+
+                          <br /> 
+                          {% endif %}
+                          {% if promotion.valid_to %}
+                          <span style="float: middle; color: #000;font-size: 10px; line-height: 1.8;">{{ promotion.valid_to }}</span> 
+                          {% endif %}
+
+                        </td>
+                        <!--REDEEM BUTTON-->                      
+                        <td colspan="1" style="text-align:left; padding: 0 25 0 10;"> 
+                          <button style="width:100;height:38; background-color: #1FB18A; color: white; font-size: 14; border-radius: 7px; border-style: none;">REDEEM</button>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+
+                <tr>
+
+                  <!--HEADER & DESCRIPTION-->                
+                  <td style="width: 48%;padding: 30px 20px 0px 20px; vertical-align: top;">
+                    <span style="font-size: 18px; color: #19bc9c;">{{ promotion.short_code }}</span>
+                    <br />
+                    <br />
+                    <p style="margin-top: 0; font-size: 12px;">{{ promotion.description }}</p>
+                  </td>
+
+                  <!--THE IMAGE-->                 
+                  <td style="vertical-align: top; padding: 30px 20px 0px 20px;">
+                    <img style="max-width: 100%; border-radius: 7px;" src="{{ promotion.image_url }}">
+                  </td>
+
+                </tr>
+
+                <!--THE FINE PRINT-->               
+                <tr>
+                  <td style="padding: 0px 20px 0px 20px; vertical-align: top;">   
+
+                  </td>
+                </tr>
+                {% if promotion.restrictions %}
+                <td colspan="2" style="padding: 20px 20px 15px 20px; margin-bottom: 15 px;">
+                  <h3 style="margin-bottom: 0 px; font-size: 14; color: #85929e; font-weight: normal;">Restriction:</h3>
+                  <p style= "margin-top: -10px; font-size: 12px;">{{ promotion.restrictions }}</p>
+                </td>
+                {% endif %}
+                <!--DIVIDER-->  
+                <tr>
+                  <td colspan="2" style="border-top: 2px dotted #E7ECED;">
+                </tr>  
+
+                {% comment %}
+                  <!--BUSINESS INFORMATION-->  
+                  <td style="vertical-align: top;">
+                    <h2 style="padding: 20px 0px 0 40px; margin-bottom: 0px; font-weight: bold; font-size: 14px; color: #446cb2;">Galactic Empire</h2>
+                    <a style="padding: 0px 0px 0 40px; font-size: 13px; text-decoration: underline; color: #446cb2;" href="">Company Website</a>
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin-top: 10px; margin-bottom: 15px; padding-left: 10px; overflow: hidden;">
+                      <tbody>
+                        <tr>
+                          <td style="vertical-align: top; padding: 0 0 0 30px" >
+                            <img style="margin-right: 5px; width:15px;" src="http://keensmb.com/static/images/email-template/marker.png" alt="marker">
+                          </td>
+                          <td>
+                            <span style="display: block; width: 150px; font-size: 12px; line-height: 1; ">1 Infinite Loop<br>
+                              Cupertino&nbsp;CA,&nbsp;95014<br>
+                              USA<br>(413)-555-3452</span>
+                            <a style="display: block; text-decoration: none; color: #446cb2; font-size:12px" target="_blank" href="http://maps.google.com?q=1 Infinite Loop,Cupertino,CA,USA,95014">Get Directions</a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+
+                  <!--GOOGLE MAP PREVIEW-->             
+                  <td style="padding-right: 20px; padding-bottom: 10px;">Redemption Instructions:
+                  </td>
+
+                  <!--DIVIDER-->  
+                  <tr>
+                    <td colspan="2" style="border-top: 2px dotted #E7ECED;">
+                    </tr>  
+
+                    {% endcomment %}
+
+                    {% if promotion.additional_information %}
+                    <!--ADDITIONAL INFO-->             
+                    <tr>
+                      <td colspan="2">
+                        <h3 style="margin: 15px 10px 5px 20px; font-size: 15px; color: #85929e; font-weight: normal;">Additional Information</h3>
+                        <p style="margin: 0 20 40px 20px; font-size: 12px; ">
+                        {{ promotion.additional_information }}
+                        </p>
+                      </td>
+                    </tr>
+                    {% endif %}
+
+                    <tr>
+                      <td colspan="2" style="text-align:center; font-size: 8px; line-height: 18px;">
+                        Click <a href="*|UNSUB:https://keensmb.com/mandrill/unsubscribe|*">here</a> to unsubscribe
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <script type="text/javascript">if(!NREUMQ.f){NREUMQ.f=function(){NREUMQ.push(["load",new Date().getTime()]);var e=document.createElement("script");e.type="text/javascript";e.src=(("http:"===document.location.protocol)?"http:":"https:")+"//"+"js-agent.newrelic.com/nr-100.js";document.body.appendChild(e);if(NREUMQ.a)NREUMQ.a();};NREUMQ.a=window.onload;window.onload=NREUMQ.f;};NREUMQ.push(["nrfj","beacon-2.newrelic.com","df4423eae8","3005442","YlVTY0UACEFQAhBbVlsfd0JZAhJbXg9LWVxQXh9AUgNIRFgEE0EXVlxYUlkVXEJDBBJbXEJvQUVYDAlGWA4K",0,25,new Date().getTime(),"","","","",""]);</script>
+      </body>
+    </html>

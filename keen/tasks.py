@@ -1,5 +1,6 @@
 import os
 from subprocess import call
+from itertools import chain
 
 from celery import Celery
 from celery.exceptions import Ignore
@@ -7,6 +8,7 @@ from celery.utils.log import get_task_logger
 
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 from PIL import Image
 import mailchimp
@@ -67,3 +69,82 @@ def send_email(subject, body, recipients, sender=None, **kw):
     msg = EmailMessage(subject, body, sender, recipients, **kw)
     msg.content_subtype = 'html'
     msg.send()
+
+
+@app.task(bind=True)
+def promotion_launch(self, promotion_id):
+    try:
+        promotion = Promotion.objects.get(id=promotion_id)
+    except Promotion.DoesNotExist:
+        logger.error('Cannot find promotion {0}'.format(promotion_id))
+        return
+
+    if promotion.status != Promotion.PROMOTION_STATIS.approved:
+        logger.error('Promotion {0}: status must be {1!r}'.format(
+            promotion_id, Promotion.PROMOTION_STATIS.approved))
+        return
+
+    customers = promotion.customers.values_list('email', 'full_name')
+    recipients = [
+        {
+            'email': email,
+            'name': name or 'Valued customer',
+        } for email, name in customers if email
+    ]
+
+    if recipients:
+        ctx = {
+            'promotion': promotion,
+        }
+#        client = promotion.client
+#        global_vars = build_vars(
+#            client=client.name,
+#            description=promotion.description,
+#            redemption_instructions=promotion.redemption_instructions,
+#            banner_url=promotion.banner_url,
+#            image_url=promotion.image_url,
+#            additional_information=promotion.additional_information,
+#        )
+#        rcpt_vars = [
+#            {
+#                'rcpt': rcpt['email'],
+#                'vars': build_vars(rcpt)
+#            } for rcpt in recipients
+#        ]
+        message = {
+            'from_name': client.name,
+            'from_email': '{0}@keensmb.com'.format(client.slug),
+            'to': recipients,
+            'subject': promotion.name,
+            'html': render_to_string('email/promotion.html', ctx),
+            'preserve_recipients': False,
+            'track_opens': True,
+            'metadata': {
+                'client': client.slug,
+                'promotion': promotion.id,
+            },
+#            'merge_vars': rcpt_vars,
+#            'global_merge_vars': global_vars,
+        }
+        m = mandrill.Mandrill(settings.MANDRILL_API_KEY)
+        m.messages.send(message=message, async=True)
+
+        promotion.status = Promotion.PROMOTION_STATUS.active
+        promotion.save()
+
+
+def build_vars(*args, **kw):
+    """
+    Convert dictionary-like data into Mandrill API array of sructs.
+
+    Positional arguments if any expected to be dictionaries.
+
+    WARNING: Mandrill API does not say what happens if some name occures more than once
+    so this function does not attempt to deal with duplicate names.
+    """
+    items = chain(*(d.iteritems() for d in args + (kw,)))
+    return [
+        {
+            'name': name,
+            'content': value,
+        } for name, value in items]

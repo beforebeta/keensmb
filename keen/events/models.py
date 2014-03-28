@@ -153,6 +153,7 @@ def promotion_status_changed(sender, instance, **kw):
                 subject=instance,
                 occurrence_datetime=now(),
             )
+            promotion_launch.apply_async((promotion.id,), countdown=15)
             send_promotion_status_email(instance)
         elif instance.status == Promotion.PROMOTION_STATUS.scheduled:
             Event.objects.record_event(

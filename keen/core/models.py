@@ -5,19 +5,19 @@ import urllib
 import datetime
 import re
 import logging
+import uuid
 
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from django_hstore import hstore
 
+from django_hstore import hstore
 from jsonfield import JSONField
 from model_utils import Choices
 
 from keen import util, print_stack_trace, InvalidOperationException
-
 from tracking.models import Visitor
 
 
@@ -268,7 +268,7 @@ class Client(Timestamps):
     def get_top_promotions(self, order_by='-valid_to', count=4):
         #TODO: Change
         return self.promotions.filter(status__in=[Promotion.PROMOTION_STATUS.active, Promotion.PROMOTION_STATUS.expired]).extra(
-            select={'redemptions_percentage': "upper(core_promotion.analytics -> 'redemptions_percentage')"}
+            select={'redemptions_percentage': "(analytics->'redemptions') / GREATEST(1, analytics->'total_sent')"}
         ).order_by(order_by).order_by('-redemptions_percentage')[:count]
 
     def get_active_promotions(self, order_by='-valid_to', count=4):
@@ -493,6 +493,7 @@ class PromotionMedium(Timestamps):
     platform = models.CharField(max_length=10, choices=PROMOTION_PLATFORMS)
     account_info = hstore.DictionaryField() #account into per medium
 
+
 class PromotionsManager(models.Manager):
 
     def get_promotions_for_status(self, status, client):
@@ -502,13 +503,14 @@ class PromotionsManager(models.Manager):
         _status = alias_mapping[status]
         return self.filter(status=_status).filter(client=client)
 
-import uuid
+
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     #print os.path.join('../keen/web/static/uploads/images', filename)
     #return os.path.join('../keen/web/static/uploads/images', filename)
     return os.path.join('uploads/images', filename)
+
 
 class Promotion(Timestamps):
     PROMOTION_STATUS = Choices(
@@ -517,6 +519,7 @@ class Promotion(Timestamps):
         ('scheduled', 'Scheduled'),
         ('active', 'Active'),
         ('expired', 'Expired'),
+        ('approved', 'Admin Approved'),
     )
 
     SEND_LATER_CHOICES = Choices(
@@ -541,7 +544,7 @@ class Promotion(Timestamps):
     send_later = models.BooleanField(default=False, choices=SEND_LATER_CHOICES)
     send_schedule = models.DateTimeField(null=True, blank=True, verbose_name='', help_text='You can send this promotion immediately after completing this form or you can schedule a specific start date and time. and we will automatically activate the promotion for you then.')
     target_audience = JSONField(null=True, blank=True)
-    analytics = hstore.DictionaryField(null=True, blank=True, verbose_name='', help_text='')
+    analytics = JSONField(null=True, blank=True, verbose_name='', help_text='')
 
     objects = PromotionsManager()
 
@@ -566,12 +569,15 @@ class Promotion(Timestamps):
     def save(self, *args, **kwargs):
         if not self.analytics:
             self.analytics = {
-                "total_sent"    : str(random.randrange(500, 1000)),
-                "redemptions"   : str(random.randrange(100, 500)),
+                "total_sent": 0,
+                "redemptions": 0,
             }
-            self.analytics["redemptions_percentage"] = str(int((float(self.analytics["redemptions"])/float(self.analytics["total_sent"]))*100))
         if not self.send_later:
             self.send_schedule = None
         if self.valid_to and not self.valid_from:
             self.valid_from = datetime.date.today()
         super(Promotion, self).save(*args, **kwargs)
+
+    @property
+    def customers(self):
+        return self.client.customers_by_data(self.target_audience)
