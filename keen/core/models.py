@@ -267,9 +267,13 @@ class Client(Timestamps):
 
     def get_top_promotions(self, order_by='-valid_to', count=4):
         #TODO: Change
-        return self.promotions.filter(status__in=[Promotion.PROMOTION_STATUS.active, Promotion.PROMOTION_STATUS.expired]).extra(
-            select={'redemptions_percentage': "(analytics->'redemptions') / GREATEST(1, analytics->'total_sent')"}
-        ).order_by(order_by).order_by('-redemptions_percentage')[:count]
+        return self.promotions.filter(
+            status__in=[Promotion.PROMOTION_STATUS.active, Promotion.PROMOTION_STATUS.expired]).extra(
+            select={
+                'redemptions_percentage': '''
+                    100 * (analytics::json->>'redemptions')::int / GREATEST(1, (analytics::json->'total_sent')::int)
+                    ''',
+            }).order_by(order_by).order_by('-redemptions_percentage')[:count]
 
     def get_active_promotions(self, order_by='-valid_to', count=4):
         #TODO: Change
