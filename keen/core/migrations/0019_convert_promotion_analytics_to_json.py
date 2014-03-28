@@ -15,15 +15,15 @@ class Migration(SchemaMigration):
                    ''')
         db.execute('''
             alter table core_promotion
-                   alter column analytics type text using array_to_json(hstore_to_array(analytics))
+                   alter column analytics type text using array_to_json(hstore_to_matrix(analytics))
                    ''')
         for p in orm.Promotion.objects.all():
-            json = loads(p.analytics)
+            json = dict(p.analytics)
             for name in ('total_sent', 'redemptions'):
                 if name in json:
                     json[name] = int(json[name])
             json.pop('redemptions_percentage', None)
-            p.analytics = dumps(json)
+            p.analytics = json
             p.save()
 
     def backwards(self, orm):
