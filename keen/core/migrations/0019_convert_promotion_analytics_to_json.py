@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
                    ''')
         db.execute('''
             alter table core_promotion
-                   alter column analytics type text using hstore_to_json(analytics)
+                   alter column analytics type text using array_to_json(hstore_to_array(analytics))
                    ''')
         for p in orm.Promotion.objects.all():
             for name in ('total_sent', 'redemptions'):
