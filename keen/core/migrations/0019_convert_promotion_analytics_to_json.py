@@ -4,6 +4,8 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from django.utils.simplejson import dumps, loads
+
 
 class Migration(SchemaMigration):
 
@@ -16,10 +18,12 @@ class Migration(SchemaMigration):
                    alter column analytics type text using array_to_json(hstore_to_array(analytics))
                    ''')
         for p in orm.Promotion.objects.all():
+            json = loads(p.analytics)
             for name in ('total_sent', 'redemptions'):
-                if name in p.analytics:
-                    p.analytics[name] = int(p.analytics[name])
-            p.analytics.pop('redemptions_percentage', None)
+                if name in json:
+                    json[name] = int(json[name])
+            json.pop('redemptions_percentage', None)
+            p.analytics = dumps(json)
             p.save()
 
     def backwards(self, orm):
