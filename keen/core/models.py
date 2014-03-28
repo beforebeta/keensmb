@@ -271,7 +271,7 @@ class Client(Timestamps):
             status__in=[Promotion.PROMOTION_STATUS.active, Promotion.PROMOTION_STATUS.expired]).extra(
             select={
                 'redemptions_percentage': '''
-                    100 * (analytics::json->>'redemptions')::int / GREATEST(1, (analytics::json->'total_sent')::int)
+                    100 * (analytics::json->>'redemptions')::int / GREATEST(1, (analytics::json->>'total_sent')::int)
                     ''',
             }).order_by(order_by).order_by('-redemptions_percentage')[:count]
 
