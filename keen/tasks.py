@@ -84,7 +84,11 @@ def promotion_launch(self, promotion_id):
             promotion_id, Promotion.PROMOTION_STATUS.approved))
         return
 
-    customers = promotion.customers.values_list('email', 'full_name')
+    customers = promotion.customers.extra(
+        select={
+            'email': "data->'email'",
+            'name': "data->'full_name'",
+        }).values_list('email', 'name')
     recipients = [
         {
             'email': email,
