@@ -3,6 +3,7 @@ import hmac
 import hashlib
 import base64
 
+from django.conf import settings
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt

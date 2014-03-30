@@ -79,6 +79,6 @@ urlpatterns = patterns(
     url(r'^landing4$', TemplateView.as_view(template_name='front-page/landing4.html'), name='landing4.html'),
     url(r'^email_template$', 'client.email_template'),
 
-    url(r'^mandrill/unsubscribe/$', 'mandrill.unsubscribe_view', name='mandrill_unsubscribe'),
-    url(r'^mandrill/webhook/$', 'mandrill.webhook_view', name='mandrill_webhook'),
+    url(r'^mandrill/unsubscribe$', 'mandrill.unsubscribe_view', name='mandrill_unsubscribe'),
+    url(r'^mandrill/webhook$', 'mandrill.webhook_view', name='mandrill_webhook'),
 )
