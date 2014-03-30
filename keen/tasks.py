@@ -79,9 +79,9 @@ def promotion_launch(self, promotion_id):
         logger.error('Cannot find promotion {0}'.format(promotion_id))
         return
 
-    if promotion.status != Promotion.PROMOTION_STATIS.approved:
+    if promotion.status != Promotion.PROMOTION_STATUS.approved:
         logger.error('Promotion {0}: status must be {1!r}'.format(
-            promotion_id, Promotion.PROMOTION_STATIS.approved))
+            promotion_id, Promotion.PROMOTION_STATUS.approved))
         return
 
     customers = promotion.customers.values_list('email', 'full_name')
