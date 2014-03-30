@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 
 from PIL import Image
 import mailchimp
+import mandrill
 
 from keen.core.models import Customer, Promotion
 from keen.web.models import SignupForm
