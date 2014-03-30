@@ -100,7 +100,7 @@ def promotion_launch(self, promotion_id):
         ctx = {
             'promotion': promotion,
         }
-#        client = promotion.client
+        client = promotion.client
 #        global_vars = build_vars(
 #            client=client.name,
 #            description=promotion.description,
