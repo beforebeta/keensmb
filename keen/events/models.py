@@ -12,7 +12,7 @@ from django_hstore import hstore
 from model_utils import Choices
 
 from keen.core.models import Timestamps, Client, Customer, Promotion
-from keen.tasks import send_email
+from keen.tasks import send_email, promotion_launch
 
 
 logger = logging.getLogger(__name__)
