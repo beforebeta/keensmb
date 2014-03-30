@@ -163,7 +163,7 @@ def promotion_status_changed(sender, instance, **kw):
             )
             send_promotion_status_email(instance)
         elif instance.status == Promotion.PROMOTION_STATUS.approved:
-            promotion_launch.apply_async((promotion.id,), countdown=15)
+            promotion_launch.apply_async((instance.id,), countdown=15)
 
 
 @receiver(post_save, sender=Promotion, weak=False)
