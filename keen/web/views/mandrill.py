@@ -37,8 +37,9 @@ def webhook_view(request):
                          settings.MANDRILL_WEBHOOK_URL)
     except SignatureError as e:
         logger.error('Signature verification failed: %s', e)
-    else:
-        process_events(request.POST.get('mandrill_events', []))
+        return HttpResponse('Signature verification error', status=409)
+
+    process_events(request.POST.get('mandrill_events', []))
 
     return HttpResponse()
 
