@@ -4,30 +4,36 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-from django.utils.simplejson import dumps, loads
+from django.utils.simplejson import loads
+
+from django_hstore.hstore import DictionaryField
+from jsonfield.fields import JSONField
 
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.execute('''
-                   drop index core_promotion_analytics_gist
-                   ''')
-        db.execute('''
-            alter table core_promotion
-                   alter column analytics type text using array_to_json(hstore_to_matrix(analytics))
-                   ''')
-        for p in orm.Promotion.objects.all():
-            json = dict(p.analytics)
-            for name in ('total_sent', 'redemptions'):
-                if name in json:
-                    json[name] = int(json[name])
-            json.pop('redemptions_percentage', None)
-            p.analytics = json
-            p.save()
+        db.rename_column('core_promotion', 'analytics', 'hstore_analytics')
+        db.add_column('core_promotion', 'analytics', JSONField(null=True, blank=True))
+
+        for id, analytics in orm.Promotion.objects.extra(
+            select={'hstore_analytics': 'hstore_analytics'}).values_list(
+                'id', 'hstore_analytics'):
+            analytics = dict((name, int(value)) for name, value in analytics.items())
+            orm.Promotion.objects.filter(id=id).update(analytics=analytics)
+
+        db.delete_column('core_promotion', 'hstore_analytics')
 
     def backwards(self, orm):
-        raise NotImplemented()
+        db.rename_column('core_promotion', 'analytics', 'json_analytics')
+        db.add_column('core_promotion', 'analytics',
+                      DictionaryField(blank=True, null=True, db_index=True))
+        for p in orm.Promotion.objects.extra(select={'json_analytics': 'json_analytics'}):
+            analytics = dict((name, str(value)) for name, value in loads(p.json_analytics).items())
+            orm.Promotion.objects.filter(id=p.id).update(analytics=analytics)
+
+        db.delete_column('core_promotion', 'json_analytics')
+
 
     models = {
         u'auth.group': {
