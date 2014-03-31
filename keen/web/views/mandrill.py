@@ -7,6 +7,7 @@ from django.conf import settings
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.simplejson import loads
 
 from keen.core.models import Client, Promotion
 
@@ -61,7 +62,8 @@ def verify_signature(request, key, url):
 
 
 def process_events(events):
-    for event in events:
+    for event in loads(events):
+        logger.debug('Processing Mandrill event {0!r}'.format(event))
         try:
             meta = event['msg']['metadata']
             client_slug = meta['client']
