@@ -10,34 +10,34 @@
   <section class='clearfix promotions'>
     <div class="row">
       <div class="col-sm-3 promotion-type text-center">
-        <figure>
+        <a class='figure' href="{% url 'client_create_promotion' %}">
           <img src="{% static "images/icons/mail.svg" %}" alt="mail">
-        </figure>
-        <h6>Targeted email</h6>
+        </a>
+        <h6>Targeted Email</h6>
         <p class='small'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
       </div>
 
       <div class="col-sm-3 promotion-type text-center">
-        <figure>
+        <a class='figure' href="{% url 'client_create_promotion_website' %}" disabled>
           <img src="{% static "images/icons/user-interface.svg" %}" alt="website">
-        </figure>
+        </a>
         <h6>Website Promotion</h6>
         <p class='small'>You can't make a web promotion until you have a website for your business!</p>
         <a href="#fakelink" class='text-blue small'>Learn More</a>
       </div>
 
       <div class="col-sm-3 promotion-type text-center">
-        <figure>
+        <a class='figure' href="{% url 'client_create_promotion_email' %}">
           <img src="{% static "images/icons/news.svg" %}" alt="website">
-        </figure>
+        </a>
         <h6>Email Newsletter</h6>
         <p class='small'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
       </div>
 
       <div class="col-sm-3 promotion-type text-center">
-        <figure>
+        <a class='figure' href="{% url 'client_create_promotion_instore' %}">
           <img src="{% static "images/icons/graph.svg" %}" alt="website">
-        </figure>
+        </a>
         <h6>In-Store Promotion</h6>
         <p class='small'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
       </div>
