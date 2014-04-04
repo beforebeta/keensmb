@@ -1,6 +1,6 @@
 // Some general UI pack related JS
 // Extend JS String with repeat method
-"use strict";
+'use strict';
 
 String.prototype.repeat = function (num) {
     return new Array(num + 1).join(this);
@@ -65,6 +65,47 @@ keen.showMessageModal = function(title, message) {
 
     $(function () {
 
+        if (window.AmCharts) {
+            AmCharts.ready(function () {
+                // SERIAL CHART
+                var chart = new AmCharts.AmSerialChart();
+                chart.dataProvider = chartData;
+                chart.categoryField = "month";
+                chart.startDuration = 1;
+
+                // AXES
+                // category
+                var categoryAxis = chart.categoryAxis;
+                categoryAxis.gridPosition = "start";
+
+                // value
+                // in case you don't want to change default settings of value axis,
+                // you don't need to create it, as one value axis is created automatically.
+
+                // GRAPH
+                var graph = new AmCharts.AmGraph();
+                graph.valueField = "visits";
+                graph.balloonText = "[[category]]: <b>[[value]]</b>";
+                graph.type = "column";
+                graph.lineAlpha = 0;
+                graph.fillAlphas = 0.8;
+                graph.lineColor = '#1abc9c';
+                chart.addGraph(graph);
+
+                // CURSOR
+                var chartCursor = new AmCharts.ChartCursor();
+                chartCursor.cursorAlpha = 0;
+                chartCursor.zoomable = false;
+                chartCursor.categoryBalloonEnabled = false;
+                chart.addChartCursor(chartCursor);
+
+                chart.creditsPosition = "top-right";
+
+                chart.write("chartdiv");
+            });
+        }
+
+
         // Custom Selects
         if ($.fn.selectpicker) {
             $("select[name='huge']").selectpicker({style: 'btn-hg btn-primary', menuStyle: 'dropdown-inverse'});
@@ -86,12 +127,10 @@ keen.showMessageModal = function(title, message) {
         }
 
         // Tabs
-        if ($.fn.tab) {
-            $(".nav-tabs a").on('click', function (e) {
-                e.preventDefault();
-                $(this).tab("show");
-            });
-        }
+        $(".nav-tabs a, .tabs-wrap .tab-trigger").on('click', function (e) {
+            e.preventDefault();
+            $(this).tab("show");
+        });
 
         // Tooltips
         $.fn.tooltip && $("[data-toggle=tooltip]").tooltip("show");
@@ -181,6 +220,12 @@ keen.showMessageModal = function(title, message) {
             $(target).trigger('click');
         });
 
+        // Toggle slide
+        $(document).on('click', '.js-toggle-slide', function (e) {
+            var target = $(this).data('target');
+            $(target).slideToggle();
+        });
+
         // Chromoselector
         $.fn.chromoselector && $('.chromoselector').chromoselector();
 
@@ -239,6 +284,7 @@ keen.showMessageModal = function(title, message) {
     });
 
     var $buttonWrap = $('.enrichment-estimated-price .kn-section-content');
+
     $('.enrichment-checkbox-container .js-estimated-label').on('click', function(){
 
         var innerText = $(this).children('strong').html(),
@@ -248,13 +294,17 @@ keen.showMessageModal = function(title, message) {
         $buttonBox.find('span').text(innerText);
         $buttonBox.attr('data-button-name', data);
 
+            $(this).addClass('checked disabled');
+
         if(!$(this).hasClass('checked') || !$(this).hasClass('disabled')) {
 
             $(this).addClass('checked disabled');
 
             $buttonWrap.find('.unselect').hide();
             $buttonBox.appendTo($buttonWrap).show();
-        } else {
+
+        }
+        else {
             return false;
         }
     });
@@ -265,62 +315,21 @@ keen.showMessageModal = function(title, message) {
 
         $('.js-estimated-label').each(function() {
 
-            var $this = $(this),
-                $dataLabel = $this.data("label");
+          var $this = $(this),
+              $dataLabel = $this.data("label");
 
-            if ($dataLabel === labelName) {
-                $this.removeClass('checked disabled');
-            }
+          if($dataLabel === labelName) {
+            $this.removeClass('checked disabled');
+          }
 
         });
 
         $thisButton.remove();
 
         if(!$buttonWrap.children('button').length){
-            $('.unselect').show();
+          $('.unselect').show();
         }
     });
 
 })(jQuery);
 
-try{
-    (function(){
-        AmCharts.ready(function () {
-            // SERIAL CHART
-            chart = new AmCharts.AmSerialChart();
-            chart.dataProvider = chartData;
-            chart.categoryField = "month";
-            chart.startDuration = 1;
-
-            // AXES
-            // category
-            var categoryAxis = chart.categoryAxis;
-            categoryAxis.gridPosition = "start";
-
-            // value
-            // in case you don't want to change default settings of value axis,
-            // you don't need to create it, as one value axis is created automatically.
-
-            // GRAPH
-            var graph = new AmCharts.AmGraph();
-            graph.valueField = "visits";
-            graph.balloonText = "[[category]]: <b>[[value]]</b>";
-            graph.type = "column";
-            graph.lineAlpha = 0;
-            graph.fillAlphas = 0.8;
-            graph.lineColor = '#1abc9c';
-            chart.addGraph(graph);
-
-            // CURSOR
-            var chartCursor = new AmCharts.ChartCursor();
-            chartCursor.cursorAlpha = 0;
-            chartCursor.zoomable = false;
-            chartCursor.categoryBalloonEnabled = false;
-            chart.addChartCursor(chartCursor);
-
-            chart.creditsPosition = "top-right";
-
-            chart.write("chartdiv");
-        });
-    })(AmCharts);
-} catch(e){}

@@ -615,7 +615,7 @@ header.navbar .navbar-nav > li:hover > a {
   color: #bdc3c7;
 }
 .kn-section-header {
-  padding: 15px 25px;
+  padding: 8px 10px 8px 20px;
   background: #f2f2f2;
 }
 .kn-section-header [class^='fui-']{
@@ -623,18 +623,24 @@ header.navbar .navbar-nav > li:hover > a {
   line-height: 1;
 }
 .kn-section-content {
-  padding: 15px 25px;
+  padding: 15px 20px;
   margin-bottom: 7px;
   background: #fff;
 }
 
 .user-details {
-    padding-left:40px;
+  padding-left:40px;
 }
 
 .user-details .social-icon {
-  font-size: 34px;
+  font-size: 23px;
   line-height: 1;
+}
+.user-details .social-icon:hover {
+  color: #446cb3;
+}
+.user-details .social-icon.disabled {
+  opacity: .7;
 }
 
 .input-fixed {

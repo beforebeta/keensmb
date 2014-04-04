@@ -12,43 +12,65 @@
             <div class="center-block text-center">
               <img src="{% static "images/icons/dude.svg" %}" alt="user name" style='width: 170px'>
             </div>
-            <div class="mtl">
-              <table>
-                <div class='row'>
-                  <div class='col-sm-3'><span class="text-muted mtl mrs dib">Name:</span></div>
-                  <div class='col-sm-9'><span class='dib mtl'>{{ customer.get_name|nonempty }}</span></div>
+            <div class="mtl mbl">
+              <div class='row'>
+                <div class='col-sm-3'><span class="text-muted mrs dib">Name:</span></div>
+                <div class='col-sm-7'><span class='dib'>{{ customer.get_name|nonempty }}</span></div>
+                <div class="col-sm-1">
+                  <a href='#fakelink' class="fui-facebook text-blue social-icon {% if not customer.get_formatted_facebook_username %}disabled{% endif %}"></a>
                 </div>
-                <div class='row'>
-                  <div class='col-sm-3'><span class="text-muted mtl mrs dib">DOB:</span></div>
-                  <div class='col-sm-9'><small class='dib mtl'>{{ customer.get_dob|nonempty }}</small></div>
-                </div>
-                <div class='row'>
-                  <div class='col-sm-3'><span class="text-muted mtl mrs dib">Gender:</span></div>
-                  <div class='col-sm-9'><small class='dib mtl'>{{ customer.get_formatted_gender|nonempty }}</small></div>
-                </div>
-              </table>
-
-              <div class="row mtl">
-                <div class="col-md-3">
-                  <span class="fui-facebook text-blue social-icon"></span>
-                </div>
-                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_facebook_username|nonempty }}</span></div>
               </div>
-
-              <div class="row mtm">
-                <div class="col-md-3">
-                  <span class="fui-twitter text-blue social-icon"></span>
+              <div class='row'>
+                <div class='col-sm-3'><span class="text-muted mrs dib">DOB:</span></div>
+                <div class='col-sm-7'><small class='dib'>{{ customer.get_dob|nonempty }}</small></div>
+                <div class="col-sm-1">
+                  <a href='#fakelink' class="fui-twitter text-blue social-icon {% if not customer.get_formatted_twitter_username %}disabled{% endif %}"></a>
                 </div>
-                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_twitter_username|nonempty }}</span></div>
               </div>
-
-              <div class="row mtm">
-                <div class="col-md-3">
-                  <span class="fui-googleplus text-blue social-icon"></span>
+              <div class='row mbm'>
+                <div class='col-sm-3'><span class="text-muted mrs dib">Gender:</span></div>
+                <div class='col-sm-7'><small class='dib'>{{ customer.get_formatted_gender|nonempty }}</small></div>
+                <div class="col-sm-1">
+                  <a href='#fakelink' class="fui-googleplus text-blue social-icon {% if not customer.get_formatted_googleplus_username %}disabled{% endif %}"></a>
                 </div>
-                <div class="col-md-9"><span class="text-muted small">{{ customer.get_formatted_googleplus_username|nonempty }}</span></div>
               </div>
             </div>
+
+            <div class="kn-section active dashboard">
+              <div class="kn-section-header">
+                <span class="fui-chat text-blue dib mid"></span>
+                <h6 class="mlm mbn mtn dib mid">Updates</h6>
+              </div>
+              <div class="kn-section-content">
+                <div class="row small">
+                  <ul class="dashboard-list">
+                    <li>
+                      <figure>
+                        <img src="{% static "images/icons/dude.svg" %}" alt="" width="30" height="30">
+                      </figure>
+                      <div>
+                        <p>
+                          <strong>Blaine</strong> was added to the customer list.
+                        </p>
+                        <span class="dib mbl">2 weeks, 6 days ago</span>
+                      </div>
+                    </li>
+                    <li>
+                      <figure>
+                        <img src="{% static "images/icons/dude.svg" %}" alt="" width="30" height="30">
+                      </figure>
+                      <div>
+                        <p>
+                          <strong>Blaine</strong> was added to the customer list.
+                        </p>
+                        <span class="dib mbl">2 weeks, 6 days ago</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
           </div>
 
 

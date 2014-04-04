@@ -1,0 +1,90 @@
+{% extends "page.html" %}
+
+{% load static %}
+{% load compress %}
+{% load web_tags %}
+
+
+{% block content %}
+  <!-- Content -->
+  <section class='clearfix promotions'>
+    <div class="row">
+      <div class="col-sm-3 promotion-type text-center">
+        <figure>
+          <img src="{% static "images/icons/mail.svg" %}" alt="mail">
+        </figure>
+        <h6>Targeted email</h6>
+        <p class='small'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
+      </div>
+
+      <div class="col-sm-3 promotion-type text-center">
+        <figure>
+          <img src="{% static "images/icons/user-interface.svg" %}" alt="website">
+        </figure>
+        <h6>Website Promotion</h6>
+        <p class='small'>You can't make a web promotion until you have a website for your business!</p>
+        <a href="#fakelink" class='text-blue small'>Learn More</a>
+      </div>
+
+      <div class="col-sm-3 promotion-type text-center">
+        <figure>
+          <img src="{% static "images/icons/news.svg" %}" alt="website">
+        </figure>
+        <h6>Email Newsletter</h6>
+        <p class='small'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
+      </div>
+
+      <div class="col-sm-3 promotion-type text-center">
+        <figure>
+          <img src="{% static "images/icons/graph.svg" %}" alt="website">
+        </figure>
+        <h6>In-Store Promotion</h6>
+        <p class='small'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
+      </div>
+    </div>
+    <div class="row mbl">
+
+      <div class="col-sm-3 text-center">
+        <a href="{% url 'client_create_promotion' %}" class="btn btn-md btn-primary btn-wide">Select</a>
+        <br/>
+        <a href="#fakelink" class='text-blue small'>View Example</a>
+      </div>
+      <div class="col-sm-3 text-center">
+        <a href="{% url 'client_create_promotion_website' %}" class="btn btn-md btn-primary btn-wide" disabled>Select</a>
+        <br/>
+        <a href="#fakelink" class='text-blue small'>View Example</a>
+      </div>
+      <div class="col-sm-3 text-center">
+        <a href="{% url 'client_create_promotion_email' %}" class="btn btn-md btn-primary btn-wide">Select</a>
+        <br/>
+        <a href="#fakelink" class='text-blue small'>View Example</a>
+      </div>
+      <div class="col-sm-3 text-center">
+        <a href="{% url 'client_create_promotion_instore' %}" class="btn btn-md btn-primary btn-wide">Select</a>
+        <br/>
+        <a href="#fakelink" class='text-blue small'>View Example</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="promotionPreviewModal" class="modal fade modal-large" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content center-block">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="fui-cross"></i>
+          </button>
+          <h4 class="modal-title">Preview Promotion</h4>
+        </div>
+        <div class="modal-body">
+            <iframe src="" width="702" height="600" frameborder="0"></iframe>
+        </div>
+        <div class="modal-footer ptm pbn">
+          <button type="button" class="mbm btn btn-sm btn-default btn-wide btn-embossed pull-right" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+{% endblock %}

@@ -13,12 +13,12 @@
         {% compress css %}
         <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
         <link href="{% static "css/flat-ui-custom.css" %}" rel="stylesheet">
+        <link href="{% static "css/chromoselector.css" %}" rel="stylesheet">
 
         <!-- Custom styles -->
         <link href="{% static "css/app.css" %}" rel="stylesheet">
         <link href="{% static "css/common.css" %}" rel="stylesheet">
         <link href="{% static "css/animations.css" %}" rel="stylesheet">
-        <link href="{% static "css/chromoselector.css" %}" rel="stylesheet">
 
         <link href="{% static "css/dashboard.css" %}" rel="stylesheet">
         <link href="{% static "css/promotions.css" %}" rel="stylesheet">
@@ -27,8 +27,10 @@
 
         <link href="{% static "css/enrichment.css" %}" rel="stylesheet">
 
-        <link rel="stylesheet" href="{% static "css/select2.css" %}">
-        <link rel="stylesheet" href="{% static "css/select2-overwrite.css" %}">
+        <link href="{% static "css/select2.css" %}" rel="stylesheet">
+        <link href="{% static "css/select2-overwrite.css" %}" rel="stylesheet">
+
+        <link href="{% static "css/tinymce-overwrite.css" %}" rel="stylesheet">
         {% endcompress %}
 
         {% compress js %}
@@ -138,8 +140,6 @@
 
     <script src="{% static "js/application.js" %}"></script>
     <script src="{% static "js/promotions.js" %}"></script>
-
-    {# angular staff #}
     <script src="{% static "js/module.js" %}"></script>
     <script src="{% static "js/controllers/customerListCtrl.js" %}"></script>
     <script src="{% static "js/controllers/importCsvCtrl.js" %}"></script>

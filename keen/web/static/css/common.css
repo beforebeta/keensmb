@@ -253,8 +253,9 @@
 .text-blue {
   color: #446cb3;
 }
-.text-uppercase {
-  text-transform: uppercase;
+
+a.text-blue:hover {
+  color: #5585DB;
 }
 
 .select .btn, .full {
@@ -396,4 +397,14 @@
   border-top: none;
 }
 
-.btn, .btn:focus {outline: 0;}
+.btn-group-justified>.btn, .btn-group-justified>.btn-group {
+  float: none;
+  display: table-cell;
+  width: 1%;
+}
+
+.ui-cs-chromoselector.cs-static {
+  background: #e4ccc1;
+  background: rgba(228, 204, 193, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(82, 37, 18, 0.5);
+}

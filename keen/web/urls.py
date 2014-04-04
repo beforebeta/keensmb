@@ -50,6 +50,12 @@ urlpatterns = patterns(
 
     url(r'^promotions$', 'client.promotions', name='client_promotions'),
     url(r'^promotions/create$', 'client.create_edit_promotion', name='client_create_promotion'),
+
+    url(r'^promotions/create/choose-type$', TemplateView.as_view(template_name='client/promotions/choose_promotion_type.html'), name='client_create_promotion_choose_type'),
+    url(r'^promotions/create/email$', TemplateView.as_view(template_name='client/promotions/promotion-create-email.html'), name='client_create_promotion_email'),
+    url(r'^promotions/create/instore$', TemplateView.as_view(template_name='client/promotions/promotion-create-instore.html'), name='client_create_promotion_instore'),
+    url(r'^promotions/create/website$', TemplateView.as_view(template_name='client/promotions/promotion-create-website.html'), name='client_create_promotion_website'),
+
     url(r'^promotions/(?P<promotion_id>\d+)/edit$', 'client.create_edit_promotion', name='client_edit_promotion'),
     url(r'^promotions/(?P<promotion_id>\d+)/preview', 'client.preview_promotion', name='client_preview_promotion'),
     url(r'^promotions/delete', 'client.delete_promotion', name='client_delete_promotion'),

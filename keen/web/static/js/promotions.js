@@ -1,18 +1,35 @@
-/* global filepicker, keen */
-(function ($) {
+$(function () {
     'use strict';
 
     if (window.filepicker) {filepicker.setKey('AlEC17z10RIuLOpyhK2n2z');}
 
+    if (window.tinymce) {
+        tinymce.init({
+            selector: "textarea.tinymce",
+            menubar: false,
+            path: false,
+            plugins: ['link image save'],
+            toolbar: "undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+
+        if ($('textarea.tinymce').siblings('.tinymce-content').length) {
+            var content = $('textarea.tinymce').siblings('.tinymce-content').html();
+            setTimeout(function() {
+                tinyMCE.activeEditor.setContent(content);
+            }, 35);
+        }
+    }
+
     var preview_promotion = function($button) {
-        var $this = $button;
-        var location = $this.attr('data-location');
-        var $modal = $($this.attr('data-target'));
-        var $iframe = $($this.attr('data-target') + " iframe");
-        var $modal_title = $($this.attr('data-target') + " h4.modal-title");
-        $modal_title.text($this.attr("data-title"));
+        var location = $button.attr('data-location'),
+            title = $button.attr("data-title"),
+            $modal = $($button.attr('data-target')),
+            $iframe = $modal.find("iframe"),
+            $modal_title = $modal.find("h4.modal-title");
+
+        $modal_title.text(title);
         $iframe.attr("src",location);
-        $modal.modal({show:true});
+        $modal.modal('show');
     };
 
     var hash = window.location.hash;
@@ -25,7 +42,7 @@
     });
 
     // delete and approve
-    $('.objIdTransferToModal').click(function(){
+    $('.objIdTransferToModal').on('click', function(){
         var obj_id = $(this).attr('data-obj_id');
         var target_button_id = $(this).attr("data-targetBtn");
         $(target_button_id).attr('data-obj_id', obj_id);
@@ -225,4 +242,85 @@
 
         updateTargetCustomers();
     }
-})(jQuery);
+
+    // Website promotions:
+
+    if ($('#web-promotion-appearance').length) {
+
+        var $tmplBlock = $('.tmpl-block'),   $bgColor = $('#bg-color'),
+            $tmplHeader = $('.tmpl-header'), $headColor = $('#head-color'),
+            $tmplText = $('.tmpl-text'),     $textColor = $('#text-color'),
+            $tmplButton = $('.tmpl-button'), $btnColor = $('#btn-color');
+
+        var updateColorPreview = function() {
+            $tmplBlock.css({'background-color': $bgColor.val()});
+            $tmplHeader.css({'color': $headColor.val()});
+            $tmplText.css({'color': $textColor.val()});
+            $tmplButton.css({'background-color': $btnColor.val()});
+        };
+
+        $('.color-pick').each(function(i, item) {
+            var $item = $(item),
+                $target = $item.parent();
+
+            $item.chromoselector({
+                target: $target,
+                pickerClass: 'cs-static',
+                autoshow: false,
+                panel: true,
+                panelMode: 'hsl',
+                preview: true,
+                resizable: false,
+                speed: 0,
+                create: updateColorPreview,
+                update: updateColorPreview,
+                hide: function(e) {
+                    // dont hide on blur
+                    $item.chromoselector('show', 0);
+                }
+            }).chromoselector('show', 0).chromoselector('resize', 120);
+        });
+
+
+        var createTemplatePlaceholders = function() {
+            var mockExample = $('.tmpl-placeholder-mock').html();
+
+            $('.tmpl-placeholder').hide().each(function(i, item) {
+                var $item = $(item);
+                $item.html(mockExample);
+
+                $item.css({'background-color': $item.data('bg')});
+                $item.find('.tmpl-header').css({color: $item.data('head')});
+                $item.find('.tmpl-text').css({color: $item.data('txt')});
+                $item.find('.tmpl-button').css({'background-color': $item.data('btn')});
+
+                $item.fadeIn();
+            });
+        };
+
+        var templateClickHandler = function() {
+            var $this = $(this),
+                bgColor = $this.data('bg'),
+                headColor = $this.data('head'),
+                textColor = $this.data('txt'),
+                btnColor = $this.data('btn');
+
+            $bgColor.val(bgColor).chromoselector('setColor', bgColor);
+            $headColor.val(headColor).chromoselector('setColor', headColor);
+            $textColor.val(textColor).chromoselector('setColor', textColor);
+            $btnColor.val(btnColor).chromoselector('setColor', btnColor);
+
+            updateColorPreview();
+
+            $('.tmpl-placeholder').removeClass('active');
+            $this.addClass('active');
+        };
+
+
+        createTemplatePlaceholders();
+        $(document).on('click', '.tmpl-placeholder', templateClickHandler);
+
+        if (!$('.tmpl-placeholder.active').length) {$('.tmpl-placeholder').eq(0).trigger('click')}
+    }
+
+});
