@@ -161,9 +161,10 @@ def get_field_value(name, form):
 
 @client_view
 def preview_promotion(request, client, promotion_id):
-    context = {}
-    context["promotion"] = get_object_or_404(Promotion, id=promotion_id, client=client)
-    return render('client/promotions/preview_promotion.html', context)
+    context = {
+        'promotion': get_object_or_404(Promotion, id=promotion_id, client=client),
+    }
+    return render(request, 'email/promotion.html', context)
 
 @client_view
 def delete_promotion(request, client):
@@ -200,7 +201,7 @@ def approve_promotion(request, client):
 
 @client_view
 def email_template(request, client):
-    return render('email-template/index.html')
+    return render(request, 'email-template/index.html')
 
 ####################################################################################################################
 # Customers
