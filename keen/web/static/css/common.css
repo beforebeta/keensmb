@@ -385,9 +385,11 @@ a.text-blue:hover {
   font-size: 20px;
   line-height: 20px;
 }
+
 .custom-checkbox:checked + label {
   color: #169e83;
 }
+
 .custom-checkbox:checked + label:before {
   content:"\e034";
 }
@@ -407,4 +409,15 @@ a.text-blue:hover {
   background: #e4ccc1;
   background: rgba(228, 204, 193, 0.8);
   box-shadow: inset 0 0 0 1px rgba(82, 37, 18, 0.5);
+}
+
+.dropdown-on-hover:hover .dropdown-arrow {
+  /*margin-top: 1px;*/
+  opacity: 1;
+}
+
+.dropdown-on-hover:hover ul.dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  display: block;
 }
