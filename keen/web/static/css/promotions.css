@@ -598,3 +598,17 @@ input[type=file]{
   text-align: center;
   color: #fff;
 }
+
+.select2-container-multi .select2-choices .select2-search-choice {
+  margin-right: 5px !important;
+}
+
+.select2-drop {
+  font-size: 15px !important;
+}
+
+.select2-results .select2-highlighted {
+  color: #34495e !important;
+  background-color: #7b96c9 !important;
+}
+
