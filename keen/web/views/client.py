@@ -239,7 +239,7 @@ def profile(request, client, customer_id=None):
     customer = get_object_or_404(Customer, client=client, id=customer_id)
     context["customer"] = customer
     context["client"] = customer.client
-    return render('client/customers/customer_profile_view.html', context)
+    return render(request, 'client/customers/customer_profile_view.html', context)
 
 ####################################################################################################################
 # Signup Forms
